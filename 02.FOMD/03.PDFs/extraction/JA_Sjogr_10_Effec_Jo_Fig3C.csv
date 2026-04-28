@@ -1,0 +1,19 @@
+practice,year,season,mean,mean+se,se
+S6: 6 months tree growth with Sesbania fallow,1996,LR, 0.7811753784553097, 0.8892735112040668,0.108098133
+S18: 18 months tree growth with Sesbania fallow,1996,LR, 0.3275602704410605, 0.36358552502810104,0.036025255
+N6: 6 months natural regrowth of vegetation fallow without cultivation,1996,LR, 0.7207567428517104, 0.7598185875102759,0.039061845
+N18: 18 months natural regrowth of vegetation fallow without cultivation,1996,LR, 0.33921451299917793, 0.4023006503783155,0.063086137
+M: continuous maize cropping,1996,LR, 0.29403475022229175, 0.3300488203155145,0.03601407
+MF: continuous maize cropping associated with fertilizer  (60 kg P2O5 + 60 kg N/ha/season),1996,LR, 0.4590563642565947, 0.4890755456634921,0.030019181
+S6: 6 months tree growth with Sesbania fallow,1997,LR, 0.6087943674889135, 0.6808896146382656,0.072095247
+S18: 18 months tree growth with Sesbania fallow,1997,LR,0.449465661, 0.48247669431100726,0.033011034
+N6: 6 months natural regrowth of vegetation fallow without cultivation,1997,LR, 0.4252736006800173, 0.48233129589137624,0.057057695
+N18: 18 months natural regrowth of vegetation fallow without cultivation,1997,LR, 0.4671707145213876, 0.5512445545495726,0.08407384
+M: continuous maize cropping,1997,LR, 0.46998361471655703, 0.5180769381329725,0.048093323
+MF: continuous maize cropping associated with fertilizer  (60 kg P2O5 + 60 kg N/ha/season),1997,LR, 0.6289879710768991, 0.6500092272073996,0.021021256
+S6: 6 months tree growth with Sesbania fallow,1998,LR, 0.2832584904288694, 0.34329685324266435,0.060038363
+S18: 18 months tree growth with Sesbania fallow,1998,LR, 0.22001577013628304, 0.2500237670493628,0.030007997
+N6: 6 months natural regrowth of vegetation fallow without cultivation,1998,LR, 0.2378550377756279, 0.2799311035180826,0.042076066
+N18: 18 months natural regrowth of vegetation fallow without cultivation,1998,LR, 0.23770963935599687, 0.30077340774749894,0.063063768
+M: continuous maize cropping,1998,LR, 0.30059445584641453, 0.35766333555159124,0.05706888
+MF: continuous maize cropping associated with fertilizer  (60 kg P2O5 + 60 kg N/ha/season),1998,LR, 0.6638164848254381, 0.7358669939995192,0.072050509
