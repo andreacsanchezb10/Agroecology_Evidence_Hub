@@ -70,7 +70,8 @@ sl.data<-sl.data%>%
   select(ss_id,	authors,journal, booktitle,		article_number,
          start_page,	end_page,	issue,	title,	volume,	year,	doi,
          issn,url,code_from_ss,keywords,	abstract,study_type)%>%
-  mutate(across(everything(), as.character))
+  mutate(across(everything(), as.character))%>%
+  distinct()
 
 sapply(sl.data,class)
 names(sl.data)
