@@ -2,23 +2,23 @@ library(readxl)
 library(dplyr)
 
 
-path.studylist<-setwd("C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Knowledge_Hub/02.FOMD/01.metadata_harmonisation/01.study_list")
+path.studylist<-setwd("C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/01.metadata_harmonisation/01.study_list")
 list.files(path.studylist)
 
 #==========================================================
 # Read datasets
 #==========================================================
 #---Study list dictionary 
-sl.dic<-read_xlsx(path = "02.selected/sl_MD_Jones_21_A glo_Sc.xlsx", sheet ="Data_dictionary")
+sl.dic<-read_xlsx(path = "02.selected/sl_MD_Paut,_24_A glo_Sc.xlsx", sheet ="data_dictionary")
 
 #---Study list data 
-sl.data<-read_xlsx(path = "02.selected/sl_MD_Jones_21_A glo_Sc.xlsx", sheet="Literature_screened")
+sl.data<-read_xlsx(path = "02.selected/sl_MD_Paut,_24_A glo_Sc.xlsx", sheet="data")
          
 #==========================================================
 # Filter included studies only
 #==========================================================
-sl.data<-sl.data%>%
-  filter(Inclusion_yes_no %in% c("yes","Yes"))
+#sl.data<-sl.data%>%
+ # filter(Inclusion_yes_no %in% c("yes","Yes"))
 
 #==========================================================
 # Rename relevant columns
@@ -27,18 +27,18 @@ sl.data<-sl.data%>%
   #Rename columns to match with our dataset
   rename(
     "authors"="Authors",
-    "journal"="Source.title",
-    "article_number"="Art_No",
-    "start_page"="Page_start",
-    "end_page"="Page_end",
-    "issue"="Issue",
+    #"journal"="",
+    #"article_number"="",
+    #"start_page"="",
+    #"end_page"="",
+    #"issue"="",
     "title"="Title",
     #"study_type"="",
-    "volume"="Volume",
-    "year"="Year",
+    #"volume"="",
+    "year"="Year_of_publication",
     "doi"="DOI",
-    "issn"="ISSN",
-    "code_from_ss"="ID"
+    #"issn"="",
+    "code_from_ss"="Id_article"
     #"keywords"=","
     #"abstract"="",
     
