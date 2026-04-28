@@ -1,0 +1,13 @@
+practice,year,season,mean,mean+se,se
+S6= six months tree growth with Sesbania fallow,1996,SR, 3.0095238095238077, 3.5047619047619047,0.495238095
+S18=18 months tree growth with Sesbania,1996,SR, 1.542857142857141, 1.7333333333333307,0.19047619
+N6=six months natural re-growth of vegetation fallow without cultivation,1996,SR, 1.9047619047619033, 2.114285714285714,0.20952381
+N18=18 months natural re-growth of vegetation fallow without cultivation,1996,SR, 1.3904761904761873, 1.5809523809523807,0.19047619
+M=continuous maize cropping,1996,SR, 1.1428571428571406, 1.1999999999999975,0.057142857
+MF=continuous maize cropping with fertilizer (60 kg P2O5 + 60 kg N/ha) application,1996,SR, 1.3904761904761873,1.561904762,0.171428571
+S6= six months tree growth with Sesbania fallow,1997,SR, 1.0857142857142854, 1.2380952380952372,0.152380952
+S18=18 months tree growth with Sesbania,1997,SR, 0.8190476190476179, 0.9333333333333318,0.114285714
+N6=six months natural re-growth of vegetation fallow without cultivation,1997,SR, 0.7999999999999989, 0.9714285714285698,0.171428571
+N18=18 months natural re-growth of vegetation fallow without cultivation,1997,SR, 0.9523809523809508, 1.1047619047619026,0.152380952
+M=continuous maize cropping,1997,SR, 0.9904761904761887, 1.1999999999999975,0.20952381
+MF=continuous maize cropping with fertilizer (60 kg P2O5 + 60 kg N/ha) application,1997,SR, 1.523809523809522, 1.6761904761904738,0.152380952
