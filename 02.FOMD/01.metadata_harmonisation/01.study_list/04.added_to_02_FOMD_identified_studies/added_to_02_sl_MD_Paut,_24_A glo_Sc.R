@@ -48,12 +48,19 @@ sl.data<-sl.data%>%
 # Complete the source code
 #==========================================================
 sl.data<-sl.data%>%    
-  mutate("ss_id"="MD_Jones_21_A glo_Sc",
+  mutate("ss_id"="MD_Paut,_24_A glo_Sc",
+         "journal"=NA,
+         "article_number"=NA,
+         "start_page"=NA,
+         "end_page"=NA,
+         "issue"=NA,
          "booktitle"=NA,
          "url"=NA ,
          "keywords"=NA,
          "abstract"=NA,
-         "study_type"="JA"
+         "volume"=NA,
+         "study_type"="JA",
+         "issn"=NA,
          )
 
 #==========================================================
@@ -68,5 +75,5 @@ sl.data<-sl.data%>%
 sapply(sl.data,class)
 names(sl.data)
 
-writexl::write_xlsx(sl.data,"04.added_to_02_FOMD_identified_studies/added_to_02_sl_MD_Jones_21_A glo_Sc.xlsx")
+writexl::write_xlsx(sl.data,"04.added_to_02_FOMD_identified_studies/added_to_02_sl_MD_Paut,_24_A glo_Sc.xlsx")
 
