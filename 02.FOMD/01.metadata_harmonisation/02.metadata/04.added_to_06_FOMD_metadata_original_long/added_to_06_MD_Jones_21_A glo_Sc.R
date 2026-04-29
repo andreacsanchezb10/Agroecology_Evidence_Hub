@@ -4,8 +4,8 @@ library(readxl)
 library(tidyr)
 library(openxlsx)
 
-path.metadata<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Knowledge_Hub/02.FOMD/01.metadata_harmonisation/02.metadata"
-path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Knowledge_Hub/02.FOMD/02.metadata_structure"
+path.metadata<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/01.metadata_harmonisation/02.metadata"
+path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure"
 list.files(path.metadata)
 list.files(path.metadata.structure)
 list.files(paste0(path.metadata,"/02.selected"))
