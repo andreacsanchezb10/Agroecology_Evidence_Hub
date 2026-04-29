@@ -38,6 +38,9 @@ fomd04 <- read_xlsx(
   sheet = "04_FOMD_screening") %>%
   mutate(key_ty = make_key_ty(title, authors))
 
+#---Study list data 
+sl.data<-read_xlsx(path = "02.selected/sl_MD_Paut,_24_A glo_Sc.xlsx", sheet="data")
+
 #==========================================================
 # Build "MD_Paut,_24_A glo_Sc"
 #==========================================================
@@ -72,7 +75,14 @@ deduplicated.fomd04.new <- fomd04.new %>%
       (  is.na(doi)    &  is.na(key_ty) ) |
       (  is.na(doi)    & !is.na(key_ty) & !(key_ty %in% screen_keys) )
   )%>%
-  select(-key_ty)
+  select(-key_ty)%>%
+  left_join(
+    sl.data %>%
+      mutate(Id_article = as.character(Id_article)) %>%
+      select(Id_article, Country)%>%
+      distinct(),
+    by = c("code_from_ss" = "Id_article")
+  )
 
 
 writexl::write_xlsx(deduplicated.fomd04.new,"05.added_to_04_FOMD_screening/added_to_04_sl_MD_Paut,_24_A glo_Sc.xlsx")
