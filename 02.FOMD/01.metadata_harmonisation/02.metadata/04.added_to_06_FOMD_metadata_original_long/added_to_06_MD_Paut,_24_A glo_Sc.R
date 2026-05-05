@@ -52,8 +52,11 @@ md.data.C1<-md.data%>%
            Crop_2_Scientific_Name=NA,
            Crop_2_Variety=NA,
            C2_yield=NA,
-           LER_crop_2_calc=NA,
-           Yield_total_intercropping_calc=NA)
+           LER_crop1=NA,
+           LER_crop2=NA,
+           LER_tot=NA,
+           Yield_total_intercropping_calc=NA)%>%
+    filter(!is.na(C1_yield))
 
 names(md.data.C1)
 #length(sort(unique(md.data.C$ES_ID)))
@@ -67,8 +70,11 @@ md.data.C2<-md.data%>%
          Crop_1_Scientific_Name=NA,
          Crop_1_Variety=NA,
          C1_yield=NA,
-         LER_crop_1_calc=NA,
-         Yield_total_intercropping_calc=NA)
+         LER_crop1=NA,
+         LER_crop2=NA,
+         LER_tot=NA,
+         Yield_total_intercropping_calc=NA)%>%
+  filter(!is.na(C2_yield))
 
 names(md.data.C2)
 
@@ -86,10 +92,10 @@ names(md.data.T)
 #--- Get data long version (one row per practice)
 md.data.long<-rbind(md.data.C1,md.data.C2 ,md.data.T)
 #sort(unique(md.data.long$Year_assessment))
-length(sort(unique(md.data.long$Id_article)))  #119
-length(sort(unique(md.data.T$Id_article)))  #119
-length(sort(unique(md.data.C1$Id_article)))  #119
-length(sort(unique(md.data.C2$Id_article)))  #119
+length(sort(unique(md.data.long$Id_article)))  #292
+length(sort(unique(md.data.T$Id_article)))  #292
+length(sort(unique(md.data.C1$Id_article)))  #256
+length(sort(unique(md.data.C2$Id_article)))  #156
 
 names(md.data.long)
 
@@ -207,8 +213,8 @@ sort(unique(md.data.long.clean$ss_id))
 #==========================================================
 # Rename columns to match 09_FOMD_metadata_extraction_long names
 #==========================================================
-md.data.long.clean$Comparison_ID
-sort(unique(md.data.long.clean$Comparison_class))
+#md.data.long.clean$Comparison_ID
+#sort(unique(md.data.long.clean$Comparison_class))
 names(md.data.long.clean)
 
 md.data.long.rename<-md.data.long.clean%>%
@@ -237,20 +243,24 @@ md.data.long.rename<-md.data.long.clean%>%
     #time_season=,
     
     ###---crop commodity
-    
     "crop01"="Crop_1_Common_Name",
     "crop_variety01"="Crop_1_Variety",
     "crop02"="Crop_2_Common_Name",
     "crop_variety02"="Crop_2_Variety",
     
     ###---practice
-    #subpractice_raw= System_raw,
+    "subpractice_raw"= "Additional_factor",
     #subpractice_description_raw=System_details,
     #practice_id=Comparison_ID,
     #system_type=Comparison_class,
     
     ###---soil_management_practice
     #tillage_subpractice_raw=Soil_management,
+    
+    ###---intercropping_practice
+    "intercrop_subpractice"="Comb_Nf",
+    "intercrop_design"="Intercropping_design",
+    "intercrop_pattern"="Intercropping_pattern",
     
     ###---agroforestry_practice
     "agrof_subpractice_raw"="AF",
@@ -268,7 +278,7 @@ md.data.long.rename<-md.data.long.clean%>%
     "chem_subpractice03"="Fungicide",
     
     ###---irrigation_practice	
-    #irrig_subpractice_raw=,
+    "irrig_subpractice_raw"="Irrigation",
     
     ###---out_exp_design
     #out_exp_design= Sampling_unit,
@@ -283,9 +293,9 @@ md.data.long.rename<-md.data.long.clean%>%
     #econ_inputs=,
     
     ###---outcome
-    #out_subindicator_raw= B_measure,
+    "out_subindicator_raw"= "Yield_measure",
     #out_subindicator_description_raw=,
-    #out_subindicator_unit=,
+    "out_subindicator_unit"= "Yield_unit",
     
     ###---outcome_value
     #out_value_metric=,
@@ -295,15 +305,29 @@ md.data.long.rename<-md.data.long.clean%>%
     #outc_var_value_l=B_error_range_l,
     #outc_var_value_u=B_error_range_u,
     #out_sample_size=B_N,
-    data_location=Data_location
+    "out_value_product_component01"="C1_yield",
+    "out_value_product_component02"="C2_yield",
+    "ler_value_product_component01"="LER_crop1",
+    "ler_value_product_component02"="LER_crop2",
+    "ler_value_total"="LER_tot",
     
-  )
+    
+    "data_location"="Data_location"
+    
+  )%>%
+  mutate(
+    ###---intercropping_practice
+    intercrop_subpractice_raw=subpractice_raw,
+    
+    ###---product_outcome
+    product_component01=crop01,
+    product_component02=crop02)
+
 names(md.data.long.rename)
-sort(unique(md.data.long.rename$agrof_subpractice_raw))
-sort(unique(md.data.long.rename1$agrof_subpractice_raw))
+sort(unique(md.data.long.rename$product_component02))
 
 #----CREATE MISSING COLUMNS
-md.data.long.rename1<-md.data.long.rename%>%
+md.data.long.rename<-md.data.long.rename%>%
   mutate(
     ###---location
     #site_latlong_type01= case_when(!is.na(site_latitude01)~"Original",TRUE~NA),
@@ -317,12 +341,16 @@ md.data.long.rename1<-md.data.long.rename%>%
     #exp_duration=exp_duration/365,
     ###---practice
     #system_type=case_when(system_type%in%c("Diversified","Simplified" )~"cropland",TRUE~"natural/seminatural"),
-    ###---nutrient_management_fert_moderator
-    "fert_inorganicNPK_unit"=case_when(!is.na(fert_inorganicN)~"kg/ha",TRUE~NA),
+    
+    ###---intercropping_practice
+    intercrop_subpractice=case_when(intercrop_subpractice%in%c("no-yes","yes-no",  "yes-yes")~"N fixing",TRUE~intercrop_subpractice),
     
     ###---agroforestry_practice
-    agrof_subpractice_raw=case_when(agrof_subpractice_raw=="yes"~"Agroforestry",TRUE~NA),
+    agrof_subpractice_raw=case_when(agrof_subpractice_raw=="yes"&!is.na(subpractice_raw)~subpractice_raw,
+                                    agrof_subpractice_raw=="yes"&!is.na(subpractice_raw)~"Agroforestry",TRUE~NA),
     
+    ###---nutrient_management_fert_moderator
+    "fert_inorganicNPK_unit"=case_when(!is.na(fert_inorganicN)~"kg/ha",TRUE~NA),
     
     ###---chemical_management_practice
     "chem_subpractice01"= case_when(chem_subpractice01=="yes"~"Herbicide",TRUE~NA),
@@ -335,112 +363,46 @@ md.data.long.rename1<-md.data.long.rename%>%
          )
 
 #==========================================================
-# Deal with yield values
-#==========================================================  
-#--- Get yield columns
-names(md.data.long.rename.biodiversity)
-md.data.long.rename.yield<-md.data.long.rename.biodiversity%>%
-  select(
-    ###---product_outcome
-    -product_raw,
-    -product_component01,
-    -bio_func_group,
-    -bio_ground_ref,
-    ###---outcome
-    -out_subindicator_raw,
-    ###---outcome_value
-    -out_value, 
-    -out_var_metric,
-    -out_var_value,
-    -outc_var_value_l,
-    -outc_var_value_u,
-    -out_sample_size)%>%
-  filter(!is.na(Yield_value))
-
-#--- Rename yield columns
-names(md.data.long.rename.yield)
-
-md.data.long.rename.yield<-md.data.long.rename.yield%>%
-  rename(
-    ###---outcome_value
-    #out_value_metric=,
-    out_value= Yield_value, 
-    out_var_metric=Yield_error_measure,
-    out_var_value=Yield_error_value,
-    outc_var_value_l=Yield_error_range_l,
-    outc_var_value_u=Yield_error_range_u,
-    out_sample_size=Yield_N
-  )
-
-#----CREATE MISSING COLUMNS
-md.data.long.rename.yield<-md.data.long.rename.yield%>%
-  mutate(out_subindicator_raw="Crop Yield")
-         
-#==========================================================
 # Unselect unnecessary columns
 #==========================================================  
 fomd09.names <- unique(fomd09.names)
+fomd09.names
 
-#--- Clean biodiversity columns
-# columns missing in md.data.long.rename.biodiversity
-missing_cols <- setdiff(fomd09.names, names(md.data.long.rename.biodiversity))
-
+#--- Clean columns
+# columns missing in md.data.long.rename
+missing_cols <- setdiff(fomd09.names, names(md.data.long.rename))
+missing_cols
 # add missing columns as NA
-fomd06.biodiversity.clean <- md.data.long.rename.biodiversity
+fomd06.clean <- md.data.long.rename
 
 for (col in missing_cols) {
-  fomd06.biodiversity.clean[[col]] <- NA
+  fomd06.clean[[col]] <- NA
 }
 
 # keep only columns in fomd09.names, in the same order
-fomd06.biodiversity.clean <- fomd06.biodiversity.clean[, fomd09.names, drop = FALSE]
+fomd06.clean <- fomd06.clean[, fomd09.names, drop = FALSE]
 
 # check
 list(
-  only_in_fomd06.clean = setdiff(names(fomd06.biodiversity.clean), fomd09.names),
-  only_in_fomd09.names = setdiff(fomd09.names, names(fomd06.biodiversity.clean))
+  only_in_fomd06.clean = setdiff(names(fomd06.clean), fomd09.names),
+  only_in_fomd09.names = setdiff(fomd09.names, names(fomd06.clean))
 )
 
 
-names(fomd06.biodiversity.clean)
-
-#--- Clean yield columns
-# columns missing in md.data.long.rename.biodiversity
-missing_cols <- setdiff(fomd09.names, names(md.data.long.rename.yield))
-
-# add missing columns as NA
-fomd06.yield.clean <- md.data.long.rename.yield
-
-for (col in missing_cols) {
-  fomd06.yield.clean[[col]] <- NA
-}
-
-# keep only columns in fomd09.names, in the same order
-fomd06.yield.clean <- fomd06.yield.clean[, fomd09.names, drop = FALSE]
-
-# check
-list(
-  only_in_fomd06.clean = setdiff(names(fomd06.yield.clean), fomd09.names),
-  only_in_fomd09.names = setdiff(fomd09.names, names(fomd06.yield.clean))
-)
-
-#==========================================================
-# rbind yield and biodiversity
-#========================================================== 
-fomd06.clean<-rbind(fomd06.biodiversity.clean,fomd06.yield.clean)
+names(fomd06.clean)
 
 #==========================================================
 # Remove duplicate columns
 #==========================================================  
-nrow(fomd06.clean) #11269
-nrow(distinct(fomd06.clean)) #5474
+nrow(fomd06.clean) #4715
+nrow(distinct(fomd06.clean)) #4480
 
 fomd06.clean<-fomd06.clean %>%
   distinct()
 
-nrow(fomd06.clean) #5474
-nrow(distinct(fomd06.clean)) #5474
+nrow(fomd06.clean) #4480
+nrow(distinct(fomd06.clean)) #4480
 
-readr::write_csv(fomd06.clean, paste0(path.metadata, "/04.added_to_06_FOMD_metadata_original_long/added_to_06_MD_Jones_21_A glo_Sc.csv"))
+readr::write_csv(fomd06.clean, paste0(path.metadata, "/04.added_to_06_FOMD_metadata_original_long/added_to_06_MD_Paut,_24_A glo_Sc.csv"))
 
 
