@@ -32,7 +32,7 @@ md.dic <- read.xlsx(file_md, sheet = "data_dictionary")
 
 #---Metadata
 md.data<-read.xlsx(file_md, sheet = "data")
-  mutate(ID=as.character(ID))
+  #mutate(ID=as.character(ID))
   #select(-Year_assessment,
    #      -FAO_group_T_recla,
     #     -Crop_woodiness_T_recla,
@@ -84,6 +84,7 @@ md.data.T<-md.data%>%
   #select(!ends_with("_C_recla"))%>%
   rename_with(~ gsub("_intercropped$", "", .x), ends_with("_intercropped"))%>%
   rename_with(~ gsub("_intercrop$", "", .x), ends_with("_intercrop"))
+  filter(!(is.na(C1_yield)&is.na(C2_yield)))
 
 names(md.data.T)
 #length(sort(unique(md.data.T$ES_ID)))
@@ -92,7 +93,7 @@ names(md.data.T)
 #--- Get data long version (one row per practice)
 md.data.long<-rbind(md.data.C1,md.data.C2 ,md.data.T)
 #sort(unique(md.data.long$Year_assessment))
-length(sort(unique(md.data.long$Id_article)))  #292
+length(sort(unique(md.data.long$Id_article)))  #266
 length(sort(unique(md.data.T$Id_article)))  #292
 length(sort(unique(md.data.C1$Id_article)))  #256
 length(sort(unique(md.data.C2$Id_article)))  #156
@@ -249,7 +250,7 @@ md.data.long.rename<-md.data.long.clean%>%
     "crop_variety02"="Crop_2_Variety",
     
     ###---practice
-    "subpractice_raw"= "Additional_factor",
+    "subpractice_description_raw"= "Additional_factor",
     #subpractice_description_raw=System_details,
     #practice_id=Comparison_ID,
     #system_type=Comparison_class,
@@ -317,7 +318,7 @@ md.data.long.rename<-md.data.long.clean%>%
   )%>%
   mutate(
     ###---intercropping_practice
-    intercrop_subpractice_raw=subpractice_raw,
+    intercrop_subpractice_raw=subpractice_description_raw,
     
     ###---product_outcome
     product_component01=crop01,
@@ -346,8 +347,8 @@ md.data.long.rename<-md.data.long.rename%>%
     intercrop_subpractice=case_when(intercrop_subpractice%in%c("no-yes","yes-no",  "yes-yes")~"N fixing",TRUE~intercrop_subpractice),
     
     ###---agroforestry_practice
-    agrof_subpractice_raw=case_when(agrof_subpractice_raw=="yes"&!is.na(subpractice_raw)~subpractice_raw,
-                                    agrof_subpractice_raw=="yes"&!is.na(subpractice_raw)~"Agroforestry",TRUE~NA),
+    agrof_subpractice_raw=case_when(agrof_subpractice_raw=="yes"&!is.na(subpractice_description_raw)~subpractice_description_raw,
+                                    agrof_subpractice_raw=="yes"&!is.na(subpractice_description_raw)~"Agroforestry",TRUE~NA),
     
     ###---nutrient_management_fert_moderator
     "fert_inorganicNPK_unit"=case_when(!is.na(fert_inorganicN)~"kg/ha",TRUE~NA),

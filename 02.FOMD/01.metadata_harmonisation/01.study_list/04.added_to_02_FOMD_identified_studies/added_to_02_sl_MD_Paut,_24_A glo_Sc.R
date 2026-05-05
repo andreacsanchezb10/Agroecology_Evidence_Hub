@@ -28,7 +28,8 @@ names(sl.data)
 sl.data.clean<- sl.data%>%
   select("Id_article" ,	 "Authors","Title" ,"DOI","Year_of_publication")%>%
   distinct()%>%
-  left_join(sl.biblio_info, by=c("DOI"))
+  left_join(sl.biblio_info%>%
+              filter(!is.na(DOI)), by=c("DOI"))
 
 #==========================================================
 # Rename relevant columns
@@ -73,7 +74,8 @@ sl.data<-sl.data%>%
          "booktitle"=NA,
          
          "keywords"=NA
-         )
+         )%>%
+  mutate(study_type=case_when(study_type=="journalArticle"~"JA",TRUE~study_type))
 
 #==========================================================
 # Select only necessary columns
