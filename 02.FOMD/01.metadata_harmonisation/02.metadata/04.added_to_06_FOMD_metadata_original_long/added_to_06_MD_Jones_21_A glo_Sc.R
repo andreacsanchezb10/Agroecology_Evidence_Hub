@@ -3,6 +3,7 @@ library(dplyr)
 library(readxl)
 library(tidyr)
 library(openxlsx)
+library(stringr)
 
 path.metadata<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/01.metadata_harmonisation/02.metadata"
 path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure"
@@ -25,7 +26,7 @@ fomd09.names<-names(read_xlsx(file.path(path.metadata.structure,"09_FOMD_metadat
 fomd09.names
 
 #---Metadata dictionary
-file_md <- file.path(path.metadata, "02.selected", "md_short_MD_Jones_21_A glo_Sc.xlsx")
+file_md <- file.path(path.metadata, "02.selected", "md_MD_Jones_21_A glo_Sc.xlsx")
 getSheetNames(file_md)
 md.dic <- read.xlsx(file_md, sheet = "Data_dictionary")  
 
