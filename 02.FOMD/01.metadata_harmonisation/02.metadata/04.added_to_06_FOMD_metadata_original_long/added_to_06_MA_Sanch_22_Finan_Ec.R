@@ -4,8 +4,8 @@ library(readxl)
 library(tidyr)
 library(openxlsx)
 
-path.metadata<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Knowledge Hub - General/Agroecology_Knolwedge_Hub/02.FOMD/01.metadata_harmonisation/02.metadata/"
-path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Knowledge Hub - General/Agroecology_Knolwedge_Hub/02.FOMD/02.metadata_structure/"
+path.metadata<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/01.metadata_harmonisation/02.metadata/"
+path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure/"
 list.files(path.metadata)
 list.files(paste0(path.metadata,"02.selected/"))
 
@@ -17,14 +17,14 @@ fomd04<-read_xlsx(file.path(path.metadata.structure,"04_FOMD_screening.xlsx"), s
   filter(ss_id=="MA_Sanch_22_Finan_Ec")%>%
   filter(status%in%c("PI","I","unresolved"))%>%
   select(ss_id,study_id_ss,study_id)
-length(unique(fomd04$study_id)) #112
+length(unique(fomd04$study_id)) #110
 
 #---09_FOMD_metadata_extraction_long
 fomd09.names<-names(read_xlsx(file.path(path.metadata.structure,"09_FOMD_metadata_extraction_long.xlsx"), sheet = "09_FOMD_metadata_extraction_lon"))
 fomd09.names
 
 #---Metadata dictionary
-file_md <- file.path(path.metadata, "02.selected", "md_short_MA_Sanch_22_Finan_Ec.xlsx")
+file_md <- file.path(path.metadata, "02.selected", "md_MA_Sanch_22_Finan_Ec.xlsx")
 getSheetNames(file_md)
 md.dic <- read.xlsx(file_md, sheet = "Data_dictionary")  
 
@@ -283,7 +283,7 @@ nrow(distinct(fomd06.clean)) #1564
 fomd06.clean<-fomd06.clean %>%
   distinct()
 
-nrow(fomd06.clean) #1564
+nrow(fomd06.clean) #1541
 nrow(distinct(fomd06.clean)) #1564
 
 readr::write_csv(fomd06.clean, paste0(path.metadata, "04.added_to_06_FOMD_metadata_original_long/added_to_06_MA_Sanch_22_Finan_Ec.csv"))
