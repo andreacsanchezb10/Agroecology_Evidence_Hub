@@ -67,9 +67,9 @@ names(md.data.T)
 #--- Get data long version (one row per practice)
 md.data.long<-rbind(md.data.C,md.data.T)
 sort(unique(md.data.long$Year_assessment))
-length(sort(unique(md.data.long$ID)))  #119
-length(sort(unique(md.data.T$ID)))  #119
-length(sort(unique(md.data.C$ID)))  #119
+length(sort(unique(md.data.long$ID)))  #237
+length(sort(unique(md.data.T$ID)))  #237
+length(sort(unique(md.data.C$ID)))  #237
 
 names(md.data.long)
 
@@ -377,5 +377,6 @@ nrow(fomd06.clean) #5474
 nrow(distinct(fomd06.clean)) #5474
 
 readr::write_csv(fomd06.clean, paste0(path.metadata, "/04.added_to_06_FOMD_metadata_original_long/added_to_06_MD_Jones_21_A glo_Sc.csv"))
+
 
 
