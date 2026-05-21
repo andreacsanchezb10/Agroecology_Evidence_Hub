@@ -1,0 +1,47 @@
+Nom simplifie	Signification
+ref	numero de reference bibliographique
+Subject	Ensemble d'unites d'une etude qui recoivent un meme traitement sur une ou plusieurs annees successives
+Data_source	Reference bibliographique/source des donnees
+Year	Annee
+Site	Site
+Coordinates	Latitude et longitude
+Climat_Koppen	Type de climat (Koppen)
+rainfall_type	Regime des pluies
+Study_type	Type d'etude
+Crop	Culture etudiee
+CT_type	Mode de labour traditionnel
+CA_type1	Mode d'agriculture de conservation
+Herbicide_on_CA	Herbicide ou non en agriculture de conservation
+Altitude	Altitude (metres au-dessus du niveau moyen de la mer)
+Soil_NRCS	Texture du sol (taxonomie NRCS)
+Texture	Texture simplifiee du sol
+Initial_soil_C	C initial du sol (g/kg)
+Actual_rainfall	Pluviometrie observee de la saison de culture (mm)
+Average_rainfall	Pluviometrie moyenne de la saison de culture (mm)
+Average_Temp	Temperature moyenne (øC)
+Legume_rotation	Legumineuse dans la rotation
+Legume_intercropping	Legumineuse en culture associee
+Years_CA	Nombre d'annees en Agriculture de conservation
+Initial_mulch	Quantite initiale de paillis (kg/ha)
+Mulch_type	Type de paillis
+Applied_N_CT	N applique sur labour traditionnel (kg /ha)
+Applied_P_CT	P applique sur labour traditionnel (kg /ha)
+Applied_N_CA	N applique en agriculture de conservation (kg /ha)
+Applied_P_CA	P applique en agriculture de conservation (kg /ha)
+Id	Identifiant de l'ensemble des parcelles comparees au meme temoin de labour traditionnel
+Grain_yield_CT	Rendement grain en labour traditionnel (kg/ha)
+Grain_yield_CA	Rendement grain en agriculture de conservation (kg/ha)
+CA_type	Traitement etudie : type d'agriculture de conservation
+n	Nombre repetitions pour le calcul des rendements
+CTstdev	Ecart-type residuel du rendement (CT=CA)
+lsd	Plus petite difference significative (au niveau 0,05)
+cv	Coefficient de variation (%)
+CT_SEM	Ecart-type de la moyenne du rendement (CT=CA)
+CT_SED	Ecart-type de la difference entre 2 moyennes du rendement (CT=CA)
+poidsv	Poids des observations (inversement proportionnels a la variance du log ratio)
+poidsn	Poids des observations (proportionnels aux nombres de repetitions, pour memoire)
+logratio	Logarithme neperien du rapport des rendements CA/CT
+Id1	Concatenation des variables ref et Id (identificateur d'une etude individuelle)
+Applied_N	N applique en kg/ha (CA = CT)
+Applied_P	P applique en kg/ha (CA = CT)
+ordre	Ordre initial dans le fichier des donnees

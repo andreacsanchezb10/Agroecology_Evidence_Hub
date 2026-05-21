@@ -1,0 +1,7 @@
+3. Summary of the database.csv (text/comma-separated-values) 5762 bytes.
+6. Classification of F&V.xlsx (application/vnd.openxmlformats-officedocument.spreadsheetml.sheet) 12637 bytes.
+1. Database.csv (text/comma-separated-values) 1454131 bytes.
+2. Database.xlsx (application/vnd.openxmlformats-officedocument.spreadsheetml.sheet) 591451 bytes.
+4. List of references.pdf (application/pdf) 408615 bytes.
+7. List of unique intercrops.xlsx (application/vnd.openxmlformats-officedocument.spreadsheetml.sheet) 13401 bytes.
+5. Paut_data_paper_figures_code.Rmd (text/x-r-notebook) 7389 bytes.

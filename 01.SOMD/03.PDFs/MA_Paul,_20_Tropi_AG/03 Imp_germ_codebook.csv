@@ -1,0 +1,43 @@
+variable name,variable description
+pid,paper identification number
+sid,site identification number
+eid,experiment identification number
+tid,treatment identification number
+author,authors of publication
+year,year of publication
+title,title of publication
+journal,journal in which article was published
+region,"geographical location where experiment was conducted (West Africa, East Africa)"
+studymode,"mode of study (feeding trial, on-farm trial, on-station trial, survey)"
+country,country in which experiment was conducted 
+site,specific location of the experiment
+livestock_production_system,"livestock production system dominant in site of experiment (mixed rainfed arid, mixed rainfed humid, mixed rainfed temperate, urban)(Robinson et al. 2011)"
+agroecological_zone,"climatic and geographical area of the study (Tropic - warm / semiarid, Tropic - warm / subhumid, Tropic - cool / semiarid, Tropic - cool / subhumid, Tropic - cool / humid, Tropic - warm / humid)(Robinson et al. 2011)"
+n,number of replicates in the experiment
+technology_type,type of forage technology used
+control,experimental control
+trt,experimental treatment
+improved_forage,"forage type used as treatment (Dual-purpose legume, Grass, Herbaceous legume)"
+improved_legume,improved legume species used in treatment
+improved_grass,improved grass species used in treatment
+food_crop,food crops used in the experiment
+forage_ctrl_dm1_hv1,dry matter of forage yield for control in first harvest - first measurement
+forage_trt_dm1_hv1,dry matter of forage yield for treatment in first harvest - first measurement
+uom_dm,unit of measurement for dry matter
+forage_ctrl_cp_hv1,crude protein of forage yield for control in first harvest    
+forage_trt_cp_hv1,crude protein of forage yield for treatment in first harvest    
+uom_cp,unit of measurement for crude protein
+food_ctrl_cr1_s1,food crop yield for first crop in first season of the control experiment    
+food_trt_cr1_s1,food crop yield for first crop in first season of the treatment experiment    
+cr_1,first food crop planted in experiment   
+uom_cr1,unit of measurement for first food crop yield    
+,
+unit of measurement,description
+uom_dm,
+t/ha,tonnes per hectare
+t/ha/yr,tonnes per hectare per year
+kg,kilograms
+uom_cp,
+%ofDM(yr),percentage of dry matter per year
+uom_cr1,
+t/ha/yr,tonnes per hectare per year

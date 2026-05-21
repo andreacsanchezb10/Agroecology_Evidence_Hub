@@ -6,6 +6,7 @@ library(openxlsx)
 
 path.metadata<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/01.metadata_harmonisation/02.metadata"
 path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure"
+path.era<-"C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/ERA/data"
 list.files(path.metadata)
 list.files(path.metadata.structure)
 list.files(paste0(path.metadata,"/02.selected"))
@@ -17,62 +18,65 @@ list.files(paste0(path.metadata,"/02.selected"))
 fomd04<-read_xlsx(file.path(path.metadata.structure,"/04_FOMD_screening.xlsx"), sheet = "04_FOMD_screening")%>%
   filter(ss_id=="MD_Rosen_24_Effec_Sc")%>%
   filter(status%in%c("PI","I","unresolved"))%>%
-  select(ss_id,study_id_ss,study_id)
+  select(ss_id,study_id_ss,study_id,doi)
 length(unique(fomd04$study_id)) #2106
+length(unique(fomd04$doi)) #2106
 sort(unique(fomd04$status))
 
 #---10_FOMD_metadata_synthesis_short
 fomd10.names<-names(read_xlsx(file.path(path.metadata.structure,"10_FOMD_metadata_synthesis_short.xlsx"), sheet = "10_FOMD_metadata_synthesis"))
-fomd10.names
+fomd10.names<-unique(fomd10.names)
 
-#---Metadata dictionary
-file_md <- file.path("C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/ERA/data", "md_MD_Rosen_24_Effec_Sc.csv")
-#getSheetNames(file_md)
-#md.dic <- read.xlsx(file_md, sheet = "Data_dictionary")  
+#---Metadata 
+md.data.short <- read.csv(file.path(path.era, "ERA_complete_data_short_v3.csv"))
 
+length(unique(md.data.short$study_id)) #1811
+length(unique(md.data.short$doi)) #1592
+sort(unique(md.data.short$country))
 
-#---Metadata
-md.data.short<-read.csv(file_md)
-  #mutate(ID=as.character(ID))
-  #select(-Year_assessment,
-   #      -FAO_group_T_recla,
-    #     -Crop_woodiness_T_recla,
-     #    -Time_state_T)
+#---Metadata field match
+#md.data.columns <- read.csv(file.path(path.era, "ERA_to_FOMD_field_map.csv"))
+
+#rename_vector <- setNames(md.data.columns$fomd_field,
+#                          md.data.columns$era_source)
 
 
 #==========================================================
 # Add study_id 
 #==========================================================
 length(unique(fomd04$study_id)) #2106
-md.data.short.clean<-md.data.short
-  left_join(fomd04,
-            by=c("ID"="study_id_ss"))%>%
-  filter(!is.na(study_id))
+md.data.short.clean<-md.data.short%>%
+  rename("study_id_ss"="study_id")%>%
+  left_join(fomd04%>%
+              select(-doi,-ss_id),by=c("study_id_ss"="study_id_ss"))%>%
+  left_join(fomd04%>%filter(!is.na(doi))%>%
+              select(-ss_id,-study_id_ss),by="doi")%>%
+  #select(1:10,230:233)%>%
+  mutate(study_id=study_id.x)%>%
+  mutate(study_id=case_when(is.na(study_id)~study_id.y,TRUE~study_id))%>%
+  select(-study_id.x,-study_id.y)
+  
 
-length(unique(md.data.short.clean$B.Code)) #880
+length(unique(md.data.short.clean$study_id)) #969
 sort(unique(md.data.short.clean$ss_id))
 
 #==========================================================
 # Rename columns to match 10_FOMD_metadata_synthesis_short names
 #==========================================================
+names(md.data.short.clean)
+sort(unique(md.data.short.rename$out_year_start))
+
+md.data.short.rename <- md.data.short.clean 
+
+
 #md.data.short.clean$Comparison_ID
 length(unique(md.data.short.clean$B.Code))
 sort(unique(md.data.short.clean$Exp.Duration))
 sort(unique(md.data.short.clean$C.Till.Out__T.Freq))
 sort(unique(md.data.short.clean$T.pH.Level.Name))
 
-names(md.data.short.clean)
-
-md.data.short.rename<-md.data.short.clean%>%
+%>%
   rename(
-    ###---bibliographic
-    "study_id"="B.Code",
-    "effect_size_id"="Index",
-    #"authors"=,
-    "year"="B.Date",
-    "journal"="B.Journal",
-    "doi"="B.DOI",
-    
     ###---location
     "country" = "Country",
     "countryISO" ="ISO.3166.1.alpha.3",
@@ -84,12 +88,6 @@ md.data.short.rename<-md.data.short.clean%>%
     "site_latitude"= "Site.LatD",
     "site_longitude"= "Site.LonD",
     "site_buffer"="Buffer.Manual",
-    
-    ###---experiment_details 
-    "exp_design" ="EX.Design",
-    "exp_plot_size" ="EX.Plot.Size",
-    #exp_field_size=	,
-    "exp_duration"= "Exp.Duration",
     
     ###---experiment_time 
     #time_raw=,
@@ -309,18 +307,9 @@ md.data.short.rename<-md.data.short.clean%>%
     T_residues_material_amount_unit=,
     "T_residues_material_amount"="T.Res.Method__M.Amount",
     
-    ###---ph management
-    C_ph_subpractice_raw
-    C_ph_subpractice
-    "C_ph_material_applied"="C.pH.Method__pH.Material",
-    "C_ph_material_amount_unit"="C.pH.Method__pH.Unit",
-    "C_ph_material_amount"="C.pH.Method__pH.Amount",
     
-    T_ph_subpractice_raw
-    T_ph_subpractice
-    "T_ph_material_applied"="T.pH.Method__pH.Material",
-    "T_ph_material_amount_unit"="T.pH.Method__pH.Unit",
-    "T_ph_material_amount"="T.pH.Method__pH.Amount",
+    
+    
     
     ###---irrigation_practice	
     "C_irrig_subpractice_raw"
@@ -398,82 +387,59 @@ md.data.short.rename<-md.data.short.clean%>%
     out_agg_stat
     
   )
-names(md.data.long.rename.biodiversity)
+names(md.data.short.rename)
 
 #----CREATE MISSING COLUMNS
-md.data.long.rename.biodiversity<-md.data.long.rename.biodiversity%>%
+sort(unique(md.data.short.rename$C_crop_density))
+sort(unique(md.data.short.rename$C_crop_density_unit))
+sort(unique(md.data.short.rename$T_crop_density))
+sort(unique(md.data.short.rename$T_crop_density_unit))
+
+sort(unique(md.data.short.rename$C_intercrop_residues_fate))
+sort(unique(md.data.short.rename$C_ph_material))
+
+
+
+
+md.data.short.rename1<-md.data.short.rename%>%
   mutate(
-
-
+    ###---commodity_crop: It is not correct, only include the main product crop, it should include all crops included in the systems
+    #C_crop_density=paste0(C_crop_density,"(",C_crop_density_unit,")"),
+    #C_crop_density=case_when(C_crop_density=="NA()"~"Unspecified",TRUE~C_crop_density),
+    #T_crop_density=paste0(T_crop_density,"(",T_crop_density_unit,")"),
+    #T_crop_density=case_when(T_crop_density=="NA()"~"Unspecified",TRUE~T_crop_density),
+    
     ###---soil_management_practice
-    "C_tillage_subpractice_raw" =paste(C.Till.Level.Name, C_tillage_subpractice_raw,sep = " "),
-    "T_tillage_subpractice_raw"=paste(T.Till.Level.Name, T_tillage_subpractice_raw,sep = " "),
+    #"C_tillage_subpractice_raw" =paste(C.Till.Level.Name, C_tillage_subpractice_raw,sep = " "),
+    #"T_tillage_subpractice_raw"=paste(T.Till.Level.Name, T_tillage_subpractice_raw,sep = " "),
+    
     
     ###---outcome_value
-    C_out_value_metric="Mean",
-    T_out_value_metric="Mean"
+    C_out_metric="Mean",
+    T_out_metric="Mean"
          )
 
-#==========================================================
-# Deal with yield values
-#==========================================================  
-#--- Get yield columns
-names(md.data.long.rename.biodiversity)
-md.data.long.rename.yield<-md.data.long.rename.biodiversity%>%
-  select(
-    ###---product_outcome
-    -product_raw,
-    -product_component01,
-    -bio_func_group,
-    -bio_ground_ref,
-    ###---outcome
-    -out_subindicator_raw,
-    ###---outcome_value
-    -out_value, 
-    -out_var_metric,
-    -out_var_value,
-    -outc_var_value_l,
-    -outc_var_value_u,
-    -out_sample_size)%>%
-  filter(!is.na(Yield_value))
-
-#--- Rename yield columns
-names(md.data.long.rename.yield)
-
-md.data.long.rename.yield<-md.data.long.rename.yield%>%
-  rename(
-    ###---outcome_value
-    #out_value_metric=,
-    out_value= Yield_value, 
-    out_var_metric=Yield_error_measure,
-    out_var_value=Yield_error_value,
-    outc_var_value_l=Yield_error_range_l,
-    outc_var_value_u=Yield_error_range_u,
-    out_sample_size=Yield_N
-  )
-
-#----CREATE MISSING COLUMNS
-md.data.long.rename.yield<-md.data.long.rename.yield%>%
-  mutate(out_subindicator_raw="Crop Yield")
-         
+sort(unique(md.data.short.rename1$C_crop_density))
+sort(unique(md.data.short.rename1$C_crop_density_unit))
+sort(unique(md.data.short.rename1$T_crop_density))
+sort(unique(md.data.short.rename1$T_crop_density_unit))
 #==========================================================
 # Unselect unnecessary columns
 #==========================================================  
-fomd09.names <- unique(fomd09.names)
-
+fomd10.names
 #--- Clean biodiversity columns
-# columns missing in md.data.long.rename.biodiversity
-missing_cols <- setdiff(fomd09.names, names(md.data.long.rename.biodiversity))
-
+# columns missing in md.data.short.rename
+missing_cols <- setdiff(fomd10.names, names(md.data.short.rename))
+missing_cols
 # add missing columns as NA
-fomd06.biodiversity.clean <- md.data.long.rename.biodiversity
+fomd10.clean <- md.data.short.rename
 
 for (col in missing_cols) {
-  fomd06.biodiversity.clean[[col]] <- NA
+  fomd10.clean[[col]] <- NA
 }
 
 # keep only columns in fomd09.names, in the same order
-fomd06.biodiversity.clean <- fomd06.biodiversity.clean[, fomd09.names, drop = FALSE]
+fomd10.clean <- fomd10.clean[, fomd10.names, drop = FALSE]
 
 # check
 list(

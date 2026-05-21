@@ -1,0 +1,61 @@
+variable name,variable description
+pid,paper identification number
+sid,site identification number
+eid,experiment identification number
+tid,treatment identification number
+author,authors of publication
+year,year of publication
+title,title of publication
+journal,journal in which article was published
+region,"geographical location where experiment was conducted (East Africa, Southern Africa, West Africa)"
+studymode,"mode of study (feeding trial, on-farm trial, on-station trial, survey)"
+country,country in which experiment was conducted 
+site,specific location of the experiment
+livestock_production_system,"livestock production system dominant in site of experiment (mixed rainfed temperate, mixed rainfed humid, mixed irrigated humid, urban, rangelands arid)(Robinson et al. 2011)"
+agroecological_zone,"climatic and geographical area of the study (Tropic - warm / semiarid, Tropic - warm / subhumid, Tropic - cool / semiarid, Tropic - cool / subhumid, Tropic - cool / humid, Tropic - warm / humid)(Robinson et al. 2011)"
+n,number of replicates in the experiment
+technology_type,type of forage technology used
+control,experimental control
+trt,experimental treatment
+improved_forage,"forage type used as treatment (Dual-purpose legume, Grass, Herbaceous legume)"
+improved_legume,improved legume species used in treatment
+improved_grass,improved grass species used in treatment
+management_type,type of agronomic management practised
+forage_ctrl_dm1_hv1,dry matter of forage yield for control in first harvest - first measurement
+forage_trt_dm1_hv1,dry matter of forage yield for treatment in first harvest - first measurement
+forage_ctrl_dm1_hv2,dry matter of forage yield for control in second harvest - first measurement
+forage_trt_dm1_hv2,dry matter of forage yield for treatment in second harvest - first measurement
+forage_ctrl_dm1_hv3,dry matter of forage yield for control in third harvest - first measurement
+forage_trt_dm1_hv3,dry matter of forage yield for treatment in third harvest - first measurement
+forage_ctrl_dm1_hv4,dry matter of forage yield for control in fourth harvest - first measurement
+forage_trt_dm1_hv4,dry matter of forage yield for treatment in fourth harvest - first measurement
+uom_dm,unit of measurement for dry matter
+forage_ctrl_cp_hv1,crude protein of forage yield for control in first harvest    
+forage_trt_cp_hv1,crude protein of forage yield for treatment in first harvest    
+uom_cp,unit of measurement for crude protein
+forage_ctrl_n1,amount of nitrogen in forage yield for control in first year measurement
+forage_trt_n1,amount of nitrogen in forage yield for treatment in first year measurement
+uom_n_forage,unit of measurement for nitrogen in forage yield for experiment
+econ_ctrl_rev_s1,revenue amount from the control in the first season
+econ_trt_rev_s1,revenue amount from the treatment in the first season
+uom_rev,unit of measurement for revenue
+econ_ctrl_benefit_s1,benefits amount from the control in the first season
+econ_trt_benefit_s1,benefits amount from the treatment in the first season
+econ_ctrl_bc_ratio1,benefit:cost ratio for the control in the first season
+econ_trt_bc_ratio1,benefit:cost ratio for the treatment in the first season
+uom_benefit,unit of measurement for benefits
+usd_exchange_rate,United States dollar exchange rate
+,
+unit of measurement,description
+uom_dm,
+t/ha/harvest,tonnes per hectare per harvest
+t/ha,tonnes per hectare
+kg/ha/season(avgfor5seasons),kilograms per hectare for 5 seasons
+%ofDM(yr),percentage of dry matter per year
+uom_n_forage,
+g/kgDM,grams per kilogram of dry matter
+uom_rev,
+Tot gross KSH/ha/24 wks,total gross revenue in Kenyan shillings per hectare for 24 weeks
+uom_benefit,
+GrossnetUSH/ha/yr,gross net revenue in Ugandan shillings per hectare per year
+TotalnetKSh/ha/24wks,total net revenue in Kenyan shillings per hectare for 24 weeks

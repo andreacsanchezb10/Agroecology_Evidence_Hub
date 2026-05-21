@@ -1,0 +1,91 @@
+variable name,variable description
+pid,paper identification number
+sid,site identification number
+eid,experiment identification number
+tid,treatment identification number
+author,authors of publication
+year,year of publication
+title,title of publication
+journal,journal in which article was published
+region,"geographical location where experiment was conducted (Southern Africa, East Africa, West Africa, Central Africa) "
+studymode,"mode of study (feeding trial, on-farm trial, on-station trial, survey)"
+country,country in which experiment was conducted 
+site,specific location of the experiment
+livestock_production_system ,"livestock production system dominant in site of experiment (Urban, Mixed Rainfed Arid, Rangeland Arid, Other) (Robinson et al. 2011)"
+agroecological_zone,"climatic and geographical area of the study (Tropic - warm / semiarid, Tropic - warm / subhumid, Tropic - cool / semiarid, Tropic - cool / subhumid, Tropic - cool / humid, Tropic - warm / humid) (Robinson et al. 2011)"
+n,number of replicates in the experiment
+technology_type,type of forage technology used
+control,experimental control
+trt,experimental treatment
+improved_forage,"forage type used as treatment (Dual-purpose legume, Herbaceous legume, Shrub)"
+improved_legume,improved legume species used in treatment
+improved_grass,improved grass species used in treatment
+forage_ctrl_cp_hv1,crude protein of forage yield for control in first harvest    
+forage_trt_cp_hv1,crude protein of forage yield for treatment in first harvest    
+uom_cp,unit of measurement for crude protein
+livestock_ctrl_milk1,milk yield for control in first measurement
+livestock_trt_milk1,milk yield for treatment in first measurement
+livestock_ctrl_milk2,milk yield for control in second measurement
+livestock_trt_milk2,milk yield for treatment in second measurement 
+uom_milk,unit of measurement for milk yield
+livestock_ctrl_lwg1,live weight gain for control in first measurement
+livestock_trt_lwg1,live weight gain for treatment in first measurement 
+livestock_ctrl_lwg2,live weight gain for control in second measurement 
+livestock_trt_lwg2,live weight gain for treatment in second measurement 
+uom_lwg,unit of measurement for live weight gain
+livestock_ctrl_dmi,dry matter intake for control treatment
+livestock_trt_dmi,dry matter intake for treatment treatment
+uom_dmi,unit of measurement for dry matter intake
+livestock_ctrl_manure,yield for manure in control treatment
+livestock_trt_manure,yield for manure in treatment treatment
+uom_manure,unit of measurement for manure
+livestock_ctrl_n_manure,amount of nitrogen in manure for control treatment
+livestock_trt_n_manure,amount of nitrogen in manure for experimental treatment
+uom_n_manure,unit of measurement for nitrogen in manure
+econ_ctrl_rev_s1,revenue amount from the control treatment for the first season
+econ_trt_rev_s1,revenue amount from the experimental treatment for the first season
+uom_rev,unit of measurement for revenue
+usd_exchange_rate,United States dollar exchange rate
+,
+unit of measurement,description
+uom_cp,
+% of DM,percentage of dry matter
+uom_milk,
+kg/cow/day,kilograms per cow per day
+l/day,litres per day
+ml/day/animal,millilitres per day per animal
+kgFCM/cow/day,kilograms of fat corrected milk per cow per day
+l/cow/day,litres per cow per day
+l/day(yr1&2),liters per day for years 1 and 2
+l/day(yr1),litres per day for year 1
+l/12weeks,litres for 12 weeks
+uom_lwg,
+g/day,grams per day
+g/2months(drywinterseason),grams per 2 months of dry winter season
+g/head/day,grams per head per day
+kg/week,kilograms per week
+kg/day,kilograms per day
+kgDM/kgBW^0.75,kilograms of dry matter per kilogram of body weight (metabolic body weight^0.75)
+g/head/day,grams per head per day
+kg/97days,kilograms for 97 days
+kg/season,kilograms per season
+uom_dmi,
+kgDM/animal/day,kilograms of dry matter per animal per day
+g/kgBW^0.75/day,grams per kilogram of body weight (metabolic body weight^0.75) per day
+g/head/day,grams per head per day
+g/kgLW^0.75,grams per kilogram of the live weight (live weight^0.75)
+kgDM/cow/day,kilograms of dry matter per cow per day
+kgDM/day,kilograms of dry matter per day
+gDM/kgLW/day,grams of dry matter per kilogram of the live weight per day
+kg/day,kilograms per day
+kgDM(maizestover)/animal,kilograms of maize stover dry matter per animal
+kg/day/cow,kilograms per day per cow
+uom_manure,
+kg/D/day,kilograms of dry manure per day
+kgDM/day/animal,kilograms of dry matter per day per animal
+uom_n_manure,
+%,percentage
+g/kgOM,grams per kilogram of organic matter
+g/kgDM,grams per kilogram of dry matter
+uom_rev,
+Tot gross USH/cow/year,total gross revenue in Ugandan shillings per cow per year

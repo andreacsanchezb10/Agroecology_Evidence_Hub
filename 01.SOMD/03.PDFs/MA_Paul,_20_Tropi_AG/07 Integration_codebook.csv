@@ -1,0 +1,215 @@
+variable name,variable description
+pid,paper identification number
+sid,site identification number
+eid,experiment identification number
+tid,treatment identification number
+author,authors of publication
+year,year of publication
+title,title of publication
+journal,journal in which article was published
+region,"geographical location where experiment was conducted (East Africa, West Africa, Southern Africa, Central Africa)"
+studymode,"mode of study (feeding trial, on-farm trial, on-station trial, survey)"
+country,country in which experiment was conducted 
+site,specific location of the experiment
+livestock_production_system,"livestock production system dominant in site of experiment (mixed rainfed temperate, mixed rainfed arid, urban, mixed rainfed humid, other, rangelands arid, rangelands hyperarid) (Robinson et al. 2011)"
+agroecological_zone,"climatic and geographical area of the study (Tropic - warm / semiarid, Tropic - warm / subhumid, Tropic - cool / semiarid, Tropic - cool / subhumid, Tropic - cool / humid, Tropic - warm / humid) (Robinson et al. 2011)"
+n,number of replicates in the experiment
+technology_type,type of forage technology used
+control,experimental control
+trt,experimental treatment
+improved_forage,"forage type used as treatment (Grass, Shrub, Dual-purpose legume, Herbaceous legume)"
+improved_legume,improved legume species used in treatment
+improved_grass,improved grass species used in treatment
+food_crop,food crops used in the experiment
+cropping_system,type of crop production used
+forage_ctrl_dm1_hv1,dry matter of forage yield for control in first harvest - first measurement
+forage_trt_dm1_hv1,dry matter of forage yield for treatment in first harvest - first measurement
+forage_ctrl_dm1_hv2,dry matter of forage yield for control in second harvest - first measurement
+forage_trt_dm1_hv2,dry matter of forage yield for treatment in second harvest - first measurement
+forage_ctrl_dm1_hv3,dry matter of forage yield for control in third harvest - first measurement
+forage_trt_dm1_hv3,dry matter of forage yield for treatment in third harvest - first measurement
+forage_ctrl_dm1_hv4,dry matter of forage yield for control in fourth harvest - first measurement
+forage_trt_dm1_hv4,dry matter of forage yield for treatment in fourth harvest - first measurement
+forage_ctrl_dm1_hv5,dry matter of forage yield for control in fifth harvest - first measurement
+forage_trt_dm1_hv5,dry matter of forage yield for treatment in fifth harvest - first measurement
+forage_ctrl_dm1_hv6,dry matter of forage yield for control in sixth harvest - first measurement
+forage_trt_dm1_hv6,dry matter of forage yield for treatment in sixth harvest - first measurement
+forage_ctrl_dm1_hv7,dry matter of forage yield for control in seventh harvest - first measurement
+forage_trt_dm1_hv7,dry matter of forage yield for treatment in seventh harvest - first measurement
+forage_trt_dm2_hv1,dry matter of forage yield for treatment in first harvest - second measurement
+forage_trt_dm2_hv2,dry matter of forage yield for treatment in second harvest - second measurement
+forage_trt_dm2_hv3,dry matter of forage yield for treatment in third harvest - second measurement
+forage_trt_dm2_hv4,dry matter of forage yield for treatment in fouth harvest - second measurement
+forage_trt_dm2_hv5,dry matter of forage yield for treatment in fifth harvest - second measurement
+forage_trt_dm2_hv6,dry matter of forage yield for treatment in sixth harvest - second measurement
+uom_dm,unit of measurement for dry matter
+forage_ctrl_cp_hv1,crude protein of forage yield for control in first harvest    
+forage_trt_cp_hv1,crude protein of forage yield for treatment in first harvest    
+forage_ctrl_cp_hv2,crude protein of forage yield for control in second harvest    
+forage_trt_cp_hv2,crude protein of forage yield for treatment in second harvest    
+uom_cp,unit of measurement for crude protein
+forage_ctrl_n1,amount of nitrogen in forage yield for control in first year measurement
+forage_trt_n1,amount of nitrogen in forage yield for treatment in first year measurement
+forage_ctrl_n2,amount of nitrogen in forage yield for control in second year measurement
+forage_trt_n2,amount of nitrogen in forage yield for treatment in second year measurement
+uom_n_forage,unit of measurement for nitrogen in forage yield for experiment
+forage_ctrl_me,amount of metabolizable energy for forage yield from control
+forage_trt_me,amount of metabolizable energy for forage yield from treatment
+uom_me,unit of measurement for metabolizable energy
+livestock_ctrl_milk1,milk yield for control in first replicate
+livestock_trt_milk1,milk yield for treatment in first replicate
+uom_milk,unit of measurement for milk yield
+soil_ctrl_sl_5_10_s1,amount of soil loss at a slope/gradient of 5-10 for the control in season one
+soil_trt_sl_5_10_s1,amount of soil loss at a slope/gradient of 5-10 for the treatment in season one
+soil_ctrl_sl_10_20_s1,amount of soil loss at a slope/gradient of 10-20 for the control in season one
+soil_trt_sl_10_20_s1,amount of soil loss at a slope/gradient of 10-20 for the treatment in season one
+soil_ctrl_sl_20_30_s1,amount of soil loss at a slope/gradient of 20-30 for the control in season one
+soil_trt_sl_20_30_s1,amount of soil loss at a slope/gradient of 20-30 for the treatment in season one
+soil_ctrl_sl_30_s1,amount of soil loss at a slope/gradient greater than 30 for the control in season one
+soil_trt_sl_30_s1,amount of soil loss at a slope/gradient of greater than 30 for the treatment in season one
+soil_ctrl_sl_5_10_s2,amount of soil loss at a slope/gradient of 5-10 for the control in season two
+soil_trt_sl_5_10_s2,amount of soil loss at a slope/gradient of 5-10 for the treatment in season two
+soil_ctrl_sl_10_20_s2,amount of soil loss at a slope/gradient of 10-20 for the control in season two
+soil_trt_sl_10_20_s2,amount of soil loss at a slope/gradient of 10-20 for the treatment in season two
+soil_ctrl_sl_20_30_s2,amount of soil loss at a slope/gradient of 20-30 for the control in season two
+soil_trt_sl_20_30_s2,amount of soil loss at a slope/gradient of 20-30 for the treatment in season two
+soil_ctrl_sl_30_s2,amount of soil loss at a slope/gradient greater than 30 for the control in season two
+soil_trt_sl_30_s2,amount of soil loss at a slope/gradient greater than 30 for the treatment in season two
+soil_ctrl_sl_10_20_s3,amount of soil loss at a slope/gradient of 10-20 for the control in season three
+soil_trt_sl_10_20_s3,amount of soil loss at a slope/gradient of 10-20 for the treatment in season three
+soil_ctrl_sl_10_20_s4,amount of soil loss at a slope/gradient of 10-20 for the control in season four
+soil_trt_sl_10_20_s4,amount of soil loss at a slope/gradient of 10-20 for the treatment in season four
+soil_ctrl_sl_10_20_s5,amount of soil loss at a slope/gradient of 10-20 for the control in season five
+soil_trt_sl_10_20_s5,amount of soil loss at a slope/gradient of 10-20 for the treatment in season five
+soil_ctrl_sl_10_20_s6,amount of soil loss at a slope/gradient of 10-20 for the control in season six
+soil_trt_sl_10_20_s6,amount of soil loss at a slope/gradient of 10-20 for the treatment in season six
+soil_ctrl_sl_10_20_s7,amount of soil loss at a slope/gradient of 10-20 for the control in season seven
+soil_trt_sl_10_20_s7,amount of soil loss at a slope/gradient of 10-20 for the treatment in season seven
+soil_ctrl_sl_10_20_s8,amount of soil loss at a slope/gradient of 10-20 for the control in season eight
+soil_trt_sl_10_20_s8,amount of soil loss at a slope/gradient of 10-20 for the treatment in season eight
+soil_ctrl_sl_10_20_s9,amount of soil loss at a slope/gradient of 10-20 for the control in season nine
+soil_trt_sl_10_20_s9,amount of soil loss at a slope/gradient of 10-20 for the treatment in season nine
+soil_ctrl_sl_10_20_s10,amount of soil loss at a slope/gradient of 10-20 for the control in season ten
+soil_trt_sl_10_20_s10,amount of soil loss at a slope/gradient of 10-20 for the treatment in season ten
+soil_ctrl_uom_sl,unit of measurement for soil loss for the control
+soil_ctrl_runoff_12_25,amount of runoff at a slope/gradient of 12-25 for the control
+soil_trt_runoff_12_25,amount of runoff at a slope/gradient of 12-25 for the treatment
+soil_ctrl_runoff_10_20_yr1,amount of runoff at a slope/gradient of 10-20 per year for the control
+soil_trt_runoff_10_20_yr1,amount of runoff at a slope/gradient of 10-20 per year for the treatment
+soil_ctrl_runoff_30_yr1,amount of runoff at a slope/gradient greater than 30 per year for the control
+soil_trt_runoff_30_yr1,amount of runoff at a slope/gradient greater than 30 per year for the treatment
+uom_runoff,unit of measurement for runoff
+soil_ctrl_soc,amount of soil organic carbon for the control
+soil_trt_soc,amount of soil organic carbon for the treatment
+uom_soc,unit of measurement for soil organic carbon
+econ_ctrl_rev_s1,revenue amount from the control experiment for the first season
+econ_trt_rev_s1,revenue amount from the treatment experiment for the first season
+econ_ctrl_rev_s2,revenue amount from the control experiment for the second season
+econ_trt_rev_s2,revenue amount from the treatment experiment for the second season
+econ_ctrl_rev_s3,revenue amount from the control experiment for the third season
+econ_trt_rev_s3,revenue amount from the treatment experiment for the third season
+econ_ctrl_rev_s4,revenue amount from the control experiment for the fourth season
+econ_trt_rev_s4,revenue amount from the treatment experiment for the fourth season
+uom_rev,unit of measurement for revenue
+econ_ctrl_benefit_s1,benefits amount from the control for the first season
+econ_trt_benefit_s1,benefits amount from the treatment for the first season
+econ_ctrl_benefit_s2,benefits amount from the control for the second season
+econ_trt_benefit_s2,benefits amount from the treatment for the second season
+econ_ctrl_benefit_s3,benefits amount from the control for the third season
+econ_trt_benefit_s3,benefits amount from the treatment for the third season
+econ_ctrl_benefit_s4,benefits amount from the control for the fourth season
+econ_trt_benefit_s4,benefits amount from the treatment for the fourth season
+econ_ctrl_bc_ratio1,benefits:cost ratio for the control for the first season
+econ_trt_bc_ratio1,benefits:cost ratio for the treatment for the first season
+econ_ctrl_bc_ratio2,benefits:cost ratio for the control for the second season
+econ_trt_bc_ratio2,benefits:cost ratio for the treatment for the second season
+uom_benefit,unit of measurement for benefits
+usd_exchange_rate,United States dollar exchange rate
+food_ctrl_cr1_s1,food crop yield for first crop in first season of the control      
+food_trt_cr1_s1,food crop yield for first crop in first season of the treatment      
+food_ctrl_cr1__s2,food crop yield for first crop in second season of the control      
+food_trt_cr1_s2,food crop yield for first crop in second season of the treatment      
+food_ctrl_cr1_s3,food crop yield for first crop in third season of the control      
+food_trt_cr1_s3,food crop yield for first crop in third season of the treatment      
+food_ctrl_cr1_s4,food crop yield for first crop in fourth season of the control      
+food_trt_cr1_s4,food crop yield for first crop in fourth season of the treatment      
+food_ctrl_cr1_s5,food crop yield for first crop in fifth season of the control      
+food_trt_cr1_s5,food crop yield for first crop in fifth season of the treatment      
+food_ctrl_cr1_s6,food crop yield for first crop in sixth season of the control      
+food_trt_cr1_s6,food crop yield for first crop in sixth season of the treatment      
+food_ctrl_cr1_s7,food crop yield for first crop in seventh season of the control      
+food_trt_cr1_s7,food crop yield for first crop in seventh season of the treatment      
+food_ctrl_cr1_s8,food crop yield for first crop in eigth season of the control      
+food_trt_cr1_s8,food crop yield for first crop in eigth season of the treatment      
+food_ctrl_cr1_s9,food crop yield for first crop in ninth season of the control      
+food_trt_cr1_s9,food crop yield for first crop in ninth season of the treatment      
+food_ctrl_cr1_s10,food crop yield for first crop in tenth season of the control      
+food_trt_cr1_s10,food crop yield for first crop in tenth season of the treatment      
+cr_1,first food crop planted in experiments    
+uom_cr1,unit of measurement for first food crop yield    
+food_ctrl_cr2_yr1,food crop yield for second crop in first year of the control      
+food_trt_cr2_yr1,food crop yield for second crop in first year of the treatment      
+food_ctrl_cr2_yr2,food crop yield for second crop in second year of the control      
+food_trt_cr2_yr2,food crop yield for second crop in second year of the treatment      
+food_ctrl_cr2_yr3,food crop yield for second crop in third year of the control      
+food_trt_cr2_yr3,food crop yield for second crop in third year of the treatment      
+cr_2,second food crop planted in experiments    
+uom_cr2,unit of measurement for second food crop yield    
+food_ctrol_stover_yr1,stover yield in first year of the control      
+food_trt_stover_yr1,stover yield in first year of the treatment      
+food_ctrl_stover_yr2,stover yield in second year of the control      
+food_trt_stover_yr2,stover yield in second year of the treatment      
+food_ctrl_stover_yr3,stover yield in third year of the control      
+food_trt_stover_yr3,stover yield in third year of the treatment      
+uom_stover,unit of measurement for stover yield from second food crop
+,
+unit of measurement,description
+uom_milk,
+l/day,litres per day
+l/season(6months)/cow,litres per season of 6 months per cow
+uom_dm,
+t/ha/season,tonnes per hectare per season
+kg/ha,kilograms per hectare
+t/ha,tonnes per hectare
+uom_n_forage,
+kg/ha,kilograms per hectare
+soil_ctrl_uom_sl,
+kg/8m2/season,kilograms per 8m2 per season
+Mg/ha/yr,megagrams per hectare per year
+uom_runoff,
+l/8m2/season,litres per 8m2 per season
+mm/yr,millimetres per year
+uom_soc,
+%,percentage
+"g/kg(10-20,s2)",grams per kilogram of soil at a gradient range of 10-20 for season 2
+uom_rev,
+TotgrossUSD/ha/yr,total gross revenue in United States Dollars per hectare per year
+TotgrossUSH/cow/year,total gross revenue in United States Dollars per cow per year
+"TotgrossUSD/ha/season(main,minor)",total gross revenue in United States Dollars per hectare for main and minor seasons combined
+TotUSD/ha/season,total gross revenue in United States Dollars per hectare per season
+uom_benefit,
+CumnetUSD/4seasons,cumulative net benefits in United States Dollars per 4 seasons
+NetKSH/ha/yr,net benefits in Kenyan shillings per hectare per year
+uom_stover,
+kgDM/ha/dryseason,kilograms of dry matter per hectare per dry season
+tDM/ha,tonnes of dry matter per hectare
+uom_me,
+MJ/kgDM,megajoule per kilogram of dry matter
+uom_cr1,
+Mg/ha/season,megagrams per hectare per season
+kg/m/harvest,kilograms per month per harvest
+kg/ha,kilograms per hectare
+t/ha,tonnes per hectare
+kg/ha/yr,kilograms per hectare per year
+kg/ha/season,kilograms per hectare per season
+t/ha/season,tonnes per hectare per season
+t/ha/yr,tonnes per hectare per year
+uom_cr2,
+Mg/ha/season,megagrams per hectare per season
+uom_cp,
+%ofDM(harvest),percentage of dry matter per harvest
+%DM,percentage of dry matter per harvest
+%ofDM(yr),percentage of dry matter per year
+%,percentage
+%ofDM(season),percentage of dry matter per season
+g/kgDM(yr),grams per kilogram of dry matter per year
