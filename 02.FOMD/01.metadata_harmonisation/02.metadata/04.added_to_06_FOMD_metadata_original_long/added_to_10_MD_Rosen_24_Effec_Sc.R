@@ -64,9 +64,13 @@ sort(unique(md.data.short.clean$ss_id))
 # Rename columns to match 10_FOMD_metadata_synthesis_short names
 #==========================================================
 names(md.data.short.clean)
-sort(unique(md.data.short.rename$out_year_start))
+sort(unique(md.data.short.rename$C_product_type))
 
-md.data.short.rename <- md.data.short.clean 
+md.data.short.rename <- md.data.short.clean%>%
+  select(C_product_component,C_product_type,
+         C_product_subtype,
+         C_product_simple
+  )
 
 
 #md.data.short.clean$Comparison_ID
