@@ -4,10 +4,11 @@ library(tidyr)
 library(stringr)
 library(readr)
 
-path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Knowledge Hub - General/Agroecology_Knolwedge_Hub/02.FOMD/02.metadata_structure/"
-path.metadata.effectsize<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Knowledge Hub - General/Agroecology_Knolwedge_Hub/02.FOMD/04.metadata_effectsize/"
+path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure/"
+path.metadata.effectsize<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/04.metadata_effectsize/"
 
 list.files(path.metadata.structure)
+list.files(path.metadata.effectsize)
 
 #==========================================================
 # Read datasets
@@ -20,36 +21,48 @@ sort(unique(fomd01.practices$subpractice))
 
 #---04_FOMD_screening
 fomd04<-read_xlsx(file.path(path.metadata.structure,"04_FOMD_screening.xlsx"), sheet = "04_FOMD_screening")%>%
-  filter(status %in%c("PI","I"))
+  filter(ss_id!="MD_Rosen_24_Effec_Sc")%>%
+  filter(status =="I")
+length(unique(fomd04$study_id))#20
 
 #---09_FOMD_metadata_extraction_long
 fomd09<-read_xlsx(file.path(path.metadata.structure,"09_FOMD_metadata_extraction_long.xlsx"), sheet = "09_FOMD_metadata_extraction_lon")%>%
-  slice(-(1:2))
-  
+  slice(-(1))%>%
+  filter(study_id!="JA_Kapoor_07_Effec_Jo")#%>% #for now remove (it is not ready)
+  #filter(row_status=="verified")
+
+length(unique(fomd09$study_id)) #18
+
 #---10_FOMD_metadata_synthesis_long
 fomd10<-read_xlsx(file.path(path.metadata.structure,"10_FOMD_metadata_synthesis_short.xlsx"), sheet = "10_FOMD_metadata_synthesis")%>%
-    select(-starts_with("T_"),-index)%>%
+    select(-starts_with("T_"))%>%
     rename_with(~ sub("^C_", "", .x))
 
 names(fomd10)
 #==========================================================
 # Left join for reclassification
 #==========================================================
+sort(unique(fomd09$out_subindicator))
+names(fomd01.countries)
+
 fomd09.clean<-fomd09%>%
   #---bibliographic----
-  left_join(fomd04 %>%select(authors,year,journal,doi,study_id),by ="study_id" )%>%
+  left_join(fomd04 %>%select(authors,title,year,journal,doi,study_id),by ="study_id" )%>%
   
   #---outcome
-  left_join(fomd01.outcomes %>%select(pillar,subpillar,indicator, subindicator,effect_size_type),by = c("out_subindicator"="subindicator"))%>%
+  left_join(fomd01.outcomes %>%select(pillar,subpillar, indicator, subindicator,effect_size_type),by = c("out_subindicator"="subindicator"))%>%
   rename("out_pillar"="pillar",
          "out_subpillar"="subpillar",
          "out_indicator"="indicator",
          "effect_size_type"="effect_size_type")
+  filter(is.na(effect_size_type))
 
+names(fomd09.clean)
 #MISING: Convert units
 #---bibliographic
-sort(unique(fomd09.clean$study_id))  
-sort(unique(fomd09.clean$authors))  
+length(unique(fomd09.clean$study_id)) # 18
+length(unique(fomd09.clean$authors))  #18
+length(unique(fomd09.clean$title)) # 18
 sort(unique(fomd09.clean$year))  
 sort(unique(fomd09.clean$journal))  
 sort(unique(fomd09.clean$doi))  
@@ -61,45 +74,37 @@ sort(unique(fomd09.clean$out_subpillar))
 sort(unique(fomd09.clean$out_indicator))  
 sort(unique(fomd09.clean$effect_size_type))  
 
-#-----------------------------------------------
+#==============================================
 #---- Convert to specify class ----
-#-----------------------------------------------
-fomd09.clean<-fomd09.clean%>%
-  
+#==============================================
+#--- Clean dates
+clean_date <- function(x) {
+  x %>%
+    na_if("Unspecified") %>%
+    as.numeric() %>%
+    as.Date(origin = "1899-12-30") %>%
+    format("%d/%m/%Y")
+}
+
+fomd09.clean <- fomd09.clean %>%
   mutate(
-    planting_date_start = na_if(planting_date_start, "Unspecified"),
-    planting_date_start = as.Date(as.numeric(planting_date_start), origin = "1899-12-30"),
-    planting_date_start = format(planting_date_start, "%d/%m/%Y"),
+    across(c(
+        #--planting_practice
+        planting_date_start, planting_date_end, 
+        #--irrigation_practice
+        irrig_date_start, irrig_date_end,
+        #--harvest_practice
+        harvest_date_start, harvest_date_end,
+        #--postharvesting_practice
+        postharvest_date_start, postharvest_date_end
+      ),
+      clean_date))%>%
+  mutate(across(
+    c(starts_with("crop_density"),
+      starts_with("tree_density"),
+      starts_with("animal_density")),
     
-    planting_date_end = na_if(planting_date_end, "Unspecified"),
-    planting_date_end = as.Date(as.numeric(planting_date_end), origin = "1899-12-30"),
-    planting_date_end = format(planting_date_end, "%d/%m/%Y"),
-    
-    irrig_date_start = na_if(irrig_date_start, "Unspecified"),
-    irrig_date_start = as.Date(as.numeric(irrig_date_start), origin = "1899-12-30"),
-    irrig_date_start = format(irrig_date_start, "%d/%m/%Y"),
-    
-    irrig_date_end = na_if(irrig_date_end, "Unspecified"),
-    irrig_date_end = as.Date(as.numeric(irrig_date_end), origin = "1899-12-30"),
-    irrig_date_end = format(irrig_date_end, "%d/%m/%Y"),
-    
-    harvest_date_start = na_if(harvest_date_start, "Unspecified"),
-    harvest_date_start = as.Date(as.numeric(harvest_date_start), origin = "1899-12-30"),
-    harvest_date_start = format(harvest_date_start, "%d/%m/%Y"),
-    
-    harvest_date_end = na_if(harvest_date_end, "Unspecified"),
-    harvest_date_end = as.Date(as.numeric(harvest_date_end), origin = "1899-12-30"),
-    harvest_date_end = format(harvest_date_end, "%d/%m/%Y"),
-    
-    postharvest_date_start = na_if(postharvest_date_start, "Unspecified"),
-    postharvest_date_start = as.Date(as.numeric(postharvest_date_start), origin = "1899-12-30"),
-    postharvest_date_start = format(postharvest_date_start, "%d/%m/%Y"),
-    
-    postharvest_date_end = na_if(postharvest_date_end, "Unspecified"),
-    postharvest_date_end = as.Date(as.numeric(postharvest_date_end), origin = "1899-12-30"),
-    postharvest_date_end = format(postharvest_date_end, "%d/%m/%Y")
-    
-    )
+      as.character))
   
 (unique(fomd09.clean$planting_date_start))
 (unique(fomd09.clean$planting_date_end))
@@ -112,6 +117,9 @@ fomd09.clean<-fomd09.clean%>%
 
 (unique(fomd09.clean$postharvest_date_start))
 (unique(fomd09.clean$postharvest_date_end))
+class(fomd09.clean$crop_density15)
+class(fomd09.clean$tree_density15)
+class(fomd09.clean$animal_density05)
 
 #==========================================================
 # Convert multiple columns into one column
@@ -120,7 +128,6 @@ collapse_clean <- function(x, sep = "-") {
   x <- x[x != "" & !is.na(x)]
   if (length(x) == 0) NA_character_ else paste(x, collapse = sep)
 }
-
 
 subpractice.list<-c(
   "tillage_subpractice", #soil_management_practice
@@ -142,10 +149,13 @@ subpractice.list<-c(
 )
 
 #MISSING: a medida que se vayan agregando mas countries, crops, animals, cambiar el numero de 01:0x
+
+sort(unique(fomd09.clean1$site_latitude))
+
+#---location----
+
 fomd09.clean<-fomd09.clean%>% 
   rowwise() %>%
-  
-  #---location
 mutate(
   country = paste(na.omit(c_across(starts_with("country0"))),collapse = ".."),
   site_type= paste(na.omit(c_across(starts_with("site_type0"))),collapse = ".."),
@@ -153,94 +163,151 @@ mutate(
   site_admin= paste(na.omit(c_across(starts_with("site_admin0"))),collapse = ".."),
   site_agg= paste(na.omit(c_across(starts_with("site_agg0"))),collapse = ".."),
   site_latlong_type= paste(na.omit(c_across(starts_with("site_latlong_type0"))),collapse = ".."),
-  site_latitude= paste(na.omit(c_across(starts_with("site_latitude0"))),collapse = ".."),
-  site_longitude= paste(na.omit(c_across(starts_with("site_longitude0"))),collapse = ".."),
-  site_buffer= paste(na.omit(c_across(starts_with("site_buffer0"))),collapse = ".."),
+  site_latitude = paste(na.omit(as.character(unlist(pick(starts_with("site_latitude0"))))), collapse = ".."),
+  site_longitude = paste(na.omit(as.character(unlist(pick(starts_with("site_longitude0"))))), collapse = ".."),
+  site_buffer = paste(na.omit(as.character(unlist(pick(starts_with("site_buffer0"))))), collapse = ".."),
   site_key= {
-    long <- c_across(all_of(paste0("site_longitude", sprintf("%02d", 01:02))))
-    lat <- c_across(all_of(paste0("site_latitude", sprintf("%02d", 01:02))))
-    b <- c_across(all_of(paste0("site_buffer", sprintf("%02d", 01:02))))
-    paste0(na.omit(ifelse(is.na(long) |long == "",NA_character_,
-                          paste0(long,ifelse(is.na(lat) | lat == "", "", paste0(" ", lat, " B")),
-                                 ifelse(is.na(b) | b == "", "", b)))),collapse = "..")
-  },
+    coun <- as.character(unlist(pick(all_of(paste0("country", sprintf("%02d", 1:5))))))
+    
+    long <- as.character(unlist(pick(all_of(paste0("site_longitude", sprintf("%02d", 1:5))))))
+    lat  <- as.character(unlist(pick(all_of(paste0("site_latitude",  sprintf("%02d", 1:5))))))
+    b    <- as.character(unlist(pick(all_of(paste0("site_buffer",    sprintf("%02d", 1:5))))))
+    vals <- ifelse(
+      is.na(coun) | coun == "",
+      NA_character_,
+      paste0(
+        coun," ",
+        long,
+        ifelse(is.na(lat) | lat == "", "", paste0(" ", lat, " B")),
+        ifelse(is.na(b) | b == "", "", b)
+      )
+    )
+    
+    paste0(na.omit(vals), collapse = "..")
+    
+  })
 
-  #---commodity_crop
+sort(unique(fomd09.clean$country))
+sort(unique(fomd09.clean$site_type))
+sort(unique(fomd09.clean$site_id))
+sort(unique(fomd09.clean$site_admin))
+sort(unique(fomd09.clean$site_latlong_type))
+sort(unique(fomd09.clean$site_latitude))
+sort(unique(fomd09.clean$site_longitude))
+sort(unique(fomd09.clean$site_buffer))
+sort(unique(fomd09.clean$site_key))
+
+#---commodity_crop----
+fomd09.clean<-fomd09.clean%>% 
+  rowwise() %>%
+  mutate(
   crop_diversity = {
-    d <- c_across(all_of(paste0("crop", sprintf("%02d", 01:03))))
-    a <- c_across(all_of(paste0("crop_arrangement", sprintf("%02d", 01:03))))
+    d <- c_across(all_of(paste0("crop", sprintf("%02d", 01:15))))
+    a <- c_across(all_of(paste0("crop_arrangement", sprintf("%02d", 01:15))))
     paste0(na.omit(ifelse(is.na(d) | d == "", NA_character_, paste0(d, ifelse(is.na(a), "", a)))), collapse = "")
   } ,
   crop_variety = {
-      v <- c_across(all_of(paste0("crop_variety", sprintf("%02d", 01:03))))
-      a <- c_across(all_of(paste0("crop_arrangement", sprintf("%02d", 01:03))))
-      paste0(na.omit(ifelse(is.na(v) | v == "", NA_character_, paste0(v, ifelse(is.na(a), "", a)))), collapse = "")
+    c <- c_across(all_of(paste0("crop", sprintf("%02d", 01:15))))
+    v <- c_across(all_of(paste0("crop_variety", sprintf("%02d", 01:15))))
+    a <- c_across(all_of(paste0("crop_arrangement", sprintf("%02d", 01:15))))
+    paste0(na.omit(ifelse(is.na(c) | c == "", NA_character_, paste0(c,"(",v, ")",ifelse(is.na(a), "", a)))), collapse = "")
   } ,
   crop_density= {
-    d <- c_across(all_of(paste0("crop_density", sprintf("%02d", 01:03))))
-    u <- c_across(all_of(paste0("crop_density_unit", sprintf("%02d", 01:03))))
-    a <- c_across(all_of(paste0("crop_arrangement", sprintf("%02d", 01:03))))
+    c <- c_across(all_of(paste0("crop", sprintf("%02d", 01:15))))
+    d <- c_across(all_of(paste0("crop_density", sprintf("%02d", 01:15))))
+    u <- c_across(all_of(paste0("crop_density_unit", sprintf("%02d", 01:15))))
+    a <- c_across(all_of(paste0("crop_arrangement", sprintf("%02d", 01:15))))
     paste0(na.omit(ifelse(is.na(d) |d == "",NA_character_,
-                          paste0(d,ifelse(is.na(u) | u == "", "", paste0("(", u, ")")),
+                          paste0(c,"[",d,ifelse(is.na(u) | u == "", "", paste0("(", u, ")]")),
                                  ifelse(is.na(a) | a == "", "", a)))),collapse = "")
-   },
-  
-  #---commodity_tree
+   })
+sort(unique(fomd09.clean$crop_diversity))
+sort(unique(fomd09.clean$crop_variety))
+sort(unique(fomd09.clean$crop_density))
+
+#---commodity_tree----
+fomd09.clean<-fomd09.clean%>% 
+  rowwise() %>%
+  mutate(
   tree_diversity = {
-      t <- c_across(all_of(paste0("tree", sprintf("%02d", 01:02))))
-      a <- c_across(all_of(paste0("tree_arrangement", sprintf("%02d", 01:02))))
+      t <- c_across(all_of(paste0("tree", sprintf("%02d", 01:15))))
+      a <- c_across(all_of(paste0("tree_arrangement", sprintf("%02d", 01:15))))
       paste0(na.omit(ifelse(is.na(t) | t == "", NA_character_, paste0(t, ifelse(is.na(a), "", a)))), collapse = "")
     },
   tree_density= {
-    d <- c_across(all_of(paste0("tree_density", sprintf("%02d", 01:02))))
-    u <- c_across(all_of(paste0("tree_density_unit", sprintf("%02d", 01:02))))
-    a <- c_across(all_of(paste0("tree_arrangement", sprintf("%02d", 01:02))))
+    t <- c_across(all_of(paste0("tree", sprintf("%02d", 01:10))))
+    d <- c_across(all_of(paste0("tree_density", sprintf("%02d", 01:15))))
+    u <- c_across(all_of(paste0("tree_density_unit", sprintf("%02d", 01:15))))
+    a <- c_across(all_of(paste0("tree_arrangement", sprintf("%02d", 01:15))))
     paste0(na.omit(ifelse(is.na(d) |d == "",NA_character_,
-                          paste0(d,ifelse(is.na(u) | u == "", "", paste0("(", u, ")")),
+                          paste0(t,"[",d,ifelse(is.na(u) | u == "", "", paste0("(", u, ")]")),
                                  ifelse(is.na(a) | a == "", "", a)))),collapse = "")
-  },
-  
-  #---commodity_animal
+  })
+sort(unique(fomd09.clean$tree_diversity))
+sort(unique(fomd09.clean$tree_density))
+
+#---commodity_animal----
+fomd09.clean<-fomd09.clean%>% 
+  rowwise() %>%
+  mutate(
   animal_diversity = {
-    l <- c_across(all_of(paste0("animal", sprintf("%02d", 01:02))))
-    a <- c_across(all_of(paste0("animal_arrangement", sprintf("%02d", 01:02))))
+    l <- c_across(all_of(paste0("animal", sprintf("%02d", 01:05))))
+    a <- c_across(all_of(paste0("animal_arrangement", sprintf("%02d", 01:05))))
     paste0(na.omit(ifelse(is.na(l) | l == "", NA_character_, paste0(l, ifelse(is.na(a), "", a)))), collapse = "")
   },
   
   animal_breed = {
-    v <- c_across(all_of(paste0("animal_breed", sprintf("%02d", 01:02))))
-    a <- c_across(all_of(paste0("animal_arrangement", sprintf("%02d", 01:02))))
-    paste0(na.omit(ifelse(is.na(v) | v == "", NA_character_, paste0(v, ifelse(is.na(a), "", a)))), collapse = "")
+    l <- c_across(all_of(paste0("animal", sprintf("%02d", 01:05))))
+    v <- c_across(all_of(paste0("animal_breed", sprintf("%02d", 01:05))))
+    a <- c_across(all_of(paste0("animal_arrangement", sprintf("%02d", 01:05))))
+    paste0(na.omit(ifelse(is.na(v) | v == "", NA_character_, paste0(l,"(",v, ")",ifelse(is.na(a), "", a)))), collapse = "")
   } ,
   
   animal_density= {
+    l <- c_across(all_of(paste0("animal", sprintf("%02d", 01:05))))
     d <- c_across(all_of(paste0("animal_density", sprintf("%02d", 01:02))))
     u <- c_across(all_of(paste0("animal_density_unit", sprintf("%02d", 01:02))))
     a <- c_across(all_of(paste0("animal_arrangement", sprintf("%02d", 01:02))))
     paste0(na.omit(ifelse(is.na(d) |d == "",NA_character_,
-                          paste0(d,ifelse(is.na(u) | u == "", "", paste0("(", u, ")")),
+                          paste0(l,"[", d,ifelse(is.na(u) | u == "", "", paste0("(", u, ")]")),
                                  ifelse(is.na(a) | a == "", "", a)))),collapse = "")
-  },
+  })
+sort(unique(fomd09.clean$animal_diversity))
+sort(unique(fomd09.clean$animal_breed))
+sort(unique(fomd09.clean$animal_density))
+
   
-  #---planting_moderator
-  planting_date_start_end= paste0(na.omit(c(planting_date_start,planting_date_end)),collapse = "-"),
+#---planting_moderator----
+  #planting_date_start_end= paste0(na.omit(c(planting_date_start,planting_date_end)),collapse = "-"),
   
+sort(unique(fomd09.clean$planting_date_start_end))
+
+
+#---intercropping_practice----
+sort(unique(fomd09.clean$intercrop_subpractice))
+
+
+#---crop_sequence_practice
+fomd09.clean<-fomd09.clean%>% 
+  rowwise() %>%
+  mutate(
   #---crop_sequence_practice
-  crop_seq_subpractice= paste(na.omit(c_across(starts_with("crop_seq_subpractice0"))),collapse = "-"),
-  
-  
-  #---agroforestry_practice
+  crop_seq_subpractice= paste(na.omit(c_across(starts_with("crop_seq_subpractice0"))),collapse = "-"))
+
+sort(unique(fomd09.clean$crop_seq_subpractice))
+
+#---agroforestry_practice----
+fomd09.clean<-fomd09.clean%>% 
+  rowwise() %>%
+  mutate( 
   agrof_subpractice = paste(
     na.omit(c_across(any_of(c("agrof_spatial_arrangement_subpractice",
                               "agrof_components_subpractice",
-                              "agrof_temporal_subpractice",
                               "agrof_shade_subpractice")))),  collapse = "-"),
-  
-  agrof_subpractice = case_when(
-    agrof_subpractice=="Monoculture"~"Monoculture_Landscape management",
-    TRUE~agrof_subpractice
-  ),
-  #---agroforestry_moderator
+  #agrof_subpractice = case_when(
+   # agrof_subpractice=="Monoculture"~"Monoculture_Landscape management",
+    #TRUE~agrof_subpractice
+  #),
   agrof_shade_mean_min_max =  ifelse(
     is.na(agrof_shade_mean) & is.na(agrof_shade_min) & is.na(agrof_shade_max),  "",
     paste0(agrof_shade_mean, "(", agrof_shade_min, "-", agrof_shade_max, ")")),
@@ -251,17 +318,35 @@ mutate(
   
   agrof_dhb_mean_min_max=ifelse(
     is.na(agrof_dhb_mean) & is.na(agrof_dhb_min) & is.na(agrof_dhb_max),  "",
-    paste0(agrof_dhb_mean, "(", agrof_dhb_min, "-", agrof_dhb_max, ")")),
-  
-  #---weeding_management_moderator
+    paste0(agrof_dhb_mean, "(", agrof_dhb_min, "-", agrof_dhb_max, ")")))
+
+sort(unique(fomd09.clean$agrof_subpractice))
+sort(unique(fomd09.clean$agrof_shade_mean_min_max))
+sort(unique(fomd09.clean$agrof_canopy_height_mean_min_max))
+sort(unique(fomd09.clean$agrof_dhb_mean_min_max))
+
+#############################################
+##### CHECK: MISSING FERTILIZER SUBPRACTICES
+#############################################
+
+#---weeding_management_moderator----
+fomd09.clean<-fomd09.clean%>% 
+  rowwise() %>%
+  mutate( 
   weed_frequency_unit= ifelse(
     is.na(weed_frequency) & is.na(weed_frequency_unit),  "",
-    paste0(weed_frequency, "(", weed_frequency_unit,  ")")),
+    paste0(weed_frequency, "(", weed_frequency_unit,  ")")))
   
-  #---chemical_management_practice
+sort(unique(fomd09.clean$weed_method))
+sort(unique(fomd09.clean$weed_frequency_unit))
+  
+
+#---chemical_management_practice ### TO CHECK FALTA ARREGLAR AMOUNT UNIT
+fomd09.clean1<-fomd09.clean%>% 
+    rowwise() %>%
+    mutate( 
   chem_subpractice= paste(na.omit(c_across(starts_with("chem_subpractice0"))),collapse = "-"),
   
-  #---chemical_management_moderator
   chem_name_amount_unit = {
     n <- c_across(all_of(paste0("chem_name", sprintf("%02d", 1:3))))
     a <- c_across(all_of(paste0("chem_amount", sprintf("%02d", 1:3))))
@@ -273,7 +358,10 @@ mutate(
              ifelse(is.na(u) | u == "", "", paste0("(", u, ")"))
              ))
     if (all(vals == "NA")) "" else paste(vals, collapse = "-")
-  },
+  })
+  
+sort(unique(fomd09.clean1$chem_subpractice))
+sort(unique(fomd09.clean1$chem_name_amount_unit))
   
   #---residues_practice
   residues_subpractice= paste(na.omit(c_across(starts_with("residues_subpractice0"))),collapse = "-"),
@@ -315,44 +403,14 @@ mutate(
   ungroup()
 
 names(fomd09.clean)
-#---location
-sort(unique(fomd09.clean$country))
-sort(unique(fomd09.clean$site_type))
-sort(unique(fomd09.clean$site_id))
-sort(unique(fomd09.clean$site_admin))
-sort(unique(fomd09.clean$site_latlong_type))
-sort(unique(fomd09.clean$site_latitude))
-sort(unique(fomd09.clean$site_longitude))
-sort(unique(fomd09.clean$site_buffer))
-sort(unique(fomd09.clean$site_key))
-#---commodity_crop
-sort(unique(fomd09.clean$crop_diversity))
-sort(unique(fomd09.clean$crop_variety))
-table(fomd09.clean$crop_diversity,fomd09.clean$crop_variety)
-sort(unique(fomd09.clean$crop_density))
-#---commodity_tree
-sort(unique(fomd09.clean$tree_diversity))
-sort(unique(fomd09.clean$tree_density))
-#---commodity_animal
-sort(unique(fomd09.clean$animal_diversity))
-#---planting_moderator
-sort(unique(fomd09.clean$planting_date_start_end))
-#---intercropping_practice
-sort(unique(fomd09.clean$intercrop_subpractice))
-#---crop_sequence_practice
-sort(unique(fomd09.clean$crop_seq_subpractice))
-#---agroforestry_practice
-sort(unique(fomd09.clean$agrof_subpractice))
-#---agroforestry_moderator
-sort(unique(fomd09.clean$agrof_shade_mean_min_max))
-sort(unique(fomd09.clean$agrof_canopy_height_mean_min_max))
-sort(unique(fomd09.clean$agrof_dhb_mean_min_max))
-#---weeding_management_moderator
-sort(unique(fomd09.clean$weed_frequency_unit))
-#---chemical_management_practice
-sort(unique(fomd09.clean$chem_subpractice))
-#---chemical_management_moderator
-sort(unique(fomd09.clean$chem_name_amount_unit))
+
+
+
+
+
+
+
+
 #---residues_practice
 sort(unique(fomd09.clean$residues_subpractice))
 #---residues_moderator
