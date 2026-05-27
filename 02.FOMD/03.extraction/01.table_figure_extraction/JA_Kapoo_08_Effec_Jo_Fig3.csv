@@ -1,0 +1,49 @@
+Site,Indicator,Point,SD
+AN,Jackknife estimator of species richness,62.80,
+AN,Jackknife estimator of species richness,65.89,3.08
+BC,Jackknife estimator of species richness,77.66,
+BC,Jackknife estimator of species richness,81.31,3.64
+IN,Jackknife estimator of species richness,74.02,
+IN,Jackknife estimator of species richness,79.35,5.33
+IT,Jackknife estimator of species richness,74.58,
+IT,Jackknife estimator of species richness,68.69,5.89
+IYAK,Jackknife estimator of species richness,78.50,
+IYAK,Jackknife estimator of species richness,82.43,3.93
+KO,Jackknife estimator of species richness,73.46,
+KO,Jackknife estimator of species richness,77.66,4.21
+MA,Jackknife estimator of species richness,102.34,
+MA,Jackknife estimator of species richness,105.42,3.08
+PA,Jackknife estimator of species richness,86.36,
+PA,Jackknife estimator of species richness,94.21,7.85
+PU,Jackknife estimator of species richness,83.55,
+PU,Jackknife estimator of species richness,85.51,1.96
+TC,Jackknife estimator of species richness,100.65,
+TC,Jackknife estimator of species richness,103.74,3.08
+TF,Jackknife estimator of species richness,81.87,
+TF,Jackknife estimator of species richness,86.36,4.49
+V3,Jackknife estimator of species richness,95.33,
+V3,Jackknife estimator of species richness,98.97,3.64
+AN,rarefaction spider species richness,36.45,
+AN,rarefaction spider species richness,38.69,2.24
+BC,rarefaction spider species richness,39.81,
+BC,rarefaction spider species richness,42.90,3.08
+IN,rarefaction spider species richness,44.86,
+IN,rarefaction spider species richness,47.66,2.80
+IT,rarefaction spider species richness,47.10,
+IT,rarefaction spider species richness,44.86,2.24
+IYAK,rarefaction spider species richness,39.81,
+IYAK,rarefaction spider species richness,42.90,3.08
+KO,rarefaction spider species richness,47.38,
+KO,rarefaction spider species richness,49.63,2.24
+MA,rarefaction spider species richness,44.86,
+MA,rarefaction spider species richness,48.50,3.64
+PA,rarefaction spider species richness,47.10,
+PA,rarefaction spider species richness,50.19,3.08
+PU,rarefaction spider species richness,52.43,
+PU,rarefaction spider species richness,55.23,2.80
+TC,rarefaction spider species richness,48.79,
+TC,rarefaction spider species richness,52.15,3.36
+TF,rarefaction spider species richness,41.78,
+TF,rarefaction spider species richness,44.58,2.80
+V3,rarefaction spider species richness,54.95,
+V3,rarefaction spider species richness,58.04,3.08

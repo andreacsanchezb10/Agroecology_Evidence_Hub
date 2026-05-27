@@ -219,6 +219,9 @@ sort(unique(fomd09.clean$system_type))
 
 #---commodity_crop----
 fomd09.clean<-fomd09.clean%>% 
+  mutate( across(
+      all_of(paste0("crop", sprintf("%02d", 1:15))),
+      ~gsub("_", " ", .x))) %>% 
   rowwise() %>%
   mutate(
   crop_diversity = {
@@ -321,7 +324,9 @@ sort(unique(fomd09.clean$planting_date_start))
 sort(unique(fomd09.clean$planting_date_end))
 
 #---improved crop varieties: practice----
-# TO CHECK: ver de sacar el "_" que aparece entre los espacios de los crops
+fomd09.clean<-fomd09.clean%>% 
+  mutate(varietal_crop_name = gsub("_", " ", varietal_crop_name))
+
 sort(unique(fomd09.clean$varietal_crop_subpractice_raw))
 sort(unique(fomd09.clean$varietal_crop_name))
 sort(unique(fomd09.clean$varietal_crop_variety))
@@ -329,24 +334,29 @@ sort(unique(fomd09.clean$varietal_crop_subpractice))
 sort(unique(fomd09.clean$varietal_crop_type))
 sort(unique(fomd09.clean$varietal_crop_trait))
 
-					
-
-
-
 #---intercropping_practice----
+sort(unique(fomd09.clean$intercrop_subpractice_raw))
 sort(unique(fomd09.clean$intercrop_subpractice))
+sort(unique(fomd09.clean$intercrop_design))
+sort(unique(fomd09.clean$intercrop_pattern))
+sort(unique(fomd09.clean$intercrop_start_year))
+sort(unique(fomd09.clean$intercrop_start_season))
+sort(unique(fomd09.clean$intercrop_residues_fate))
 
-
-#---crop_sequence_practice
+#---crop_sequence_practice----
 fomd09.clean<-fomd09.clean%>% 
   rowwise() %>%
   mutate(
-  #---crop_sequence_practice
-  crop_seq_subpractice= paste(na.omit(c_across(starts_with("crop_seq_subpractice0"))),collapse = "-"))
+    crop_seq_subpractice= paste(na.omit(c_across(starts_with("crop_seq_subpractice0"))),collapse = "-"))
 
+sort(unique(fomd09.clean$crop_seq_subpractice_raw))
 sort(unique(fomd09.clean$crop_seq_subpractice))
+sort(unique(fomd09.clean$crop_seq_start_year))
+sort(unique(fomd09.clean$crop_seq_start_season))
+sort(unique(fomd09.clean$crop_seq_residues_fate))
 
 #---agroforestry_practice----
+## HASTA ACA!!
 fomd09.clean<-fomd09.clean%>% 
   rowwise() %>%
   mutate( 
