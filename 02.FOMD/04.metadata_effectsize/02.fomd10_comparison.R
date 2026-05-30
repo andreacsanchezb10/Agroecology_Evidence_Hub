@@ -4,8 +4,8 @@ library(tidyr)
 library(stringr)
 library(readr)
 
-path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Knowledge Hub - General/Agroecology_Knolwedge_Hub/02.FOMD/02.metadata_structure/"
-path.metadata.effectsize<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Knowledge Hub - General/Agroecology_Knolwedge_Hub/02.FOMD/04.metadata_effectsize/"
+path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure/"
+path.metadata.effectsize<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/04.metadata_effectsize/"
 
 list.files(path.metadata.structure)
 list.files(path.metadata.effectsize)
@@ -17,36 +17,40 @@ list.files(path.metadata.effectsize)
 fomd01.outcomes<- read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies.xlsx"), sheet = "01_outcomes")
 
 #---09_FOMD_clean
-fomd09.clean<-read_csv(file.path(path.metadata.effectsize,"fomd09_clean.csv"), show_col_types = FALSE)
+fomd09.clean<-read_csv(file.path(path.metadata.effectsize,"fomd09_cleanv2.csv"), show_col_types = FALSE)
+#---09_FOMD_verified
+#fomd09.clean<- read_xlsx(file.path(path.metadata.structure,"09_FOMD_metadata_extraction_long.xlsx"), sheet = "09_FOMD_metadata_extraction_lon")
 
 #---10_FOMD_metadata_synthesis_long
 fomd10.names<-names(read_xlsx(file.path(path.metadata.structure,"10_FOMD_metadata_synthesis_short.xlsx"), sheet = "10_FOMD_metadata_synthesis"))
 fomd10.names
 # check
 sort(unique(fomd09.clean$product_component))
-sort(unique(fomd09.clean$product_component_focal_yield))
 
 #==========================================================
 # Row id columns: Context columns
 #==========================================================
 names(fomd09.clean)
 sort(unique(fomd09.clean$out_subpillar))
+table(fomd09.clean$out_subpillar)
 sort(unique(fomd09.clean$bio_ground_ref))
-sort(unique(fomd09.clean$subpractice))
+sort(unique(fomd09.clean$country))
+sort(unique(fomd09.clean$country_ISO))
 
 context.row.id.cols<-c(
   #---practice
   "practice_id",
   #---bibliographic----
-  "study_id","authors","year","journal","doi",
+  "study_id","authors","title","year","journal","doi",
   #---location----
   "country", "country_ISO" , 
-  "site_type","site_id","site_admin","site_agg","site_latlong_type",
-  "site_latitude","site_longitude","site_buffer","site_key",
+  #"site_type","site_id","site_admin","site_agg","site_latlong_type",
+  #"site_latitude","site_longitude","site_buffer","site_key",
   #---experiment_details----
-  "exp_design",	"exp_plot_size"	,"exp_field_size",	"exp_duration",
+  #"exp_design",	"exp_plot_size"	,"exp_field_size",	"exp_duration",
+  
   #---experiment_time----
-  "time_raw",	"time_year_start",	"time_year_end",	"time_season",
+  #"time_raw",	"time_year_start",	"time_year_end",	"time_season",
   #---product_outcome----
   "bio_func_group","bio_ground_ref" ,
   #---outcome----
@@ -56,19 +60,136 @@ context.row.id.cols<-c(
   "out_year",	"out_year_start",	"out_year_end",
   "out_season_start",	"out_season_end")
 
+
+##########################################
+#---- BIODIVERSITY DATASET
+##########################################
+bio.data<- fomd09.clean%>%
+  filter(out_subpillar=="Biodiversity")
+
+# Quick checks
+length(unique(bio.data$study_id)) #6
+bio.data %>% distinct(practice_id) %>% arrange(practice_id)
+bio.data %>% distinct(country) %>% arrange(country)
+bio.data %>% distinct(country_ISO) %>% arrange(country_ISO)
+bio.data %>%group_by(country) %>% summarise(n_studies = n_distinct(study_id), .groups = "drop") %>% arrange(desc(n_studies))
+bio.data %>% distinct(out_subpillar)
+bio.data %>% distinct(product) %>% arrange(product)
+bio.data %>%count(out_subindicator, wt = !duplicated(study_id), name = "n_studies")
+
 #-----------------------------
-# Row id1 columns: out_subpillar== "Biodiversity" 
-# row id includes product_component
+# Columns defining one biodiversity outcome row
 #-----------------------------
-out.bio.row.id1.cols <- c(
-  context.row.id.cols,
+bio.row.id.cols <- c(
+  #-- practice
+  "practice_id",
+  #-- bibliographic
+  "ss_id",
+  "study_id","authors","year","journal","doi",
+  #-- location
+  "country", "country_ISO" , 
+  #"site_type","site_id","site_admin","site_agg","site_latlong_type",
+  #"site_latitude","site_longitude","site_buffer","site_key",
+  #-- experiment_details
+  "exp_design",
+  #"exp_plot_size"	,"exp_field_size",	"exp_duration",
+  #---experiment_time----
+  "time_raw",	"time_year_start",	"time_year_end",	"time_season",
   #---product_outcome----
-  "product_component" #MISSING: "C_product_type",  "C_product_subtype",  "C_product_simple"
+  "bio_func_group","bio_ground_ref" ,
+  #---outcome----
+  "out_subindicator","out_indicator","out_subpillar" , "out_pillar","out_subindicator_unit", #"effect_size_type", 
+  "out_soil_depth_l",	"out_soil_depth_u",
+  #---product_outcome----
+  "product", #MISSING: "C_product_type",  "C_product_subtype",  "C_product_simple"
+  #---outcome_time---
+  "out_year",	"out_year_start",	"out_year_end",
+  "out_season_start",	"out_season_end"
   )
 
-out.bio.row.id1.cols
-out.bio.comparison.id1.cols<- c("out_comparison_treatment",setdiff(out.bio.row.id1.cols, "practice_id"))
-out.bio.comparison.id1.cols
+bio.row.id.cols
+
+bio.data<- bio.data%>%
+  mutate(row_id = apply(select(., all_of(bio.row.id.cols)), 1, paste, collapse = "/"))
+
+# Quick checks (make sure the numbers are the same)
+nrow(bio.data) #197
+length(unique(bio.data$row_id)) #197
+sort(unique(bio.data$row_id)) #197
+
+#-----------------------------
+# Columns defining one biodiversity comparison
+#-----------------------------
+bio.comparison.id.cols<- c("out_comparison_treatment",setdiff(bio.row.id.cols, "practice_id"))
+bio.comparison.id.cols
+
+#-----------------------------
+# Control observations
+#-----------------------------
+bio.data.C<-bio.data%>%
+  filter(grepl("C", practice_id))
+
+# Quick checks
+nrow(bio.data.C) #74
+length(unique(bio.data.C$row_id)) #74
+bio.data %>%  filter(grepl("C", practice_id))%>% distinct(practice_id) %>% arrange(practice_id)
+unique(bio.data.C$out_comparison_treatment)
+bio.data.C%>% filter(grepl("C", practice_id))%>%filter(is.na(practice_id))
+
+bio.data.C<-bio.data.C%>%
+  separate_rows(out_comparison_treatment, sep = "\\.\\.")%>%
+  mutate(out_comparison_treatment = str_squish(out_comparison_treatment)) %>%
+  filter(out_comparison_treatment != "")%>%
+  mutate(comparison_id = apply(select(., all_of(bio.comparison.id.cols)), 1, paste, collapse = "/"))
+    
+# Quick checks
+length(unique(bio.data.C$row_id)) #74
+sort(unique(bio.data.C$row_id)) #74
+sort(unique(bio.data.C$out_comparison_treatment))
+length(unique(bio.data.C$comparison_id)) #176 (AHORA ME APARECE 156)
+sort(unique(bio.data.C$comparison_id)) #176 (AHORA ME APARECE 156)
+
+#-----------------------------
+# Pairing Control and Treatment rows 
+#-----------------------------
+out.all.row.id.cols <- setdiff(bio.row.id.cols,"practice_id")
+out.all.row.id.cols
+
+bio.fomd10<- bio.data.C%>%
+  left_join(
+    bio.data%>% 
+      select(-out.all.row.id.cols), 
+    suffix = c(".C", ".T"),
+    by = c("comparison_id"="row_id"))%>%
+  rename_with(~ paste0("T_", sub("\\.T$", "", .)),.cols = ends_with(".T"))%>%
+  rename_with(~ paste0("C_", sub("\\.C$", "", .)),.cols = ends_with(".C"))%>%
+  filter(!is.na(T_practice_id))
+  mutate(comparison_id=paste0(C_practice_id,"-",comparison_id1))
+
+names(bio.fomd10)
+nrow(bio.fomd10) #231 (AHORA ME APARECE 261)
+length(unique(bio.fomd10$study_id)) #6
+length(unique(bio.fomd10$comparison_id)) #156
+
+sort(unique(fomd10.1$C_crop_diversity))
+sort(unique(fomd10.1$T_crop_diversity))
+
+
+sort(unique(fomd10.1$C_crop_variety))
+sort(unique(fomd10.1$T_out_sd))
+sort(unique(fomd10.1$comparison_id))
+
+sort(unique(fomd10.1$T_practice_id))
+
+
+############################################
+
+
+
+
+
+
+
 
 #-----------------------------
 # Row id1 columns: out_subpillar== "Economics" 

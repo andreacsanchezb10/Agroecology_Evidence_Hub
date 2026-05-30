@@ -27,8 +27,7 @@ length(unique(fomd04$study_id))#20
 
 #---09_FOMD_metadata_extraction_long
 fomd09<-read_xlsx(file.path(path.metadata.structure,"09_FOMD_metadata_extraction_long.xlsx"), sheet = "09_FOMD_metadata_extraction_lon")%>%
-  slice(-(1))%>%
-  filter(study_id!="JA_Kapoo_08_Effec_Jo")#%>% #for now remove (it is not ready)
+  slice(-(1))
   #filter(row_status=="verified")
 
 length(unique(fomd09$study_id)) #18
@@ -39,42 +38,6 @@ fomd10<-read_xlsx(file.path(path.metadata.structure,"10_FOMD_metadata_synthesis_
     rename_with(~ sub("^C_", "", .x))
 
 names(fomd10)
-#==========================================================
-# Left join for reclassification
-#==========================================================
-sort(unique(fomd09$out_subindicator))
-names(fomd01.countries)
-
-fomd09.clean<-fomd09%>%
-  #---bibliographic----
-  left_join(fomd04 %>%select(authors,title,year,journal,doi,study_id),by ="study_id" )%>%
-  
-  #---outcome
-  left_join(fomd01.outcomes %>%select(pillar,subpillar, indicator, subindicator,effect_size_type),by = c("out_subindicator"="subindicator"))%>%
-  rename("out_pillar"="pillar",
-         "out_subpillar"="subpillar",
-         "out_indicator"="indicator",
-         "effect_size_type"="effect_size_type")
-  filter(is.na(effect_size_type))
-
-names(fomd09.clean)
-#MISING: Convert units
-#---bibliographic
-length(unique(fomd09.clean$study_id)) # 18
-length(unique(fomd09.clean$authors))  #18
-length(unique(fomd09.clean$title)) # 18
-sort(unique(fomd09.clean$year))  
-sort(unique(fomd09.clean$journal))  
-sort(unique(fomd09.clean$doi))  
-
-#---outcome
-sort(unique(fomd09.clean$out_subindicator))  
-sort(unique(fomd09.clean$out_pillar))  
-sort(unique(fomd09.clean$out_subpillar))  
-sort(unique(fomd09.clean$out_indicator))  
-sort(unique(fomd09.clean$out_subindicator_unit))  
-
-sort(unique(fomd09.clean$effect_size_type))  
 
 #==============================================
 #---- Convert to specify class ----
@@ -88,7 +51,7 @@ clean_date <- function(x) {
     format("%d/%m/%Y")
 }
 
-fomd09.clean <- fomd09.clean %>%
+fomd09.clean <- fomd09 %>%
   mutate(
     across(c(
         #--planting_practice
@@ -152,55 +115,63 @@ subpractice.list<-c(
 
 #MISSING: a medida que se vayan agregando mas countries, crops, animals, cambiar el numero de 01:0x
 
-sort(unique(fomd09.clean1$site_latitude))
+###########################
+###################
+#---bibliographic----
+fomd09.clean<-fomd09.clean%>%
+  left_join(fomd04 %>%select(authors,title,year,journal,doi,study_id),by ="study_id" )
+
+# Quick checks
+length(unique(fomd09.clean$study_id)) # 18
+length(unique(fomd09.clean$authors))  #18
+length(unique(fomd09.clean$title)) # 18
+sort(unique(fomd09.clean$year))  
+sort(unique(fomd09.clean$journal))  
+sort(unique(fomd09.clean$doi)) 
 
 #---location----
 fomd09.clean<-fomd09.clean%>% 
   rowwise() %>%
-mutate(
-  country = paste(na.omit(c_across(starts_with("country0"))),collapse = ".."),
-  site_type= paste(na.omit(c_across(starts_with("site_type0"))),collapse = ".."),
-  site_id= paste(na.omit(c_across(starts_with("site_id0"))),collapse = ".."),
-  site_admin= paste(na.omit(c_across(starts_with("site_admin0"))),collapse = ".."),
-  site_agg= paste(na.omit(c_across(starts_with("site_agg0"))),collapse = ".."),
-  site_latlong_type= paste(na.omit(c_across(starts_with("site_latlong_type0"))),collapse = ".."),
-  site_latitude = paste(na.omit(as.character(unlist(pick(starts_with("site_latitude0"))))), collapse = ".."),
-  site_longitude = paste(na.omit(as.character(unlist(pick(starts_with("site_longitude0"))))), collapse = ".."),
-  site_buffer = paste(na.omit(as.character(unlist(pick(starts_with("site_buffer0"))))), collapse = ".."),
-  site_key= {
-    coun <- as.character(unlist(pick(all_of(paste0("country", sprintf("%02d", 1:5))))))
-    
-    long <- as.character(unlist(pick(all_of(paste0("site_longitude", sprintf("%02d", 1:5))))))
-    lat  <- as.character(unlist(pick(all_of(paste0("site_latitude",  sprintf("%02d", 1:5))))))
-    b    <- as.character(unlist(pick(all_of(paste0("site_buffer",    sprintf("%02d", 1:5))))))
+  mutate(
+    country = paste(unique(na.omit(c_across(starts_with("country0"))),collapse = "..")),
+    site_key= {
+      coun <- as.character(unlist(pick(all_of(paste0("country", sprintf("%02d", 1:5))))))
+      type <- as.character(unlist(pick(all_of(paste0("site_type", sprintf("%02d", 1:5))))))
+      id <- as.character(unlist(pick(all_of(paste0("site_id", sprintf("%02d", 1:5))))))
+      admin <- as.character(unlist(pick(all_of(paste0("site_admin", sprintf("%02d", 1:5))))))
+      agg <- as.character(unlist(pick(all_of(paste0("site_agg", sprintf("%02d", 1:5))))))
+      latlong_type <- as.character(unlist(pick(all_of(paste0("site_latlong_type", sprintf("%02d", 1:5))))))
+      lat  <- as.character(unlist(pick(all_of(paste0("site_latitude",  sprintf("%02d", 1:5))))))
+      long <- as.character(unlist(pick(all_of(paste0("site_longitude", sprintf("%02d", 1:5))))))
+      b    <- as.character(unlist(pick(all_of(paste0("site_buffer",    sprintf("%02d", 1:5))))))
     vals <- ifelse(
       is.na(coun) | coun == "",
       NA_character_,
       paste0(
-        coun," ",
-        long,
-        ifelse(is.na(lat) | lat == "", "", paste0(" ", lat, " B")),
-        ifelse(is.na(b) | b == "", "", b)
-      )
-    )
-    
+        "[",coun,"]",
+        "[",type,"]",
+        "[",id,"]",
+        "[",admin,"]",
+        "[",agg,"]",
+        "[",latlong_type,"]",
+        "[",lat,"]",
+        
+        ifelse(is.na(long) | long == "", "", paste0("[", long, "]")),
+        ifelse(is.na(b) | b == "", "", paste0("[", b, "]"))
+      ))
     paste0(na.omit(vals), collapse = "..")
-    
   })
 
+# Quick checks
 sort(unique(fomd09.clean$country))
-sort(unique(fomd09.clean$site_type))
-sort(unique(fomd09.clean$site_id))
-sort(unique(fomd09.clean$site_admin))
-sort(unique(fomd09.clean$site_agg))
-sort(unique(fomd09.clean$site_latlong_type))
-sort(unique(fomd09.clean$site_latitude))
-sort(unique(fomd09.clean$site_longitude))
-sort(unique(fomd09.clean$site_buffer))
+sort(unique(fomd09.clean$country02))
+sort(unique(fomd09.clean$country03))
+sort(unique(fomd09.clean$country04))
 sort(unique(fomd09.clean$site_key))
 
 #---experiment_details----
 ## TO CHECK: see what to do here, this can differ from T and C
+# Quick checks
 sort(unique(fomd09.clean$exp_design))
 sort(unique(fomd09.clean$exp_plot_size))
 sort(unique(fomd09.clean$exp_field_size))
@@ -208,6 +179,7 @@ sort(unique(fomd09.clean$exp_duration))
 
 #---experiment_time----
 ## TO CHECK: see what to do here, this can differ from T and C
+# Quick checks
 sort(unique(fomd09.clean$time_raw))
 sort(unique(fomd09.clean$time_year_start))
 sort(unique(fomd09.clean$time_year_end))
@@ -244,6 +216,8 @@ fomd09.clean<-fomd09.clean%>%
                           paste0(c,"[",d,ifelse(is.na(u) | u == "", "", paste0("(", u, ")]")),
                                  ifelse(is.na(a) | a == "", "", a)))),collapse = "")
    })
+
+# Quick checks
 sort(unique(fomd09.clean$crop_diversity))
 sort(unique(fomd09.clean$crop_variety))
 sort(unique(fomd09.clean$crop_density))
@@ -266,6 +240,8 @@ fomd09.clean<-fomd09.clean%>%
                           paste0(t,"[",d,ifelse(is.na(u) | u == "", "", paste0("(", u, ")]")),
                                  ifelse(is.na(a) | a == "", "", a)))),collapse = "")
   })
+
+# Quick checks
 sort(unique(fomd09.clean$tree_diversity))
 sort(unique(fomd09.clean$tree_density))
 
@@ -295,17 +271,15 @@ fomd09.clean<-fomd09.clean%>%
                           paste0(l,"[", d,ifelse(is.na(u) | u == "", "", paste0("(", u, ")]")),
                                  ifelse(is.na(a) | a == "", "", a)))),collapse = "")
   })
+
+# Quick checks
 sort(unique(fomd09.clean$animal_diversity))
 sort(unique(fomd09.clean$animal_breed))
 sort(unique(fomd09.clean$animal_density))
 
-#---soil_management_practice----
-fomd09.clean<-fomd09.clean%>% 
-  rowwise() %>%
-  mutate(tillage_method=case_when(tillage_method=="Unspecified"~NA,TRUE~tillage_method),
-         tillage_method_other=case_when(tillage_method_other=="Unspecified"~NA,TRUE~tillage_method_other)
-         )
+#---soil_management_practice---- 
 
+# Quick checks
 sort(unique(fomd09.clean$tillage_subpractice_raw))
 sort(unique(fomd09.clean$tillage_subpractice))
 sort(unique(fomd09.clean$tillage_method))
@@ -313,10 +287,9 @@ sort(unique(fomd09.clean$tillage_method_other))
 sort(unique(fomd09.clean$tillage_depth))
 sort(unique(fomd09.clean$tillage_frequency))
 
-
 #---planting_practice----
-#planting_date_start_end= paste0(na.omit(c(planting_date_start,planting_date_end)),collapse = "-"),
-  
+
+# Quick checks
 sort(unique(fomd09.clean$planting_subpractice_raw))
 sort(unique(fomd09.clean$planting_subpractice))
 sort(unique(fomd09.clean$planting_method))
@@ -325,8 +298,13 @@ sort(unique(fomd09.clean$planting_date_end))
 
 #---improved crop varieties: practice----
 fomd09.clean<-fomd09.clean%>% 
-  mutate(varietal_crop_name = gsub("_", " ", varietal_crop_name))
+  mutate(varietal_crop_name = gsub("_", " ", varietal_crop_name))%>%
+  mutate( varietal_crop_variety = ifelse(
+    is.na(varietal_crop_name) | varietal_crop_name == "",
+    NA_character_,
+    paste0(varietal_crop_name, "(", varietal_crop_variety, ")")))
 
+# Quick checks
 sort(unique(fomd09.clean$varietal_crop_subpractice_raw))
 sort(unique(fomd09.clean$varietal_crop_name))
 sort(unique(fomd09.clean$varietal_crop_variety))
@@ -335,6 +313,7 @@ sort(unique(fomd09.clean$varietal_crop_type))
 sort(unique(fomd09.clean$varietal_crop_trait))
 
 #---intercropping_practice----
+# Quick checks
 sort(unique(fomd09.clean$intercrop_subpractice_raw))
 sort(unique(fomd09.clean$intercrop_subpractice))
 sort(unique(fomd09.clean$intercrop_design))
@@ -346,9 +325,9 @@ sort(unique(fomd09.clean$intercrop_residues_fate))
 #---crop_sequence_practice----
 fomd09.clean<-fomd09.clean%>% 
   rowwise() %>%
-  mutate(
-    crop_seq_subpractice= paste(na.omit(c_across(starts_with("crop_seq_subpractice0"))),collapse = "-"))
+  mutate(crop_seq_subpractice= paste(na.omit(c_across(starts_with("crop_seq_subpractice0"))),collapse = "-"))
 
+# Quick checks
 sort(unique(fomd09.clean$crop_seq_subpractice_raw))
 sort(unique(fomd09.clean$crop_seq_subpractice))
 sort(unique(fomd09.clean$crop_seq_start_year))
@@ -356,75 +335,156 @@ sort(unique(fomd09.clean$crop_seq_start_season))
 sort(unique(fomd09.clean$crop_seq_residues_fate))
 
 #---agroforestry_practice----
-## HASTA ACA!!
+##CHECK TO : verificar later if it is better to keep track of spatial, component, shade..
 fomd09.clean<-fomd09.clean%>% 
   rowwise() %>%
-  mutate( 
-  agrof_subpractice = paste(
-    na.omit(c_across(any_of(c("agrof_spatial_arrangement_subpractice",
-                              "agrof_components_subpractice",
-                              "agrof_shade_subpractice")))),  collapse = "-"),
-  #agrof_subpractice = case_when(
-   # agrof_subpractice=="Monoculture"~"Monoculture_Landscape management",
-    #TRUE~agrof_subpractice
-  #),
-  agrof_shade_mean_min_max =  ifelse(
+  mutate(
+    agrof_subpractice = paste(unique(na.omit(c_across(any_of(c("agrof_spatial_arrangement_subpractice",
+                                                               "agrof_components_subpractice",
+                                                               "agrof_shade_subpractice"))))),collapse = "-"),
+    agrof_shade_mean_min_max =  ifelse(
     is.na(agrof_shade_mean) & is.na(agrof_shade_min) & is.na(agrof_shade_max),  "",
     paste0(agrof_shade_mean, "(", agrof_shade_min, "-", agrof_shade_max, ")")),
-  
-  agrof_canopy_height_mean_min_max= ifelse(
+    
+    agrof_canopy_height_mean_min_max= ifelse(
     is.na(agrof_canopy_height_mean) & is.na(agrof_canopy_height_min) & is.na(agrof_canopy_height_max),  "",
     paste0(agrof_canopy_height_mean, "(", agrof_canopy_height_min, "-", agrof_canopy_height_max, ")")),
   
   agrof_dhb_mean_min_max=ifelse(
     is.na(agrof_dhb_mean) & is.na(agrof_dhb_min) & is.na(agrof_dhb_max),  "",
-    paste0(agrof_dhb_mean, "(", agrof_dhb_min, "-", agrof_dhb_max, ")")))
+    paste0(agrof_dhb_mean, "(", agrof_dhb_min, "-", agrof_dhb_max, ")")))%>%
+  ungroup()
 
+# Quick checks
+sort(unique(fomd09.clean$agrof_subpractice_raw))
 sort(unique(fomd09.clean$agrof_subpractice))
 sort(unique(fomd09.clean$agrof_shade_mean_min_max))
 sort(unique(fomd09.clean$agrof_canopy_height_mean_min_max))
 sort(unique(fomd09.clean$agrof_dhb_mean_min_max))
 
-#############################################
-##### CHECK: MISSING FERTILIZER SUBPRACTICES
-#############################################
+#---nutrient_management_practice (inorganic)----
+fomd09.clean<-fomd09.clean%>%
+  rowwise() %>%
+  mutate(
+    fert_inorganic_type_amount_unit = if_else(
+      any(is.na(c(fert_inorganic_type
+                  ))),
+      NA_character_,
+      {
+        types   <- strsplit(fert_inorganic_type, "\\.\\.")[[1]]
+        amounts <- strsplit(fert_inorganic_amount, "\\.\\.")[[1]]
+        units   <- strsplit(fert_inorganic_unit, "\\.\\.")[[1]]
+        
+        paste0(
+          types, "[", amounts, "(", units, ")]",
+          collapse = "..")} )) %>%
+  mutate(
+    fert_inorganicN = if_else(is.na(fert_inorganicN),NA_character_,paste0(fert_inorganicN, "(", fert_inorganicNPK_unit, ")")),
+    fert_inorganicP = if_else(is.na(fert_inorganicP),NA_character_,paste0(fert_inorganicP, "(", fert_inorganicNPK_unit, ")")),
+    fert_inorganicK = if_else(is.na(fert_inorganicK),NA_character_,paste0(fert_inorganicK, "(", fert_inorganicNPK_unit, ")")),
+    fert_inorganicP2O5 = if_else(is.na(fert_inorganicP2O5),NA_character_,paste0(fert_inorganicP2O5, "(", fert_inorganicNPK_unit, ")")),
+    fert_inorganicK2O = if_else(is.na(fert_inorganicK2O),NA_character_,paste0(fert_inorganicK2O, "(", fert_inorganicNPK_unit, ")")))%>%
+  ungroup()
+
+# Quick checks
+sort(unique(fomd09.clean$fert_subpractice_raw))
+sort(unique(fomd09.clean$fert_subpractice))
+sort(unique(fomd09.clean$fert_inorganic_category))
+sort(unique(fomd09.clean$fert_inorganic_type_amount_unit))
+sort(unique(fomd09.clean$fert_inorganicN))
+sort(unique(fomd09.clean$fert_inorganicP))
+sort(unique(fomd09.clean$fert_inorganicK))
+sort(unique(fomd09.clean$fert_inorganicP2O5))
+sort(unique(fomd09.clean$fert_inorganicK2O))
+
+#---nutrient_management_practice (organic)----
+fomd09.clean<-fomd09.clean%>%
+  rowwise() %>%
+  mutate(
+    fert_organic_type_amount_unit = if_else(
+      any(is.na(c(fert_organic_type
+      ))),
+      NA_character_,
+      {
+        types   <- strsplit(fert_organic_type, "\\.\\.")[[1]]
+        amounts <- strsplit(fert_organic_amount, "\\.\\.")[[1]]
+        units   <- strsplit(fert_organic_unit, "\\.\\.")[[1]]
+        
+        paste0(
+          types, "[", amounts, "(", units, ")]",
+          collapse = "..")} )) %>%
+  mutate(
+    fert_organicN = if_else(is.na(fert_organicN),NA_character_,paste0(fert_organicN, "(", fert_organicNPK_unit, ")")),
+    fert_organicP = if_else(is.na(fert_organicP),NA_character_,paste0(fert_organicP, "(", fert_organicNPK_unit, ")")),
+    fert_organicK = if_else(is.na(fert_organicK),NA_character_,paste0(fert_organicK, "(", fert_organicNPK_unit, ")")))%>%
+  ungroup()
+
+# Quick checks
+sort(unique(fomd09.clean$fert_organic_category))
+sort(unique(fomd09.clean$fert_organic_type))
+sort(unique(fomd09.clean$fert_organic_amount))
+sort(unique(fomd09.clean$fert_organic_type_amount_unit))
+sort(unique(fomd09.clean$fert_organicNPK_unit))
+sort(unique(fomd09.clean$fert_organicN))
+sort(unique(fomd09.clean$fert_organicP))
+sort(unique(fomd09.clean$fert_organicK))
+sort(unique(fomd09.clean$fert_organic_source))
 
 #---weeding_management_moderator----
 fomd09.clean<-fomd09.clean%>% 
   rowwise() %>%
   mutate( 
   weed_frequency_unit= ifelse(
-    is.na(weed_frequency) & is.na(weed_frequency_unit),  "",
+    is.na(weed_frequency) & is.na(weed_frequency_unit),  NA,
     paste0(weed_frequency, "(", weed_frequency_unit,  ")")))
   
+# Quick checks
+sort(unique(fomd09.clean$weed_method_raw))
 sort(unique(fomd09.clean$weed_method))
 sort(unique(fomd09.clean$weed_frequency_unit))
-  
 
-#---chemical_management_practice ### TO CHECK FALTA ARREGLAR AMOUNT UNIT
-fomd09.clean1<-fomd09.clean%>% 
+#---chemical_management_practice ----
+### HASTA ACA!
+fomd09.clean<-fomd09.clean%>% 
     rowwise() %>%
     mutate( 
   chem_subpractice= paste(na.omit(c_across(starts_with("chem_subpractice0"))),collapse = ".."),
   
   chem_name_amount_unit = {
-    n <- c_across(all_of(paste0("chem_name", sprintf("%02d", 1:3))))
-    a <- c_across(all_of(paste0("chem_amount", sprintf("%02d", 1:3))))
-    u <- c_across(all_of(paste0("chem_unit", sprintf("%02d", 1:3))))
+    subpractice <- c_across(all_of(paste0("chem_subpractice", sprintf("%02d", 1:3))))
+    name   <- c_across(all_of(paste0("chem_name", sprintf("%02d", 1:3))))
+    amount <- c_across(all_of(paste0("chem_amount", sprintf("%02d", 1:3))))
+    unit   <- c_across(all_of(paste0("chem_unit", sprintf("%02d", 1:3))))
     
-    vals <- ifelse(is.na(n) | n == "", "NA[0(NA)]",
-      paste0(n,"[",
-             ifelse(is.na(a) | a == "", "[Unspecified(Unspecified)]", a),
-             ifelse(is.na(u) | u == "", "", paste0("(", u, ")]"))
-             ))
-    if (all(vals == "NA[0(NA)]")) "" else paste(vals, collapse = "..")
-  })
-  
-sort(unique(fomd09.clean1$chem_subpractice))
-sort(unique(fomd09.clean1$chem_name_amount_unit))
+    keep <- !(is.na(subpractice) | subpractice == "")
+    
+    if (!any(keep)) {
+      NA_character_
+    } else {
+      vals <- ifelse(
+        is.na(name[keep]) | name[keep] == "",
+        "NA[0(NA)]",
+        paste0(
+          name[keep], "[",
+          ifelse(is.na(amount[keep]) | amount[keep] == "", "NA", amount[keep]),
+          "(",
+          ifelse(is.na(unit[keep]) | unit[keep] == "", "NA", unit[keep]),
+          ")]"))
+      
+      paste(vals, collapse = "..")
+    }}) %>%
+  ungroup()
+
+sort(unique(fomd09.clean$chem_subpractice_raw))
+sort(unique(fomd09.clean$chem_subpractice))
+sort(unique(fomd09.clean$chem_name01))
+sort(unique(fomd09.clean$chem_name_amount_unit))
+
+
+
 
 fomd09.clean1<-fomd09.clean%>% 
-  rowwise() %>%
+  rowwise() 
   mutate(  
   #---residues_practice
   residues_subpractice= paste(na.omit(c_across(starts_with("residues_subpractice0"))),collapse = "-"),
@@ -459,18 +519,32 @@ fomd09.clean1<-fomd09.clean%>%
   postharvest_date_start_end= paste0(na.omit(c(harvest_date_start,harvest_date_end)),collapse = "-"),
   
   #---practice
-  subpractice = collapse_clean(c_across(all_of(subpractice.list))),
+  subpractice = collapse_clean(c_across(all_of(subpractice.list))))
   
-  #---product_outcome
-  product_component= paste(na.omit(c_across(starts_with("product_component0"))),collapse = "-")) %>%
+#---product_outcome
+fomd09.clean<-fomd09.clean%>% 
+    rowwise() %>%
+    mutate(product= paste(na.omit(c_across(starts_with("product0"))),collapse = "-")) %>%
   ungroup()
 
-names(fomd09.clean)
+# Quick checks
+sort(unique(fomd09.clean$product))
 
+#---outcome
+fomd09.clean<-fomd09.clean%>%
+  left_join(fomd01.outcomes %>%select(pillar,subpillar, indicator, subindicator,effect_size_type),by = c("out_subindicator"="subindicator"))%>%
+  rename("out_pillar"="pillar",
+         "out_subpillar"="subpillar",
+         "out_indicator"="indicator",
+         "effect_size_type"="effect_size_type")
 
-
-
-
+# Quick checks
+sort(unique(fomd09.clean$out_subindicator))  
+sort(unique(fomd09.clean$out_indicator))  
+sort(unique(fomd09.clean$out_subpillar))  
+sort(unique(fomd09.clean$out_pillar))  
+sort(unique(fomd09.clean$out_subindicator_unit))  
+sort(unique(fomd09.clean$effect_size_type)) 
 
 
 
@@ -496,7 +570,7 @@ sort(unique(fomd09.clean$subpractice))
 sort(unique(fomd09.clean$product_component))
 
 #-----------------------------------------------
-#---- Match with ontologies ----
+#---- Match with 01_FOMD_ontologies ----
 #-----------------------------------------------
 library(tibble)
 library(purrr)
@@ -523,12 +597,12 @@ fomd09.clean <- fomd09.clean %>%
     }))
   
   
-#---location
+#Quick check
+length(unique(fomd09.clean$country))
 sort(unique(fomd09.clean$country))
+length(unique(fomd09.clean$country_ISO))
 sort(unique(fomd09.clean$country_ISO))
-       
-#---practice
-sort(unique(fomd09.clean$subpractice))
+
 
 
 #-----------------------------
@@ -689,7 +763,8 @@ sort(unique(fomd09.clean$subpractice))
  # select(study_id,practice_theme,practice_type,practice, subpractice)%>%
   #filter(practice_theme=="Crop Management-Agroforestry-Inorganic Fertilizer-Pest management")
 
-readr::write_csv(fomd09.clean, paste0(path.metadata.effectsize, "/fomd09_clean.csv"))
+readr::write_csv(fomd09.clean, paste0(path.metadata.effectsize, "/fomd09_cleanv2.csv"))
 
+#readr::write_csv(fomd09.clean, paste0(path.metadata.effectsize, "/fomd09_clean.csv"))
 
 
