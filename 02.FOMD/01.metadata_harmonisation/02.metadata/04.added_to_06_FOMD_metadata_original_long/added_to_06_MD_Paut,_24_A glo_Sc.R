@@ -286,7 +286,7 @@ md.data.long.rename<-md.data.long.clean%>%
     
     ###---product_outcome
     #product_raw=Taxa_details,
-    #product_component01=Taxa,
+    #product01=Taxa,
     #bio_func_group=Functional_group,
     #bio_ground_ref=B_ground,
     
@@ -306,10 +306,10 @@ md.data.long.rename<-md.data.long.clean%>%
     #outc_var_value_l=B_error_range_l,
     #outc_var_value_u=B_error_range_u,
     #out_sample_size=B_N,
-    "out_value_product_component01"="C1_yield",
-    "out_value_product_component02"="C2_yield",
-    "ler_value_product_component01"="LER_crop1",
-    "ler_value_product_component02"="LER_crop2",
+    "out_value_product01"="C1_yield",
+    "out_value_product02"="C2_yield",
+    "ler_value_product01"="LER_crop1",
+    "ler_value_product02"="LER_crop2",
     "ler_value_total"="LER_tot",
     
     
@@ -321,11 +321,11 @@ md.data.long.rename<-md.data.long.clean%>%
     intercrop_subpractice_raw=subpractice_description_raw,
     
     ###---product_outcome
-    product_component01=crop01,
-    product_component02=crop02)
+    product01=crop01,
+    product02=crop02)
 
 names(md.data.long.rename)
-sort(unique(md.data.long.rename$product_component02))
+sort(unique(md.data.long.rename$product02))
 
 #----CREATE MISSING COLUMNS
 md.data.long.rename<-md.data.long.rename%>%
