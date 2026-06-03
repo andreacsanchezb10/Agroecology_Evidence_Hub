@@ -20,7 +20,8 @@ list.files(paste0(path.metadata,"/02.selected"))
 fomd01.countries<-read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies.xlsx"), sheet = "01_countries")
 fomd01.sites<-read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies.xlsx"), sheet = "01_sites")
 
-fomd01.outcomes<-read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies.xlsx"), sheet = "01_outcomes")
+fomd01.outcomes<-read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies.xlsx"), sheet = "01_outcomes")%>%
+  filter(!is.na(subindicator) )
 fomd01.practices<-read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies.xlsx"), sheet = "01_practices")
 sort(unique(fomd01.practices$subpractice))
 
@@ -58,8 +59,6 @@ na_empty_summary1 <- data.frame(
 )
 
 print(na_empty_summary1)
-
-
 
 
 #---bibliographic----
@@ -116,6 +115,7 @@ md.era.short.clean <- md.era.short.clean%>%
 
   mutate(
     country=case_when(
+      country=="DRC"~"Congo (Democratic Republic of the)",
       country==""|is.na(country)&site_id!=""~"Missing",
       country==""|is.na(country)&site_id==""~"Unspecified",
       TRUE~country),
@@ -378,6 +378,9 @@ sort(unique(md.era.short.clean$T_tillage_frequency))
 #---planting_practice----
 #=========================
 ## TO CHECK: C_planting_method and T_planting_method
+md.era.short.clean$C_planting_subpractice <- gsub("...", "..", md.era.short.clean$C_planting_subpractice, fixed = TRUE)
+md.era.short.clean$T_planting_subpractice <- gsub("...", "..", md.era.short.clean$T_planting_subpractice, fixed = TRUE)
+
 
 # Quick checks
 sort(unique(md.era.short.clean$C_planting_subpractice_raw))
@@ -600,11 +603,13 @@ sort(unique(md.era.short.clean$bio_ground_ref))#Missing from ERA
 #=========================
 #---product_outcome----
 #=========================
-md.era.short.clean<-md.era.short.clean
 
-sort(unique(md.era.short.clean$out_subindicator))
-sort(unique(md.era.short.clean$out_indicator)) #to RECLASIFIED AGAIN BASED ON out_subindicator
-sort(unique(md.era.short.clean$out_subpillar)) #to RECLASIFIED AGAIN BASED ON out_subindicator
+md.era.short.clean$out_subindicator <- gsub("Labor Cost" , "Labour Cost" , md.era.short.clean$out_subindicator)
+
+
+sort(unique(md.era.short.clean1$out_subindicator))
+sort(unique(md.era.short.clean$out_indicator)) # RECLASIFIED BASED ON out_subindicator
+sort(unique(md.era.short.clean$out_subpillar)) # RECLASIFIED BASED ON out_subindicator
 sort(unique(md.era.short.clean$out_pillar)) #to RECLASIFIED AGAIN BASED ON out_subindicator
 sort(unique(md.era.short.clean$out_subindicator_unit))
 
@@ -668,28 +673,21 @@ lookup.country.iso <- fomd01.countries %>%
   distinct() %>%
   deframe()
 
+
 sort(unique(md.era.short.clean$country))
 sort(unique(md.era.short.clean$country_ISO))
 
-#---location
 md.era.short.clean <- md.era.short.clean %>%
-  mutate(country_ISO = case_when(
-    country_ISO == "" & country != "" ~ map_chr(str_split(str_squish(country), "\\.\\."), \(x) {
-      tokens <- str_squish(x)
-      out <- unname(lookup.country.iso[tokens])
-      #out[is.na(out)] <- tokens[is.na(out)]  # keep original if no match
-      paste(out, collapse = "..")
-    }),
-    TRUE ~ country_ISO
-  ))
+  mutate(country_ISO = map_chr(str_split(str_squish(country), "\\.\\."), \(x) {
+    tokens <- str_squish(x)
+    out <- unname(lookup.country.iso[tokens])
+    if (any(is.na(out))) return(NA_character_)
+    #out[is.na(out)] <- tokens[is.na(out)]  # keep original if no match
+    paste(out, collapse = "..")
+  }))
 
-sort(unique(md.era.short.clean$country))
-sort(unique(md.era.short.clean$country_ISO))
-# hay un problema con India
-
-md.era.short.clean1 <- md.era.short.clean %>%
-  filter(is.na(country_ISO))
-
+sort(unique(md.era.short.clean1$country))
+sort(unique(md.era.short.clean1$country_ISO))
 
 #Remove duplicate country and country_ISO
 md.era.short.clean <- md.era.short.clean %>%
@@ -704,9 +702,10 @@ sort(unique(md.era.short.clean$country_ISO))
 #=========================
 #---product_outcome----
 #=========================
+#I NEED TO DO THIS
 md.era.short.clean1<-md.era.short.clean
 
-#--- lookup vector: names = product, values = ISO_3166_1_Alpha_3
+#--- lookup vector: names = product_simple, values = ISO_3166_1_Alpha_3
 lookup.country.iso <- fomd01.countries %>%
   transmute(
     country = str_squish(Country),
@@ -714,6 +713,94 @@ lookup.country.iso <- fomd01.countries %>%
   ) %>%
   distinct() %>%
   deframe()
+
+
+sort(unique(md.era.short.clean$country))
+sort(unique(md.era.short.clean$country_ISO))
+
+#=========================
+#---outcome----
+#=========================
+#--- lookup vector: names = out_subindicator, values = out_indicator
+lookup.indicator <- fomd01.outcomes %>%
+  transmute(
+    out_subindicator= str_squish(subindicator),
+    out_indicator    = str_squish(indicator)
+  ) %>%
+  distinct() %>%
+  deframe()
+
+sort(unique(md.era.short.clean$out_subindicator))
+sort(unique(md.era.short.clean$out_indicator))
+
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(out_indicator = map_chr(str_split(str_squish(out_subindicator), "\\.\\."), \(x) {
+    tokens <- str_squish(x)
+    out <- unname(lookup.indicator[tokens])
+    if (any(is.na(out))) return(NA_character_)
+    #out[is.na(out)] <- tokens[is.na(out)]  # keep original if no match
+    paste(out, collapse = "..")
+  }))
+
+sort(unique(md.era.short.clean$out_subindicator))
+sort(unique(md.era.short.clean$out_indicator))
+
+#--- lookup vector: names = out_subindicator, values = out_subpillar
+lookup.subpillar <- fomd01.outcomes %>%
+  transmute(
+    out_subindicator= str_squish(subindicator),
+    out_subpillar    = str_squish(subpillar)
+  ) %>%
+  distinct() %>%
+  deframe()
+
+sort(unique(md.era.short.clean$out_subindicator))
+sort(unique(md.era.short.clean$out_subpillar))
+
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(out_subpillar = map_chr(str_split(str_squish(out_subindicator), "\\.\\."), \(x) {
+    tokens <- str_squish(x)
+    out <- unname(lookup.subpillar[tokens])
+    if (any(is.na(out))) return(NA_character_)
+    #out[is.na(out)] <- tokens[is.na(out)]  # keep original if no match
+    paste(out, collapse = "..")
+  }))
+
+sort(unique(md.era.short.clean$out_subindicator))
+sort(unique(md.era.short.clean$out_subpillar))
+
+#--- lookup vector: names = out_subindicator, values = out_pillar
+lookup.pillar <- fomd01.outcomes %>%
+  transmute(
+    out_subindicator= str_squish(subindicator),
+    out_pillar    = str_squish(pillar)
+  ) %>%
+  distinct() %>%
+  deframe()
+
+sort(unique(md.era.short.clean$out_subindicator))
+sort(unique(md.era.short.clean$out_pillar))
+
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(out_pillar = map_chr(str_split(str_squish(out_subindicator), "\\.\\."), \(x) {
+    tokens <- str_squish(x)
+    out <- unname(lookup.pillar[tokens])
+    if (any(is.na(out))) return(NA_character_)
+    #out[is.na(out)] <- tokens[is.na(out)]  # keep original if no match
+    paste(out, collapse = "..")
+  }))
+
+sort(unique(md.era.short.clean$out_subindicator))
+sort(unique(md.era.short.clean$out_pillar))
+
+md.era.short.clean2 <- md.era.short.clean1 %>%
+  filter(is.na(out_pillar))%>%
+  select(out_subindicator,out_pillar)
+
+sort(unique(md.era.short.clean2$out_subindicator))
+sort(unique(md.era.short.clean2$out_pillar))
+na_empty_summary1["out_subindicator", ]
+
 
 
 
