@@ -20,7 +20,7 @@ fomd04<-read_xlsx(file.path(path.metadata.structure,"/04_FOMD_screening.xlsx"), 
   filter(status%in%c("PI","I","unresolved"))%>%
   select(ss_id,study_id_ss,study_id,doi)
 length(unique(fomd04$study_id)) #2106
-length(unique(fomd04$doi)) #2106
+length(unique(fomd04$doi)) #1877
 sort(unique(fomd04$status))
 
 #---10_FOMD_metadata_synthesis_short
@@ -28,7 +28,7 @@ fomd10.names<-names(read_xlsx(file.path(path.metadata.structure,"10_FOMD_metadat
 fomd10.names<-unique(fomd10.names)
 
 #---Metadata 
-md.data.short <- read.csv(file.path(path.era, "ERA_complete_data_short_v3.csv"))
+md.data.short <- read.csv(file.path(path.era, "ERA_data_short_v6.csv"))
 
 length(unique(md.data.short$study_id)) #1811
 length(unique(md.data.short$doi)) #1592
