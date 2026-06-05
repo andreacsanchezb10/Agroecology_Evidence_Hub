@@ -79,9 +79,9 @@ length(unique(md.era.short.clean$doi)) #1592
 #---location----
 #=========================
 # Fix site_id
-sort(unique(md.era.short.clean$site_id[md.era.short.clean$country==""]))
-sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_type==""]))
-sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_admin==""]))
+sort(unique(md.era.short.clean$site_id[md.era.short.clean$country==""])) "Cedara Research Station"
+sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_type==""])) #10
+sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_admin==""])) #13
 
 md.era.short.clean<-md.era.short.clean%>%
   mutate(
@@ -106,10 +106,10 @@ md.era.short.clean<-md.era.short.clean%>%
                          TRUE~site_admin))
     
 sort(unique(md.era.short.clean$site_id[md.era.short.clean$country==""]))
-sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_type==""]))
-sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_admin==""]))
-sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_latitude==""]))
-sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_longitude==""]))
+sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_type==""])) #6
+sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_admin==""])) #13
+sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_latitude==""])) #11
+sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_longitude==""])) #11
 sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_buffer==""]))
 sort(unique(md.era.short.clean$site_admin))
 
@@ -307,32 +307,72 @@ sort(unique(md.era.short.clean$T_system_type))
 #=========================
 #---commodity_crop----
 #=========================
+md.era.short.clean <- md.era.short.clean%>%
+  mutate(
+    # Replace ANY sequence of 1 or more * with exactly **
+    C_crop_variety = gsub("\\*+", "**", C_crop_variety),
+    C_crop_variety = gsub("\\$+", "**", C_crop_variety),
+    C_crop_variety = gsub("\\(\\s*NA\\s*\\)", "(Unspecified)", C_crop_variety, ignore.case = TRUE),
+    
+    T_crop_variety = gsub("\\*+", "**", T_crop_variety),
+    T_crop_variety = gsub("\\$+", "**", T_crop_variety),
+    T_crop_variety = gsub("\\(\\s*NA\\s*\\)", "(Unspecified)", T_crop_variety, ignore.case = TRUE)
+  )
+  
+# Reusable function to combine crop_diversity + crop_density columns separated by "/" or "-"
 create_density <- function(diversity, density) {
-  # If either is empty, return empty
-  if (diversity == "" | is.na(diversity)) return("")
+  if (is.na(diversity) || diversity == "") return("")
   
-  # Extract the delimiter sequence from diversity string
-  # Split keeping delimiters
-  div_parts <- strsplit(diversity, "(?<=[^/-])(?=[/-])|(?<=[/-])(?=[^/-])", perl = TRUE)[[1]]
-  den_parts <- strsplit(density,   "(?<=[^/-])(?=[/-])|(?<=[/-])(?=[^/-])", perl = TRUE)[[1]]
+  # Split on / or - outside parentheses
+  # Strategy: track parenthesis depth character by character
+  split_outside_parens <- function(x, delimiters = c("/", "-")) {
+    if (is.na(x) || x == "") return(character(0))
+    chars <- strsplit(x, "")[[1]]
+    depth <- 0
+    positions <- c()
+    for (i in seq_along(chars)) {
+      if (chars[i] == "(") depth <- depth + 1
+      else if (chars[i] == ")") depth <- depth - 1
+      else if (chars[i] %in% delimiters && depth == 0) positions <- c(positions, i)
+    }
+    if (length(positions) == 0) return(trimws(x))
+    
+    # Extract parts and separators
+    starts <- c(1, positions + 1)
+    ends   <- c(positions - 1, nchar(x))
+    parts  <- trimws(substring(x, starts, ends))
+    parts
+  }
   
-  # Separate crop names and separators
-  div_crops <- div_parts[!div_parts %in% c("/", "-")]
-  div_seps  <- div_parts[ div_parts %in% c("/", "-")]
+  get_seps_outside_parens <- function(x, delimiters = c("/", "-")) {
+    if (is.na(x) || x == "") return(character(0))
+    chars <- strsplit(x, "")[[1]]
+    depth <- 0
+    seps  <- c()
+    for (i in seq_along(chars)) {
+      if (chars[i] == "(") depth <- depth + 1
+      else if (chars[i] == ")") depth <- depth - 1
+      else if (chars[i] %in% delimiters && depth == 0) seps <- c(seps, chars[i])
+    }
+    seps
+  }
   
-  den_crops <- den_parts[!den_parts %in% c("/", "-")]
-  den_seps  <- den_parts[ den_parts %in% c("/", "-")]
+  div_crops <- split_outside_parens(diversity)
+  den_crops <- split_outside_parens(density)
+  div_seps  <- get_seps_outside_parens(diversity)
   
-  # Pair each crop with its density
+  if (length(den_crops) == 1) den_crops <- rep(den_crops, length(div_crops))
+  
+  if (length(div_crops) == 0) return("")
+  
   paired <- mapply(function(crop, dens) {
-    if (is.na(dens) || dens == "NA") {
+    if (is.na(dens) || dens == "NA" || dens == "") {
       paste0(crop, "[Unspecified(Unspecified)]")
     } else {
-      paste0(crop, "[", dens, ")]")
+      paste0(crop, "[", dens, "]")
     }
   }, div_crops, den_crops)
   
-  # Reconstruct with original separators
   result <- paired[1]
   if (length(div_seps) > 0) {
     for (i in seq_along(div_seps)) {
@@ -340,22 +380,14 @@ create_density <- function(diversity, density) {
     }
   }
   
-  return(result)
+  return(as.character(result))
 }
 
 md.era.short.clean <- md.era.short.clean%>%
   mutate(
-    C_crop_variety = gsub("\\(NA\\)", "(Unspecified)", C_crop_variety, fixed = TRUE),
-    T_crop_variety = gsub("\\(NA\\)", "(Unspecified)", T_crop_variety, fixed = TRUE),
     C_crop_density=mapply(create_density,C_crop_diversity,C_crop_density),
-    T_crop_density=mapply(create_density,C_crop_diversity,T_crop_density)
-    )%>%
-  mutate(C_crop_variety = gsub("*", "**", C_crop_variety, fixed = TRUE),
-         C_crop_variety = gsub("***", "**", C_crop_variety, fixed = TRUE),
-         C_crop_variety = gsub("$$", "**", C_crop_variety, fixed = TRUE))%>%
-  mutate(T_crop_variety = gsub("*", "**", T_crop_variety, fixed = TRUE),
-         T_crop_variety = gsub("***", "**", T_crop_variety, fixed = TRUE),
-         T_crop_variety = gsub("$$", "**", T_crop_variety, fixed = TRUE))
+    T_crop_density=mapply(create_density,T_crop_diversity,T_crop_density)
+    )
   
 # Quick checks
 sort(unique(md.era.short.clean$C_crop_diversity))
@@ -372,8 +404,18 @@ sort(unique(md.era.short.clean$T_crop_density))
 #=========================
 md.era.short.clean <- md.era.short.clean%>%
   mutate(
-    C_tree_density= mapply(create_density,C_tree_diversity,C_tree_density),
-    T_tree_density = mapply(create_density,T_tree_diversity,T_tree_density))
+    C_tree_density=case_when((!is.na(C_tree_diversity)|C_tree_diversity!="")& is.na(C_tree_density)~"Unspecified(Unspecified)",TRUE~C_tree_density),
+    C_tree_density=gsub("NA", "Unspecified(Unspecified)", C_tree_density, fixed = TRUE),
+    T_tree_density=case_when(
+      (!is.na(T_tree_diversity)|T_tree_diversity!="")& is.na(T_tree_density)~"Unspecified(Unspecified)",
+      T_tree_density=="NA-NA-NA-NA-NA-NA-NA-NA-NA-NA-NA"~"NA-NA-NA-NA-NA-NA-NA-NA-NA-NA-NA-NA",
+      TRUE~T_tree_density),
+    T_tree_density=gsub("NA", "Unspecified(Unspecified)", T_tree_density, fixed = TRUE),
+    
+    )%>%
+  mutate(
+    C_tree_density1= mapply(create_density,C_tree_diversity,C_tree_density),
+    T_tree_density1 = mapply(create_density,T_tree_diversity,T_tree_density))
 
 # Quick checks
 sort(unique(md.era.short.clean$C_tree_diversity))
@@ -382,16 +424,20 @@ sort(unique(md.era.short.clean$T_tree_diversity))
 sort(unique(md.era.short.clean$C_tree_density))
 sort(unique(md.era.short.clean$T_tree_density))
 
+sort(unique(md.era.short.clean$C_tree_density1))
+sort(unique(md.era.short.clean$T_tree_density1))
+
 #=========================
 #---commodity_animal----
 #=========================
 ## TO CHECK: density
 md.era.short.clean <- md.era.short.clean%>%
-  mutate(C_animal_diversity = gsub("*", "-", C_animal_diversity, fixed = TRUE),
-         T_animal_diversity = gsub("*", "-", T_animal_diversity, fixed = TRUE),
-         C_animal_breed = gsub("*", "**", C_animal_breed, fixed = TRUE),
-         T_animal_breed = gsub("*", "**", T_animal_breed, fixed = TRUE))
-
+  mutate(
+    C_animal_diversity = gsub("\\*+", "**", C_animal_diversity),
+    T_animal_diversity = gsub("\\*+", "**", T_animal_diversity),
+    C_animal_breed = gsub("\\*+", "**", C_animal_breed),
+    T_animal_breed = gsub("\\*+", "**", T_animal_breed))
+    
 # Quick checks
 sort(unique(md.era.short.clean$C_animal_diversity))
 sort(unique(md.era.short.clean$T_animal_diversity))
@@ -399,8 +445,51 @@ sort(unique(md.era.short.clean$T_animal_diversity))
 sort(unique(md.era.short.clean$C_animal_breed))
 sort(unique(md.era.short.clean$T_animal_breed))
 
-sort(unique(md.era.short.clean$C_animal_density))
-sort(unique(md.era.short.clean$T_animal_density))
+sort(unique(md.era.short.clean$C_animal_density)) # TO CHECK: Missing
+sort(unique(md.era.short.clean$T_animal_density)) # TO CHECK: Missing
+
+#==================================================
+#---improved_crop_varieties_practice---- 
+#==================================================
+md.era.short.clean <- md.era.short.clean%>%
+  mutate(
+    C_varietal_crop_variety = gsub("\\*+", "**", C_varietal_crop_variety),
+    C_varietal_crop_variety = gsub("\\$+", "**", C_varietal_crop_variety),
+    T_varietal_crop_variety = gsub("\\*+", "**", T_varietal_crop_variety),
+    T_varietal_crop_variety = gsub("\\$+", "**", T_varietal_crop_variety),
+    
+    C_varietal_crop_subpractice = gsub("\\*+", "..", C_varietal_crop_subpractice),
+    C_varietal_crop_subpractice = gsub("\\$+", "..", C_varietal_crop_subpractice),
+    T_varietal_crop_subpractice = gsub("\\*+", "..", T_varietal_crop_subpractice),
+    T_varietal_crop_subpractice = gsub("\\$+", "..", T_varietal_crop_subpractice),
+    
+    C_varietal_crop_type = gsub("\\*+", "..", C_varietal_crop_type),
+    C_varietal_crop_type = gsub("\\$+", "..", C_varietal_crop_type),
+    T_varietal_crop_type = gsub("\\*+", "..", T_varietal_crop_type),
+    T_varietal_crop_type = gsub("\\$+", "..", T_varietal_crop_type),
+    
+    C_varietal_crop_trait = gsub("\\*+", "..", C_varietal_crop_trait),
+    C_varietal_crop_trait = gsub("\\$+", "..", C_varietal_crop_trait),
+    T_varietal_crop_trait = gsub("\\*+", "..", T_varietal_crop_trait),
+    T_varietal_crop_trait = gsub("\\$+", "..", T_varietal_crop_trait)
+    
+    )
+
+# Quick checks
+sort(unique(md.era.short.clean$C_varietal_crop_subpractice_raw))
+sort(unique(md.era.short.clean$T_varietal_crop_subpractice_raw))
+
+sort(unique(md.era.short.clean$C_varietal_crop_variety))
+sort(unique(md.era.short.clean$T_varietal_crop_variety))
+
+sort(unique(md.era.short.clean$C_varietal_crop_subpractice))
+sort(unique(md.era.short.clean$T_varietal_crop_subpractice))
+
+sort(unique(md.era.short.clean$C_varietal_crop_type))
+sort(unique(md.era.short.clean$T_varietal_crop_type))
+
+sort(unique(md.era.short.clean$C_varietal_crop_trait))
+sort(unique(md.era.short.clean$T_varietal_crop_trait))
 
 #=========================
 #---soil_management_practice---- 
@@ -453,22 +542,6 @@ sort(unique(md.era.short.clean$T_planting_date_start))
 
 sort(unique(md.era.short.clean$C_planting_date_end))
 sort(unique(md.era.short.clean$T_planting_date_end))
-
-#---improved crop varieties: practice----
-fomd09.clean<-fomd09.clean%>% 
-  mutate(varietal_crop_name = gsub("_", " ", varietal_crop_name))%>%
-  mutate( varietal_crop_variety = ifelse(
-    is.na(varietal_crop_name) | varietal_crop_name == "",
-    NA_character_,
-    paste0(varietal_crop_name, "(", varietal_crop_variety, ")")))
-
-# Quick checks
-sort(unique(fomd09.clean$varietal_crop_subpractice_raw))
-sort(unique(fomd09.clean$varietal_crop_name))
-sort(unique(fomd09.clean$varietal_crop_variety))
-sort(unique(fomd09.clean$varietal_crop_subpractice))
-sort(unique(fomd09.clean$varietal_crop_type))
-sort(unique(fomd09.clean$varietal_crop_trait))
 
 #=========================
 #---intercropping_practice----
@@ -524,216 +597,418 @@ sort(unique(md.era.short.clean$T_crop_seq_residues_fate))
 sort(unique(md.era.short.clean$C_agrof_subpractice_raw))
 sort(unique(md.era.short.clean$T_agrof_subpractice_raw))
 
-sort(unique(md.era.short.clean$C_agrof_subpractice))
+sort(unique(md.era.short.clean$C_agrof_subpractice)) # TO CHECK: I think Monoculture is missing here
 sort(unique(md.era.short.clean$T_agrof_subpractice))
 
 sort(unique(md.era.short.clean$agrof_shade_mean_min_max)) #Missing from ERA
 sort(unique(md.era.short.clean$agrof_canopy_height_mean_min_max)) #Missing from ERA
 sort(unique(md.era.short.clean$agrof_dhb_mean_min_max))#Missing from ERA
 
-#=========================
+#==================================================
 #---nutrient_management_practice (inorganic)----
-#=========================
+#==================================================
 ## TO CHECK: C_fert_subpractice C_fert_organic_type
-#C_fert_inorganic_category C_fert_inorganic_type_amount_unit T_fert_inorganic_category T_fert_inorganic_type_amount_unit
+# C_fert_inorganic_type_amount_unit  T_fert_inorganic_type_amount_unit
 
-md.era.short.clean$C_fert_inorganic_category <- gsub("; ", "..", md.era.short.clean$C_fert_inorganic_category, fixed = TRUE)
-md.era.short.clean$T_fert_inorganic_category <- gsub("; ", "..", md.era.short.clean$T_fert_inorganic_category, fixed = TRUE)
+# Columns where "; " should become ".."
+npk_in_semicolon_cols <- c(
+  "C_fert_inorganic_category", "T_fert_inorganic_category",
+  "C_fert_inorganic_type",     "T_fert_inorganic_type",
+  "C_fert_inorganic_unit",     "T_fert_inorganic_unit",
+  "C_fert_inorganic_amount",   "T_fert_inorganic_amount"
+)
 
-md.era.short.clean$C_fert_inorganic_type <- gsub("; ", "..", md.era.short.clean$C_fert_inorganic_type, fixed = TRUE)
-md.era.short.clean$T_fert_inorganic_type <- gsub("; ", "..", md.era.short.clean$T_fert_inorganic_type, fixed = TRUE)
+# Columns needing only "..." -> ".."
+npk_in_unit_cols <- c(
+  "C_fert_inorganicNPK_unit", "T_fert_inorganicNPK_unit"
+)
 
-md.era.short.clean$C_fert_inorganic_unit <- gsub("; ", "..", md.era.short.clean$C_fert_inorganic_unit, fixed = TRUE)
-md.era.short.clean$T_fert_inorganic_unit <- gsub("; ", "..", md.era.short.clean$T_fert_inorganic_unit, fixed = TRUE)
+# Columns needing "..." -> "..", strip whitespace, and remove "999999"
+npk_in_cols <- c(
+  "C_fert_inorganicN",    "T_fert_inorganicN",
+  "C_fert_inorganicP",    "T_fert_inorganicP",
+  "C_fert_inorganicK",    "T_fert_inorganicK",
+  "C_fert_inorganicP2O5", "T_fert_inorganicP2O5",
+  "C_fert_inorganicK2O",  "T_fert_inorganicK2O"
+)
 
-md.era.short.clean$C_fert_inorganic_amount <- gsub("; ", "..", md.era.short.clean$C_fert_inorganic_amount, fixed = TRUE)
-md.era.short.clean$T_fert_inorganic_amount <- gsub("; ", "..", md.era.short.clean$T_fert_inorganic_amount, fixed = TRUE)
+# Columns needing "NA..NA..NA.." -> "NA..NA..NA..NA"
+npd_in_NA_amount_cols<- c(
+  "C_fert_inorganicN", "T_fert_inorganicN",
+  "C_fert_inorganicP", "T_fert_inorganicP",
+  "C_fert_inorganicK", "T_fert_inorganicK",
+  "C_fert_inorganicK2O", "T_fert_inorganicK2O",
+  "C_fert_inorganicP2O5", "T_fert_inorganicP2O5")
+  
+# Apply "; " -> ".." substitution
+md.era.short.clean[npk_in_semicolon_cols] <- lapply(
+  md.era.short.clean[npk_in_semicolon_cols],
+  \(x) gsub("; ", "..", x, fixed = TRUE)
+)
 
-md.era.short.clean$C_fert_inorganicNPK_unit <- gsub("...", "..", md.era.short.clean$C_fert_inorganicNPK_unit, fixed = TRUE)
-md.era.short.clean$T_fert_inorganicNPK_unit <- gsub("...", "..", md.era.short.clean$T_fert_inorganicNPK_unit, fixed = TRUE)
+# Apply "..." -> ".." only
+md.era.short.clean[npk_in_unit_cols] <- lapply(
+  md.era.short.clean[npk_in_unit_cols],
+  \(x) gsub("...", "..", x, fixed = TRUE)
+)
 
-md.era.short.clean$C_fert_inorganicN <- gsub("...", "..", md.era.short.clean$C_fert_inorganicN, fixed = TRUE)
-md.era.short.clean$T_fert_inorganicN <- gsub("...", "..", md.era.short.clean$T_fert_inorganicN, fixed = TRUE)
+# Apply "..." -> "..", strip whitespace, remove "999999"
+md.era.short.clean[npk_in_cols] <- lapply(
+  md.era.short.clean[npk_in_cols],
+  \(x) trimws(gsub("999999", "", gsub("\\s+", "", gsub("...", "..", x, fixed = TRUE))))
+)
 
-md.era.short.clean$C_fert_inorganicN <- gsub("...", "..", md.era.short.clean$C_fert_inorganicN, fixed = TRUE)
-md.era.short.clean$T_fert_inorganicN <- gsub(" ", "", md.era.short.clean$T_fert_inorganicN, fixed = TRUE)
+# Apply "NA..NA..NA.." -> "NA..NA..NA..NA"
+md.era.short.clean[npd_in_NA_amount_cols] <- lapply(
+  md.era.short.clean[npd_in_NA_amount_cols],
+  \(x) trimws(gsub("NA..NA..NA..", "NA..NA..NA..NA", x, fixed = TRUE))
+)
 
-md.era.short.clean$C_fert_inorganicP <- gsub("...", "..", md.era.short.clean$C_fert_inorganicP, fixed = TRUE)
-md.era.short.clean$T_fert_inorganicP <- gsub("...", "..", md.era.short.clean$T_fert_inorganicP, fixed = TRUE)
+# Function to clean a category string
+clean_fert_category <- function(x, remove_cats) {
+  sapply(x, function(val) {
+    if (is.na(val) || val == "") return(val)
+    
+    # Split by ".."
+    parts <- strsplit(val, "\\.\\.")[[1]]
+    
+    # Remove any part that matches the organic categories
+    parts_clean <- parts[!parts %in% remove_cats]
+    
+    # Rejoin remaining parts
+    if (length(parts_clean) == 0) return("")
+    paste(parts_clean, collapse = "..")
+  }, USE.NAMES = FALSE)
+}
 
-md.era.short.clean$C_fert_inorganicK <- gsub("...", "..", md.era.short.clean$C_fert_inorganicK, fixed = TRUE)
-md.era.short.clean$T_fert_inorganicK <- gsub("...", "..", md.era.short.clean$T_fert_inorganicK, fixed = TRUE)
+# Define the organic categories to remove
+organic_to_remove <- c("Ash", "Biosolid", "Compost", "Manure", "Organic_Other")
 
-md.era.short.clean$C_fert_inorganicP2O5 <- gsub("...", "..", md.era.short.clean$C_fert_inorganicP2O5, fixed = TRUE)
-md.era.short.clean$T_fert_inorganicP2O5 <- gsub("...", "..", md.era.short.clean$T_fert_inorganicP2O5, fixed = TRUE)
+# Apply to both columns
+md.era.short.clean<-md.era.short.clean%>%
+  mutate(
+    C_fert_inorganic_category =clean_fert_category(C_fert_inorganic_category, organic_to_remove),
+    T_fert_inorganic_category = clean_fert_category(T_fert_inorganic_category, organic_to_remove))
 
-md.era.short.clean$C_fert_inorganicP2O5 <- gsub(" ", "", md.era.short.clean$C_fert_inorganicP2O5, fixed = TRUE)
-md.era.short.clean$T_fert_inorganicP2O5 <- gsub(" ", "", md.era.short.clean$T_fert_inorganicP2O5, fixed = TRUE)
+# Reusable function to combine amount + unit columns separated by ".."
+combine_amount_unit <- function(amount, unit, sep = "..") {
+  mapply(function(amt, unt) {
+    if (is.na(amt) || amt == "") return(amt)
+    
+    amounts <- strsplit(amt, "\\.\\.") [[1]]
+    units   <- strsplit(unt, "\\.\\.") [[1]]
+    
+    # Single unit: recycle across all amounts (not a problem)
+    if (length(units) == 1) {
+      units <- rep(units, length(amounts))
+    }
+    
+    units <- ifelse(is.na(units) | units == "", "Unspecified", units)
+    
+    # Only warn when MULTIPLE units exist but count doesn't match amounts
+    if (length(units) > 1 && length(amounts) != length(units)) {
+      warning(paste("Length mismatch: amounts =", length(amounts),
+                    "units =", length(units), "— recycling units."))
+      units <- rep_len(units, length(amounts))
+    }
+    
+    paste(paste0(amounts, "(", units, ")"), collapse = sep)
+    
+  }, amount, unit, USE.NAMES = FALSE)
+}
 
-md.era.short.clean$C_fert_inorganicK2O <- gsub("...", "..", md.era.short.clean$C_fert_inorganicK2O, fixed = TRUE)
-md.era.short.clean$T_fert_inorganicK2O <- gsub("...", "..", md.era.short.clean$T_fert_inorganicK2O, fixed = TRUE)
+# Combine amount + unit columns separated by ".."
+md.era.short.clean <- md.era.short.clean%>%
+  mutate(C_fert_inorganicN_amount_unit= combine_amount_unit(amount = C_fert_inorganicN,unit   = C_fert_inorganicNPK_unit),
+         C_fert_inorganicP_amount_unit= combine_amount_unit(amount = C_fert_inorganicP,unit   = C_fert_inorganicNPK_unit),
+         C_fert_inorganicK_amount_unit= combine_amount_unit(amount = C_fert_inorganicK,unit   = C_fert_inorganicNPK_unit),
+         C_fert_inorganicP2O5_amount_unit= combine_amount_unit(amount = C_fert_inorganicP2O5,unit   = C_fert_inorganicNPK_unit),
+         C_fert_inorganicK2O_amount_unit= combine_amount_unit(amount = C_fert_inorganicK2O,unit   = C_fert_inorganicNPK_unit),
+         
+         T_fert_inorganicN_amount_unit= combine_amount_unit(amount = T_fert_inorganicN,unit   = T_fert_inorganicNPK_unit),
+         T_fert_inorganicP_amount_unit= combine_amount_unit(amount = T_fert_inorganicP,unit   = T_fert_inorganicNPK_unit),
+         #T_fert_inorganicK_amount_unit= combine_amount_unit(amount = T_fert_inorganicK,unit   = T_fert_inorganicNPK_unit),
+         T_fert_inorganicP2O5_amount_unit= combine_amount_unit(amount = T_fert_inorganicP2O5,unit   = T_fert_inorganicNPK_unit),
+         T_fert_inorganicK2O_amount_unit= combine_amount_unit(amount = T_fert_inorganicK2O,unit   = T_fert_inorganicNPK_unit)
+  )
+#-------------------------------------------------------
+# Code to check mismatch between amount and unit columns
+#-------------------------------------------------------
+check_length_mismatch <- function(df, amount_col, unit_col) {
+  amt <- df[[amount_col]]
+  unt <- df[[unit_col]]
+  
+  mismatches <- mapply(function(a, u, id) {
+    if (is.na(a) || a == "") return(NULL)
+    na <- length(strsplit(a, "\\.\\.")[[1]])
+    nu <- length(strsplit(u, "\\.\\.")[[1]])
+    # Ignore single-unit rows — those are fine
+    if (nu == 1) return(NULL)
+    if (na != nu) data.frame(study_id = id, amount_col, unit_col,
+                             n_amounts = na, n_units = nu,
+                             amount = a, unit = u)
+  }, amt, unt, df$study_id, SIMPLIFY = FALSE)
+  
+  do.call(rbind, Filter(Negate(is.null), mismatches))
+}
 
-md.era.short.clean$C_fert_inorganicK2O <- gsub(" ", "", md.era.short.clean$C_fert_inorganicK2O, fixed = TRUE)
-md.era.short.clean$T_fert_inorganicK2O <- gsub(" ", "", md.era.short.clean$T_fert_inorganicK2O, fixed = TRUE)
 
+# Check mismatches for any amount/unit pair
+check_length_mismatch <- function(df, amount_col, unit_col) {
+  amt <- df[[amount_col]]
+  unt <- df[[unit_col]]
+  
+  mismatches <- mapply(function(a, u, i) {
+    if (is.na(a) || a == "") return(NULL)
+    na <- length(strsplit(a, "\\.\\.")[[1]])
+    nu <- length(strsplit(u, "\\.\\.")[[1]])
+    if (na != nu) data.frame(row = i, amount_col, unit_col,
+                             n_amounts = na, n_units = nu,
+                             amount = a, unit = u)
+  }, amt, unt, seq_along(amt), SIMPLIFY = FALSE)
+  
+  do.call(rbind, Filter(Negate(is.null), mismatches))
+}
+
+# Run for all relevant pairs
+pairs <- list(
+  c("T_fert_inorganicN",   "T_fert_inorganicNPK_unit"),
+  c("T_fert_inorganicP",   "T_fert_inorganicNPK_unit"),
+  c("T_fert_inorganicP2O5","T_fert_inorganicNPK_unit"),
+  c("T_fert_inorganicK2O", "T_fert_inorganicNPK_unit"),
+  c("C_fert_inorganicN",   "C_fert_inorganicNPK_unit"),
+  c("C_fert_inorganicK2O", "C_fert_inorganicNPK_unit")
+)
+
+mismatch_report <- do.call(rbind, lapply(pairs, function(p)
+  check_length_mismatch(md.era.short.clean, p[1], p[2])
+))
+
+View(mismatch_report)
+
+
+#-------------------------------------------------------
+# Code to check mismatch between type, amount and unit columns
+#-------------------------------------------------------
+check_length_mismatch <- function(df, type_col, amount_col, unit_col) {
+  typ <- df[[type_col]]
+  amt <- df[[amount_col]]
+  unt <- df[[unit_col]]
+  
+  mismatches <- mapply(function(t, a, u, id) {
+    # Use type as the reference if amount is empty
+    if ((is.na(t) || t == "") && (is.na(a) || a == "")) return(NULL)
+    
+    nt <- if (is.na(t) || t == "") NA else length(strsplit(t, "\\.\\.") [[1]])
+    na <- if (is.na(a) || a == "") NA else length(strsplit(a, "\\.\\.") [[1]])
+    nu <- if (is.na(u) || u == "") NA else length(strsplit(u, "\\.\\.") [[1]])
+    
+    # Single unit is fine — not a mismatch
+    if (!is.na(nu) && nu == 1) return(NULL)
+    
+    # Flag if any of the three differ from each other
+    counts <- na.omit(c(nt, na, nu))
+    if (length(unique(counts)) <= 1) return(NULL)
+    
+    data.frame(study_id  = id,
+               type_col  = type_col,
+               amount_col = amount_col,
+               unit_col  = unit_col,
+               n_types   = nt,
+               n_amounts = na,
+               n_units   = nu,
+               type      = t,
+               amount    = a,
+               unit      = u)
+    
+  }, typ, amt, unt, df$study_id, SIMPLIFY = FALSE)
+  
+  do.call(rbind, Filter(Negate(is.null), mismatches))
+}
+
+# Run for all relevant triplets
+pairs <- list(
+  #c("C_fert_inorganic_type", "C_fert_inorganic_amount", "C_fert_inorganic_unit"),
+  #c("T_fert_inorganic_type", "T_fert_inorganic_amount", "T_fert_inorganic_unit"),
+  c("C_fert_inorganic_type", "C_fert_inorganic_amount", "C_fert_inorganic_unit"),
+  c("T_fert_inorganic_type", "T_fert_inorganic_amount", "T_fert_inorganic_unit")
+)
+
+mismatch_report <- do.call(rbind, lapply(pairs, function(p)
+  check_length_mismatch(md.era.short.clean, p[1], p[2], p[3])
+))
+
+View(mismatch_report)
+
+
+#------------
 # Quick checks
 sort(unique(md.era.short.clean$C_fert_subpractice_raw))
 sort(unique(md.era.short.clean$T_fert_subpractice_raw))
 
-sort(unique(md.era.short.clean$C_fert_subpractice))
-sort(unique(md.era.short.clean$T_fert_subpractice))
+sort(unique(md.era.short.clean$C_fert_subpractice)) #TO CHECK: IT DOESN'T EXIST NOW
+sort(unique(md.era.short.clean$T_fert_subpractice)) #TO CHECK: IT DOESN'T EXIST NOW
 
-sort(unique(md.era.short.clean$C_fert_inorganic_category))
-sort(unique(md.era.short.clean$T_fert_inorganic_category))
+sort(unique(md.era.short.clean$C_fert_inorganic_category)) 
+sort(unique(md.era.short.clean$T_fert_inorganic_category)) 
 
-sort(unique(md.era.short.clean$C_fert_inorganic_type))
-sort(unique(md.era.short.clean$T_fert_inorganic_type))
+sort(unique(md.era.short.clean$C_fert_inorganic_type)) #TO CHECK: Need to separate organic and inorganic
+sort(unique(md.era.short.clean$T_fert_inorganic_type)) #TO CHECK: Need to separate organic and inorganic
 
-sort(unique(md.era.short.clean$C_fert_inorganic_unit))
-sort(unique(md.era.short.clean$T_fert_inorganic_unit))
+sort(unique(md.era.short.clean$C_fert_inorganic_unit)) #TO CHECK: Need to separate organic and inorganic and combine type with amount and unit
+sort(unique(md.era.short.clean$T_fert_inorganic_unit)) #TO CHECK: Need to separate organic and inorganic and combine type with amount and unit
 
-sort(unique(md.era.short.clean$C_fert_inorganic_amount))
-sort(unique(md.era.short.clean$T_fert_inorganic_amount))
+sort(unique(md.era.short.clean$C_fert_inorganic_amount)) #TO CHECK: Need to separate organic and inorganic and combine type with amount and unit
+sort(unique(md.era.short.clean$T_fert_inorganic_amount)) #TO CHECK: Need to separate organic and inorganic and combine type with amount and unit
 
-sort(unique(md.era.short.clean$C_fert_inorganicNPK_unit))
-sort(unique(md.era.short.clean$T_fert_inorganicNPK_unit))
+sort(unique(md.era.short.clean$C_fert_inorganicNPK_unit)) # Merged
+sort(unique(md.era.short.clean$T_fert_inorganicNPK_unit)) # Merged
 
-sort(unique(md.era.short.clean$C_fert_inorganicN))
-sort(unique(md.era.short.clean$T_fert_inorganicN))
+sort(unique(md.era.short.clean$C_fert_inorganicN)) # Merged
+sort(unique(md.era.short.clean$T_fert_inorganicN)) # Merged
+sort(unique(md.era.short.clean$C_fert_inorganicN[md.era.short.clean$C_fert_inorganicNPK_unit==""]))
+#character(0)
+sort(unique(md.era.short.clean$T_fert_inorganicN[md.era.short.clean$T_fert_inorganicNPK_unit==""]))
+#[1] ""
 
-sort(unique(md.era.short.clean$C_fert_inorganicP))
-sort(unique(md.era.short.clean$T_fert_inorganicP))
+sort(unique(md.era.short.clean$C_fert_inorganicP)) # Merged
+sort(unique(md.era.short.clean$T_fert_inorganicP)) # Merged
+sort(unique(md.era.short.clean$C_fert_inorganicP[md.era.short.clean$C_fert_inorganicNPK_unit==""]))
+#character(0)
+sort(unique(md.era.short.clean$T_fert_inorganicP[md.era.short.clean$T_fert_inorganicNPK_unit==""]))
+#[1] ""
 
-sort(unique(md.era.short.clean$C_fert_inorganicK))
-sort(unique(md.era.short.clean$T_fert_inorganicK))
+sort(unique(md.era.short.clean$C_fert_inorganicK)) # Merged
+sort(unique(md.era.short.clean$T_fert_inorganicK)) # TO CHECK: Not ready to merge
+sort(unique(md.era.short.clean$C_fert_inorganicK[md.era.short.clean$C_fert_inorganicNPK_unit==""]))
+#character(0)
+sort(unique(md.era.short.clean$T_fert_inorganicK[md.era.short.clean$T_fert_inorganicNPK_unit==""]))
+#[1] ""   "10"
 
 sort(unique(md.era.short.clean$C_fert_inorganicP2O5))
 sort(unique(md.era.short.clean$T_fert_inorganicP2O5))
+sort(unique(md.era.short.clean$C_fert_inorganicP2O5[md.era.short.clean$C_fert_inorganicNPK_unit==""]))
+#character(0)
+sort(unique(md.era.short.clean$T_fert_inorganicP2O5[md.era.short.clean$T_fert_inorganicNPK_unit==""]))
+#[1] ""   "10"
 
-sort(unique(md.era.short.clean$C_fert_inorganicK2O))
-sort(unique(md.era.short.clean$T_fert_inorganicK2O))
+sort(unique(md.era.short.clean$C_fert_inorganicK2O)) # Merged
+sort(unique(md.era.short.clean$T_fert_inorganicK2O)) # Merged
+sort(unique(md.era.short.clean$C_fert_inorganicK2O[md.era.short.clean$C_fert_inorganicNPK_unit==""]))
+#[1] ""
+sort(unique(md.era.short.clean$T_fert_inorganicK2O[md.era.short.clean$T_fert_inorganicNPK_unit==""]))
+#[1] "" 
+sort(unique(md.era.short.clean$C_fert_inorganicN_amount_unit)) 
+sort(unique(md.era.short.clean$C_fert_inorganicP_amount_unit))  
+sort(unique(md.era.short.clean$C_fert_inorganicK_amount_unit))
+sort(unique(md.era.short.clean$C_fert_inorganicP2O5_amount_unit)) 
+sort(unique(md.era.short.clean$C_fert_inorganicK2O_amount_unit))
 
-
-fomd09.clean<-fomd09.clean%>%
-  rowwise() %>%
-  mutate(
-    fert_inorganic_type_amount_unit = if_else(
-      any(is.na(c(fert_inorganic_type
-      ))),
-      NA_character_,
-      {
-        types   <- strsplit(fert_inorganic_type, "\\.\\.")[[1]]
-        amounts <- strsplit(fert_inorganic_amount, "\\.\\.")[[1]]
-        units   <- strsplit(fert_inorganic_unit, "\\.\\.")[[1]]
-        
-        paste0(
-          types, "[", amounts, "(", units, ")]",
-          collapse = "..")} )) %>%
-  mutate(
-    fert_inorganicN = if_else(is.na(fert_inorganicN),NA_character_,paste0(fert_inorganicN, "(", fert_inorganicNPK_unit, ")")),
-    fert_inorganicP = if_else(is.na(fert_inorganicP),NA_character_,paste0(fert_inorganicP, "(", fert_inorganicNPK_unit, ")")),
-    fert_inorganicK = if_else(is.na(fert_inorganicK),NA_character_,paste0(fert_inorganicK, "(", fert_inorganicNPK_unit, ")")),
-    fert_inorganicP2O5 = if_else(is.na(fert_inorganicP2O5),NA_character_,paste0(fert_inorganicP2O5, "(", fert_inorganicNPK_unit, ")")),
-    fert_inorganicK2O = if_else(is.na(fert_inorganicK2O),NA_character_,paste0(fert_inorganicK2O, "(", fert_inorganicNPK_unit, ")")))%>%
-  ungroup()
-
-# Quick checks
-sort(unique(md.era.short.clean$fert_inorganic_category))
-sort(unique(md.era.short.clean$fert_inorganic_type_amount_unit))
-sort(unique(md.era.short.clean$fert_inorganicN))
-sort(unique(fomd09.clean$fert_inorganicP))
-sort(unique(fomd09.clean$fert_inorganicK))
-sort(unique(fomd09.clean$fert_inorganicP2O5))
-sort(unique(fomd09.clean$fert_inorganicK2O))
+sort(unique(md.era.short.clean$T_fert_inorganicN_amount_unit)) 
+sort(unique(md.era.short.clean$T_fert_inorganicP_amount_unit))  
+sort(unique(md.era.short.clean$T_fert_inorganicK_amount_unit))
+sort(unique(md.era.short.clean$T_fert_inorganicP2O5_amount_unit)) 
+sort(unique(md.era.short.clean$T_fert_inorganicK2O_amount_unit)) 
 
 #=========================
 #---nutrient_management_practice (organic)----
 #=========================
-md.era.short.clean$C_fert_organic_category <- gsub("; ", "..", md.era.short.clean$C_fert_organic_category, fixed = TRUE)
-md.era.short.clean$T_fert_organic_category <- gsub("; ", "..", md.era.short.clean$T_fert_organic_category, fixed = TRUE)
+# Columns where "; " should become ".."
+npk_or_semicolon_cols <- c(
+  "C_fert_organic_category", "T_fert_organic_category",
+  "C_fert_organic_type",     "T_fert_organic_type",
+  "C_fert_organic_unit",     "T_fert_organic_unit",
+  "C_fert_organic_amount",   "T_fert_organic_amount",
+  "C_fert_organic_source",   "T_fert_organic_source"
+)
 
-md.era.short.clean$C_fert_organic_type <- gsub("; ", "..", md.era.short.clean$C_fert_organic_type, fixed = TRUE)
-md.era.short.clean$T_fert_organic_type <- gsub("; ", "..", md.era.short.clean$T_fert_organic_type, fixed = TRUE)
+# Columns needing "..." -> ".."
+npk_or_cols <- c(
+  "C_fert_organicN", "T_fert_organicN",
+  "C_fert_organicP", "T_fert_organicP",
+  "C_fert_organicK", "T_fert_organicK"
+)
 
-md.era.short.clean$C_fert_organic_unit <- gsub("; ", "..", md.era.short.clean$C_fert_organic_unit, fixed = TRUE)
-md.era.short.clean$T_fert_organic_unit <- gsub("; ", "..", md.era.short.clean$T_fert_organic_unit, fixed = TRUE)
+# Apply "; " -> ".." substitution
+md.era.short.clean[npk_or_semicolon_cols] <- lapply(
+  md.era.short.clean[npk_or_semicolon_cols],
+  \(x) gsub("; ", "..", x, fixed = TRUE)
+)
 
-md.era.short.clean$C_fert_organic_amount <- gsub("; ", "..", md.era.short.clean$C_fert_organic_amount, fixed = TRUE)
-md.era.short.clean$T_fert_organic_amount <- gsub("; ", "..", md.era.short.clean$T_fert_organic_amount, fixed = TRUE)
+# Apply "..." -> ".." 
+md.era.short.clean[npk_or_cols] <- lapply(
+  md.era.short.clean[npk_or_cols],
+  \(x) gsub("...", "..", x, fixed = TRUE)
+)
 
-md.era.short.clean$C_fert_organicN <- gsub("...", "..", md.era.short.clean$C_fert_organicN, fixed = TRUE)
-md.era.short.clean$T_fert_organicN <- gsub("...", "..", md.era.short.clean$T_fert_organicN, fixed = TRUE)
+# Define the inorganic categories to remove
+inorganic_to_remove <- c("Biochar","Inorganic", "MicroNutrient")
 
-md.era.short.clean$C_fert_organicP <- gsub("...", "..", md.era.short.clean$C_fert_organicP, fixed = TRUE)
-md.era.short.clean$T_fert_organicP <- gsub("...", "..", md.era.short.clean$T_fert_organicP, fixed = TRUE)
+# Apply to both columns
+md.era.short.clean<-md.era.short.clean%>%
+  mutate(
+    C_fert_organic_category =clean_fert_category(C_fert_organic_category, inorganic_to_remove),
+    T_fert_organic_category = clean_fert_category(T_fert_organic_category, inorganic_to_remove))
 
-md.era.short.clean$C_fert_organicK <- gsub("...", "..", md.era.short.clean$C_fert_organicK, fixed = TRUE)
-md.era.short.clean$T_fert_organicK <- gsub("...", "..", md.era.short.clean$T_fert_organicK, fixed = TRUE)
-
-md.era.short.clean$C_fert_organic_source <- gsub("; ", "..", md.era.short.clean$C_fert_organic_source, fixed = TRUE)
-md.era.short.clean$T_fert_organic_source <- gsub("; ", "..", md.era.short.clean$T_fert_organic_source, fixed = TRUE)
-
+# Combine amount + unit columns separated by ".."
+md.era.short.clean <- md.era.short.clean%>%
+  mutate(C_fert_organicN_amount_unit= combine_amount_unit(amount = C_fert_organicN,unit   = C_fert_organicNPK_unit),
+         C_fert_organicP_amount_unit= combine_amount_unit(amount = C_fert_organicP,unit   = C_fert_organicNPK_unit),
+         C_fert_organicK_amount_unit= combine_amount_unit(amount = C_fert_organicK,unit   = C_fert_organicNPK_unit),
+         
+         T_fert_organicN_amount_unit= combine_amount_unit(amount = T_fert_organicN,unit   = T_fert_organicNPK_unit),
+         T_fert_organicP_amount_unit= combine_amount_unit(amount = T_fert_organicP,unit   = T_fert_organicNPK_unit),
+         T_fert_organicK_amount_unit= combine_amount_unit(amount = T_fert_organicK,unit   = T_fert_organicNPK_unit)
+  )
 
 # Quick checks
-sort(unique(md.era.short.clean$C_fert_organic_category))
-sort(unique(md.era.short.clean$T_fert_organic_category))
+sort(unique(md.era.short.clean1$C_fert_organic_category))  
+sort(unique(md.era.short.clean1$T_fert_organic_category))  
 
-sort(unique(md.era.short.clean$C_fert_organic_type))
-sort(unique(md.era.short.clean$T_fert_organic_type))
+sort(unique(md.era.short.clean$C_fert_organic_type))  #TO CHECK: Need to separate organic and inorganic
+sort(unique(md.era.short.clean$T_fert_organic_type))  #TO CHECK: Need to separate organic and inorganic
 
-sort(unique(md.era.short.clean$C_fert_organic_unit))
-sort(unique(md.era.short.clean$T_fert_organic_unit))
+sort(unique(md.era.short.clean$C_fert_organic_unit)) #TO CHECK: Need to separate organic and inorganic and combine type with amount and unit
+sort(unique(md.era.short.clean$T_fert_organic_unit)) #TO CHECK: Need to separate organic and inorganic and combine type with amount and unit
 
-sort(unique(md.era.short.clean$C_fert_organic_amount))
-sort(unique(md.era.short.clean$T_fert_organic_amount))
+sort(unique(md.era.short.clean$C_fert_organic_amount)) #TO CHECK: Need to separate organic and inorganic and combine type with amount and unit
+sort(unique(md.era.short.clean$T_fert_organic_amount)) #TO CHECK: Need to separate organic and inorganic and combine type with amount and unit
 
-sort(unique(md.era.short.clean$C_fert_organicNPK_unit))
-sort(unique(md.era.short.clean$T_fert_organicNPK_unit))
+sort(unique(md.era.short.clean$C_fert_organicNPK_unit)) # Merged
+sort(unique(md.era.short.clean$T_fert_organicNPK_unit)) # Merged
 
-sort(unique(md.era.short.clean$C_fert_organicN))
-sort(unique(md.era.short.clean$T_fert_organicN))
+sort(unique(md.era.short.clean$C_fert_organicN)) # Merged
+sort(unique(md.era.short.clean$T_fert_organicN)) # Merged
+sort(unique(md.era.short.clean$C_fert_organicN[md.era.short.clean$C_fert_organicNPK_unit==""]))
+#character(0)
+sort(unique(md.era.short.clean$T_fert_organicN[md.era.short.clean$T_fert_organicNPK_unit==""]))
+#[1] ""
 
-sort(unique(md.era.short.clean$C_fert_organicP))
-sort(unique(md.era.short.clean$T_fert_organicP))
+sort(unique(md.era.short.clean$C_fert_organicP)) # Merged
+sort(unique(md.era.short.clean$T_fert_organicP)) # Merged
 
-sort(unique(md.era.short.clean$C_fert_organicK))
-sort(unique(md.era.short.clean$T_fert_organicK))
+sort(unique(md.era.short.clean$C_fert_organicP[md.era.short.clean$C_fert_organicNPK_unit==""]))
+#character(0)
+sort(unique(md.era.short.clean$T_fert_organicP[md.era.short.clean$T_fert_organicNPK_unit==""]))
+#[1] ""
+
+sort(unique(md.era.short.clean$C_fert_organicK)) # Merged
+sort(unique(md.era.short.clean$T_fert_organicK)) # Merged
+
+sort(unique(md.era.short.clean$C_fert_organicK[md.era.short.clean$C_fert_organicNPK_unit==""]))
+#character(0)
+sort(unique(md.era.short.clean$T_fert_organicK[md.era.short.clean$T_fert_organicNPK_unit==""]))
+#[1] ""
 
 sort(unique(md.era.short.clean$C_fert_organic_source))
 sort(unique(md.era.short.clean$T_fert_organic_source))
 
-
-fomd09.clean<-fomd09.clean%>%
-  rowwise() %>%
-  mutate(
-    fert_organic_type_amount_unit = if_else(
-      any(is.na(c(fert_organic_type
-      ))),
-      NA_character_,
-      {
-        types   <- strsplit(fert_organic_type, "\\.\\.")[[1]]
-        amounts <- strsplit(fert_organic_amount, "\\.\\.")[[1]]
-        units   <- strsplit(fert_organic_unit, "\\.\\.")[[1]]
-        
-        paste0(
-          types, "[", amounts, "(", units, ")]",
-          collapse = "..")} )) %>%
-  mutate(
-    fert_organicN = if_else(is.na(fert_organicN),NA_character_,paste0(fert_organicN, "(", fert_organicNPK_unit, ")")),
-    fert_organicP = if_else(is.na(fert_organicP),NA_character_,paste0(fert_organicP, "(", fert_organicNPK_unit, ")")),
-    fert_organicK = if_else(is.na(fert_organicK),NA_character_,paste0(fert_organicK, "(", fert_organicNPK_unit, ")")))%>%
-  ungroup()
-
-# Quick checks
-sort(unique(fomd09.clean$fert_organic_category))
-sort(unique(fomd09.clean$fert_organic_type))
-sort(unique(fomd09.clean$fert_organic_amount))
-sort(unique(fomd09.clean$fert_organic_type_amount_unit))
-sort(unique(fomd09.clean$fert_organicNPK_unit))
-sort(unique(fomd09.clean$fert_organicN))
-sort(unique(fomd09.clean$fert_organicP))
-sort(unique(fomd09.clean$fert_organicK))
-sort(unique(fomd09.clean$fert_organic_source))
+sort(unique(md.era.short.clean$C_fert_organicN_amount_unit))
+sort(unique(md.era.short.clean$C_fert_organicP_amount_unit))
+sort(unique(md.era.short.clean$C_fert_organicK_amount_unit))
+sort(unique(md.era.short.clean$T_fert_organicN_amount_unit))
+sort(unique(md.era.short.clean$T_fert_organicP_amount_unit))
+sort(unique(md.era.short.clean$T_fert_organicK_amount_unit))
 
 #=========================
 #---weeding_management_moderator----
@@ -773,8 +1048,6 @@ sort(unique(md.era.short.clean$T_weed_frequency[md.era.short.clean$T_weed_freque
 #=========================
 #---chemical_management_practice----
 #=========================
-md.era.short.clean<-md.era.short
-
 md.era.short.clean$C_chem_subpractice <- gsub("; ", "..", md.era.short.clean$C_chem_subpractice, fixed = TRUE)
 md.era.short.clean$T_chem_subpractice <- gsub("; ", "..", md.era.short.clean$T_chem_subpractice, fixed = TRUE)
 
@@ -814,7 +1087,6 @@ sort(unique(md.era.short.clean$T_chem_amount[md.era.short.clean$T_chem_amount_un
 #---residues_practice----
 #=========================
 ## TO CHECK: A LOT OF THINGS TO CHECK HERE!!
-
 
 md.era.short.clean$C_residues_OC <- gsub("; ", "..", md.era.short.clean$C_residues_OC, fixed = TRUE)
 md.era.short.clean$T_residues_OC <- gsub("; ", "..", md.era.short.clean$T_residues_OC, fixed = TRUE)
@@ -1019,24 +1291,6 @@ sort(unique(md.era.short.clean$T_ph_material_amount_unit))
 #=========================
 #---irrigation_practice----
 #=========================
-# Reusable function to combine amount + unit columns separated by ".."
-combine_amount_unit <- function(amount, unit, sep = "..") {
-  mapply(function(amt, unt) {
-    if (is.na(amt) || amt == "") return(amt)
-    
-    # Replace empty or NA unit with "Unspecified"
-    unt <- ifelse(is.na(unt) || unt == "", "Unspecified", unt)
-    
-    amounts <- strsplit(amt, "\\.\\.")[[1]]
-    
-    if (length(amounts) == 1) {
-      paste0(amt, "(", unt, ")")
-    } else {
-      paste(paste0(amounts, "(", unt, ")"), collapse = sep)
-    }
-  }, amount, unit, USE.NAMES = FALSE)
-}
-
 md.era.short.clean$C_irrig_subpractice <- gsub("...", "..", md.era.short.clean$C_irrig_subpractice, fixed = TRUE)
 md.era.short.clean$T_irrig_subpractice <- gsub("...", "..", md.era.short.clean$T_irrig_subpractice, fixed = TRUE)
 
@@ -1088,7 +1342,6 @@ sort(unique(md.era.short.clean$T_irrig_water_type))
 #---water_harvesting_practice----
 #=========================
 ## TO CHECK C_watharv_subpractice and T_watharv_subpractice
-
 md.era.short.clean$C_watharv_subpractice <- gsub(", ", "..", md.era.short.clean$C_watharv_subpractice, fixed = TRUE)
 md.era.short.clean$T_watharv_subpractice <- gsub(", ", "..", md.era.short.clean$T_watharv_subpractice, fixed = TRUE)
 
