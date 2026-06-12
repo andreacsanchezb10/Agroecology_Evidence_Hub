@@ -1,0 +1,197 @@
+code,label,corr,partialCorr
+1,Cereals,,1474
+1.01,Wheat,,8373
+1.02,Maize,,12332
+1.03,Rice,,6599
+1.04,Sorghum,,7244
+1.05,Barley,,823
+1.06,Rye,,14010
+1.07,Oats,,5287
+1.08,Millet,,
+1.09,Triticale,,
+1.1,Buckwheat,,9471
+1.11,Fonio,,
+1.12,Quinoa,,13716
+1.13,Canary seed,,
+1.14,Mixed cereals,,
+1.9,"Other cereals, n.e.c.",,
+2,Vegetables and melons,,
+2.01,Leafy or stem vegetables,,
+2.01.01,Artichokes,,
+2.01.02,Asparagus,,669
+2.01.03,Cabbages,,1173
+2.01.04,Cauliflower and broccoli,,
+2.01.05,Lettuce,,
+2.01.06,Spinach,,14508
+2.01.07,Chicory,,9786
+2.01.90,"Other leafy or stem vegetables, n.e.c.",,
+2.02,Fruit-bearing vegetables,,
+2.02.01,Cucumbers,,10195
+2.02.02,Eggplants (aubergines),,
+2.02.03,Tomatoes,,7805
+2.02.04,"Pumpkin, squash and gourds",,
+2.02.05,Okra,,
+2.02.90,"Other fruit-bearing vegetables, n.e.c.",,
+2.03,"Root, bulb or tuberous vegetables",,
+2.03.01,Carrots,,9640
+2.03.02,Turnips,,8019
+2.03.03,Garlic,,11091
+2.03.04,Onions (incl. shallots),,
+2.03.05,Leeks and other alliaceous vegetables,,
+2.03.90,"Other root, bulb, or tuberous vegetables, n.e.c.",,
+2.04,Mushrooms and truffles,,
+2.05,Melons,,12487
+2.05.01,Watermelons,,15277
+2.05.02,Cantaloupes and other melons,,
+2.9,Other vegetables n.e.c.,,
+3,Fruit and nuts,,
+3.01,Tropical and subtropical fruits,,
+3.01.01,Avocados,,9022
+3.01.02,Bananas,,806
+3.01.03,Plantains,,5989
+3.01.04,Dates,,25475
+3.01.05,Figs,,10840
+3.01.06,"Mangoes, guavas and mangosteens",,
+3.01.07,Papayas,,13087
+3.01.08,Pineapples,,13394
+3.01.90,"Other tropical and subtropical fruits, n.e.c.",,
+3.02,Citrus fruits,,1641
+3.02.01,Grapefruit and pomelo,,
+3.02.02,Lemons and limes,,
+3.02.03,Oranges,,
+3.02.04,"Tangerines mandarins, clementines",,
+3.02.90,"Other citrus fruits, n.e.c.",,
+3.03,Grapes,,3359
+3.04,Berries,,
+3.04.01,Currants,,
+3.04.02,Gooseberries,,3333
+3.04.03,Kiwi fruit,,
+3.04.04,Raspberries,,6458
+3.04.05,Strawberries,,7443
+3.04.06,Blueberries,,974
+3.04.07,Cranberries,,1944
+3.04.90,"Other berries, n.e.c",,
+3.05,Pome fruits and stone fruits,,
+3.05.01,Apples,,541
+3.05.02,Apricots,,545
+3.05.03,Cherries and sour cherries,,
+3.05.04,Peaches and nectarines,,
+3.05.05,Pears and quinces,,
+3.05.06,Plums and sloes,,
+3.05.90,"Other pome fruits and stone fruits, n.e.c.",,
+3.06,Nuts,,12873
+3.06.01,Almonds,,8734
+3.06.02,Cashew nuts,,
+3.06.03,Chestnuts,,25467
+3.06.04,Hazelnuts,,18248
+3.06.05,Pistachios,,13413
+3.06.06,Walnuts,,15254
+3.06.07,Brazil nuts,,9410
+3.06.08,Areca nuts,,
+3.06.09,Cola nuts,,
+3.06.90,"Other nuts, n.e.c.",,
+3.9,"Other fruits, n.e.c.",,
+4,Oilseed crops and oleaginous fruits,,
+4.01,Soya beans,,
+4.02,Groundnuts,,11368
+4.03,Other temporary oilseed crops,,
+4.03.01,Castor bean,,
+4.03.02,Linseed,,12192
+4.03.03,Mustard,,25488
+4.03.04,Niger seed,,12827
+4.03.05,Rapeseed,,25499
+4.03.06,Safflower,,14022
+4.03.07,Sesame,,14216
+4.03.08,Sunflower,,
+4.03.09,Shea tree (shea butter or karite nuts),,
+4.03.10,Tung tree,,
+4.03.11,Jojoba,,11913
+4.03.12,Poppy,,
+4.03.13,Tallow tree,,
+4.03.90,"Other temporary oilseed crops, n.e.c.",,
+4.04,Permanent oilseed crops,,
+4.04.01,Coconuts,,25470
+4.04.02,Olives,,12926
+4.04.03,Oil palms,,5330
+4.04.90,"Other oleaginous fruits, n.e.c.",,
+5,Root/tuber crops with high starch or inulin content,,
+5.01,Potatoes,,13551
+5.02,Sweet potatoes,,14729
+5.03,Cassava,,9649
+5.04,Yams,,8478
+5.05,Taro,,14791
+5.06,Yautia,,
+5.9,"Other roots and tubers, n.e.c.",,
+6,"Stimulant, spice and aromatic crops",,
+6.01,Stimulant crops,,7413
+6.01.01,Coffee,,1731
+6.01.02,Tea,,7634
+6.01.03,Maté,,
+6.01.04,Cocoa,,
+6.01.05,Chicory roots,,
+6.01.90,"Other stimulant crops, n.e.c.",,
+6.02,Spice and aromatic crops,,
+6.02.01,Temporary spice and aromatic crops,,
+6.02.01.01,Chillies and peppers (capsicum spp.),,
+6.02.01.02,"Anise, badian, and fennel",,
+6.02.01.90,"Other temporary spice crops, n.e.c.",,
+6.02.02,Permanent spice and aromatic crops,,
+6.02.02.01,Pepper (piper spp.),,
+6.02.02.02,"Nutmeg, mace, cardamoms",,
+6.02.02.03,Cinnamon (canella),,
+6.02.02.04,Cloves,,23597
+6.02.02.05,Ginger,,11157
+6.02.02.06,Vanilla,,
+6.02.02.07,Hops,,11596
+6.02.02.90,"Other permanent spice and aromatic crops, n.e.c.",,
+7,Leguminous crops,,
+7.01,Beans,,331566
+7.02,Broad beans,,
+7.03,Chickpeas,,9785
+7.04,Cowpeas,,1938
+7.05,Lentils,,12140
+7.06,Lupins,,
+7.07,Peas,,13177
+7.08,Pigeon peas,,13356
+7.09,Bambara beans,,
+7.1,Vetches,,
+7.9,"Leguminous crops, n.e.c.",,
+8,Sugar crops,,7503
+8.01,Sugar beet,,
+8.02,Sugar cane,,
+8.03,Sweet sorghum,,
+8.9,"Other sugar crops, n.e.c.",,
+9,Other crops,,
+9.01,Grasses and other fodder crops,,
+9.01.01,Temporary grass and fodder crops,,
+9.01.02,Permanent grass and fodder crops,,
+9.02,Fibre crops,,2876
+9.02.01,Temporary fibre crops,,
+9.02.01.01,Cotton,,1926
+9.02.01.02,"Jute, kenaf, and other similar crops",,
+9.02.01.03,Flax,,2970
+9.02.01.04,Hemp,,3558
+9.02.01.90,"Other temporary fibre crops, n.e.c.",,
+9.02.02,Permanent fibre crops,,
+9.02.02.01,Ramie,,6442
+9.02.02.02,Sisal,,7086
+9.02.02.90,"Other permanent fibre crops, n.e.c.",,
+9.03,"Medicinal, pesticidal or similar crops",,
+9.03.01,"Temporary medicinal, pesticidal or similar crops",,
+9.03.01.01,Mint,,12606
+9.03.01.02,Basil,,9093
+9.03.01.90,"Other temporary medicinal, pesticidal or similar crops",,
+9.03.02,"Permanent medicinal, pesticidal or similar crops",,
+9.03.02.01,Ginseng,,
+9.03.02.02,Coca,,9955
+9.03.02.03,Kava,,
+9.03.02.04,Guarana,,
+9.03.02.90,"Other permanent medicinal, pesticidal or similar crops",,
+9.04,Rubber,,6678
+9.05,Flower crops,,
+9.05.01,Temporary flower crops,,
+9.05.02,Permanent flower crops,,
+9.06,Tobacco,,7796
+9.9,"Other crops, n.e.c.",,
+9.90.01,"Other crops, n.e.c. – temporary",,
+9.90.02,"Other crops, n.e.c. – permanent",,
