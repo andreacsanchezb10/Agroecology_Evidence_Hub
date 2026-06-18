@@ -1,197 +1,197 @@
-"code","broader","label_en","label_fr","label_es","label_ru","alternative","definition","note","uri"
-"1","","Cereals","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/1"
-"1.01","1","Wheat","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/1-01"
-"1.02","1","Maize","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/1-02"
-"1.03","1","Rice","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/1-03"
-"1.04","1","Sorghum","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/1-04"
-"1.05","1","Barley","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/1-05"
-"1.06","1","Rye","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/1-06"
-"1.07","1","Oats","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/1-07"
-"1.08","1","Millet","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/1-08"
-"1.09","1","Triticale","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/1-09"
-"1.1","1","Buckwheat","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/1-1"
-"1.11","1","Fonio","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/1-11"
-"1.12","1","Quinoa","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/1-12"
-"1.13","1","Canary seed","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/1-13"
-"1.14","1","Mixed cereals","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/1-14"
-"1.9","1","Other cereals, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/1-9"
-"2","","Vegetables and melons","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2"
-"2.01","2","Leafy or stem vegetables","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-01"
-"2.01.01","2.01","Artichokes","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-01-01"
-"2.01.02","2.01","Asparagus","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-01-02"
-"2.01.03","2.01","Cabbages","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-01-03"
-"2.01.04","2.01","Cauliflower and broccoli","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-01-04"
-"2.01.05","2.01","Lettuce","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-01-05"
-"2.01.06","2.01","Spinach","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-01-06"
-"2.01.07","2.01","Chicory","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-01-07"
-"2.01.90","2.01","Other leafy or stem vegetables, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-01-90"
-"2.02","2","Fruit-bearing vegetables","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-02"
-"2.02.01","2.02","Cucumbers","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-02-01"
-"2.02.02","2.02","Eggplants (aubergines)","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-02-02"
-"2.02.03","2.02","Tomatoes","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-02-03"
-"2.02.04","2.02","Pumpkin, squash and gourds","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-02-04"
-"2.02.05","2.02","Okra","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-02-05"
-"2.02.90","2.02","Other fruit-bearing vegetables, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-02-90"
-"2.03","2","Root, bulb or tuberous vegetables","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-03"
-"2.03.01","2.03","Carrots","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-03-01"
-"2.03.02","2.03","Turnips","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-03-02"
-"2.03.03","2.03","Garlic","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-03-03"
-"2.03.04","2.03","Onions (incl. shallots)","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-03-04"
-"2.03.05","2.03","Leeks and other alliaceous vegetables","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-03-05"
-"2.03.90","2.03","Other root, bulb, or tuberous vegetables, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-03-90"
-"2.04","2","Mushrooms and truffles","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-04"
-"2.05","2","Melons","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-05"
-"2.05.01","2.05","Watermelons","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-05-01"
-"2.05.02","2.05","Cantaloupes and other melons","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-05-02"
-"2.9","2","Other vegetables n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/2-9"
-"3","","Fruit and nuts","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3"
-"3.01","3","Tropical and subtropical fruits","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-01"
-"3.01.01","3.01","Avocados","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-01-01"
-"3.01.02","3.01","Bananas","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-01-02"
-"3.01.03","3.01","Plantains","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-01-03"
-"3.01.04","3.01","Dates","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-01-04"
-"3.01.05","3.01","Figs","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-01-05"
-"3.01.06","3.01","Mangoes, guavas and mangosteens","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-01-06"
-"3.01.07","3.01","Papayas","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-01-07"
-"3.01.08","3.01","Pineapples","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-01-08"
-"3.01.90","3.01","Other tropical and subtropical fruits, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-01-90"
-"3.02","3","Citrus fruits","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-02"
-"3.02.01","3.02","Grapefruit and pomelo","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-02-01"
-"3.02.02","3.02","Lemons and limes","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-02-02"
-"3.02.03","3.02","Oranges","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-02-03"
-"3.02.04","3.02","Tangerines mandarins, clementines","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-02-04"
-"3.02.90","3.02","Other citrus fruits, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-02-90"
-"3.03","3","Grapes","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-03"
-"3.04","3","Berries","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-04"
-"3.04.01","3.04","Currants","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-04-01"
-"3.04.02","3.04","Gooseberries","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-04-02"
-"3.04.03","3.04","Kiwi fruit","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-04-03"
-"3.04.04","3.04","Raspberries","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-04-04"
-"3.04.05","3.04","Strawberries","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-04-05"
-"3.04.06","3.04","Blueberries","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-04-06"
-"3.04.07","3.04","Cranberries","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-04-07"
-"3.04.90","3.04","Other berries, n.e.c","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-04-90"
-"3.05","3","Pome fruits and stone fruits","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-05"
-"3.05.01","3.05","Apples","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-05-01"
-"3.05.02","3.05","Apricots","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-05-02"
-"3.05.03","3.05","Cherries and sour cherries","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-05-03"
-"3.05.04","3.05","Peaches and nectarines","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-05-04"
-"3.05.05","3.05","Pears and quinces","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-05-05"
-"3.05.06","3.05","Plums and sloes","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-05-06"
-"3.05.90","3.05","Other pome fruits and stone fruits, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-05-90"
-"3.06","3","Nuts","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-06"
-"3.06.01","3.06","Almonds","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-06-01"
-"3.06.02","3.06","Cashew nuts","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-06-02"
-"3.06.03","3.06","Chestnuts","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-06-03"
-"3.06.04","3.06","Hazelnuts","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-06-04"
-"3.06.05","3.06","Pistachios","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-06-05"
-"3.06.06","3.06","Walnuts","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-06-06"
-"3.06.07","3.06","Brazil nuts","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-06-07"
-"3.06.08","3.06","Areca nuts","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-06-08"
-"3.06.09","3.06","Cola nuts","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-06-09"
-"3.06.90","3.06","Other nuts, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-06-90"
-"3.9","3","Other fruits, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/3-9"
-"4","","Oilseed crops and oleaginous fruits","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4"
-"4.01","4","Soya beans","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-01"
-"4.02","4","Groundnuts","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-02"
-"4.03","4","Other temporary oilseed crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-03"
-"4.03.01","4.03","Castor bean","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-03-01"
-"4.03.02","4.03","Linseed","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-03-02"
-"4.03.03","4.03","Mustard","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-03-03"
-"4.03.04","4.03","Niger seed","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-03-04"
-"4.03.05","4.03","Rapeseed","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-03-05"
-"4.03.06","4.03","Safflower","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-03-06"
-"4.03.07","4.03","Sesame","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-03-07"
-"4.03.08","4.03","Sunflower","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-03-08"
-"4.03.09","4.03","Shea tree (shea butter or karite nuts)","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-03-09"
-"4.03.10","4.03","Tung tree","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-03-10"
-"4.03.11","4.03","Jojoba","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-03-11"
-"4.03.12","4.03","Poppy","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-03-12"
-"4.03.13","4.03","Tallow tree","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-03-13"
-"4.03.90","4.03","Other temporary oilseed crops, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-03-90"
-"4.04","4","Permanent oilseed crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-04"
-"4.04.01","4.04","Coconuts","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-04-01"
-"4.04.02","4.04","Olives","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-04-02"
-"4.04.03","4.04","Oil palms","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-04-03"
-"4.04.90","4.04","Other oleaginous fruits, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/4-04-90"
-"5","","Root/tuber crops with high starch or inulin content","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/5"
-"5.01","5","Potatoes","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/5-01"
-"5.02","5","Sweet potatoes","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/5-02"
-"5.03","5","Cassava","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/5-03"
-"5.04","5","Yams","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/5-04"
-"5.05","5","Taro","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/5-05"
-"5.06","5","Yautia","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/5-06"
-"5.9","5","Other roots and tubers, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/5-9"
-"6","","Stimulant, spice and aromatic crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6"
-"6.01","6","Stimulant crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-01"
-"6.01.01","6.01","Coffee","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-01-01"
-"6.01.02","6.01","Tea","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-01-02"
-"6.01.03","6.01","Maté","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-01-03"
-"6.01.04","6.01","Cocoa","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-01-04"
-"6.01.05","6.01","Chicory roots","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-01-05"
-"6.01.90","6.01","Other stimulant crops, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-01-90"
-"6.02","6","Spice and aromatic crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-02"
-"6.02.01","6.02","Temporary spice and aromatic crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-02-01"
-"6.02.01.01","6.02.01","Chillies and peppers (capsicum spp.)","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-02-01-01"
-"6.02.01.02","6.02.01","Anise, badian, and fennel","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-02-01-02"
-"6.02.01.90","6.02.01","Other temporary spice crops, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-02-01-90"
-"6.02.02","6.02","Permanent spice and aromatic crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-02-02"
-"6.02.02.01","6.02.02","Pepper (piper spp.)","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-02-02-01"
-"6.02.02.02","6.02.02","Nutmeg, mace, cardamoms","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-02-02-02"
-"6.02.02.03","6.02.02","Cinnamon (canella)","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-02-02-03"
-"6.02.02.04","6.02.02","Cloves","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-02-02-04"
-"6.02.02.05","6.02.02","Ginger","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-02-02-05"
-"6.02.02.06","6.02.02","Vanilla","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-02-02-06"
-"6.02.02.07","6.02.02","Hops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-02-02-07"
-"6.02.02.90","6.02.02","Other permanent spice and aromatic crops, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/6-02-02-90"
-"7","","Leguminous crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/7"
-"7.01","7","Beans","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/7-01"
-"7.02","7","Broad beans","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/7-02"
-"7.03","7","Chickpeas","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/7-03"
-"7.04","7","Cowpeas","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/7-04"
-"7.05","7","Lentils","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/7-05"
-"7.06","7","Lupins","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/7-06"
-"7.07","7","Peas","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/7-07"
-"7.08","7","Pigeon peas","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/7-08"
-"7.09","7","Bambara beans","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/7-09"
-"7.1","7","Vetches","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/7-1"
-"7.9","7","Leguminous crops, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/7-9"
-"8","","Sugar crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/8"
-"8.01","8","Sugar beet","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/8-01"
-"8.02","8","Sugar cane","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/8-02"
-"8.03","8","Sweet sorghum","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/8-03"
-"8.9","8","Other sugar crops, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/8-9"
-"9","","Other crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9"
-"9.01","9","Grasses and other fodder crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-01"
-"9.01.01","9.01","Temporary grass and fodder crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-01-01"
-"9.01.02","9.01","Permanent grass and fodder crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-01-02"
-"9.02","9","Fibre crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-02"
-"9.02.01","9.02","Temporary fibre crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-02-01"
-"9.02.01.01","9.02.01","Cotton","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-02-01-01"
-"9.02.01.02","9.02.01","Jute, kenaf, and other similar crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-02-01-02"
-"9.02.01.03","9.02.01","Flax","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-02-01-03"
-"9.02.01.04","9.02.01","Hemp","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-02-01-04"
-"9.02.01.90","9.02.01","Other temporary fibre crops, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-02-01-90"
-"9.02.02","9.02","Permanent fibre crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-02-02"
-"9.02.02.01","9.02.02","Ramie","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-02-02-01"
-"9.02.02.02","9.02.02","Sisal","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-02-02-02"
-"9.02.02.90","9.02.02","Other permanent fibre crops, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-02-02-90"
-"9.03","9","Medicinal, pesticidal or similar crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-03"
-"9.03.01","9.03","Temporary medicinal, pesticidal or similar crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-03-01"
-"9.03.01.01","9.03.01","Mint","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-03-01-01"
-"9.03.01.02","9.03.01","Basil","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-03-01-02"
-"9.03.01.90","9.03.01","Other temporary medicinal, pesticidal or similar crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-03-01-90"
-"9.03.02","9.03","Permanent medicinal, pesticidal or similar crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-03-02"
-"9.03.02.01","9.03.02","Ginseng","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-03-02-01"
-"9.03.02.02","9.03.02","Coca","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-03-02-02"
-"9.03.02.03","9.03.02","Kava","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-03-02-03"
-"9.03.02.04","9.03.02","Guarana","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-03-02-04"
-"9.03.02.90","9.03.02","Other permanent medicinal, pesticidal or similar crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-03-02-90"
-"9.04","9","Rubber","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-04"
-"9.05","9","Flower crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-05"
-"9.05.01","9.05","Temporary flower crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-05-01"
-"9.05.02","9.05","Permanent flower crops","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-05-02"
-"9.06","9","Tobacco","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-06"
-"9.9","9","Other crops, n.e.c.","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-9"
-"9.90.01","9.9","Other crops, n.e.c. – temporary","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-90-01"
-"9.90.02","9.9","Other crops, n.e.c. – permanent","","","","","","","https://stats.fao.org/classifications/ICC/v1.1/9-90-02"
+code,broader,label_en,label_fr,label_es,label_ru,alternative,definition,note,uri
+1,,Cereals,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/1
+1.01,1,Wheat,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/1-01
+1.02,1,Maize,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/1-02
+1.03,1,Rice,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/1-03
+1.04,1,Sorghum,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/1-04
+1.05,1,Barley,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/1-05
+1.06,1,Rye,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/1-06
+1.07,1,Oats,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/1-07
+1.08,1,Millet,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/1-08
+1.09,1,Triticale,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/1-09
+1.1,1,Buckwheat,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/1-1
+1.11,1,Fonio,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/1-11
+1.12,1,Quinoa,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/1-12
+1.13,1,Canary seed,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/1-13
+1.14,1,Mixed cereals,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/1-14
+1.9,1,"Other cereals, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/1-9
+2,,Vegetables and melons,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2
+2.01,2,Leafy or stem vegetables,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-01
+2.01.01,2.01,Artichokes,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-01-01
+2.01.02,2.01,Asparagus,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-01-02
+2.01.03,2.01,Cabbages,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-01-03
+2.01.04,2.01,Cauliflower and broccoli,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-01-04
+2.01.05,2.01,Lettuce,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-01-05
+2.01.06,2.01,Spinach,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-01-06
+2.01.07,2.01,Chicory,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-01-07
+2.01.90,2.01,"Other leafy or stem vegetables, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-01-90
+2.02,2,Fruit-bearing vegetables,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-02
+2.02.01,2.02,Cucumbers,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-02-01
+2.02.02,2.02,Eggplants (aubergines),,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-02-02
+2.02.03,2.02,Tomatoes,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-02-03
+2.02.04,2.02,"Pumpkin, squash and gourds",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-02-04
+2.02.05,2.02,Okra,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-02-05
+2.02.90,2.02,"Other fruit-bearing vegetables, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-02-90
+2.03,2,"Root, bulb or tuberous vegetables",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-03
+2.03.01,2.03,Carrots,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-03-01
+2.03.02,2.03,Turnips,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-03-02
+2.03.03,2.03,Garlic,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-03-03
+2.03.04,2.03,Onions (incl. shallots),,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-03-04
+2.03.05,2.03,Leeks and other alliaceous vegetables,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-03-05
+2.03.90,2.03,"Other root, bulb, or tuberous vegetables, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-03-90
+2.04,2,Mushrooms and truffles,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-04
+2.05,2,Melons,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-05
+2.05.01,2.05,Watermelons,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-05-01
+2.05.02,2.05,Cantaloupes and other melons,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-05-02
+2.9,2,Other vegetables n.e.c.,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/2-9
+3,,Fruit and nuts,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3
+3.01,3,Tropical and subtropical fruits,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-01
+3.01.01,3.01,Avocados,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-01-01
+3.01.02,3.01,Bananas,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-01-02
+3.01.03,3.01,Plantains,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-01-03
+3.01.04,3.01,Dates,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-01-04
+3.01.05,3.01,Figs,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-01-05
+3.01.06,3.01,"Mangoes, guavas and mangosteens",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-01-06
+3.01.07,3.01,Papayas,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-01-07
+3.01.08,3.01,Pineapples,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-01-08
+3.01.90,3.01,"Other tropical and subtropical fruits, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-01-90
+3.02,3,Citrus fruits,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-02
+3.02.01,3.02,Grapefruit and pomelo,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-02-01
+3.02.02,3.02,Lemons and limes,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-02-02
+3.02.03,3.02,Oranges,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-02-03
+3.02.04,3.02,"Tangerines mandarins, clementines",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-02-04
+3.02.90,3.02,"Other citrus fruits, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-02-90
+3.03,3,Grapes,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-03
+3.04,3,Berries,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-04
+3.04.01,3.04,Currants,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-04-01
+3.04.02,3.04,Gooseberries,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-04-02
+3.04.03,3.04,Kiwi fruit,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-04-03
+3.04.04,3.04,Raspberries,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-04-04
+3.04.05,3.04,Strawberries,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-04-05
+3.04.06,3.04,Blueberries,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-04-06
+3.04.07,3.04,Cranberries,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-04-07
+3.04.90,3.04,"Other berries, n.e.c",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-04-90
+3.05,3,Pome fruits and stone fruits,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-05
+3.05.01,3.05,Apples,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-05-01
+3.05.02,3.05,Apricots,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-05-02
+3.05.03,3.05,Cherries and sour cherries,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-05-03
+3.05.04,3.05,Peaches and nectarines,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-05-04
+3.05.05,3.05,Pears and quinces,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-05-05
+3.05.06,3.05,Plums and sloes,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-05-06
+3.05.90,3.05,"Other pome fruits and stone fruits, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-05-90
+3.06,3,Nuts,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-06
+3.06.01,3.06,Almonds,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-06-01
+3.06.02,3.06,Cashew nuts,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-06-02
+3.06.03,3.06,Chestnuts,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-06-03
+3.06.04,3.06,Hazelnuts,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-06-04
+3.06.05,3.06,Pistachios,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-06-05
+3.06.06,3.06,Walnuts,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-06-06
+3.06.07,3.06,Brazil nuts,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-06-07
+3.06.08,3.06,Areca nuts,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-06-08
+3.06.09,3.06,Cola nuts,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-06-09
+3.06.90,3.06,"Other nuts, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-06-90
+3.9,3,"Other fruits, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/3-9
+4,,Oilseed crops and oleaginous fruits,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4
+4.01,4,Soya beans,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-01
+4.02,4,Groundnuts,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-02
+4.03,4,Other temporary oilseed crops,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-03
+4.03.01,4.03,Castor bean,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-03-01
+4.03.02,4.03,Linseed,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-03-02
+4.03.03,4.03,Mustard,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-03-03
+4.03.04,4.03,Niger seed,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-03-04
+4.03.05,4.03,Rapeseed,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-03-05
+4.03.06,4.03,Safflower,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-03-06
+4.03.07,4.03,Sesame,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-03-07
+4.03.08,4.03,Sunflower,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-03-08
+4.03.09,4.03,Shea tree (shea butter or karite nuts),,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-03-09
+4.03.10,4.03,Tung tree,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-03-10
+4.03.11,4.03,Jojoba,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-03-11
+4.03.12,4.03,Poppy,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-03-12
+4.03.13,4.03,Tallow tree,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-03-13
+4.03.90,4.03,"Other temporary oilseed crops, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-03-90
+4.04,4,Permanent oilseed crops,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-04
+4.04.01,4.04,Coconuts,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-04-01
+4.04.02,4.04,Olives,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-04-02
+4.04.03,4.04,Oil palms,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-04-03
+4.04.90,4.04,"Other oleaginous fruits, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/4-04-90
+5,,Root/tuber crops with high starch or inulin content,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/5
+5.01,5,Potatoes,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/5-01
+5.02,5,Sweet potatoes,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/5-02
+5.03,5,Cassava,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/5-03
+5.04,5,Yams,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/5-04
+5.05,5,Taro,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/5-05
+5.06,5,Yautia,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/5-06
+5.9,5,"Other roots and tubers, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/5-9
+6,,"Stimulant, spice and aromatic crops",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6
+6.01,6,Stimulant crops,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-01
+6.01.01,6.01,Coffee,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-01-01
+6.01.02,6.01,Tea,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-01-02
+6.01.03,6.01,Maté,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-01-03
+6.01.04,6.01,Cocoa,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-01-04
+6.01.05,6.01,Chicory roots,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-01-05
+6.01.90,6.01,"Other stimulant crops, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-01-90
+6.02,6,Spice and aromatic crops,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-02
+6.02.01,6.02,Temporary spice and aromatic crops,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-02-01
+6.02.01.01,6.02.01,Chillies and peppers (capsicum spp.),,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-02-01-01
+6.02.01.02,6.02.01,"Anise, badian, and fennel",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-02-01-02
+6.02.01.90,6.02.01,"Other temporary spice crops, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-02-01-90
+6.02.02,6.02,Permanent spice and aromatic crops,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-02-02
+6.02.02.01,6.02.02,Pepper (piper spp.),,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-02-02-01
+6.02.02.02,6.02.02,"Nutmeg, mace, cardamoms",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-02-02-02
+6.02.02.03,6.02.02,Cinnamon (canella),,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-02-02-03
+6.02.02.04,6.02.02,Cloves,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-02-02-04
+6.02.02.05,6.02.02,Ginger,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-02-02-05
+6.02.02.06,6.02.02,Vanilla,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-02-02-06
+6.02.02.07,6.02.02,Hops,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-02-02-07
+6.02.02.90,6.02.02,"Other permanent spice and aromatic crops, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/6-02-02-90
+7,,Leguminous crops,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/7
+7.01,7,Beans,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/7-01
+7.02,7,Broad beans,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/7-02
+7.03,7,Chickpeas,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/7-03
+7.04,7,Cowpeas,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/7-04
+7.05,7,Lentils,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/7-05
+7.06,7,Lupins,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/7-06
+7.07,7,Peas,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/7-07
+7.08,7,Pigeon peas,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/7-08
+7.09,7,Bambara beans,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/7-09
+7.1,7,Vetches,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/7-1
+7.9,7,"Leguminous crops, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/7-9
+8,,Sugar crops,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/8
+8.01,8,Sugar beet,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/8-01
+8.02,8,Sugar cane,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/8-02
+8.03,8,Sweet sorghum,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/8-03
+8.9,8,"Other sugar crops, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/8-9
+9,,Other crops,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9
+9.01,9,Grasses and other fodder crops,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-01
+9.01.01,9.01,Temporary grass and fodder crops,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-01-01
+9.01.02,9.01,Permanent grass and fodder crops,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-01-02
+9.02,9,Fibre crops,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-02
+9.02.01,9.02,Temporary fibre crops,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-02-01
+9.02.01.01,9.02.01,Cotton,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-02-01-01
+9.02.01.02,9.02.01,"Jute, kenaf, and other similar crops",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-02-01-02
+9.02.01.03,9.02.01,Flax,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-02-01-03
+9.02.01.04,9.02.01,Hemp,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-02-01-04
+9.02.01.90,9.02.01,"Other temporary fibre crops, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-02-01-90
+9.02.02,9.02,Permanent fibre crops,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-02-02
+9.02.02.01,9.02.02,Ramie,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-02-02-01
+9.02.02.02,9.02.02,Sisal,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-02-02-02
+9.02.02.90,9.02.02,"Other permanent fibre crops, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-02-02-90
+9.03,9,"Medicinal, pesticidal or similar crops",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-03
+9.03.01,9.03,"Temporary medicinal, pesticidal or similar crops",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-03-01
+9.03.01.01,9.03.01,Mint,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-03-01-01
+9.03.01.02,9.03.01,Basil,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-03-01-02
+9.03.01.90,9.03.01,"Other temporary medicinal, pesticidal or similar crops",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-03-01-90
+9.03.02,9.03,"Permanent medicinal, pesticidal or similar crops",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-03-02
+9.03.02.01,9.03.02,Ginseng,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-03-02-01
+9.03.02.02,9.03.02,Coca,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-03-02-02
+9.03.02.03,9.03.02,Kava,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-03-02-03
+9.03.02.04,9.03.02,Guarana,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-03-02-04
+9.03.02.90,9.03.02,"Other permanent medicinal, pesticidal or similar crops",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-03-02-90
+9.04,9,Rubber,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-04
+9.05,9,Flower crops,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-05
+9.05.01,9.05,Temporary flower crops,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-05-01
+9.05.02,9.05,Permanent flower crops,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-05-02
+9.06,9,Tobacco,,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-06
+9.9,9,"Other crops, n.e.c.",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-9
+9.90.01,9.9,"Other crops, n.e.c. – temporary",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-90-01
+9.90.02,9.9,"Other crops, n.e.c. – permanent",,,,,,,https://stats.fao.org/classifications/ICC/v1.1/9-90-02
