@@ -14,7 +14,7 @@ path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agro
 # Read datasets
 #==========================================================
 #---01_FOMD_ontologies
-fomd01.product_new<-read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies.xlsx"), sheet = "01_product_new")%>%
+fomd01.product.new<-read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies.xlsx"), sheet = "01_product_new")%>%
   filter(!is.na(Product.Simple))%>%
   distinct(Product.Type,Product.Simple,SPAM.Food.Group,FAO.Food.SubGroup,FAO.Food.Group) 
 
@@ -135,7 +135,7 @@ unique_crops <- rbind(
                str_trim())) %>%
   distinct(crop_diversity) %>%
   arrange(crop_diversity)%>%
-  left_join(fomd01.product_new,
+  left_join(fomd01.product.new,
             by=c("crop_diversity"="Product.Simple"))
 
 head(unique_crops)
