@@ -1201,7 +1201,6 @@ sort(unique(md.era.short.clean$T_crop_seq_residues_fate))
 #---agroforestry_practice----
 #=========================
 ##CHECK TO : verificar later if it is better to keep track of spatial, component, shade..
-## TO CHECK: C_agrof_subpractice and T_agrof_subpractice
 sort(unique(md.era.short.clean$C_agrof_subpractice_raw))
 sort(unique(md.era.short.clean$T_agrof_subpractice_raw))
 
@@ -1217,8 +1216,6 @@ sort(unique(md.era.short.clean$agrof_dhb_mean_min_max))#Missing from ERA
 #==================================================
 ## TO CHECK: C_fert_organic_type
 # C_fert_inorganic_type_amount_unit  T_fert_inorganic_type_amount_unit
-md.era.short.clean<-md.era.short
-  
 fert_subpractice<-c("C_fert_subpractice",
                     "T_fert_subpractice")
 
@@ -1302,7 +1299,6 @@ md.era.short.clean[npd_in_NA_amount_cols] <- lapply(
 
 #Add manually the T_fert_inorganicNPK_unit of this study
 md.era.short.clean<-md.era.short.clean%>%
-  filter(doi=="10.2136/sssaj2018.02.0066")%>%
   mutate(T_fert_inorganicNPK_unit=case_when(
     doi=="10.2136/sssaj2018.02.0066"&
     T_fert_inorganicK=="10"&
@@ -1357,14 +1353,15 @@ check_length_mismatch_amount_unit <- function(df, amount_col, unit_col) {
   amt <- df[[amount_col]]
   unt <- df[[unit_col]]
   
-  mismatches <- mapply(function(a, u, i) {
+  mismatches <- mapply(function(a, u, i,doi) {
     if (is.na(a) || a == "") return(NULL)
     na <- length(strsplit(a, "\\.\\.")[[1]])
     nu <- length(strsplit(u, "\\.\\.")[[1]])
-    if (na != nu) data.frame(row = i, amount_col, unit_col,
+    if (na != nu) data.frame(row = i, 
+                             doi=doi, amount_col, unit_col,
                              n_amounts = na, n_units = nu,
                              amount = a, unit = u)
-  }, amt, unt, seq_along(amt), SIMPLIFY = FALSE)
+  }, amt, unt, seq_along(amt),df$doi, SIMPLIFY = FALSE)
   
   do.call(rbind, Filter(Negate(is.null), mismatches))
 }
@@ -1383,12 +1380,9 @@ pairs <- list(
   c("C_fert_inorganicP2O5","C_fert_inorganicNPK_unit"),
   c("C_fert_inorganicK2O", "C_fert_inorganicNPK_unit")
 )
-
+#this is ready, there is nothing to check
 mismatch_report <- do.call(rbind, lapply(pairs, function(p)
-  check_length_mismatch_amount_unit(md.era.short.clean, p[1], p[2])
-))
-  filter(amount_col=="T_fert_inorganicK")
-
+  check_length_mismatch_amount_unit(md.era.short.clean, p[1], p[2])))
 View(mismatch_report)
 
 #-------------------------------------------------------
@@ -1399,7 +1393,7 @@ check_length_mismatch_type_amount_unit <- function(df, type_col, amount_col, uni
   amt <- df[[amount_col]]
   unt <- df[[unit_col]]
   
-  mismatches <- mapply(function(t, a, u, id) {
+  mismatches <- mapply(function(t, a, u, id,doi) {
     # Use type as the reference if amount is empty
     if ((is.na(t) || t == "") && (is.na(a) || a == "")) return(NULL)
     
@@ -1415,6 +1409,7 @@ check_length_mismatch_type_amount_unit <- function(df, type_col, amount_col, uni
     if (length(unique(counts)) <= 1) return(NULL)
     
     data.frame(study_id  = id,
+               doi=doi,
                type_col  = type_col,
                amount_col = amount_col,
                unit_col  = unit_col,
@@ -1425,7 +1420,7 @@ check_length_mismatch_type_amount_unit <- function(df, type_col, amount_col, uni
                amount    = a,
                unit      = u)
     
-  }, typ, amt, unt, df$study_id, SIMPLIFY = FALSE)
+  }, typ, amt, unt, df$study_id, df$doi,SIMPLIFY = FALSE)
   
   do.call(rbind, Filter(Negate(is.null), mismatches))
 }
@@ -1441,7 +1436,6 @@ mismatch_report_fert_inorg <- do.call(rbind, lapply(pairs, function(p)
 ))
 
 View(mismatch_report_fert_inorg)
-
 
 #------------
 # Quick checks
@@ -1481,11 +1475,11 @@ sort(unique(md.era.short.clean$T_fert_inorganicP[md.era.short.clean$T_fert_inorg
 #[1] ""
 
 sort(unique(md.era.short.clean$C_fert_inorganicK)) # Merged
-sort(unique(md.era.short.clean$T_fert_inorganicK)) # TO CHECK: Not ready to merge
+sort(unique(md.era.short.clean$T_fert_inorganicK)) #  Merged
 sort(unique(md.era.short.clean$C_fert_inorganicK[md.era.short.clean$C_fert_inorganicNPK_unit==""]))
 #character(0)
 sort(unique(md.era.short.clean$T_fert_inorganicK[md.era.short.clean$T_fert_inorganicNPK_unit==""]))
-#[1] ""   "10"
+#[1] ""   
 
 sort(unique(md.era.short.clean$C_fert_inorganicP2O5))
 sort(unique(md.era.short.clean$T_fert_inorganicP2O5))
@@ -1690,11 +1684,11 @@ pairs <- list(
   c("T_weed_frequency",   "T_weed_frequency_unit")
 )
 
-mismatch_report <- do.call(rbind, lapply(pairs, function(p)
+mismatch_report_weeding_frequency <- do.call(rbind, lapply(pairs, function(p)
   check_length_mismatch_amount_unit(md.era.short.clean, p[1], p[2])
 ))
 
-View(mismatch_report)
+View(mismatch_report_weeding_frequency)
 
 # Quick checks
 sort(unique(md.era.short.clean$C_weed_method_raw))
@@ -1732,6 +1726,19 @@ md.era.short.clean$T_chem_amount_unit <- gsub("; ", "..", md.era.short.clean$T_c
 
 md.era.short.clean$C_chem_amount <- gsub("; ", "..", md.era.short.clean$C_chem_amount, fixed = TRUE)
 md.era.short.clean$T_chem_amount <- gsub("; ", "..", md.era.short.clean$T_chem_amount, fixed = TRUE)
+
+# Run for all relevant triplets
+pairs <- list(
+  c("C_chem_name", "C_chem_amount", "C_chem_amount_unit"),
+  c("T_chem_name", "T_chem_amount", "T_chem_amount_unit")
+)
+
+mismatch_report_chem <- do.call(rbind, lapply(pairs, function(p)
+  check_length_mismatch_type_amount_unit(md.era.short.clean, p[1], p[2], p[3])
+))
+
+View(mismatch_report_chem)
+
 
 # Quick checks
 sort(unique(md.era.short.clean$C_chem_subpractice_raw))

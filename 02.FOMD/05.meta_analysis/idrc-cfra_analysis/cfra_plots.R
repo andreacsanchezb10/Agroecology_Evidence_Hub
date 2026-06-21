@@ -309,13 +309,16 @@ raw <- tribble(
 # ------------------------------------------------------------------
 df <- raw %>%
   distinct(practice, impact, .keep_all = TRUE) %>%
-  pivot_longer(cols = c(pos, neg, neu, none),
+  pivot_longer(cols = c(pos, neg#, neu, none
+                        ),
                names_to  = "outcome",
-               values_to = "proportion") %>%
+               values_to = "proportion") 
   mutate(
     practice = factor(practice, levels = practices),
     impact   = factor(impact,   levels = rev(impacts)),   # rev so top row = first level
-    outcome  = factor(outcome,  levels = c("pos","neu","neg","none"))
+    outcome  = factor(outcome,  levels = c("pos",#"neu",
+                                           "neg"#,"none"
+                                           ))
   )
 
 # ------------------------------------------------------------------
@@ -323,20 +326,22 @@ df <- raw %>%
 #    Each donut is drawn as a stacked bar in polar coords, faceted.
 # ------------------------------------------------------------------
 colours <- c(pos  = "#4CAF50",   # green
-             neu  = "#FFC107",   # amber
-             neg  = "#E53935",   # red
-             none = "#BDBDBD")   # grey
+             #neu  = "#FFC107",   # amber
+             neg  = "#E53935"#,   # red
+             #none = "#BDBDBD"
+             )   # grey
 
-p <- ggplot(df, aes(x = 2, y = proportion, fill = outcome)) +
+ggplot(df, aes(x = 2, y = proportion, fill = outcome)) +
   geom_col(width = 0.9, colour = "white", linewidth = 0.3) +
   coord_polar(theta = "y", start = -pi / 2, direction = 1) +
   xlim(0.5, 2.5) +                          # 0.5 = hole size
-  facet_grid(impact ~ practice,
+  facet_grid( practice~impact ,
              switch = "both") +             # labels on left & bottom
   scale_fill_manual(
     values = colours,
-    labels = c(pos = "Positive", neu = "Neutral / mixed",
-               neg = "Negative", none = "No effect / unknown"),
+    labels = c(pos = "Positive",# neu = "Neutral / mixed",
+               neg = "Negative"#, none = "No effect / unknown"
+               ),
     name   = NULL
   ) +
   # study-count label in the centre of each donut
@@ -348,13 +353,13 @@ p <- ggplot(df, aes(x = 2, y = proportion, fill = outcome)) +
   ) +
   theme_void(base_size = 9) +
   theme(
-    strip.text.x    = element_text(size = 7,  angle = 60, hjust = 0,
-                                   vjust = 0,  margin = margin(b = 4)),
-    strip.text.y    = element_text(size = 8,  angle = 0,  hjust = 1,
+    strip.text.x    = element_text(size = 10,  angle = 0, hjust = 0,
+                                   vjust = 1,  margin = margin(b = 4)),
+    strip.text.y    = element_text(size = 12,  angle = 0,  hjust = 1,
                                    margin = margin(r = 6)),
     strip.placement = "outside",
     legend.position = "bottom",
-    legend.text     = element_text(size = 8),
+    legend.text     = element_text(size = 10),
     legend.key.size = unit(0.45, "cm"),
     plot.margin     = margin(t = 60, r = 10, b = 10, l = 80),
     panel.spacing   = unit(0.15, "cm"),

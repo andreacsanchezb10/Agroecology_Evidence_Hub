@@ -6,33 +6,36 @@ library(readr)
 library(tibble)
 library(purrr)
 
-path.metadata.added10<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/01.metadata_harmonisation/02.metadata/04.added_to_06_FOMD_metadata_original_long"
-path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure"
+path.metadata.effectsize<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/04.metadata_effectsize"
+
+
+
+#==========================================================
+# Read functions
+#==========================================================
+source(file.path(path.metadata.effectsize,"/fomd_fun/fun_load_data_ontologies.R"))
 
 
 #==========================================================
 # Read datasets
 #==========================================================
 #---01_FOMD_ontologies
-fomd01.product.new<-read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies.xlsx"), sheet = "01_product_new")%>%
+fomd01.product.new<-fomd01.product.new%>%
   filter(!is.na(Product.Simple))%>%
   distinct(Product.Type,Product.Simple,SPAM.Food.Group,FAO.Food.SubGroup,FAO.Food.Group) 
 
-#---added_to_10_MD_Rosen_24_Effec_Sc
-fomd10.MD_Rosen_24_Effec_Sc <- read.csv(file.path(path.metadata.added10, "added_to_10_MD_Rosen_24_Effec_Sc.csv"))
-nrow(fomd10.MD_Rosen_24_Effec_Sc) #232257
-fomd10.MD_Rosen_24_Effec_Sc <-fomd10.MD_Rosen_24_Effec_Sc%>%
-  filter(!is.na(C_out_value))%>% #231182
-  filter(!is.na(T_out_value)) #231181
-nrow(fomd10.MD_Rosen_24_Effec_Sc) #231181
 
-sort(unique(fomd10.MD_Rosen_24_Effec_Sc$C_out_value))
-is.na(fomd10.MD_Rosen_24_Effec_Sc$C_out_value)
+
+#---fomd10.effect.size
+fomd10.effect.size<-read_csv(file.path(path.metadata.effectsize,"/fomd10_effect_size.csv"), show_col_types = FALSE)
+
+nrow(fomd10.effect.size) #232257
+
 
 #==========================================================
 #--- Filter only relevant countries
 #==========================================================
-sort(unique(fomd10.MD_Rosen_24_Effec_Sc$country))
+sort(unique(fomd10.effect.size$country))
 
 # CFRA countries
 cfra.countries<-c("Angoloa",
@@ -48,7 +51,7 @@ cfra.countries<-c("Angoloa",
 pattern.countries <- paste(cfra.countries, collapse = "|")
 
 # Filter rows where country contains any of the target countries
-fomd10.cfra <- fomd10.MD_Rosen_24_Effec_Sc %>%
+fomd10.cfra <- fomd10.effect.size %>%
   filter(grepl(pattern.countries, country, ignore.case = TRUE))
 
 sort(unique(fomd10.cfra$country))
@@ -56,35 +59,37 @@ sort(unique(fomd10.cfra$C_site_latitude))
 sort(unique(fomd10.cfra$T_site_latitude))
 
 #==========================================================
-#--- Filter only relevant indicators
+#--- Filter only relevant out_subindicator
 #==========================================================
 #Biodiversity, Resilience, 
 #resilience, carbon sequestration, soil fertility, productivity
 sort(unique(fomd10.cfra$out_subindicator))
 sort(unique(fomd10.cfra$out_subindicator[is.na(fomd10.cfra$out_indicator)])) 
 sort(unique(fomd10.cfra$out_indicator)) #16 
-#[1] "Animal Survival"      "Biodiversity"         "Carbon Stocks"        "Costs"                "Economic Performance"
-#[6] "Efficiency"           "Emissions"            "Feed Intake"          "Fuel Efficiency"      "Gender Equity"       
-#[11] "Income"               "Labour"               "Non-Product Yield"    "Pest & Pathogen"      "Product Yield"       
-#[16] "Soil Quality"
 
-cfra.indicators<-c("Biodiversity",
-                   "Carbon Stocks",
+
+cfra.indicators<-c(#"Biodiversity",
+                   #"Carbon Stocks",
                    "Costs"  ,
-                   "Economic Performance",
-                   "Efficiency" ,
-                   "Emissions",
-                   "Gender Equity",
+                   "Crop Yield",
+                   #"Economic Performance",
+                   #"Efficiency" ,
+                   #"Emissions",
+                   #"Gender Equity",
                    "Income" ,
-                   "Labour",
-                   "Pest & Pathogen",
-                   "Product Yield" ,
-                   "Soil Quality")
+                   #"Labour",
+                   #"Pest & Pathogen",
+                   "Product Yield" 
+                   #"Soil Quality"
+                   )
  
 
 # Filter rows where out_indicator contains any of the target indicators
 fomd10.cfra <- fomd10.cfra %>%
   filter(tolower(out_indicator) %in% tolower(cfra.indicators))
+
+sort(unique(fomd10.cfra$out_subindicator))
+
 
 sort(unique(fomd10.cfra$out_pillar)) #3
 sort(unique(fomd10.cfra$out_subpillar)) #12
@@ -120,7 +125,7 @@ sort(unique(fomd10.cfra$out_subindicator[fomd10.cfra$out_pillar== "Resilience"])
 sort(unique(fomd10.cfra$T_crop_diversity)) #51
 sort(unique(fomd10.cfra$T_tree_diversity[fomd10.cfra$T_crop_diversity== "Acacia decurrens-Teff/Acacia decurrens-Unspecified Fodder Grass/Acacia decurrens/Acacia decurrens/Acacia decurrens" ])) 
 
-unique_crops <- rbind(
+unique_crops_diversity <- rbind(
   data.frame(crop_diversity = fomd10.cfra %>%
                filter(C_crop_diversity != "") %>%
                pull(C_crop_diversity) %>%
@@ -135,66 +140,109 @@ unique_crops <- rbind(
                str_trim())) %>%
   distinct(crop_diversity) %>%
   arrange(crop_diversity)%>%
-  left_join(fomd01.product.new,
+  left_join(fomd01.product.new%>%
+              filter(!is.na(Product.Simple))%>%
+              distinct(Product.Type,Product.Simple,SPAM.Food.Group,FAO.Food.Group),
             by=c("crop_diversity"="Product.Simple"))
+  filter(is.na(Product.Type))
 
 head(unique_crops)
 sort(unique(unique_crops$crop_diversity))
 
 
 
-################################################
-# Helper function for the repeated logic
-make_ct <- function(c_col, t_col) {
-  dplyr::case_when(
-    c_col != "" & t_col != "" & c_col != t_col ~ paste0(c_col, "_vs_", t_col),
-    TRUE ~ NA_character_
-  )
-}
 
-# Define practice types to iterate over
-practices <- c( "intercrop", "crop_seq", "fert")
+#==========================================================
+#--- Report DEEP-DIVE COUNTRIES
+#==========================================================
+sort(unique(fomd10.cfra$effect_size_type))
 
-fomd10.cfra.analysis <- fomd10.cfra %>%
-  select(C_tillage_subpractice,T_tillage_subpractice,
-         C_intercrop_subpractice,T_intercrop_subpractice,
-         C_crop_seq_subpractice,T_crop_seq_subpractice,
-         C_fert_subpractice,T_fert_subpractice
-  )%>%
+##---- COUNTRY: ETHIOPIA -----
+
+fomd10.cfra.eth<- fomd10.cfra%>%
+  filter(country=="Ethiopia")
+
+nrow(fomd10.cfra.eth) #21203
+length(unique(fomd10.cfra.eth$study_id)) #271
+
+fomd10.cfra.eth<-fomd10.cfra.eth%>%
+  filter(!is.na(effect_size_type))
   
-  mutate(
-    CT_tillage_subpractice=case_when(C_tillage_subpractice!=""&T_tillage_subpractice!=""~paste0(C_tillage_subpractice,"_vs_",T_tillage_subpractice),TRUE~NA))%>%
-  mutate(
-    across(
-      .cols = all_of(paste0("C_", practices, "_subpractice")),
-      .fns  = ~ make_ct(.x, get(sub("^C_", "T_", cur_column()))),
-      .names = "CT_{sub('C_', '', .col)}"
-    )
+nrow(fomd10.cfra.eth) #8929
+length(unique(fomd10.cfra.eth$study_id)) #224
+
+fomd10.cfra.eth<-fomd10.cfra.eth%>%
+  filter(!is.na(effect_size_vi))
+
+nrow(fomd10.cfra.eth) #8147
+length(unique(fomd10.cfra.eth$study_id)) #220
+sort(unique(fomd10.cfra.eth$out_subindicator))
+
+#For the moment i only going to analyse these indicators
+subindicator_analysis<-c("Crop Yield",
+                         "Fixed Cost" ,
+                         "Labour Cost",
+                         "Total Cost",
+                         "Variable Cost"
+                         )
+
+fomd10.cfra.eth<-fomd10.cfra.eth%>%
+  filter(out_subindicator%in%subindicator_analysis)
+
+nrow(fomd10.cfra.eth) #5544
+length(unique(fomd10.cfra.eth$study_id)) #164
+
+#For the moment i only going to analyse these comparisons
+
+practices_analysis<- c(
+  "C: Monoculture_vs_T: Agroforestry",
+  "C: Monoculture_vs_T: Green manure",
+  "C: Monoculture_vs_T: Intercropping",
+  "C: Monoculture_vs_T: Intercropping..Intercropping")
+
+fomd10.cfra.eth<-fomd10.cfra.eth%>%
+  filter(CT_intercrop_practicetheme%in%practices_analysis)
+
+nrow(fomd10.cfra.eth) #321
+length(unique(fomd10.cfra.eth$study_id)) #20
+sort(unique(fomd10.cfra.eth$effect_size_type))
+ 
+fomd10.cfra.eth$effect_size_direction <- ifelse(fomd10.cfra.eth$effect_size_vi > 0, "Positive", "Negative")
+
+
+
+sort(unique(fomd10.cfra.eth$out_indicator))
+
+
+
+fomd10.cfra.eth_analysis<-fomd10.cfra.eth%>%
+  group_by(CT_intercrop_practicetheme,out_indicator,effect_size_direction)%>%
+  summarise(n_direction = n(), .groups = "drop")
+
+raw <- fomd10.cfra.eth_analysis %>%
+  group_by(CT_intercrop_practicetheme, out_indicator) %>%
+  mutate(n = sum(n_direction)) %>%
+  ungroup() %>%
+  mutate(prop = n_direction / n) %>%
+  
+  # Drop n_direction BEFORE pivoting so it doesn't prevent row collapse
+  select(-n_direction) %>%
+  
+  pivot_wider(
+    names_from  = effect_size_direction,
+    values_from = prop,
+    values_fill = 0
+  ) %>%
+  
+  rename(
+    practice = CT_intercrop_practicetheme,
+    impact   = out_indicator,
+    pos = Positive,
+    neg= Negative
   )
+  
+head(raw)
 
-sort(unique(fomd10.cfra.analysis$C_tillage_subpractice))
-sort(unique(fomd10.cfra.analysis$T_tillage_subpractice))
-sort(unique(fomd10.cfra.analysis$CT_tillage_subpractice))
-
-sort(unique(fomd10.cfra.analysis$C_intercrop_subpractice))
-sort(unique(fomd10.cfra.analysis$T_intercrop_subpractice))
-sort(unique(fomd10.cfra.analysis$CT_intercrop_subpractice))
-
-sort(unique(fomd10.cfra.analysis$C_crop_seq_subpractice))
-sort(unique(fomd10.cfra.analysis$T_crop_seq_subpractice))
-sort(unique(fomd10.cfra.analysis$CT_crop_seq_subpractice))
-
-sort(unique(fomd10.cfra.analysis$C_fert_subpractice))
-sort(unique(fomd10.cfra.analysis$T_fert_subpractice))
-sort(unique(fomd10.cfra.analysis$CT_fert_subpractice))
-
-
-fomd10.cfra.analysis %>%
-  summarise(
-    total_rows   = n(),
-    na_count     = sum(is.na(CT_tillage_subpractice)),
-    na_pct       = round(na_count / total_rows * 100, 1)
-  )
 
 
 
