@@ -8,8 +8,6 @@ library(purrr)
 
 path.metadata.effectsize<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/04.metadata_effectsize"
 
-
-
 #==========================================================
 # Read functions
 #==========================================================
@@ -162,8 +160,39 @@ sort(unique(fomd10.cfra$effect_size_type))
 fomd10.cfra.eth<- fomd10.cfra%>%
   filter(country=="Ethiopia")
 
-nrow(fomd10.cfra.eth) #21203
-length(unique(fomd10.cfra.eth$study_id)) #271
+nrow(fomd10.cfra.eth) #8425
+length(unique(fomd10.cfra.eth$study_id)) #179
+
+ct_practice_cols <- grep("_practice$", names(fomd10.cfra.eth), value = TRUE)
+
+eth.practice_list <- purrr::map(ct_practice_cols, \(col) {
+  fomd10.cfra.eth %>%                              
+    dplyr::mutate(across(all_of(col), as.character)) %>%
+    dplyr::filter(!is.na(.data[[col]])) %>%
+    dplyr::count(column = col, value = .data[[col]], name = "n")
+}) %>%
+  dplyr::bind_rows()
+
+readr::write_csv(eth.practice_list, paste0(path.metadata.effectsize, "/eth.practice_list.csv"))
+
+sort(unique(eth.practice_list$value))
+
+# Coerce all _practicetheme columns to character
+ct_theme_cols <- grep("_practicetheme$", names(fomd10.cfra.eth), value = TRUE)
+
+fomd10.cfra.eth <- fomd10.cfra.eth %>%
+  mutate(across(all_of(ct_theme_cols), as.character))
+
+# Now run the map safely
+eth.practicetheme_list <- purrr::map(ct_theme_cols, \(col) {
+  fomd10.cfra.eth %>%
+    dplyr::filter(!is.na(.data[[col]])) %>%
+    dplyr::count(column = col, value = .data[[col]], name = "n")
+}) %>%
+  dplyr::bind_rows()
+
+readr::write_csv(eth.practicetheme_list, paste0(path.metadata.effectsize, "/eth.practicetheme_list.csv"))
+
 
 fomd10.cfra.eth<-fomd10.cfra.eth%>%
   filter(!is.na(effect_size_type))
@@ -192,16 +221,47 @@ fomd10.cfra.eth<-fomd10.cfra.eth%>%
 nrow(fomd10.cfra.eth) #5544
 length(unique(fomd10.cfra.eth$study_id)) #164
 
-#For the moment i only going to analyse these comparisons
 
+
+
+
+
+#For the moment i only going to analyse these comparisons
 practices_analysis<- c(
   "C: Monoculture_vs_T: Agroforestry",
   "C: Monoculture_vs_T: Green manure",
   "C: Monoculture_vs_T: Intercropping",
-  "C: Monoculture_vs_T: Intercropping..Intercropping")
+  "C: Monoculture_vs_T: Crop rotation"
+  #"C: Monoculture_vs_T: Intercropping..Intercropping"
+  )
 
 fomd10.cfra.eth<-fomd10.cfra.eth%>%
   filter(CT_intercrop_practicetheme%in%practices_analysis)
+
+prueba<-fomd10.cfra.eth%>%
+  filter(is.na(CT_crop_FAO_Food_Group))%>%
+  select(C_crop_diversity,T_crop_diversity,C_crop_FAO_Food_Group,T_crop_FAO_Food_Group,CT_crop_FAO_Food_Group)
+
+unmatched_crops <- bind_rows(
+  fomd10.cfra.eth %>% 
+    select(crop = C_crop_diversity),
+  fomd10.cfra.eth %>% 
+    select(crop = T_crop_diversity)
+) %>%
+  # Split compound strings into individual tokens
+  mutate(crop = str_split(crop, "[-/]")) %>%
+  unnest(crop) %>%
+  mutate(crop = str_squish(crop)) %>%
+  filter(!is.na(crop), crop != "NA", crop != "") %>%
+  distinct(crop) %>%
+  # Left join to the reference to find what's missing
+  left_join(
+    fomd01.crops.trees %>% select(plants, FAO.Food.Group),
+    by = c("crop" = "plants")
+  ) %>%
+  filter(is.na(FAO.Food.Group)) %>%
+  arrange(crop)
+
 
 nrow(fomd10.cfra.eth) #321
 length(unique(fomd10.cfra.eth$study_id)) #20
@@ -211,16 +271,16 @@ fomd10.cfra.eth$effect_size_direction <- ifelse(fomd10.cfra.eth$effect_size_vi >
 
 
 
-sort(unique(fomd10.cfra.eth$out_indicator))
+sort(unique(fomd10.cfra.eth$CT_crop_FAO_Food_Group))
 
 
 
 fomd10.cfra.eth_analysis<-fomd10.cfra.eth%>%
-  group_by(CT_intercrop_practicetheme,out_indicator,effect_size_direction)%>%
+  group_by(CT_crop_FAO_Food_Group,CT_intercrop_practice,out_indicator,effect_size_direction)%>%
   summarise(n_direction = n(), .groups = "drop")
 
 raw <- fomd10.cfra.eth_analysis %>%
-  group_by(CT_intercrop_practicetheme, out_indicator) %>%
+  group_by(CT_crop_FAO_Food_Group,CT_intercrop_practice, out_indicator) %>%
   mutate(n = sum(n_direction)) %>%
   ungroup() %>%
   mutate(prop = n_direction / n) %>%
@@ -235,15 +295,13 @@ raw <- fomd10.cfra.eth_analysis %>%
   ) %>%
   
   rename(
-    practice = CT_intercrop_practicetheme,
+    practice = CT_intercrop_practice,
     impact   = out_indicator,
     pos = Positive,
     neg= Negative
   )
   
 head(raw)
-
-
 
 
 #==========================================================

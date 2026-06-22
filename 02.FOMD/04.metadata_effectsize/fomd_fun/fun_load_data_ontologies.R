@@ -29,6 +29,10 @@ fomd01.product.new <- read_xlsx(
   file.path(path.metadata.structure, "01_FOMD_ontologies.xlsx"),
   sheet = "01_product_new")
 
+fomd01.vars.crops <- read_xlsx(
+  file.path(path.metadata.structure, "01_FOMD_ontologies.xlsx"),
+  sheet = "01_vars_crops")
+
 fomd01.outcomes <- read_xlsx(
   file.path(path.metadata.structure, "01_FOMD_ontologies.xlsx"),
   sheet = "01_outcomes") %>%
@@ -36,7 +40,9 @@ fomd01.outcomes <- read_xlsx(
 
 fomd01.practices <- read_xlsx(
   file.path(path.metadata.structure, "01_FOMD_ontologies.xlsx"),
-  sheet = "01_practices")
+  sheet = "01_practices")%>%
+  mutate(practice_subtype= paste0(type,"(",subtype,")"))%>%
+  distinct(type, subtype,theme,practice, subpractice,practice_subtype)
 
 # ── Quick checks ─────────────────────────────────────────────
 sort(unique(fomd01.practices$subpractice))

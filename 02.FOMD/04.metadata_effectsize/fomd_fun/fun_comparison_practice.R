@@ -11,7 +11,13 @@
 # =============================================================================
 local({
   
+  
+  
   library(dplyr)
+  
+  
+  source(file.path(path.metadata.effectsize, "/fomd_fun/fun_load_data_ontologies.R"),
+         local = environment())
   
   # ---------------------------------------------------------------------------
   # Constants (local scope only)
@@ -31,6 +37,12 @@ local({
     "irrig",
     "watharv"
   )
+  
+  
+    CT_practice_rename <- readxl::read_excel(
+      path  = file.path(path.metadata.effectsize, "fomd_fun/comparison_practice.xlsx"),
+      sheet = "CT_practice"
+    )
   
   # -----------------------------------------------------------------------------
   # Helper Functions
@@ -84,12 +96,13 @@ local({
       )
   }
   
-  lookup_side <- function(side_str, lookup) {
-    tokens <- stringr::str_squish(stringr::str_split(side_str, "\\.\\.")[[1]])
-    out    <- unname(lookup[tokens])
-    if (any(is.na(out))) return(NA_character_)
-    paste(out, collapse = "..")
-  }
+ 
+     lookup_side <- function(side_str, lookup) {
+      tokens <- stringr::str_squish(stringr::str_split(side_str, "\\.\\.")[[1]])
+     out    <- unname(lookup[tokens])
+     if (any(is.na(out))) return(NA_character_)
+     paste(unique(out), collapse = "..")   # <-- unique() added here
+    }
   
   apply_lookup_CT_internal <- function(df, ref, key_col, value_col, src_col, new_col) {
     lookup <- ref %>%
@@ -195,7 +208,7 @@ local({
                                  practices = PRACTICES) {
     for (practice in practices) {
       src_col <- paste0("CT_", practice, "_subpractice")
-      new_col <- paste0("CT_", practice, "_practicetheme")
+      new_col <- paste0("CT_", practice, "_practice")
       
       if (!src_col %in% names(data)) {
         message("Skipping '", practice, "': column '", src_col, "' not found.")
@@ -213,6 +226,33 @@ local({
     }
     data
   }
+  
+apply_CT_renames <<- function(data, ref = CT_practice_rename) {
+    # Keep only rows where a rename is defined
+    ref_filtered <- ref %>%
+      dplyr::filter(!is.na(CT_practice_rename) & CT_practice_rename != "")
+    
+    # Loop over each (col, old_value, new_value) triplet
+    for (i in seq_len(nrow(ref_filtered))) {
+      col       <- ref_filtered$CT_practice_col[i]
+      old_val   <- ref_filtered$CT_practice[i]
+      new_val   <- ref_filtered$CT_practice_rename[i]
+      
+      if (!col %in% names(data)) {
+        message("Skipping: column '", col, "' not found in data.")
+        next
+      }
+      
+      data[[col]] <- dplyr::if_else(
+        data[[col]] == old_val,
+        new_val,
+        data[[col]]
+      )
+    }
+    
+    data
+  }
+  
   
   # =============================================================================
   # Functions checker helper
@@ -260,8 +300,6 @@ local({
 # Functions checker helper
 # Show subpractice values that have no matching practice for all practices
 # =============================================================================
-
-
 
 apply_CT_practice_theme <<- function(data,
                                ref       = fomd01.practices,

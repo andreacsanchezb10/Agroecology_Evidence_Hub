@@ -1,0 +1,20 @@
+column,value,n
+CT_varietal_crop_practicetheme,C: Variety improvement_vs_T: Variety improvement,2704
+CT_intercrop_practicetheme,C: Agroforestry_vs_T: Agroforestry,27
+CT_intercrop_practicetheme,C: Agroforestry_vs_T: Monoculture,9
+CT_intercrop_practicetheme,C: Intercropping_vs_T: Intercropping,45
+CT_intercrop_practicetheme,C: Intercropping_vs_T: Monoculture,16
+CT_intercrop_practicetheme,C: Monoculture_vs_T: Agroforestry,44
+CT_intercrop_practicetheme,C: Monoculture_vs_T: Green manure,12
+CT_intercrop_practicetheme,C: Monoculture_vs_T: Intercropping,428
+CT_crop_seq_practicetheme,C: Crop rotation_vs_T: Crop rotation,1651
+CT_crop_seq_practicetheme,C: Monoculture_vs_T: Agroforestry,10
+CT_crop_seq_practicetheme,C: Monoculture_vs_T: Crop rotation,1
+CT_crop_seq_practicetheme,C: Monoculture_vs_T: Green manure,3
+CT_agrof_practicetheme,C: Integrated farming_vs_T: Integrated farming,64
+CT_agrof_practicetheme,C: Monoculture_vs_T: Agroforestry,282
+CT_agrof_practicetheme,C: Monoculture_vs_T: Integrated farming,8
+CT_chem_practicetheme,C: Fungi control_vs_T: Fungi control,74
+CT_chem_practicetheme,C: Insects control_vs_T: Insects control,15
+CT_irrig_practicetheme,C: Irrigation_vs_T: Irrigation,2364
+CT_watharv_practicetheme,C: Water harvesting_vs_T: Water harvesting,256

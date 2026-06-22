@@ -308,12 +308,13 @@ raw <- tribble(
 # 2. TIDY: pivot proportions to long format, deduplicate
 # ------------------------------------------------------------------
 df <- raw %>%
-  distinct(practice, impact, .keep_all = TRUE) %>%
+  distinct(CT_crop_FAO_Food_Group ,practice, impact, .keep_all = TRUE) %>%
   pivot_longer(cols = c(pos, neg#, neu, none
                         ),
                names_to  = "outcome",
                values_to = "proportion") 
   mutate(
+    FAO
     practice = factor(practice, levels = practices),
     impact   = factor(impact,   levels = rev(impacts)),   # rev so top row = first level
     outcome  = factor(outcome,  levels = c("pos",#"neu",
@@ -335,7 +336,7 @@ ggplot(df, aes(x = 2, y = proportion, fill = outcome)) +
   geom_col(width = 0.9, colour = "white", linewidth = 0.3) +
   coord_polar(theta = "y", start = -pi / 2, direction = 1) +
   xlim(0.5, 2.5) +                          # 0.5 = hole size
-  facet_grid( practice~impact ,
+  facet_grid( CT_crop_FAO_Food_Group~practice~impact ,
              switch = "both") +             # labels on left & bottom
   scale_fill_manual(
     values = colours,
@@ -346,14 +347,14 @@ ggplot(df, aes(x = 2, y = proportion, fill = outcome)) +
   ) +
   # study-count label in the centre of each donut
   geom_text(
-    data = distinct(df, practice, impact, n),
+    data = distinct(df, CT_crop_FAO_Food_Group,practice, impact, n),
     aes(x = 0.5, y = 0, label = n),
     inherit.aes = FALSE,
-    size = 2.2, fontface = "bold", colour = "#333333"
+    size = 3, fontface = "bold", colour = "#333333"
   ) +
   theme_void(base_size = 9) +
   theme(
-    strip.text.x    = element_text(size = 10,  angle = 0, hjust = 0,
+    strip.text.x    = element_text(size = 12,  angle = 0, hjust = 0,
                                    vjust = 1,  margin = margin(b = 4)),
     strip.text.y    = element_text(size = 12,  angle = 0,  hjust = 1,
                                    margin = margin(r = 6)),
@@ -361,7 +362,7 @@ ggplot(df, aes(x = 2, y = proportion, fill = outcome)) +
     legend.position = "bottom",
     legend.text     = element_text(size = 10),
     legend.key.size = unit(0.45, "cm"),
-    plot.margin     = margin(t = 60, r = 10, b = 10, l = 80),
+    plot.margin     = margin(t = 5, r = 5, b = 5, l = 5),
     panel.spacing   = unit(0.15, "cm"),
     plot.title      = element_text(size = 10, face = "bold", hjust = 0.5,
                                    margin = margin(b = 6))
