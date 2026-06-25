@@ -12,6 +12,7 @@ path.era<-"C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence
 path.functions<-"C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/04.metadata_effectsize/fomd_fun"
 path.metadata.effectsize<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/04.metadata_effectsize"
 
+list.files(path.era)
 
 list.files(path.metadata)
 list.files(path.metadata.structure)
@@ -24,7 +25,7 @@ list.files(path.functions)
 source(file.path(path.functions,"/fun_lookup_ontologies.R"))
 source(file.path(path.functions,"/fun_load_data_ontologies.R"))
 source(file.path(path.functions,"/fun_cleaning.R"))
-
+source(file.path(path.functions,"/fun_cleaning_09_FOMD.R"))
 
 #==========================================================
 # Read datasets
@@ -33,7 +34,8 @@ source(file.path(path.functions,"/fun_cleaning.R"))
 fomd01.outcomes<-fomd01.outcomes%>%
   filter(!is.na(subindicator) )
 
-#---04_FOMD_screening
+#---04_FOMD_screening 
+## TO CHECK: NEED TO UPDATE THE LIST OF PAPERS FROM ERA IN SCREENING AND IN IDENTIFIED DATASETS!!
 fomd04<-read_xlsx(file.path(path.metadata.structure,"04_FOMD_screening.xlsx"), sheet = "04_FOMD_screening")%>%
   filter(ss_id=="MD_Rosen_24_Effec_Sc")%>%
   filter(status =="I")
@@ -44,7 +46,8 @@ length(unique(fomd04$study_id))#2106
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v12.csv"))
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v16.csv"))
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v22.csv"))
-md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v24.csv"))
+#md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v24.csv"))
+md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v32.csv"))
 
 length(unique(md.era.short$study_id)) #1811 studies
 length(unique(md.era.short$doi)) #1592
@@ -68,7 +71,6 @@ na_empty_summary1 <- data.frame(
 )
 
 print(na_empty_summary1)
-
 
 #---bibliographic----
 md.era.short.clean<-md.era.short
@@ -316,734 +318,190 @@ sort(unique(md.era.short.clean$C_system_type))
 sort(unique(md.era.short.clean$T_system_type))
 
 #=========================
-#---commodity_crop----
+#---commodity_crop_tree ----
 #=========================
-sort(unique(md.era.short.clean$C_crop_diversity))
+## TO CHECK: 72 Missing crops/trees from the ontologies
+sort(unique(md.era.short.clean$C_plant_diversity))
+sort(unique(md.era.short.clean$T_plant_diversity))
 
-crop_fixes <- c(
-  "\\bBalanites aegyptica\\b"              = "Balanites aegyptiaca",
-  "\\bBlack [Oo]ats?\\b"                  = "Black Oats",   # catches "Black oat", "Black oats"
-  "\\bCommon [Vv]etch\\b"                 = "Common Vetch",
-  "\\bCongo Gra\\b"                       = "Congo Grass",
-  "\\bCrotalaria spectabili\\b"           = "Crotalaria spectabilis",
-  "\\bDesho Gra\\b"                       = "Desho Grass",
-  # FIX 1: Use a lookahead so the hyphen is NOT consumed / treated as separator
-  "\\bFicus vallis-choudae\\b"            = "Ficus vallis choudae",  # keep as-is (no-op anchor)
-  "\\bFicus vallis\\b(?!-choudae)"        = "Ficus vallis choudae",  # only fix incomplete form
-  
-  "\\bFinger [Mm]illet\\b"               = "Finger Millet",
-  "\\bGuinea Gra\\b"                     = "Guinea Grass",
-  "\\bHibiscu\\b"                        = "Hibiscus",
-  "\\bJute [Mm]allow\\b"                 = "Jute Mallow",   # catches "Jute mallow"
-  "\\bKikuyu Gra\\b"                     = "Kikuyu Grass",
-  "\\bNapier Gra\\b"                     = "Napier Grass",
-  "\\bOat\\b"                            = "Oats",
-  "\\bPalisade Gra\\b"                   = "Palisade Grass",
-  "\\bPearl [Mm]illet\\b"               = "Pearl Millet",   # catches "Pearl millet" in compounds
-  "\\bpersea americana\\b"              = "Persea americana",
-  "\\bPiliostigma reticulata\\b"        = "Piliostigma reticulatum",
-  "\\b[Pp]urple [Vv]etch\\b"           = "Purple Vetch",
-  "\\bRuzigra\\b"                       = "Ruzigrass",
-  "\\bSudan [Gg]ra\\b"                 = "Sudan Grass",    # standardise capitalisation
-  "\\bSmutsfinger Gra\\b"              = "Smutsfinger Grass",
-  "\\bTurkey [Bb]erry\\b"             = "Turkey Berry",    # NEW
-  "\\bUnspecified Fodder Gra\\b"       = "Unspecified Fodder Grass",
-  "\\b[Uu]nspecified [Ll]egume\\b"    = "Unspecified Legume",
-  "\\bVetiver Gra\\b"                  = "Vetiver Grass"
-)
-
-md.era.short.clean <- md.era.short.clean %>%
-  mutate(
-    C_crop_density = ifelse(C_crop_density == "NULL" | is.na(C_crop_density), "Unspecified(Unspecified)", C_crop_density),
-    T_crop_density = ifelse(T_crop_density == "NULL" | is.na(T_crop_density), "Unspecified(Unspecified)", T_crop_density)
-  )
-crop_cols <- c("C_crop_diversity", "T_crop_diversity",
-               "C_crop_variety","T_crop_variety",
-               "C_crop_density","T_crop_density",
-               "C_tree_diversity", "T_tree_diversity",
-               "C_tree_density","T_tree_density")
-
-
-md.era.short.clean[crop_cols] <- lapply(
-  md.era.short.clean[crop_cols],
-  \(x) gsub("Gliricida sepium", "Gliricidia sepium", x, fixed = TRUE))
-md.era.short.clean[crop_cols] <- lapply(
-  md.era.short.clean[crop_cols],
-  \(x) gsub("Glyricidia sepium", "Gliricidia sepium", x, fixed = TRUE))
-
-md.era.short.clean[crop_cols] <- lapply(
-  md.era.short.clean[crop_cols],
-  \(x) gsub("Gliricidia sp", "Gliricidia sp.", x, fixed = TRUE))
-
-md.era.short.clean[crop_cols] <- lapply(
-  md.era.short.clean[crop_cols],
-  \(x) gsub("Gliricidia sp..", "Gliricidia sp.", x, fixed = TRUE))
-
-md.era.short.clean[crop_cols] <- lapply(
-  md.era.short.clean[crop_cols],
-  \(x) gsub("Patula Pine", "Pinus patula", x, fixed = TRUE))
-
-### Remove extra * from C_crop_variety and T_crop_variety
-md.era.short.clean <- md.era.short.clean%>%
-  mutate(
-    # Clean NULL strings in density columns first
-    C_crop_density = ifelse(C_crop_density == "NULL" | is.na(C_crop_density), "Unspecified(Unspecified)", C_crop_density),
-    T_crop_density = ifelse(T_crop_density == "NULL" | is.na(T_crop_density), "Unspecified(Unspecified)", T_crop_density),
-    
-    # Replace ANY sequence of 1 or more * with exactly **
-    C_crop_variety = gsub("\\*+", "**", C_crop_variety),
-    C_crop_variety = gsub("\\$+", "**", C_crop_variety),
-    C_crop_variety = gsub("\\(\\s*NA\\s*\\)", "(Unspecified)", C_crop_variety, ignore.case = TRUE),
-    
-    T_crop_variety = gsub("\\*+", "**", T_crop_variety),
-    T_crop_variety = gsub("\\$+", "**", T_crop_variety),
-    T_crop_variety = gsub("\\(\\s*NA\\s*\\)", "(Unspecified)", T_crop_variety, ignore.case = TRUE)
-  )
-
-# Reusable function to combine crop_diversity + crop_density columns separated by "/" or "-"
-create_density <- function(diversity, density) {
-  if (is.na(diversity) || diversity == "" || diversity == "NULL") return("")
-  
-  # Helper to clean individual density values
-  clean_density <- function(d) {
-    if (is.na(d) || d == "" || d == "NULL" || d == "NA") return("Unspecified(Unspecified)")
-    return(d)
-  }
-  
-  # Split on / or - outside parentheses
-  # Strategy: track parenthesis depth character by character
-  split_outside_parens <- function(x, delimiters = c("/", "-")) {
-    if (is.na(x) || x == "") return(character(0))
-    chars <- strsplit(x, "")[[1]]
-    depth <- 0
-    positions <- c()
-    for (i in seq_along(chars)) {
-      if (chars[i] == "(") depth <- depth + 1
-      else if (chars[i] == ")") depth <- depth - 1
-      else if (chars[i] %in% delimiters && depth == 0) positions <- c(positions, i)
-    }
-    if (length(positions) == 0) return(trimws(x))
-    
-    # Extract parts and separators
-    starts <- c(1, positions + 1)
-    ends   <- c(positions - 1, nchar(x))
-    parts  <- trimws(substring(x, starts, ends))
-    parts
-  }
-  
-  get_seps_outside_parens <- function(x, delimiters = c("/", "-")) {
-    if (is.na(x) || x == "") return(character(0))
-    chars <- strsplit(x, "")[[1]]
-    depth <- 0
-    seps  <- c()
-    for (i in seq_along(chars)) {
-      if (chars[i] == "(") depth <- depth + 1
-      else if (chars[i] == ")") depth <- depth - 1
-      else if (chars[i] %in% delimiters && depth == 0) seps <- c(seps, chars[i])
-    }
-    seps
-  }
-  
-  div_crops <- split_outside_parens(diversity)
-  den_crops <- split_outside_parens(density)
-  div_seps  <- get_seps_outside_parens(diversity)
-  
-  if (length(den_crops) == 1) den_crops <- rep(den_crops, length(div_crops))
-  
-  if (length(div_crops) == 0) return("")
-  
-  paired <- mapply(function(crop, dens) {
-    paste0(crop, "[", clean_density(dens), "]")
-  }, div_crops, den_crops)
-  
-  result <- paired[1]
-  if (length(div_seps) > 0) {
-    for (i in seq_along(div_seps)) {
-      result <- paste0(result, div_seps[i], paired[i + 1])
-    }
-  }
-  
-  return(as.character(result))
-}
-
-md.era.short.clean <- md.era.short.clean%>%
-  mutate(
-    C_crop_density=mapply(create_density,C_crop_diversity,C_crop_density),
-    T_crop_density=mapply(create_density,T_crop_diversity,T_crop_density)
-  )
-
-sort(unique(md.era.short.clean$T_crop_density))
-
-### Remove animals from C_crop_diversity and T_crop_diversity
-sort(unique(md.era.short.clean$C_animal_diversity[md.era.short.clean$C_crop_diversity=="Cattle-Camel-Small Ruminants"])) #"Cattle*Camel*Small Ruminants"
-sort(unique(md.era.short.clean$T_animal_diversity[md.era.short.clean$T_crop_diversity=="Cattle-Camel-Small Ruminants"])) #"Cattle*Camel*Small Ruminants"
-
-md.era.short.clean <- md.era.short.clean%>%
-  mutate(
-    C_crop_density=case_when(C_crop_diversity=="Cattle-Camel-Small Ruminants"~"",TRUE~C_crop_density),
-    T_crop_density=case_when(T_crop_diversity=="Cattle-Camel-Small Ruminants"~"",TRUE~T_crop_density),
-    
-    C_crop_variety=case_when(C_crop_diversity=="Cattle-Camel-Small Ruminants"~"",TRUE~C_crop_variety),
-    T_crop_variety=case_when(T_crop_diversity=="Cattle-Camel-Small Ruminants"~"",TRUE~T_crop_variety),
-    
-    C_crop_diversity=case_when(C_crop_diversity=="Cattle-Camel-Small Ruminants"~"",TRUE~C_crop_diversity),
-    T_crop_diversity=case_when(T_crop_diversity=="Cattle-Camel-Small Ruminants"~"",TRUE~T_crop_diversity))
-
-### Remove trees from C_crop_diversity and T_crop_diversity
-# Remove NAs first
-tree_species <- sort(unique(na.omit(fomd01.trees$tree.latin.name)))
-tree_species
-# Escape special regex characters safely
-tree_species_escaped <- sapply(tree_species, function(x) str_replace_all(x, "([\\.\\(\\)\\[\\]\\^\\$\\*\\+\\?\\|])", "\\\\\\1"))
-
-# Identify rows where C_crop_diversity contains at least one tree species
-pattern <- paste(tree_species_escaped, collapse = "|")
-
-# Copy C_crop_diversity to C_tree_diversity where both conditions are met
-md.era.short.clean$C_tree_diversity[grepl(pattern, md.era.short.clean$C_crop_diversity, perl = TRUE) &
-                                      (is.na(md.era.short.clean$C_tree_diversity) | md.era.short.clean$C_tree_diversity == "")] <- 
-  md.era.short.clean$C_crop_diversity[grepl(pattern, md.era.short.clean$C_crop_diversity, perl = TRUE) & 
-                                        (is.na(md.era.short.clean$C_tree_diversity) | md.era.short.clean$C_tree_diversity == "")]
-
-# Copy T_crop_diversity to T_tree_diversity where both conditions are met
-md.era.short.clean$T_tree_diversity[grepl(pattern, md.era.short.clean$T_crop_diversity, perl = TRUE) &
-                                      (is.na(md.era.short.clean$T_tree_diversity) | md.era.short.clean$T_tree_diversity == "")] <- 
-  md.era.short.clean$T_crop_diversity[grepl(pattern, md.era.short.clean$T_crop_diversity, perl = TRUE) & 
-                                        (is.na(md.era.short.clean$T_tree_diversity) | md.era.short.clean$T_tree_diversity == "")]
-
-
-#md.era.short.clean1<-md.era.short.clean%>%
- # filter(doi=="10.1007/s10457-019-00405-4")%>%
-  #mutate(across(c("C_tree_diversity","C_tree_density"),
-   #             case_when(
-    #              doi=="10.1007/s10457-019-00405-4" )))
-
-### ARREGLAR MANUALMENTE
-"10.1007/s10457-019-00405-4"
-"10.1016/j.agrformet.2018.03.026"
-
-# Build pattern and cleaning function
-remove_trees_diversity <- function(x) {
-  if (is.na(x) || x == "") return(x)
-  
-  pattern <- paste(tree_species_escaped, collapse = "|")
-  
-  # Extract tokens and the separators between them
-  tokens <- character(0)
-  seps   <- character(0)
-  remaining <- x
-  
-  while (nchar(remaining) > 0) {
-    m <- regexpr("[-/]", remaining)
-    if (m == -1) {
-      tokens <- c(tokens, trimws(remaining))
-      break
-    }
-    tokens    <- c(tokens, trimws(substr(remaining, 1, m - 1)))
-    seps      <- c(seps,   substr(remaining, m, m))       # keep "/" or "-"
-    remaining <- substr(remaining, m + 1, nchar(remaining))
-  }
-  
-  # Decide which tokens to keep
-  keep <- !grepl(paste0("^(", pattern, ")$"), tokens, perl = TRUE)
-  
-  # Rebuild, preserving only the separators between kept tokens
-  kept_tokens <- tokens[keep]
-  kept_seps   <- seps[keep[-length(keep)]]   # one fewer sep than tokens
-  
-  if (length(kept_tokens) == 0) return("")
-  
-  result <- kept_tokens[1]
-  if (length(kept_seps) > 0) {
-    for (i in seq_along(kept_seps)) {
-      result <- paste0(result, kept_seps[i], kept_tokens[i + 1])
-    }
-  }
-  
-  return(trimws(result))
-}
-
-# Apply
-system.time({
-md.era.short.clean$C_crop_diversity <- sapply(md.era.short.clean$C_crop_diversity,remove_trees_diversity)
-md.era.short.clean$T_crop_diversity <- sapply(md.era.short.clean$T_crop_diversity,remove_trees_diversity)
-})
-
-# Remove trees from C_crop_variety and T_crop_variety
-remove_trees_variety <- function(x) {
-  if (is.na(x) || x == "") return(x)
-  
-  split_outside_parens <- function(x) {
-    chars <- strsplit(x, "")[[1]]
-    depth <- 0
-    positions <- c()
-    seps <- c()
-    for (i in seq_along(chars)) {
-      if (chars[i] == "(") depth <- depth + 1
-      else if (chars[i] == ")") depth <- depth - 1
-      else if (chars[i] %in% c("/", "-") && depth == 0) {
-        positions <- c(positions, i)
-        seps <- c(seps, chars[i])
-      }
-    }
-    if (length(positions) == 0) return(list(parts = trimws(x), seps = character(0)))
-    starts <- c(1, positions + 1)
-    ends   <- c(positions - 1, nchar(x))
-    parts  <- trimws(substring(x, starts, ends))
-    list(parts = parts, seps = seps)
-  }
-  
-  result <- split_outside_parens(x)
-  parts  <- result$parts
-  seps   <- result$seps
-  
-  # Single grepl per part using the pre-built pattern
-  is_tree <- grepl(paste0("^(", pattern, ")"), parts, perl = TRUE)
-  
-  keep_parts <- parts[!is_tree]
-  
-  if (length(keep_parts) == 0) return("")
-  if (length(keep_parts) == length(parts)) return(x)  # nothing removed, return original
-  
-  # Rebuild with correct separators
-  kept_idx <- which(!is_tree)
-  out <- keep_parts[1]
-  if (length(keep_parts) > 1) {
-    for (i in 2:length(keep_parts)) {
-      sep <- if ((kept_idx[i] - 1) <= length(seps)) seps[kept_idx[i] - 1] else "-"
-      out <- paste0(out, sep, keep_parts[i])
-    }
-  }
-  
-  return(out)
-}
-
-system.time({
-  md.era.short.clean$C_crop_variety <- sapply(md.era.short.clean$C_crop_variety, remove_trees_variety)
-  md.era.short.clean$T_crop_variety <- sapply(md.era.short.clean$T_crop_variety, remove_trees_variety)
-})
-
-### Remove trees from C_crop_density and T_crop_density
-remove_trees_density <- function(x) {
-  if (is.na(x) || x == "") return(x)
-  
-  # Split on / or - outside brackets (same logic as before)
-  split_outside_brackets <- function(x, delimiters = c("/", "-")) {
-    chars <- strsplit(x, "")[[1]]
-    depth <- 0
-    positions <- c()
-    seps <- c()
-    for (i in seq_along(chars)) {
-      if (chars[i] == "[") depth <- depth + 1
-      else if (chars[i] == "]") depth <- depth - 1
-      else if (chars[i] %in% delimiters && depth == 0) {
-        positions <- c(positions, i)
-        seps <- c(seps, chars[i])
-      }
-    }
-    if (length(positions) == 0) return(list(parts = trimws(x), seps = character(0)))
-    starts <- c(1, positions + 1)
-    ends   <- c(positions - 1, nchar(x))
-    parts  <- trimws(substring(x, starts, ends))
-    list(parts = parts, seps = seps)
-  }
-  
-  result <- split_outside_brackets(x)
-  parts  <- result$parts
-  seps   <- result$seps
-  
-  # Extract the crop name (everything before the first "[")
-  crop_names <- sub("\\[.*$", "", parts)
-  
-  # Check if each crop name matches a tree species
-  is_tree <- grepl(paste0("^(", pattern, ")"), crop_names, perl = TRUE)
-  
-  keep_parts <- parts[!is_tree]
-  
-  if (length(keep_parts) == 0) return("")
-  if (length(keep_parts) == length(parts)) return(x)
-  
-  # Rebuild with correct separators
-  kept_idx <- which(!is_tree)
-  out <- keep_parts[1]
-  if (length(keep_parts) > 1) {
-    for (i in 2:length(keep_parts)) {
-      sep <- if ((kept_idx[i] - 1) <= length(seps)) seps[kept_idx[i] - 1] else "-"
-      out <- paste0(out, sep, keep_parts[i])
-    }
-  }
-  
-  return(out)
-}
-
-# Copy C_crop_density to C_tree_density where both conditions are met
-md.era.short.clean$C_tree_density[grepl(pattern, md.era.short.clean$C_crop_diversity, perl = TRUE) &
-                                    (is.na(md.era.short.clean$C_tree_density) | md.era.short.clean$C_tree_density == "")] <- 
-  md.era.short.clean$C_crop_density[grepl(pattern, md.era.short.clean$C_crop_diversity, perl = TRUE) &
-                                      (is.na(md.era.short.clean$C_tree_density) | md.era.short.clean$C_tree_density == "")]
-
-# Copy T_crop_diversity to T_tree_diversity where both conditions are met
-md.era.short.clean$T_tree_density[grepl(pattern, md.era.short.clean$T_crop_diversity, perl = TRUE) &
-                                    (is.na(md.era.short.clean$T_tree_density) | 
-                                       md.era.short.clean$T_tree_density == "")] <- 
-  md.era.short.clean$T_crop_density[grepl(pattern, md.era.short.clean$T_crop_diversity, perl = TRUE) &
-                                      (is.na(md.era.short.clean$T_tree_density) | 
-                                         md.era.short.clean$T_tree_density == "")]
-
-## Arreglar MANUALMENTE
-
-"10.1007/s10457-019-00405-4"
-"10.1016/j.agrformet.2018.03.026"
-
-# Apply
-md.era.short.clean$C_crop_density <- sapply(md.era.short.clean$C_crop_density, remove_trees_density)
-md.era.short.clean$T_crop_density <- sapply(md.era.short.clean$T_crop_density, remove_trees_density)
+# --- Rename crop_tree columns
+names(md.era.short.clean) <- gsub("^C_plant_", "C_crop_tree_", names(md.era.short.clean))
+names(md.era.short.clean) <- gsub("^T_plant_", "T_crop_tree_", names(md.era.short.clean))
 
 # Apply all fixes to any set of columns
-apply_crop_fixes <- function(x, fixes) {
-  for (pattern in names(fixes)) {
-    x <- str_replace_all(x, regex(pattern), fixes[[pattern]])
-  }
-  x
-}
 
-crop_cols <- c("C_crop_diversity", "T_crop_diversity",
-               "C_crop_variety","T_crop_variety",
-               "C_crop_density","T_crop_density",
-               "C_tree_diversity", "T_tree_diversity",
-               "C_tree_density","T_tree_density")
+crop_tree_cols <- c("C_crop_tree_diversity", "T_crop_tree_diversity",
+                    "C_crop_tree_variety","T_crop_tree_variety",
+                    "C_crop_tree_density","T_crop_tree_density")
 
 md.era.short.clean <- md.era.short.clean %>%
-  mutate(across(all_of(crop_cols), ~ apply_crop_fixes(., crop_fixes)))
+  mutate(across(all_of(crop_tree_cols), ~ apply_crop_fixes(., crop_name_fixes)))
 
 
-md.era.short.clean[crop_cols] <- lapply(
-  md.era.short.clean[crop_cols],
-  \(x) gsub("Gliricida sepium", "Gliricidia sepium", x, fixed = TRUE))
-
-md.era.short.clean[crop_cols] <- lapply(
-  md.era.short.clean[crop_cols],
-  \(x) gsub("Glyricidia sepium", "Gliricidia sepium", x, fixed = TRUE))
-
-md.era.short.clean[c("C_crop_variety", "T_crop_variety")] <- lapply(
-  md.era.short.clean[c("C_crop_variety", "T_crop_variety")],
-  \(x) gsub("(NA)", "(Unspecified)", x, fixed = TRUE))
- 
-md.era.short.clean[c("C_crop_diversity", "T_crop_diversity")] <- lapply(
-  md.era.short.clean[c("C_crop_diversity", "T_crop_diversity")],
-  \(x) gsub("-NA", "", x, fixed = TRUE))
-
-# Quick checks
-sort(unique(md.era.short.clean$C_crop_diversity))
-sort(unique(md.era.short.clean$T_crop_diversity))
-
-## List of missing crops from 01_product_new to pass to Lolita
-unique_crops_diversity <- rbind(
-  data.frame(crop_diversity = md.era.short.clean %>%
-               filter(C_crop_diversity != "") %>%
-               pull(C_crop_diversity) %>%
-               str_split("[/\\-]") %>%
-               unlist() %>%
-               str_trim()),
-  data.frame(crop_diversity = md.era.short.clean %>%
-               filter(T_crop_diversity != "") %>%
-               pull(T_crop_diversity) %>%
-               str_split("[/\\-]") %>%
-               unlist() %>%
-               str_trim())) %>%
-  distinct(crop_diversity) %>%
-  arrange(crop_diversity)%>%
-  left_join(fomd01.product.new%>%
-              filter(!is.na(Product.Simple))%>%
-              distinct(Product.Type,Product.Simple,SPAM.Food.Group,FAO.Food.Group),
-            by=c("crop_diversity"="Product.Simple"))%>%
-  filter(is.na(Product.Type))
-
-sort(unique(unique_crops_diversity$crop_diversity)) #115
-#readr::write_csv(unique_crops, paste0(path.metadata, "/04.added_to_06_FOMD_metadata_original_long/missing_crops_01_products_new.csv"))
-
-sort(unique(md.era.short.clean$C_crop_variety))
-sort(unique(md.era.short.clean$T_crop_variety))
-
-extract_variety_names <- function(x) {
-  x %>%
-    na.omit() %>%
-    .[. != ""] %>%
-    strsplit("(?<=[)])[/\\-](?=[A-Z])", perl = TRUE) %>%
-    unlist() %>%
-    trimws() %>%
-    regmatches(., regexpr("^[^(]+", .)) %>%
-    trimws() %>%
-    unique() %>%
-    sort()
-}
-
-unique_crops_variety <- data.frame(
-  crop_variety = unique(c(
-    extract_variety_names(md.era.short.clean$C_crop_variety),
-    extract_variety_names(md.era.short.clean$T_crop_variety)
-  ))) %>%
-  arrange(crop_variety)
-sort(unique(unique_crops_variety$crop_variety))
-
-sort(unique(md.era.short.clean$C_crop_density))
-sort(unique(md.era.short.clean$T_crop_density))
-
-extract_crop_names <- function(x) {
-  x %>%
-    na.omit() %>%
-    .[. != ""] %>%
-    # Split on - or / that separate crop entries (i.e., followed by an uppercase letter)
-    strsplit("(?<=[)])[/\\-](?=[A-Z])", perl = TRUE) %>%
-    unlist() %>%
-    trimws() %>%
-    # Extract crop name: everything before the first [
-    regmatches(., regexpr("^[^\\[]+", .)) %>%
-    trimws() %>%
-    unique() %>%
-    sort()
-}
-
-unique_crops_density <- data.frame(
-  crop_name = unique(c(
-    extract_crop_names(md.era.short.clean$C_crop_density),
-    extract_crop_names(md.era.short.clean$T_crop_density)))) %>%
-  arrange(crop_name)
-
-sort(unique(unique_crops_density$crop_name))
-
-#=========================
-#---commodity_tree----
-#=========================
-#md.era.short.clean1 <- md.era.short.clean
-sort(unique(md.era.short.clean$T_tree_diversity))
-md.era.short.clean <- md.era.short.clean%>%
-  mutate(
-    C_tree_density=case_when((!is.na(C_tree_diversity)|C_tree_diversity!="")& is.na(C_tree_density)~"Unspecified(Unspecified)",TRUE~C_tree_density),
-    C_tree_density=gsub("NA", "Unspecified(Unspecified)", C_tree_density, fixed = TRUE),
-    T_tree_density=case_when(
-      (!is.na(T_tree_diversity)|T_tree_diversity!="")& is.na(T_tree_density)~"Unspecified(Unspecified)",
-      T_tree_density=="NA-NA-NA-NA-NA-NA-NA-NA-NA-NA-NA"~"NA-NA-NA-NA-NA-NA-NA-NA-NA-NA-NA-NA",
-      TRUE~T_tree_density),
-    T_tree_density=gsub("NA", "Unspecified(Unspecified)", T_tree_density, fixed = TRUE),
-    
-  )%>%
-  mutate(
-    C_tree_density= mapply(create_density,C_tree_diversity,C_tree_density),
-    T_tree_density = mapply(create_density,T_tree_diversity,T_tree_density))
-
-sort(unique(md.era.short.clean$T_tree_diversity))
-
-
-tree_cols <- c("C_tree_diversity", "T_tree_diversity",
-               "C_tree_density","T_tree_density")
-
-md.era.short.clean <- md.era.short.clean %>%
-  mutate(across(all_of(tree_cols), ~ apply_crop_fixes(., crop_fixes)))
-
-sort(unique(md.era.short.clean$T_tree_diversity))
-
-md.era.short.clean[tree_cols] <- lapply(
-  md.era.short.clean[tree_cols],
-  \(x) gsub("Gliricidia", "Gliricidia sp.", x, fixed = TRUE))
-
-md.era.short.clean[tree_cols] <- lapply(
-  md.era.short.clean[tree_cols],
-  \(x) gsub("Gliricidia sp. sepium", "Gliricidia sepium", x, fixed = TRUE))
-
-md.era.short.clean[tree_cols] <- lapply(
-  md.era.short.clean[tree_cols],
-  \(x) gsub("Gliricidia sp. sp.", "Gliricidia sp.", x, fixed = TRUE))
-
-md.era.short.clean[tree_cols] <- lapply(
-  md.era.short.clean[tree_cols],
-  \(x) gsub("Ficus\u00A0vallis-choudae", "Ficus vallis choudae", x, fixed = TRUE))
-
-sort(unique(md.era.short.clean$T_tree_diversity))
-
-### Remove crops from C_tree_diversity and T_tree_diversity
-## List crops from C_tree_diversity and T_tree_diversity
-crop_species <- rbind(
-  data.frame(tree_diversity = md.era.short.clean %>%
-               filter(C_tree_diversity != "") %>%
-               pull(C_tree_diversity) %>%
-               str_split("[/\\-]") %>%
-               unlist() %>%
-               str_trim()),
-  data.frame(tree_diversity = md.era.short.clean %>%
-               filter(T_tree_diversity != "") %>%
-               pull(T_tree_diversity) %>%
-               str_split("[/\\-]") %>%
-               unlist() %>%
-               str_trim())) %>%
-  distinct(tree_diversity) %>%
-  arrange(tree_diversity)%>%
-  left_join(fomd01.trees%>%filter(!is.na(tree.latin.name)),
-            by=c("tree_diversity"="tree.latin.name"))%>%
-  filter(is.na(Tree.Nfix))%>%
-  select(tree_diversity)%>%
-  left_join(fomd01.product.new,by=c("tree_diversity"="Product.Simple"))
-  
-sort(unique(crop_species$tree_diversity))
-crop_species <- unique(na.omit(crop_species$tree_diversity))
-  
-# Escape special regex characters safely
-crop_species_escaped <- sapply(crop_species, function(x) str_replace_all(x, "([\\.\\(\\)\\[\\]\\^\\$\\*\\+\\?\\|])", "\\\\\\1"))
-  
-# Identify rows where C_crop_diversity contains at least one tree species
-pattern <- paste(crop_species_escaped, collapse = "|")
-  
-# Build pattern and cleaning function
-remove_crop_diversity <- function(x) {
-  if (is.na(x) || x == "") return(x)
-  
-  pattern <- paste(crop_species_escaped, collapse = "|")
-  
-  # Extract tokens and the separators between them
-  tokens <- character(0)
-  seps   <- character(0)
-  remaining <- x
-  
-  while (nchar(remaining) > 0) {
-    m <- regexpr("[-/]", remaining)
-    if (m == -1) {
-      tokens <- c(tokens, trimws(remaining))
-      break
-    }
-    tokens    <- c(tokens, trimws(substr(remaining, 1, m - 1)))
-    seps      <- c(seps,   substr(remaining, m, m))       # keep "/" or "-"
-    remaining <- substr(remaining, m + 1, nchar(remaining))
-  }
-  
-  # Decide which tokens to keep
-  keep <- !grepl(paste0("^(", pattern, ")$"), tokens, perl = TRUE)
-  
-  # Rebuild, preserving only the separators between kept tokens
-  kept_tokens <- tokens[keep]
-  kept_seps   <- seps[keep[-length(keep)]]   # one fewer sep than tokens
-  
-  if (length(kept_tokens) == 0) return("")
-  
-  result <- kept_tokens[1]
-  if (length(kept_seps) > 0) {
-    for (i in seq_along(kept_seps)) {
-      result <- paste0(result, kept_seps[i], kept_tokens[i + 1])
-    }
-  }
-  
-  return(trimws(result))
-}
-
-# Apply
-system.time({
-  md.era.short.clean$C_tree_diversity <- sapply(md.era.short.clean$C_tree_diversity,remove_crop_diversity)
-  md.era.short.clean$T_tree_diversity <- sapply(md.era.short.clean$T_tree_diversity,remove_crop_diversity)
-  })  
-
-tree_name_fixes <- c(
-  "Acacia decurren"            = "Acacia decurrens",
-  "Acacia tortili"             = "Acacia tortilis",
-  "Artocarpus heterophyllu"    = "Artocarpus heterophyllus",
-  "Calliandra calothyrsu"      = "Calliandra calothyrsus",
-  "Croton macrostachyu"        = "Croton macrostachyus",
-  "Eucalyptus globulu"         = "Eucalyptus globulus",
-  "Eucalyptus urograndi"       = "Eucalyptus urograndis",
-  "Fernandoa madagascariensi"  = "Fernandoa madagascariensis",
-  "Guiera senegalensi"="Guiera senegalensis",
-
-  
-  "Jatropha curca"             = "Jatropha curcas",
-  "Khaya ivorensi"             = "Khaya ivorensis",
-  "Senna spectabili"           = "Senna spectabilis",
-  "Tectona grandi"             = "Tectona grandis",
-  "Terminalia ivoresensi"      = "Terminalia ivorensis"
+gliricidia_fixes <- c(
+  "\\bGliricida\\b|\\bGlyricidia\\b"   = "Gliricidia",          # fix misspellings
+  "\\bGliricidia sp\\b(?!\\.)"         = "Gliricidia sp.",       # sp -> sp.
+  "\\bGliricidia\\b(?!\\s)"            = "Gliricidia sp."        # bare -> sp.
 )
 
-# Apply to your dataframe columns
-#md.era.short.clean <- md.era.short.clean %>%
-#  mutate(
-#   C_tree_diversity = str_replace_all(C_tree_diversity, regex(paste(names(tree_name_fixes), collapse="|"), ignore_case = TRUE), 
-#                                      function(m) tree_name_fixes[str_to_lower(m)]),
-#   T_tree_diversity = str_replace_all(T_tree_diversity, regex(paste(names(tree_name_fixes), collapse="|"), ignore_case = TRUE), 
-#                                      function(m) tree_name_fixes[str_to_lower(m)])
-# )
-  
-md.era.short.clean[c("C_tree_diversity", "T_tree_diversity")] <- lapply(
-  md.era.short.clean[c("C_tree_diversity", "T_tree_diversity")],
-  \(x) gsub("-NA", "", x, fixed = TRUE))
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(across(all_of(crop_tree_cols), ~ apply_crop_fixes(., gliricidia_fixes)))
 
-md.era.short.clean[c("C_tree_diversity", "T_tree_diversity")] <- lapply(
-  md.era.short.clean[c("C_tree_diversity", "T_tree_diversity")],
-  \(x) gsub("/NA", "", x, fixed = TRUE))
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = crop_tree_cols,
+  pattern = "Ficus\u00A0vallis-choudae",replacement =  "Ficus vallis choudae") 
 
-md.era.short.clean[c("C_tree_density", "T_tree_density")] <- lapply(
-  md.era.short.clean[c("C_tree_density", "T_tree_density")],
-  \(x) gsub("-NULL", "", x, fixed = TRUE))
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = crop_tree_cols,
+  pattern = "Patula Pine",replacement =  "Pinus patula") 
 
-md.era.short.clean[c("C_tree_density", "T_tree_density")] <- lapply(
-  md.era.short.clean[c("C_tree_density", "T_tree_density")],
-  \(x) gsub("/NULL", "", x, fixed = TRUE))
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = crop_tree_cols,
+  pattern = "Cattle-Camel-Small Ruminants-",replacement =  "") 
 
-md.era.short.clean[c("C_tree_density", "T_tree_density")] <- lapply(
-  md.era.short.clean[c("C_tree_density", "T_tree_density")],
-  \(x) gsub("NULL", "", x, fixed = TRUE))
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = crop_tree_cols,
+  pattern = "Cattle(NA)-Camel(NA)-Small Ruminants(NA)",replacement =  "") 
 
-  
+md.era.short.clean[c("C_crop_tree_density", "T_crop_tree_density")] <- lapply(
+  md.era.short.clean[c("C_crop_tree_density", "T_crop_tree_density")],
+  function(x) gsub("(?<![\\w.])NA(?![\\w.])", "Unspecified(Unspecified)", x, perl = TRUE)
+)
 
-# Quick checks
-sort(unique(md.era.short.clean$C_tree_diversity))
-sort(unique(md.era.short.clean$T_tree_diversity))
+### Remove extra * from C_crop_trees_variety and T_crop_trees_variety
+md.era.short.clean <- md.era.short.clean%>%
+  mutate(
+    # Replace ANY sequence of 1 or more * with exactly **
+    C_crop_tree_variety = gsub("\\*+", "**", C_crop_tree_variety),
+    C_crop_tree_variety = gsub("\\$+", "**", C_crop_tree_variety),
+    C_crop_tree_variety = gsub("\\(\\s*NA\\s*\\)", "(Unspecified)", C_crop_tree_variety, ignore.case = TRUE),
+    
+    T_crop_tree_variety = gsub("\\*+", "**", T_crop_tree_variety),
+    T_crop_tree_variety = gsub("\\$+", "**", T_crop_tree_variety),
+    T_crop_tree_variety = gsub("\\(\\s*NA\\s*\\)", "(Unspecified)", T_crop_tree_variety, ignore.case = TRUE),
+    
+    C_crop_tree_density= case_when(C_crop_tree_diversity!=""&C_crop_tree_density==""~ "Unspecified(Unspecified)",TRUE~C_crop_tree_density),
+    T_crop_tree_density= case_when(T_crop_tree_diversity!=""&T_crop_tree_density==""~ "Unspecified(Unspecified)",TRUE~T_crop_tree_density)
+  )
 
-unique_trees_diversity <- rbind(
-  data.frame(tree_diversity = md.era.short.clean %>%
-               filter(C_tree_diversity != "") %>%
-               pull(C_tree_diversity) %>%
+#Combine crop_tree_diversity + crop_tree_density columns separated by "/" or "-"
+md.era.short.clean <- md.era.short.clean%>%
+  mutate(
+    C_crop_tree_density=mapply(create_density_crop,C_crop_tree_diversity,C_crop_tree_density),
+    T_crop_tree_density=mapply(create_density_crop,T_crop_tree_diversity,T_crop_tree_density)
+  )
+
+### ARREGLAR MANUALMENTE NO SE POR QUE PUSE ESTO ACA, VERIFICAR MAS TARDE
+"10.1007/s10457-019-00405-4"
+"10.1016/j.agrformet.2018.03.026"
+
+## Quick checks
+sort(unique(md.era.short.clean$C_crop_tree_diversity))
+sort(unique(md.era.short.clean$T_crop_tree_diversity))
+
+# List of missing crops from 01_product_new to pass to Lolita
+unique_crops_diversity <- rbind(
+  data.frame(crop_tree_diversity = md.era.short.clean %>%
+               filter(C_crop_tree_diversity != "") %>%
+               pull(C_crop_tree_diversity) %>%
                str_split("[/\\-]") %>%
                unlist() %>%
                str_trim()),
-  data.frame(tree_diversity = md.era.short.clean %>%
-               filter(T_tree_diversity != "") %>%
-               pull(T_tree_diversity) %>%
+  data.frame(crop_tree_diversity = md.era.short.clean %>%
+               filter(T_crop_tree_diversity != "") %>%
+               pull(T_crop_tree_diversity) %>%
                str_split("[/\\-]") %>%
                unlist() %>%
                str_trim())) %>%
-  distinct(tree_diversity) %>%
-  arrange(tree_diversity)%>%
-  left_join(fomd01.trees%>%
-              filter(!is.na(tree.latin.name)),
-            by=c("tree_diversity"="tree.latin.name"))
-filter(is.na(Tree.Nfix))
-sort(unique(unique_trees_diversity$tree_diversity))
+  distinct(crop_tree_diversity) %>%
+  arrange(crop_tree_diversity)%>%
+  left_join(fomd01.trees.crops,
+            
+            by="crop_tree_diversity")%>%
+  filter(is.na(type)) 
+length(unique(unique_crops_diversity$crop_tree_diversity)) #72
+#readr::write_csv(unique_crops, paste0(path.metadata, "/04.added_to_06_FOMD_metadata_original_long/missing_crops_01_products_new.csv"))
 
+sort(unique(md.era.short.clean$C_crop_tree_variety))
+sort(unique(md.era.short.clean$T_crop_tree_variety))
 
-sort(unique(md.era.short.clean1$C_tree_density))
-sort(unique(md.era.short.clean1$T_tree_density))
+unique_crops_variety <- data.frame(
+  crop_tree_diversity = unique(c(
+    extract_variety_names(md.era.short.clean$C_crop_tree_variety),
+    extract_variety_names(md.era.short.clean$T_crop_tree_variety)
+  ))) %>%
+  arrange(crop_tree_diversity)%>%
+  left_join(fomd01.trees.crops,
+            by="crop_tree_diversity")%>%
+  filter(is.na(type)) 
+length(unique(unique_crops_variety$crop_tree_diversity))#65
 
+sort(unique(md.era.short.clean$C_crop_tree_density))
+sort(unique(md.era.short.clean$T_crop_tree_density))
+
+unique_crops_density <- data.frame(
+  crop_tree_diversity = unique(c(
+    extract_crop_names(md.era.short.clean$C_crop_tree_density),
+    extract_crop_names(md.era.short.clean$T_crop_tree_density)))) %>%
+  arrange(crop_tree_diversity)%>%
+  left_join(fomd01.trees.crops,
+            by="crop_tree_diversity")%>%
+  filter(is.na(type)) 
+length(unique(unique_crops_density$crop_tree_diversity)) #43
+
+# check if there are missmatches between crop_tree_diversity and crop_tree_density columns
+mismatch_report_div_den <- do.call(rbind, lapply(pairs_div_den, function(p)
+  check_length_mismatch_div_den(md.era.short.clean, p[1], p[2])))
+
+View(mismatch_report_div_den)
 
 #=========================
 #---commodity_animal----
 #=========================
-## TO CHECK: density and diversity (there are tree names in diversity)
+## TO CHECK: VARIETY and DENSITY (there are tree names in diversity)
 
 md.era.short.clean <- md.era.short.clean%>%
   mutate(
     C_animal_diversity = gsub("\\*+", "**", C_animal_diversity),
     T_animal_diversity = gsub("\\*+", "**", T_animal_diversity),
     C_animal_breed = gsub("\\*+", "**", C_animal_breed),
-    T_animal_breed = gsub("\\*+", "**", T_animal_breed),
-    C_animal_diversity = gsub("Gliricidia sepium", "", C_animal_diversity, fixed = TRUE),
-    C_animal_diversity = gsub("Gliricidia sp.", "", C_animal_diversity, fixed = TRUE),
-    
-    
-    across(c(C_animal_diversity, T_animal_diversity), ~ gsub("Durum Wheat**Wheat", "", .x, fixed = TRUE)),
-    across(c(C_animal_diversity, T_animal_diversity), ~ gsub("Grevillea robusta", "", .x, fixed = TRUE)),
-    
-    C_animal_diversity = gsub("Jute mallow", "", C_animal_diversity, fixed = TRUE),
+    T_animal_breed = gsub("\\*+", "**", T_animal_breed))
 
-    across(c(C_animal_diversity, T_animal_diversity), ~ gsub("Seed", "", .x, fixed = TRUE)),
-    across(c(C_animal_diversity, T_animal_diversity), ~ gsub("Unknown Plant", "", .x, fixed = TRUE)),
-    across(c(C_animal_diversity, T_animal_diversity), ~ gsub("Zucchini", "", .x, fixed = TRUE))
-    )
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,cols = c("C_animal_diversity","T_animal_diversity"),
+  pattern = "Gliricidia sepium",replacement =  "") 
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,cols = c("C_animal_diversity","T_animal_diversity"),
+  pattern = "Gliricidia sp.",replacement =  "") 
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,cols = c("C_animal_diversity","T_animal_diversity"),
+  pattern = "Durum Wheat**Wheat",replacement =  "")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,cols = c("C_animal_diversity","T_animal_diversity"),
+  pattern = "Grevillea robusta",replacement =  "")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,cols = c("C_animal_diversity","T_animal_diversity"),
+  pattern = "Zucchini",replacement =  "")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,cols = c("C_animal_diversity","T_animal_diversity"),
+  pattern = "Seed",replacement =  "")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,cols = c("C_animal_diversity","T_animal_diversity"),
+  pattern = "Unknown Plant",replacement =  "")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,cols = c("C_animal_diversity","T_animal_diversity"),
+  pattern = "Jute mallow",replacement =  "")
 
 
 # Quick checks

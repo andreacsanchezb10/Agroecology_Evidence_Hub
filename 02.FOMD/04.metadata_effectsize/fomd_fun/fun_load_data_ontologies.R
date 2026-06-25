@@ -44,6 +44,26 @@ fomd01.practices <- read_xlsx(
   mutate(practice_subtype= paste0(type,"(",subtype,")"))%>%
   distinct(type, subtype,theme,practice, subpractice,practice_subtype)
 
+fomd01.trees.crops<-rbind(
+  fomd01.product.new%>%
+    filter(!is.na(Product.Simple))%>%
+    distinct(Product.Simple,SPAM.Food.Group,FAO.Food.SubGroup,FAO.Food.Group)%>%
+    rename("crop_tree_diversity"="Product.Simple")%>%
+    mutate(type="crop_list"),
+  fomd01.vars.crops%>%
+    filter(!is.na(V.Product))%>%
+    distinct(V.Product,SPAM.Food.Group,FAO.Food.SubGroup,FAO.Food.Group)%>%
+    rename("crop_tree_diversity"="V.Product")%>%
+    mutate(type="crop_list"),
+  fomd01.trees%>%
+    filter(!is.na(tree.latin.name))%>%
+    distinct(tree.latin.name,SPAM.Food.Group,FAO.Food.SubGroup,FAO.Food.Group)%>%
+    rename("crop_tree_diversity"="tree.latin.name")%>%
+    mutate(type="tree_list"))%>%
+  distinct(crop_tree_diversity, .keep_all = TRUE) 
+
+
+
 # ── Quick checks ─────────────────────────────────────────────
 sort(unique(fomd01.practices$subpractice))
 
