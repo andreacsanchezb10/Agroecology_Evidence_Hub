@@ -6,6 +6,7 @@ library(readr)
 library(tibble)
 library(purrr)
 
+
 path.metadata.effectsize<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/04.metadata_effectsize"
 
 #==========================================================
@@ -22,12 +23,16 @@ fomd01.product.new<-fomd01.product.new%>%
   filter(!is.na(Product.Simple))%>%
   distinct(Product.Type,Product.Simple,SPAM.Food.Group,FAO.Food.SubGroup,FAO.Food.Group) 
 
-
-
 #---fomd10.effect.size
 fomd10.effect.size<-read_csv(file.path(path.metadata.effectsize,"/fomd10_effect_size.csv"), show_col_types = FALSE)
 
 nrow(fomd10.effect.size) #232257
+
+prueba<-fomd10.effect.size%>%  
+  #filter(C_out_mean<0)%>%
+
+  filter(out_subindicator=="Cation Exchange Capacity")%>%
+  select(out_subindicator,C_out_mean,T_out_mean)
 
 
 #==========================================================
@@ -55,6 +60,51 @@ fomd10.cfra <- fomd10.effect.size %>%
 sort(unique(fomd10.cfra$country))
 sort(unique(fomd10.cfra$C_site_latitude))
 sort(unique(fomd10.cfra$T_site_latitude))
+
+#==========================================================
+#--- Remove irrelevant out_subindicators
+#==========================================================
+#--- Remove Animal related out_subindicators----
+removed.subindicators<-c("Animal Survival" ,
+                         "Animal Mortality" ,
+                         "Daily Average Weight Gain",
+                         "Egg Yield",
+                         "Feed Conversion Ratio (In Out)",
+                         "Feed Conversion Ratio (Out In)",
+                         "Feed Intake"  ,
+                         "Fixed Cost-Animals Purchase",
+                         "Final Body Weight Meat Yield",
+                         "Fuel Use",
+                         "Meat Yield",
+                         "Meat Yield-Empty Carcass Meat Yield",
+                         "Meat Yield-Final Body Weight",
+                         "Meat Yield-Hot Carcass" ,                    
+                         "Meat Yield-Slaughter Body", 
+                         "Milk Yield",
+                         "Nitrogen (Apparent Efficiency Animals Feed)",
+                         "Protein Conversion Ratio (In Out)",
+                         "Protein Conversion Ratio (Out In)" ,
+                         "Reproductive Yield",
+                         
+                         "Total Weight Gain",
+                         "Variable Costs-Animal Feed",
+                         "Variable Costs-Veterinary",
+                         "Weight Gain" )
+
+fomd10.cfra <- fomd10.cfra %>%
+  filter(!tolower(out_subindicator) %in% tolower(removed.subindicators))
+
+sort(unique(fomd10.cfra$out_subindicator)) #57
+sort(unique(fomd10.cfra$out_subindicator[fomd10.cfra$out_pillar== "Mitigation"])) 
+sort(unique(fomd10.cfra$out_subindicator[fomd10.cfra$out_pillar== "Productivity"])) 
+sort(unique(fomd10.cfra$out_subindicator[fomd10.cfra$out_pillar== "Resilience"])) 
+
+
+#https://caliper.integratedmodelling.org/caliper/browse/showvoc/#/datasets/WCA2020_Crops/unknown/data?resId=https:%2F%2Fstats.fao.org%2Fclassifications%2FWCA2020%2Fcrops%2FBasil
+#https://caliper.integratedmodelling.org/caliper/browse/showvoc/#/datasets/ICC1_0/unknown/data?resId=https:%2F%2Fstats.fao.org%2Fclassifications%2FICC%2Fv1.0%2F931
+
+sort(unique(fomd10.cfra$T_crop_diversity)) #51
+sort(unique(fomd10.cfra$T_tree_diversity[fomd10.cfra$T_crop_diversity== "Acacia decurrens-Teff/Acacia decurrens-Unspecified Fodder Grass/Acacia decurrens/Acacia decurrens/Acacia decurrens" ])) 
 
 #==========================================================
 #--- Filter only relevant out_subindicator
@@ -96,32 +146,6 @@ sort(unique(fomd10.cfra$out_indicator)) #12
 sort(unique(fomd10.cfra$out_subindicator[fomd10.cfra$out_indicator== "Costs"])) 
 sort(unique(fomd10.cfra$out_subindicator)) #60
 
-#--- Relevant out_subindicators----
-removed.subindicators<-c("Egg Yield",
-                         "Feed Conversion Ratio (In Out)",
-                         "Feed Conversion Ratio (Out In)",
-                         "Fuel Use",
-                         "Meat Yield",
-                         "Milk Yield",
-                         "Protein Conversion Ratio (In Out)",
-                         "Protein Conversion Ratio (Out In)" ,
-                         "Reproductive Yield",
-                         "Weight Gain" )
-            
-fomd10.cfra <- fomd10.cfra %>%
-  filter(!tolower(out_subindicator) %in% tolower(removed.subindicators))
-
-sort(unique(fomd10.cfra$out_subindicator)) #51
-sort(unique(fomd10.cfra$out_subindicator[fomd10.cfra$out_pillar== "Mitigation"])) 
-sort(unique(fomd10.cfra$out_subindicator[fomd10.cfra$out_pillar== "Productivity"])) 
-sort(unique(fomd10.cfra$out_subindicator[fomd10.cfra$out_pillar== "Resilience"])) 
-
-
-#https://caliper.integratedmodelling.org/caliper/browse/showvoc/#/datasets/WCA2020_Crops/unknown/data?resId=https:%2F%2Fstats.fao.org%2Fclassifications%2FWCA2020%2Fcrops%2FBasil
-#https://caliper.integratedmodelling.org/caliper/browse/showvoc/#/datasets/ICC1_0/unknown/data?resId=https:%2F%2Fstats.fao.org%2Fclassifications%2FICC%2Fv1.0%2F931
-
-sort(unique(fomd10.cfra$T_crop_diversity)) #51
-sort(unique(fomd10.cfra$T_tree_diversity[fomd10.cfra$T_crop_diversity== "Acacia decurrens-Teff/Acacia decurrens-Unspecified Fodder Grass/Acacia decurrens/Acacia decurrens/Acacia decurrens" ])) 
 
 unique_crops_diversity <- rbind(
   data.frame(crop_diversity = fomd10.cfra %>%
@@ -151,18 +175,98 @@ sort(unique(unique_crops$crop_diversity))
 
 
 #==========================================================
-#--- Report DEEP-DIVE COUNTRIES
+#--- Report DEEP-DIVE COUNTRIES:
+#--- ETHIOPIA
 #==========================================================
 sort(unique(fomd10.cfra$effect_size_type))
 
-##---- COUNTRY: ETHIOPIA -----
-
+##---- Filter country == Ethiopia -----
 fomd10.cfra.eth<- fomd10.cfra%>%
   filter(country=="Ethiopia")
 
-nrow(fomd10.cfra.eth) #8425
-length(unique(fomd10.cfra.eth$study_id)) #179
 
+nrow(fomd10.cfra.eth) #14653
+length(unique(fomd10.cfra.eth$study_id)) #200
+sort(unique(fomd10.cfra.eth$out_subindicator))#40
+sort(unique(fomd10.cfra.eth$out_indicator))#13
+
+sort(unique(fomd10.cfra.eth$CT_crop_FAO_Food_Group))
+sort(unique(fomd10.cfra.eth$out_subindicator[fomd10.cfra.eth$out_indicator%in%c("Costs")])) #4
+sort(unique(fomd10.cfra.eth$out_subindicator[fomd10.cfra.eth$out_indicator%in%c("Economic Performance")]))#3
+
+sort(unique(fomd10.cfra.eth$out_subindicator[fomd10.cfra.eth$out_indicator%in%c("Income")])) #3
+sort(unique(fomd10.cfra.eth$out_subindicator[fomd10.cfra.eth$out_indicator%in%c("Product Yield")])) #2
+
+# Map each indicator to its subindicators
+subindicator_list<-fomd10.cfra.eth %>%
+  group_by(out_indicator,out_subindicator,effect_size_type) %>%
+  summarise(
+    out_subindicators = list(sort(unique(out_subindicator))),
+    n = n_distinct(out_subindicator)
+  )
+
+##---- Remove rows with is.na(effect_size_type) -----
+fomd10.cfra.eth<-fomd10.cfra.eth%>%
+  filter(!is.na(effect_size_type))
+
+sort(unique(fomd10.cfra.eth$out_subindicator))#37
+sort(unique(fomd10.cfra.eth$out_subindicator[fomd10.cfra.eth$out_indicator%in%c("Costs")]))
+#"Fixed Cost"    "Labour Cost"   "Total Cost"    "Variable Cost"
+sort(unique(fomd10.cfra.eth$out_subindicator[fomd10.cfra.eth$out_indicator%in%c("Economic Performance")]))
+#[1] "Benefit Cost Ratio (GMVC)" "Benefit Cost Ratio (NRTC)"
+sort(unique(fomd10.cfra.eth$out_subindicator[fomd10.cfra.eth$out_indicator%in%c("Income")]))
+#[1] "Gross Margin" "Gross Return" "Net Return" 
+nrow(fomd10.cfra.eth) #14645
+length(unique(fomd10.cfra.eth$study_id)) #199
+
+##---- Remove rows with is.na(effect_size_vi) -----
+fomd10.cfra.eth<-fomd10.cfra.eth%>%
+  filter(!is.na(effect_size_vi))
+
+nrow(fomd10.cfra.eth) #13847
+length(unique(fomd10.cfra.eth$study_id)) #198
+
+sort(unique(fomd10.cfra.eth$out_subindicator))#36
+sort(unique(fomd10.cfra.eth$out_indicator))
+
+sort(unique(fomd10.cfra.eth$out_subindicator[fomd10.cfra.eth$out_indicator%in%c("Costs")]))
+#[1] "Fixed Cost"    "Labour Cost"   "Total Cost"    "Variable Cost"
+sort(unique(fomd10.cfra.eth$out_subindicator[fomd10.cfra.eth$out_indicator%in%c("Economic Performance")]))#2
+#[1] "Benefit Cost Ratio (GMVC)" "Benefit Cost Ratio (NRTC)"
+sort(unique(fomd10.cfra.eth$out_subindicator[fomd10.cfra.eth$out_indicator%in%c("Income")]))
+#[1] "Gross Margin" "Gross Return" "Net Return" 
+sort(unique(fomd10.cfra.eth$out_subindicator[fomd10.cfra.eth$out_indicator%in%c("Soil Quality" )]))
+
+sort(unique(fomd10.cfra.eth$out_indicator[fomd10.cfra.eth$out_subindicator%in%c("Labour Female")]))
+"Gender Equity"
+
+sort(unique(fomd10.cfra.eth$out_subindicator[fomd10.cfra.eth$out_indicator%in%c("Non-Product Yield")]))
+
+# Map each subindicators to practices
+subindicator_practice_list<-fomd10.cfra.eth %>%
+  group_by(out_indicator,out_subindicator,
+           #CT_tillage_practice,
+           CT_intercrop_practice,
+           CT_crop_seq_practice,
+           CT_agrof_practice
+           #CT_irrig_practice,
+           #CT_watharv_practice
+           ) %>%
+  distinct(out_indicator,out_subindicator,
+           #CT_tillage_practice,
+           CT_intercrop_practice,
+           CT_crop_seq_practice,
+           CT_agrof_practice,
+           #CT_fert_practice,
+           #CT_irrig_practice,
+           #CT_watharv_practice  
+           )%>%
+  summarise(
+    #out_subindicators = list(sort(unique(out_subindicator))),
+    n = n_distinct(out_subindicator)
+  )
+
+##---- check list of practices-----
 ct_practice_cols <- grep("_practice$", names(fomd10.cfra.eth), value = TRUE)
 
 eth.practice_list <- purrr::map(ct_practice_cols, \(col) {
@@ -178,7 +282,7 @@ readr::write_csv(eth.practice_list, paste0(path.metadata.effectsize, "/eth.pract
 sort(unique(eth.practice_list$value))
 
 # Coerce all _practicetheme columns to character
-ct_theme_cols <- grep("_practicetheme$", names(fomd10.cfra.eth), value = TRUE)
+ct_theme_cols <- grep("_theme$", names(fomd10.cfra.eth), value = TRUE)
 
 fomd10.cfra.eth <- fomd10.cfra.eth %>%
   mutate(across(all_of(ct_theme_cols), as.character))
@@ -194,53 +298,47 @@ eth.practicetheme_list <- purrr::map(ct_theme_cols, \(col) {
 readr::write_csv(eth.practicetheme_list, paste0(path.metadata.effectsize, "/eth.practicetheme_list.csv"))
 
 
-fomd10.cfra.eth<-fomd10.cfra.eth%>%
-  filter(!is.na(effect_size_type))
-  
-nrow(fomd10.cfra.eth) #8929
-length(unique(fomd10.cfra.eth$study_id)) #224
-
-fomd10.cfra.eth<-fomd10.cfra.eth%>%
-  filter(!is.na(effect_size_vi))
-
-nrow(fomd10.cfra.eth) #8147
-length(unique(fomd10.cfra.eth$study_id)) #220
-sort(unique(fomd10.cfra.eth$out_subindicator))
-
-#For the moment i only going to analyse these indicators
-subindicator_analysis<-c("Crop Yield",
-                         "Fixed Cost" ,
-                         "Labour Cost",
-                         "Total Cost",
-                         "Variable Cost"
+# Reclassification of subindicators
+subindicator_analysis<-c(
+  #Biodiversity
+  "Biodiversity",
+  #"Economic Performance"
+  "Benefit Cost Ratio (GMVC)",
+  "Benefit Cost Ratio (NRTC)",
+  #"Product Yield"
+  "Crop Yield",
+  "Crop Residue Yield",
+  # "Costs"
+  "Fixed Cost" ,
+  "Labour Cost",
+  "Total Cost",
+  "Variable Cost",
+  # "Income"
+  "Gross Margin",
+  "Gross Return",
+  "Net Return" 
                          )
 
-fomd10.cfra.eth<-fomd10.cfra.eth%>%
-  filter(out_subindicator%in%subindicator_analysis)
+#fomd10.cfra.eth<-fomd10.cfra.eth%>%
+#  filter(out_subindicator%in%subindicator_analysis)
 
-nrow(fomd10.cfra.eth) #5544
+nrow(fomd10.cfra.eth) #5549
 length(unique(fomd10.cfra.eth$study_id)) #164
 
+sort(unique(fomd10.cfra.eth$diversification_spatial_practice))
 
 
-
-
-
-#For the moment i only going to analyse these comparisons
-practices_analysis<- c(
-  "C: Monoculture_vs_T: Agroforestry",
-  "C: Monoculture_vs_T: Green manure",
-  "C: Monoculture_vs_T: Intercropping",
-  "C: Monoculture_vs_T: Crop rotation"
-  #"C: Monoculture_vs_T: Intercropping..Intercropping"
-  )
-
-fomd10.cfra.eth<-fomd10.cfra.eth%>%
-  filter(CT_intercrop_practicetheme%in%practices_analysis)
 
 prueba<-fomd10.cfra.eth%>%
-  filter(is.na(CT_crop_FAO_Food_Group))%>%
-  select(C_crop_diversity,T_crop_diversity,C_crop_FAO_Food_Group,T_crop_FAO_Food_Group,CT_crop_FAO_Food_Group)
+  #filter(out_subindicator=="Gross Margin")%>%
+  filter(doi=="10.1007/s10457-018-0304-9")%>%
+  
+  #filter(diversification_spatial_practice=="C: Other Agroforestry_vs_T: Monoculture")%>%
+  
+  select(doi,diversification_spatial_subpractice,out_subindicator,C_out_mean,T_out_mean,C_out_var_value,T_out_var_value,
+         C_intercrop_subpractice,"practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")
+         
+         C_crop_diversity,T_crop_diversity,C_crop_FAO_Food_Group,T_crop_FAO_Food_Group,CT_crop_FAO_Food_Group)
 
 unmatched_crops <- bind_rows(
   fomd10.cfra.eth %>% 
@@ -261,26 +359,90 @@ unmatched_crops <- bind_rows(
   ) %>%
   filter(is.na(FAO.Food.Group)) %>%
   arrange(crop)
+sort(unique(unmatched_crops$crop))
 
 
 nrow(fomd10.cfra.eth) #321
 length(unique(fomd10.cfra.eth$study_id)) #20
 sort(unique(fomd10.cfra.eth$effect_size_type))
- 
+
+##---- Reclassify effect sizes as positive or negative -----
+# Log Response Ratio: positive if effect_size_vi > 0
+# Standardized Mean Difference: positive if effect_size_vi > 0
 fomd10.cfra.eth$effect_size_direction <- ifelse(fomd10.cfra.eth$effect_size_vi > 0, "Positive", "Negative")
 
 
+sort(unique(fomd10.cfra.eth$water_management_theme))
+sort(unique(fomd10.cfra.eth$nutrient_management_practice))
 
-sort(unique(fomd10.cfra.eth$CT_crop_FAO_Food_Group))
+### Rename FAO.Food.Groups labels-----
 
+FAO_Food_Group_labels <- c(
+  "Cereals" = "Cereals",
+  "Cereals..Leguminous crops"                  = "Cereals-Legumes",
+  "Cereals..Oilseed crops and oleaginous fruits" = "Cereals-Oilcrops",
+  "Cereals..Root tuber crops with high starch or inulin content" = "Cereals-Root tubers",
+  "Fruit and nuts..Root tuber crops with high starch or inulin content..Stimulant, spice and aromatic crops..Sugar crops..Vegetables and melons" = "Mixed crops",
+  "Leguminous crops"                           = "Legumes",
+  "Oilseed crops and oleaginous fruits"        = "Oilcrops",
+  "Root tuber crops with high starch or inulin content" = "Root tubers",
+  "Stimulant, spice and aromatic crops"        = "Stimulant and Spice crops", ## ARREGLAR separar
+  "Stimulant, spice and aromatic crops..Vegetables and melons" = "Stimulant and Spice crops-Vegetables",
+  "Vegetables and melons"                      = "Vegetables"
+)
 
+out_indicator_recla <- c(
+  "Non-Product Yield"= "Yield",
+  "Product Yield" = "Yield"
+)
+
+diversification_spatial_temporal_theme_recla<-c(
+  "C: Monoculture_vs_T: Agroforestry; C: Monoculture_vs_T: Improved Fallow"="C: Monoculture_vs_T: Agroforestry"
+)
 
 fomd10.cfra.eth_analysis<-fomd10.cfra.eth%>%
-  group_by(CT_crop_FAO_Food_Group,CT_intercrop_practice,out_indicator,effect_size_direction)%>%
+  mutate(CT_crop_FAO_Food_Group_label = recode(CT_crop_FAO_Food_Group, !!!FAO_Food_Group_labels),
+         out_indicator_recla= recode(out_indicator, !!!out_indicator_recla)
+         
+         )
+
+fomd10.cfra.eth_analysis<-fomd10.cfra.eth_analysis%>%
+  mutate(diversification_spatial_temporal_practice = case_when(
+    !is.na(diversification_spatial_practice) & !is.na(diversification_temporal_practice) ~ 
+      paste0(diversification_spatial_practice, "; ", diversification_temporal_practice),
+    !is.na(diversification_spatial_practice) ~ diversification_spatial_practice,
+    !is.na(diversification_temporal_practice) ~ diversification_temporal_practice,
+    TRUE ~ NA_character_
+  ))%>%
+  mutate(diversification_spatial_temporal_theme = case_when(
+    !is.na(diversification_spatial_theme) & !is.na(diversification_temporal_theme) ~ 
+      paste0(diversification_spatial_theme, "; ", diversification_temporal_theme),
+    !is.na(diversification_spatial_theme) ~ diversification_spatial_theme,
+    !is.na(diversification_temporal_theme) ~ diversification_temporal_theme,
+    TRUE ~ NA_character_
+  ))%>%
+  mutate(diversification_spatial_temporal_theme = recode(diversification_spatial_temporal_theme, !!!diversification_spatial_temporal_theme_recla)
+  )
+
+  
+
+fomd10.cfra.eth_analysis<-fomd10.cfra.eth_analysis%>%
+  group_by(CT_crop_FAO_Food_Group_label,
+           diversification_spatial_temporal_theme,
+           #diversification_spatial_temporal_practice,
+           #nutrient_management_practice,
+           #water_management_practice,
+           out_indicator_recla,
+           effect_size_direction)%>%
   summarise(n_direction = n(), .groups = "drop")
 
-raw <- fomd10.cfra.eth_analysis %>%
-  group_by(CT_crop_FAO_Food_Group,CT_intercrop_practice, out_indicator) %>%
+raw_diversification <- fomd10.cfra.eth_analysis %>%
+  group_by(CT_crop_FAO_Food_Group_label,
+           diversification_spatial_temporal_theme,
+           #diversification_spatial_temporal_practice,
+           #nutrient_management_practice,
+           #water_management_practice,
+           out_indicator_recla) %>%
   mutate(n = sum(n_direction)) %>%
   ungroup() %>%
   mutate(prop = n_direction / n) %>%
@@ -295,13 +457,43 @@ raw <- fomd10.cfra.eth_analysis %>%
   ) %>%
   
   rename(
-    practice = CT_intercrop_practice,
-    impact   = out_indicator,
+    practice = diversification_spatial_temporal_theme,
+    #diversification_temporal=diversification_temporal_theme,
+    #nutrient_management=nutrient_management_practice,
+    #water_management=water_management_practice,
+    
+    impact   = out_indicator_recla,
     pos = Positive,
     neg= Negative
-  )
+  )%>%
+  filter(!is.na(CT_crop_FAO_Food_Group_label))%>%
+  filter(!is.na(practice))%>%
+  
+  filter(!practice%in%
+           c("C: Agroforestry_vs_T: Agroforestry",
+             "C: Agroforestry_vs_T: Monoculture", #ver para dar la vuelta
+             "C: Crop rotation_vs_T: Crop rotation",
+             "C: Intercropping_vs_T: Monoculture", #ver para dar la vuelta
+             "C: Intercropping_vs_T: Intercropping",
+             "C: Crop Rotation (N fixing mixed)_vs_T: Crop Rotation (N fixing mixed)",
+             "C: Crop Rotation (Non N fixing)_vs_T: Crop Rotation (Non N fixing)" ,                  
+             "C: Intercropping (N fixing mixed)_vs_T: Intercropping (N fixing mixed)",
+             "C: Intercropping (N fixing mixed)_vs_T: Monoculture", #ver para dar la vuelta
+             
+             "C: Other Agroforestry_vs_T: Monoculture", #ver para dar la vuelta
+             "C: Other Agroforestry_vs_T: Other Agroforestry"))
+  filter(diversification_spatial!="C: Agroforestry_vs_T: Monoculture"
+         )%>% 
+  filter(diversification_spatial!="C: Intercropping_vs_T: Monoculture")
+  
+  sort(unique(raw_diversification$practice))
   
 head(raw)
+
+sort(unique(raw$CT_crop_FAO_Food_Group))
+
+
+
 
 
 #==========================================================
