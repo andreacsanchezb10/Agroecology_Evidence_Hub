@@ -6,3 +6,5 @@
 02.FOMD/how_to_use_extration_file.pptx
 02.FOMD/04.metadata_effectsize/fomd10_effect_size.csv.csv
 02.FOMD/04.metadata_effectsize/fomd10/fomd10_MD_Rosen_24_Effec_Sc.csv
+02.FOMD/04.metadata_effectsize/fomd10_clean/fomd10_clean_MD_Rosen_24_Effec_Sc.csv02.FOMD/04.metadata_effectsize/*.csv
+02.FOMD/04.metadata_effectsize/**/*.csv
