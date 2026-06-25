@@ -86,12 +86,13 @@ x<-fomd10.effect.size %>%
   #select(doi,out_subindicator, out_effect_size) 
   distinct(out_subindicator, effect_size_type)%>%
   arrange(effect_size_type)
-  filter(is.na(effect_size_type)) #93 out_subindicator with effect_size_type==NA
+  #filter(is.na(effect_size_type)) #93 out_subindicator with effect_size_type==NA
 
 
 #==========================================================
 # Calculate Effect sizes 
 #==========================================================
+#--------- Calculate Log Response Ratio ------------
 ## THIS IS TEMPORARY, JUST FOR THE CFRA ANALYSIS, LATER I NEED TO IMPLEMENT A EQUATION
 ## TO CHECK: there are negative yield values, see what to do here!
 
@@ -100,13 +101,30 @@ x<-fomd10.effect.size %>%
 fomd10.effect.size<-fomd10.effect.size%>%
     mutate(C_out_mean=case_when(C_out_mean==0 & effect_size_type=="Log Response Ratio"~0.00001,TRUE~C_out_mean),
            T_out_mean=case_when(T_out_mean==0 & effect_size_type=="Log Response Ratio"~0.00001,TRUE~T_out_mean))%>%
-    
   mutate(
     effect_size_vi=case_when( 
       (!is.na(C_out_mean)& !is.na(T_out_mean) &effect_size_type=="Log Response Ratio")~log(T_out_mean/C_out_mean),
       TRUE~NA))
+
+#--------- Calculate Standardized Mean Difference ------------
+
   
+fomd10.effect.size<-fomd10.effect.size%>%
+  #mutate(C_out_mean=case_when(C_out_mean==0 & effect_size_type=="Log Response Ratio"~0.00001,TRUE~C_out_mean),
+  #       T_out_mean=case_when(T_out_mean==0 & effect_size_type=="Log Response Ratio"~0.00001,TRUE~T_out_mean))%>%
   
+  mutate(
+    effect_size_vi=case_when( 
+      (!is.na(C_out_mean)&
+          !is.na(T_out_mean) &
+          !is.na(C_out_sd)&
+          !is.na(T_out_sd)&
+          !is.na(C_out_sample_size)&
+          !is.na(T_out_sample_size)&
+          effect_size_type=="Standardized Mean Difference")~
+        (T_out_mean - C_out_mean) / (sqrt(((T_out_sample_size-1)*T_out_sd^2 + (C_out_sample_size-1)*C_out_sd^2) / (T_out_sample_size+C_out_sample_size-2))),
+      TRUE~effect_size_vi))  
+
 readr::write_csv(fomd10.effect.size, paste0(path.metadata.effectsize, "/fomd10_effect_size.csv"))
   
 

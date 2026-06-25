@@ -234,7 +234,12 @@ points_sf<-points_sf%>%
 
 colour_shape <- "out_pillar_label"    # e.g. colour_col <- "category"
 colour_col <- "effect_size_direction"    # e.g. colour_col <- "category"
-
+colours <- c(Positive  = "#4CAF50",   # green
+             #neu  = "#FFC107",   # amber
+             Negative  = "#E53935"#,   # red
+             #none = "#BDBDBD"
+)
+             
 cfra.ethiopia
 ggplot() +
   
@@ -262,7 +267,7 @@ ggplot() +
               size  = 4, alpha = 0.85)
     } else {
       geom_sf(data  = points_sf,
-              colour = c("#d62728", "green","blue"),  # red – change as you like
+              colour = "#888888",  # red – change as you like
               size   = 4, alpha  = 0.85)
     }
   } +
@@ -271,6 +276,8 @@ ggplot() +
   #coord_sf(xlim = c(-20, 55), ylim = c(-36, 38), expand = FALSE) +
   
   # Theme
+  scale_colour_manual(values = colours) +
+  
   theme_minimal(base_size = 12) +
   theme(
     panel.background = element_rect(fill = "#d0e8f2", colour = NA), # ocean

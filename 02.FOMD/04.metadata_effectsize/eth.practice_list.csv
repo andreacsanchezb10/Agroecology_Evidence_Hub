@@ -1,39 +1,86 @@
 column,value,n
 CT_tillage_practice,C: Conventional Tillage_vs_T: Conventional Tillage,51
-CT_tillage_practice,C: Conventional Tillage_vs_T: No or Zero Tillage,71
-CT_tillage_practice,C: Conventional Tillage_vs_T: Reduced Tillage,1322
-CT_tillage_practice,C: No or Zero Tillage_vs_T: Conventional Tillage,1031
-CT_tillage_practice,C: No or Zero Tillage_vs_T: No or Zero Tillage,24
-CT_tillage_practice,C: No or Zero Tillage_vs_T: Reduced Tillage,56
-CT_tillage_practice,C: Reduced Tillage_vs_T: Conventional Tillage,18
-CT_tillage_practice,C: Reduced Tillage_vs_T: Reduced Tillage,30
-CT_varietal_crop_practice,C: Improved variety_vs_T: Improved variety,2368
+CT_tillage_practice,C: Conventional Tillage_vs_T: Reduced Tillage,1308
+CT_tillage_practice,C: Conventional Tillage_vs_T: Zero Tillage,65
+CT_tillage_practice,C: Reduced Tillage_vs_T: Conventional Tillage,15
+CT_tillage_practice,C: Reduced Tillage_vs_T: Reduced Tillage,27
+CT_tillage_practice,C: Zero Tillage_vs_T: Conventional Tillage,1027
+CT_tillage_practice,C: Zero Tillage_vs_T: Reduced Tillage,52
+CT_tillage_practice,C: Zero Tillage_vs_T: Zero Tillage,24
+CT_varietal_crop_practice,C: Improved variety_vs_T: Improved variety,2222
 CT_varietal_crop_practice,C: Improved variety_vs_T: Unimproved Variety,14
-CT_varietal_crop_practice,C: Unimproved Variety_vs_T: Improved variety,82
-CT_varietal_crop_practice,C: Unimproved Variety_vs_T: Unimproved Variety,240
+CT_varietal_crop_practice,C: Unimproved Variety_vs_T: Improved variety,80
+CT_varietal_crop_practice,C: Unimproved Variety_vs_T: Unimproved Variety,239
 CT_intercrop_practice,C: Intercropping (N fixing mixed)_vs_T: Intercropping (N fixing mixed),45
 CT_intercrop_practice,C: Intercropping (N fixing mixed)_vs_T: Monoculture,16
 CT_intercrop_practice,C: Monoculture_vs_T: Green Manure (N fixing),12
 CT_intercrop_practice,C: Monoculture_vs_T: Intercropping (N fixing mixed),412
 CT_intercrop_practice,C: Monoculture_vs_T: Intercropping (N fixing),4
 CT_intercrop_practice,C: Monoculture_vs_T: Intercropping (Non N fixing),12
-CT_intercrop_practice,C: Monoculture_vs_T: Other Agroforestry,44
+CT_intercrop_practice,C: Monoculture_vs_T: Other Agroforestry,38
 CT_intercrop_practice,C: Other Agroforestry_vs_T: Monoculture,9
 CT_intercrop_practice,C: Other Agroforestry_vs_T: Other Agroforestry,27
-CT_crop_seq_practice,C: Crop Rotation (N fixing mixed)_vs_T: Crop Rotation (N fixing mixed),66
-CT_crop_seq_practice,C: Crop Rotation (Non N fixing)_vs_T: Crop Rotation (Non N fixing),1585
-CT_crop_seq_practice,C: Monoculture_vs_T: Agroforestry Fallow (N fixing),10
+CT_crop_seq_practice,C: Crop Rotation (N fixing mixed)_vs_T: Crop Rotation (N fixing mixed),57
+CT_crop_seq_practice,C: Crop Rotation (Non N fixing)_vs_T: Crop Rotation (Non N fixing),1573
 CT_crop_seq_practice,C: Monoculture_vs_T: Crop Rotation (N fixing),1
 CT_crop_seq_practice,C: Monoculture_vs_T: Green Manure (N fixing),3
+CT_crop_seq_practice,C: Monoculture_vs_T: Woody Fallow (N fixing),4
 CT_agrof_practice,C: Agrosilvopasture_vs_T: Agrosilvopasture,64
 CT_agrof_practice,C: Monoculture_vs_T: Multistrata Agroforestry,40
 CT_agrof_practice,C: Monoculture_vs_T: Parklands,242
 CT_agrof_practice,C: Monoculture_vs_T: Silvopasture,8
-CT_fert_practice,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,1330
-CT_fert_practice,C: Organic Fertilizer..Inorganic Fertilizer_vs_T: Organic Fertilizer..Inorganic Fertilizer,3
+CT_fert_practice,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,1255
+CT_fert_practice,C: Inorganic and Organic Fertilizers_vs_T: Inorganic and Organic Fertilizers,3
 CT_fert_practice,C: Organic Fertilizer_vs_T: Organic Fertilizer,12
-CT_chem_practice,C: Synthetic pesticide_vs_T: Synthetic pesticide,89
-CT_irrig_practice,C: Deficit Irrigation_vs_T: Deficit Irrigation,429
-CT_irrig_practice,C: Irrigation_vs_T: Deficit Irrigation,381
-CT_irrig_practice,C: Irrigation_vs_T: Supplemental Irrigation,30
-CT_irrig_practice,C: Supplemental Irrigation_vs_T: Supplemental Irrigation,1524
+CT_chem_practice,C: Synthetic pesticide_vs_T: Synthetic pesticide,87
+CT_irrig_practice,C: Deficit Irrigation_vs_T: Deficit Irrigation,357
+CT_irrig_practice,C: Full irrigation_vs_T: Deficit Irrigation,442
+CT_irrig_practice,C: Full irrigation_vs_T: Full irrigation,144
+CT_irrig_practice,C: Full irrigation_vs_T: Partial rootzone irrigation,36
+CT_irrig_practice,C: Full irrigation_vs_T: Supplemental Irrigation,528
+CT_irrig_practice,C: Partial rootzone irrigation_vs_T: Partial rootzone irrigation..Deficit Irrigation,27
+CT_irrig_practice,C: Supplemental Irrigation_vs_T: Supplemental Irrigation,1530
+CT_watharv_practice,C: Contour bunding_vs_T: Contour bunding,256
+diversification_spatial_practice,C: Agrosilvopasture_vs_T: Agrosilvopasture,64
+diversification_spatial_practice,C: Intercropping (N fixing mixed)_vs_T: Intercropping (N fixing mixed),45
+diversification_spatial_practice,C: Intercropping (N fixing mixed)_vs_T: Monoculture,16
+diversification_spatial_practice,C: Monoculture_vs_T: Green Manure (N fixing),12
+diversification_spatial_practice,C: Monoculture_vs_T: Intercropping (N fixing mixed),412
+diversification_spatial_practice,C: Monoculture_vs_T: Intercropping (N fixing),4
+diversification_spatial_practice,C: Monoculture_vs_T: Intercropping (Non N fixing),12
+diversification_spatial_practice,C: Monoculture_vs_T: Multistrata Agroforestry,40
+diversification_spatial_practice,C: Monoculture_vs_T: Other Agroforestry,38
+diversification_spatial_practice,C: Monoculture_vs_T: Parklands,242
+diversification_spatial_practice,C: Monoculture_vs_T: Silvopasture,8
+diversification_spatial_practice,C: Other Agroforestry_vs_T: Monoculture,9
+diversification_spatial_practice,C: Other Agroforestry_vs_T: Other Agroforestry,27
+diversification_temporal_practice,C: Crop Rotation (N fixing mixed)_vs_T: Crop Rotation (N fixing mixed),57
+diversification_temporal_practice,C: Crop Rotation (Non N fixing)_vs_T: Crop Rotation (Non N fixing),1573
+diversification_temporal_practice,C: Monoculture_vs_T: Crop Rotation (N fixing),1
+diversification_temporal_practice,C: Monoculture_vs_T: Green Manure (N fixing),3
+diversification_temporal_practice,C: Monoculture_vs_T: Woody Fallow (N fixing),4
+soil_management_practice,C: Conventional Tillage_vs_T: Conventional Tillage,51
+soil_management_practice,C: Conventional Tillage_vs_T: Reduced Tillage,1308
+soil_management_practice,C: Conventional Tillage_vs_T: Zero Tillage,65
+soil_management_practice,C: Reduced Tillage_vs_T: Conventional Tillage,15
+soil_management_practice,C: Reduced Tillage_vs_T: Reduced Tillage,27
+soil_management_practice,C: Zero Tillage_vs_T: Conventional Tillage,1027
+soil_management_practice,C: Zero Tillage_vs_T: Reduced Tillage,52
+soil_management_practice,C: Zero Tillage_vs_T: Zero Tillage,24
+nutrient_management_practice,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,1255
+nutrient_management_practice,C: Inorganic and Organic Fertilizers_vs_T: Inorganic and Organic Fertilizers,3
+nutrient_management_practice,C: Organic Fertilizer_vs_T: Organic Fertilizer,12
+pest_management_practice,C: Synthetic pesticide_vs_T: Synthetic pesticide,87
+water_management_practice,C: Contour bunding_vs_T: Contour bunding,148
+water_management_practice,C: Deficit Irrigation_vs_T: Deficit Irrigation,357
+water_management_practice,C: Full irrigation + Contour bunding_vs_T: Deficit Irrigation + Contour bunding,72
+water_management_practice,C: Full irrigation + Contour bunding_vs_T: Partial rootzone irrigation + Contour bunding,36
+water_management_practice,C: Full irrigation_vs_T: Deficit Irrigation,370
+water_management_practice,C: Full irrigation_vs_T: Full irrigation,144
+water_management_practice,C: Full irrigation_vs_T: Supplemental Irrigation,528
+water_management_practice,C: Partial rootzone irrigation_vs_T: Partial rootzone irrigation + Deficit Irrigation,27
+water_management_practice,C: Supplemental Irrigation_vs_T: Supplemental Irrigation,1530
+variety_management_practice,C: Improved variety_vs_T: Improved variety,2222
+variety_management_practice,C: Improved variety_vs_T: Unimproved Variety,14
+variety_management_practice,C: Unimproved Variety_vs_T: Improved variety,80
+variety_management_practice,C: Unimproved Variety_vs_T: Unimproved Variety,239

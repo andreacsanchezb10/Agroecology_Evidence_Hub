@@ -1,20 +1,20 @@
 column,value,n
-CT_varietal_crop_practicetheme,C: Variety improvement_vs_T: Variety improvement,2704
-CT_intercrop_practicetheme,C: Agroforestry_vs_T: Agroforestry,27
-CT_intercrop_practicetheme,C: Agroforestry_vs_T: Monoculture,9
-CT_intercrop_practicetheme,C: Intercropping_vs_T: Intercropping,45
-CT_intercrop_practicetheme,C: Intercropping_vs_T: Monoculture,16
-CT_intercrop_practicetheme,C: Monoculture_vs_T: Agroforestry,44
-CT_intercrop_practicetheme,C: Monoculture_vs_T: Green manure,12
-CT_intercrop_practicetheme,C: Monoculture_vs_T: Intercropping,428
-CT_crop_seq_practicetheme,C: Crop rotation_vs_T: Crop rotation,1651
-CT_crop_seq_practicetheme,C: Monoculture_vs_T: Agroforestry,10
-CT_crop_seq_practicetheme,C: Monoculture_vs_T: Crop rotation,1
-CT_crop_seq_practicetheme,C: Monoculture_vs_T: Green manure,3
-CT_agrof_practicetheme,C: Integrated farming_vs_T: Integrated farming,64
-CT_agrof_practicetheme,C: Monoculture_vs_T: Agroforestry,282
-CT_agrof_practicetheme,C: Monoculture_vs_T: Integrated farming,8
-CT_chem_practicetheme,C: Fungi control_vs_T: Fungi control,74
-CT_chem_practicetheme,C: Insects control_vs_T: Insects control,15
-CT_irrig_practicetheme,C: Irrigation_vs_T: Irrigation,2364
-CT_watharv_practicetheme,C: Water harvesting_vs_T: Water harvesting,256
+diversification_spatial_theme,C: Agroforestry_vs_T: Agroforestry,27
+diversification_spatial_theme,C: Agroforestry_vs_T: Monoculture,9
+diversification_spatial_theme,C: Integrated farming_vs_T: Integrated farming,64
+diversification_spatial_theme,C: Intercropping_vs_T: Intercropping,45
+diversification_spatial_theme,C: Intercropping_vs_T: Monoculture,16
+diversification_spatial_theme,C: Monoculture_vs_T: Agroforestry,320
+diversification_spatial_theme,C: Monoculture_vs_T: Green manure,12
+diversification_spatial_theme,C: Monoculture_vs_T: Integrated farming,8
+diversification_spatial_theme,C: Monoculture_vs_T: Intercropping,428
+diversification_temporal_theme,C: Crop rotation_vs_T: Crop rotation,1630
+diversification_temporal_theme,C: Monoculture_vs_T: Crop rotation,1
+diversification_temporal_theme,C: Monoculture_vs_T: Green manure,3
+diversification_temporal_theme,C: Monoculture_vs_T: Improved Fallow,4
+pest_management_theme,C: Fungi control_vs_T: Fungi control,72
+pest_management_theme,C: Insects control_vs_T: Insects control,15
+water_management_theme,C: Irrigation + Water harvesting_vs_T: Irrigation + Water harvesting,108
+water_management_theme,C: Irrigation_vs_T: Irrigation,2956
+water_management_theme,C: Water harvesting_vs_T: Water harvesting,148
+variety_management_theme,C: Variety improvement_vs_T: Variety improvement,2555

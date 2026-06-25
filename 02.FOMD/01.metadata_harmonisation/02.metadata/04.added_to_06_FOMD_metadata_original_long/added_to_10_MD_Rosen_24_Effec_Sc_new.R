@@ -816,7 +816,6 @@ sort(unique(unique_crops_density$crop_name))
 #---commodity_tree----
 #=========================
 #md.era.short.clean1 <- md.era.short.clean
-  
 sort(unique(md.era.short.clean$T_tree_diversity))
 md.era.short.clean <- md.era.short.clean%>%
   mutate(
@@ -961,13 +960,13 @@ tree_name_fixes <- c(
 )
 
 # Apply to your dataframe columns
-md.era.short.clean <- md.era.short.clean %>%
-  mutate(
-    C_tree_diversity = str_replace_all(C_tree_diversity, regex(paste(names(tree_name_fixes), collapse="|"), ignore_case = TRUE), 
-                                       function(m) tree_name_fixes[str_to_lower(m)]),
-    T_tree_diversity = str_replace_all(T_tree_diversity, regex(paste(names(tree_name_fixes), collapse="|"), ignore_case = TRUE), 
-                                       function(m) tree_name_fixes[str_to_lower(m)])
-  )
+#md.era.short.clean <- md.era.short.clean %>%
+#  mutate(
+#   C_tree_diversity = str_replace_all(C_tree_diversity, regex(paste(names(tree_name_fixes), collapse="|"), ignore_case = TRUE), 
+#                                      function(m) tree_name_fixes[str_to_lower(m)]),
+#   T_tree_diversity = str_replace_all(T_tree_diversity, regex(paste(names(tree_name_fixes), collapse="|"), ignore_case = TRUE), 
+#                                      function(m) tree_name_fixes[str_to_lower(m)])
+# )
   
 md.era.short.clean[c("C_tree_diversity", "T_tree_diversity")] <- lapply(
   md.era.short.clean[c("C_tree_diversity", "T_tree_diversity")],
@@ -1048,8 +1047,8 @@ md.era.short.clean <- md.era.short.clean%>%
 
 
 # Quick checks
-sort(unique(md.era.short.clean1$C_animal_diversity))
-sort(unique(md.era.short.clean1$T_animal_diversity))
+sort(unique(md.era.short.clean$C_animal_diversity))
+sort(unique(md.era.short.clean$T_animal_diversity))
 
 sort(unique(md.era.short.clean$C_animal_breed))
 sort(unique(md.era.short.clean$T_animal_breed))
@@ -1081,8 +1080,9 @@ md.era.short.clean <- md.era.short.clean%>%
     C_varietal_crop_trait = gsub("\\$+", "..", C_varietal_crop_trait),
     T_varietal_crop_trait = gsub("\\*+", "..", T_varietal_crop_trait),
     T_varietal_crop_trait = gsub("\\$+", "..", T_varietal_crop_trait)
-    
   )
+
+
 
 # Quick checks
 sort(unique(md.era.short.clean$C_varietal_crop_subpractice_raw))
@@ -1103,16 +1103,22 @@ sort(unique(md.era.short.clean$T_varietal_crop_trait))
 #=========================
 #---soil_management_practice---- 
 #=========================
-md.era.short.clean$C_tillage_subpractice <- gsub("...", "..", md.era.short.clean$C_tillage_subpractice, fixed = TRUE)
-md.era.short.clean$T_tillage_subpractice <- gsub("...", "..", md.era.short.clean$T_tillage_subpractice, fixed = TRUE)
-md.era.short.clean$C_tillage_method <- gsub("; ", "..", md.era.short.clean$C_tillage_method, fixed = TRUE)
-md.era.short.clean$C_tillage_method <- gsub(" ..", "..", md.era.short.clean$C_tillage_method, fixed = TRUE)
-md.era.short.clean$T_tillage_method <- gsub("; ", "..", md.era.short.clean$T_tillage_method, fixed = TRUE)
-md.era.short.clean$T_tillage_method <- gsub(" ..", "..", md.era.short.clean$T_tillage_method, fixed = TRUE)
-md.era.short.clean$C_tillage_method_other <- gsub("; ", "..", md.era.short.clean$C_tillage_method_other, fixed = TRUE)
-md.era.short.clean$T_tillage_method_other <- gsub("; ", "..", md.era.short.clean$T_tillage_method_other, fixed = TRUE)
-md.era.short.clean$C_tillage_frequency <- gsub("; ", "..", md.era.short.clean$C_tillage_frequency, fixed = TRUE)
-md.era.short.clean$T_tillage_frequency <- gsub("; ", "..", md.era.short.clean$T_tillage_frequency, fixed = TRUE)
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_tillage_subpractice", "T_tillage_subpractice"),
+  pattern = "...",replacement =  "..") 
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_tillage_method", "T_tillage_method",
+           "C_tillage_method_other","T_tillage_method_other",
+           "C_tillage_frequency","T_tillage_frequency"),
+  pattern = "; ",replacement =  "..") 
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_tillage_method", "T_tillage_method"),
+  pattern = " ..",replacement =  "..") 
 
 # Quick checks
 sort(unique(md.era.short.clean$C_tillage_subpractice_raw))
@@ -1131,11 +1137,17 @@ sort(unique(md.era.short.clean$T_tillage_frequency))
 #=========================
 #---planting_practice----
 #=========================
+# TO CHECK: #Poner methods en methods, y subpractices en subpractices
 md.era.short.clean <- apply_replace_in_cols(md.era.short.clean,
   cols = c("C_planting_subpractice", "T_planting_subpractice"),
   pattern = "...",replacement = "..") 
 
 md.era.short.clean <- apply_replace_in_cols(md.era.short.clean,
+  cols = c("C_planting_method", "T_planting_method"),
+  pattern = "Zero-tillage Planter",replacement = "Zero-tillage planter") 
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
   cols = c("C_planting_subpractice", "T_planting_subpractice"),
   pattern = "NA",replacement = "Unspecified") 
 
@@ -1165,8 +1177,7 @@ md.era.short.clean <- apply_replace_in_cols(
 
 md.era.short.clean <- apply_replace_in_cols(md.era.short.clean,
   cols = c("C_intercrop_subpractice", "T_intercrop_subpractice"),
-  pattern = "Alleycropping (Mixed)",
-  replacement = "Alleycropping (N fixing and Non N fixing)") ## Apply "Alleycropping (Mixed)" -> "Alleycropping (N fixing and Non N fixing)" substitution
+  pattern = "Alleycropping (Mixed)",replacement = "Alleycropping (N fixing and Non N fixing)") ## Apply "Alleycropping (Mixed)" -> "Alleycropping (N fixing and Non N fixing)" substitution
 
 # Quick checks
 sort(unique(md.era.short.clean$C_intercrop_subpractice_raw))
@@ -1246,17 +1257,30 @@ md.era.short.clean <- apply_replace_in_cols(
   cols = c("C_agrof_subpractice", "T_agrof_subpractice"),
   pattern = "Living Fences or Living Fences or Hedgerows",replacement = "Living Fences or Hedgerows") # Apply "Living Fences or Living Fences or Hedgerows" -> "Living Fences or Hedgerows" substitution
 
-md.era.short.clean <- md.era.short.clean%>%
+# Remove agroforestry practices from intercropping section
+
+md.era.short.clean<-md.era.short.clean%>%
+  mutate(
+    C_intercrop_subpractice= case_when(
+      (doi=="10.1002/agj2.20555"& 
+         C_intercrop_subpractice=="Monoculture"&
+         T_intercrop_subpractice=="Multistrata Agroforestry")~NA,TRUE~C_intercrop_subpractice),
+    T_intercrop_subpractice= case_when(
+      (doi=="10.1002/agj2.20555"& 
+         T_intercrop_subpractice=="Multistrata Agroforestry")~NA,TRUE~T_intercrop_subpractice)
+    )
+  
+#md.era.short.clean<-read_csv(file.path(path.metadata.effectsize,"/fomd10/fomd10_MD_Rosen_24_Effec_Sc.csv"), show_col_types = FALSE)
+
+ 
+md.era.short.clean<-md.era.short.clean%>% 
   mutate(
     C_agrof_subpractice= case_when(
-      str_detect(C_intercrop_practice, c("Agroforestry",))
-    )
-    
+      (doi=="10.1080/01448765.1991.9754573"& 
+         C_agrof_subpractice=="Monoculture"&
+         T_agrof_subpractice=="Living Fences or Hedgerows")~"No Living Fences or Hedgerows or Tree Windbreak",
+      TRUE~C_agrof_subpractice)
   )
-
-
-
-
 
 ##CHECK TO : verify later if it is better to keep track of spatial, component, shade..
 sort(unique(md.era.short.clean$C_agrof_subpractice_raw))
@@ -2186,33 +2210,32 @@ combine_material_amount_unit <- function(applied, amount_unit) {
   paste(pairs, collapse = "..")
 }
 
-
-ph_semicolon_cols <- c(
-  "C_ph_material_applied", "T_ph_material_applied",
-  "C_ph_material_amount",     "T_ph_material_amount"
-)
-
-# Columns needing "..." -> ".."
-ph_cols <- c(
-  "C_ph_subpractice", "T_ph_subpractice"
-)
-
 # Apply "; " -> ".." substitution
-md.era.short.clean[ph_semicolon_cols] <- lapply(
-  md.era.short.clean[ph_semicolon_cols],
-  \(x) gsub("; ", "..", x, fixed = TRUE)
-)
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_ph_material_applied", "T_ph_material_applied",
+           "C_ph_material_amount",     "T_ph_material_amount"),
+  pattern = "; ",replacement = "..") 
 
 # Apply "+" -> ".." substitution
-md.era.short.clean[ph_semicolon_cols] <- lapply(
-  md.era.short.clean[ph_semicolon_cols],
-  \(x) gsub("+", "..", x, fixed = TRUE)
-)
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_ph_material_applied", "T_ph_material_applied",
+           "C_ph_material_amount",     "T_ph_material_amount"),
+  pattern = "+",replacement = "..") 
 
 # Apply "..." -> ".." 
-md.era.short.clean[ph_cols] <- lapply(
-  md.era.short.clean[ph_cols],
-  \(x) gsub("...", "..", x, fixed = TRUE))
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_ph_subpractice", "T_ph_subpractice"),
+  pattern = "...",replacement = "..") 
+
+# Apply "..." -> ".." 
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("Ca", "Calcium"),
+  pattern = "...",replacement = "..") 
+
 
 # Merge ph_material_amount(ph_material_unit) into ph_material_amount_unit
 md.era.short.clean <- md.era.short.clean%>%
@@ -2244,11 +2267,64 @@ sort(unique(md.era.short.clean$T_ph_material_amount_unit))
 #=========================
 #---irrigation_practice----
 #=========================
-md.era.short.clean$C_irrig_subpractice <- gsub("...", "..", md.era.short.clean$C_irrig_subpractice, fixed = TRUE)
-md.era.short.clean$T_irrig_subpractice <- gsub("...", "..", md.era.short.clean$T_irrig_subpractice, fixed = TRUE)
+#md.era.short.clean<-read_csv(file.path(path.metadata.effectsize,"/fomd10/fomd10_MD_Rosen_24_Effec_Sc.csv"), show_col_types = FALSE)
 
-md.era.short.clean$C_irrig_water_unit <- gsub("mmweek", "mm/week", md.era.short.clean$C_irrig_water_unit, fixed = TRUE)
-md.era.short.clean$T_irrig_water_unit <- gsub("mmweek", "mm/week", md.era.short.clean$T_irrig_water_unit, fixed = TRUE)
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_irrig_subpractice", "T_irrig_subpractice"),
+  pattern = "...",replacement = "..") 
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_irrig_subpractice", "T_irrig_subpractice"),
+  pattern = " + ",replacement = "..") 
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_irrig_subpractice", "T_irrig_subpractice"),
+  pattern = "Deficit",replacement = "Deficit Irrigation") 
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_irrig_subpractice", "T_irrig_subpractice"),
+  pattern = "Deficit Irrigation Irrigation",replacement = "Deficit Irrigation") 
+
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_irrig_subpractice", "T_irrig_subpractice"),
+  pattern = "Fully Irrigated",replacement = "Fully Irrigated Control or Experiment") 
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_irrig_subpractice", "T_irrig_subpractice"),
+  pattern = "Fully Irrigated Control or Experiment Control or Experiment",replacement = "Fully Irrigated Control or Experiment") 
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_irrig_subpractice", "T_irrig_subpractice"),
+  pattern = "Supplemental",replacement = "Supplemental Irrigation") 
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_irrig_subpractice", "T_irrig_subpractice"),
+  pattern = "Supplemental Irrigation Irrigation",replacement = "Supplemental Irrigation") 
+
+
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_irrig_subpractice", "T_irrig_subpractice"),
+  pattern = "APRI",replacement = "Alternate Partial Rootzone Irrigation") 
+
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_irrig_water_unit", "T_irrig_water_unit"),
+  pattern = "mmweek",replacement = "mm/week") 
+
+#md.era.short.clean$C_irrig_water_unit <- gsub("mmweek", "mm/week", md.era.short.clean$C_irrig_water_unit, fixed = TRUE)
+#md.era.short.clean$T_irrig_water_unit <- gsub("mmweek", "mm/week", md.era.short.clean$T_irrig_water_unit, fixed = TRUE)
 
 md.era.short.clean$C_irrig_water_amount <- gsub("; ", "..", md.era.short.clean$C_irrig_water_amount, fixed = TRUE)
 md.era.short.clean$T_irrig_water_amount <- gsub("; ", "..", md.era.short.clean$T_irrig_water_amount, fixed = TRUE)
@@ -2559,7 +2635,7 @@ unique_countries <-data.frame(
               filter(!is.na(Country))%>%
               distinct(Country,ISO_3166_1_Alpha_3),
             by=c("country"="Country"))
-  filter(is.na(Product.Type))
+  #filter(is.na(Product.Type))
 
 sort(unique(md.era.short.clean$country))
 sort(unique(md.era.short.clean$country_ISO))
@@ -2661,6 +2737,7 @@ readr::write_csv(md.era.clean, paste0(path.metadata, "/04.added_to_06_FOMD_metad
 
 readr::write_csv(md.era.clean, paste0(path.metadata.effectsize, "/fomd10/fomd10_MD_Rosen_24_Effec_Sc.csv"))
 
+#readr::write_csv(md.era.short.clean, paste0(path.metadata.effectsize, "/fomd10/fomd10_MD_Rosen_24_Effec_Sc.csv"))
 
 #==========================================================
 # Record of missing values in each row
