@@ -300,7 +300,6 @@ sort(unique(md.era.short.clean$exp_duration))
 ## TO CHECK: see what to do here, this can differ from T and C
 md.era.short.clean$time_year_start <- gsub("...", "..", md.era.short.clean$time_year_start, fixed = TRUE)
 
-
 # Quick checks
 sort(unique(md.era.short.clean$time_raw)) #does not exist in ERA
 sort(unique(md.era.short.clean$time_year_start))
@@ -320,16 +319,13 @@ sort(unique(md.era.short.clean$T_system_type))
 #=========================
 #---commodity_crop_tree ----
 #=========================
-## TO CHECK: 72 Missing crops/trees from the ontologies
-sort(unique(md.era.short.clean$C_plant_diversity))
-sort(unique(md.era.short.clean$T_plant_diversity))
+## TO CHECK: 70 Missing crops/trees from the ontologies
 
 # --- Rename crop_tree columns
 names(md.era.short.clean) <- gsub("^C_plant_", "C_crop_tree_", names(md.era.short.clean))
 names(md.era.short.clean) <- gsub("^T_plant_", "T_crop_tree_", names(md.era.short.clean))
 
 # Apply all fixes to any set of columns
-
 crop_tree_cols <- c("C_crop_tree_diversity", "T_crop_tree_diversity",
                     "C_crop_tree_variety","T_crop_tree_variety",
                     "C_crop_tree_density","T_crop_tree_density")
@@ -356,6 +352,11 @@ md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
   cols = crop_tree_cols,
   pattern = "Patula Pine",replacement =  "Pinus patula") 
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = crop_tree_cols,
+  pattern = "Macadamia integrifolia",replacement =  "Macadamia")
 
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
@@ -423,8 +424,8 @@ unique_crops_diversity <- rbind(
             
             by="crop_tree_diversity")%>%
   filter(is.na(type)) 
-length(unique(unique_crops_diversity$crop_tree_diversity)) #72
-#readr::write_csv(unique_crops, paste0(path.metadata, "/04.added_to_06_FOMD_metadata_original_long/missing_crops_01_products_new.csv"))
+length(unique(unique_crops_diversity$crop_tree_diversity)) #70
+readr::write_csv(unique_crops_diversity, paste0(path.era, "/v32_error_report/missing_crops_01.csv"))
 
 sort(unique(md.era.short.clean$C_crop_tree_variety))
 sort(unique(md.era.short.clean$T_crop_tree_variety))
@@ -451,7 +452,7 @@ unique_crops_density <- data.frame(
   left_join(fomd01.trees.crops,
             by="crop_tree_diversity")%>%
   filter(is.na(type)) 
-length(unique(unique_crops_density$crop_tree_diversity)) #43
+length(unique(unique_crops_density$crop_tree_diversity)) #42
 
 # check if there are missmatches between crop_tree_diversity and crop_tree_density columns
 mismatch_report_div_den <- do.call(rbind, lapply(pairs_div_den, function(p)
@@ -462,12 +463,12 @@ View(mismatch_report_div_den)
 #=========================
 #---commodity_animal----
 #=========================
-## TO CHECK: VARIETY and DENSITY (there are tree names in diversity)
+## TO FIX: VARIETY and DENSITY (there are tree names in diversity)
 
 md.era.short.clean <- md.era.short.clean%>%
   mutate(
-    C_animal_diversity = gsub("\\*+", "**", C_animal_diversity),
-    T_animal_diversity = gsub("\\*+", "**", T_animal_diversity),
+    C_animal_diversity = gsub("\\*+", "-", C_animal_diversity),
+    T_animal_diversity = gsub("\\*+", "-", T_animal_diversity),
     C_animal_breed = gsub("\\*+", "**", C_animal_breed),
     T_animal_breed = gsub("\\*+", "**", T_animal_breed))
 
@@ -481,7 +482,7 @@ md.era.short.clean <- apply_replace_in_cols(
 
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,cols = c("C_animal_diversity","T_animal_diversity"),
-  pattern = "Durum Wheat**Wheat",replacement =  "")
+  pattern = "Durum Wheat-Wheat",replacement =  "")
 
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,cols = c("C_animal_diversity","T_animal_diversity"),
@@ -517,6 +518,7 @@ sort(unique(md.era.short.clean$T_animal_density)) # TO CHECK: Missing
 #==================================================
 #---improved_crop_varieties_practice---- 
 #==================================================
+## TO CHECK:  CHECK WHEN C SHOULD BE T 
 md.era.short.clean <- md.era.short.clean%>%
   mutate(
     C_varietal_crop_variety = gsub("\\*+", "**", C_varietal_crop_variety),
@@ -540,8 +542,6 @@ md.era.short.clean <- md.era.short.clean%>%
     T_varietal_crop_trait = gsub("\\$+", "..", T_varietal_crop_trait)
   )
 
-
-
 # Quick checks
 sort(unique(md.era.short.clean$C_varietal_crop_subpractice_raw))
 sort(unique(md.era.short.clean$T_varietal_crop_subpractice_raw))
@@ -557,6 +557,31 @@ sort(unique(md.era.short.clean$T_varietal_crop_type))
 
 sort(unique(md.era.short.clean$C_varietal_crop_trait))
 sort(unique(md.era.short.clean$T_varietal_crop_trait))
+
+#==================================================
+#---improved_animal_breed_practice---- 
+#==================================================
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,cols = c("C_varietal_animal_breed","T_varietal_animal_breed"),
+  pattern = "*",replacement =  "**")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,cols = c("C_varietal_animal_subpractice","T_varietal_animal_subpractice",
+                               "C_varietal_animal_type","T_varietal_animal_type"),
+  pattern = "*",replacement =  "..")
+
+# Quick checks
+sort(unique(md.era.short.clean$C_varietal_animal_subpractice_raw))
+sort(unique(md.era.short.clean$T_varietal_animal_subpractice_raw))
+
+sort(unique(md.era.short.clean$C_varietal_animal_breed))
+sort(unique(md.era.short.clean$T_varietal_animal_breed))
+
+sort(unique(md.era.short.clean$C_varietal_animal_subpractice))
+sort(unique(md.era.short.clean$T_varietal_animal_subpractice))
+
+sort(unique(md.era.short.clean$C_varietal_animal_type))
+sort(unique(md.era.short.clean$T_varietal_animal_type))
 
 #=========================
 #---soil_management_practice---- 
@@ -581,14 +606,19 @@ md.era.short.clean <- apply_replace_in_cols(
 # Quick checks
 sort(unique(md.era.short.clean$C_tillage_subpractice_raw))
 sort(unique(md.era.short.clean$T_tillage_subpractice_raw))
+
 sort(unique(md.era.short.clean$C_tillage_subpractice))
 sort(unique(md.era.short.clean$T_tillage_subpractice))
+
 sort(unique(md.era.short.clean$C_tillage_method))
 sort(unique(md.era.short.clean$T_tillage_method))
+
 sort(unique(md.era.short.clean$C_tillage_method_other))
 sort(unique(md.era.short.clean$T_tillage_method_other))
+
 sort(unique(md.era.short.clean$C_tillage_depth))
 sort(unique(md.era.short.clean$T_tillage_depth))
+
 sort(unique(md.era.short.clean$C_tillage_frequency))
 sort(unique(md.era.short.clean$T_tillage_frequency))
 
@@ -596,6 +626,7 @@ sort(unique(md.era.short.clean$T_tillage_frequency))
 #---planting_practice----
 #=========================
 # TO CHECK: #Poner methods en methods, y subpractices en subpractices
+# TO CHECK: WHICH SHOULD BE T OR C
 md.era.short.clean <- apply_replace_in_cols(md.era.short.clean,
   cols = c("C_planting_subpractice", "T_planting_subpractice"),
   pattern = "...",replacement = "..") 
@@ -697,9 +728,9 @@ sort(unique(md.era.short.clean$T_crop_seq_residues_fate))
 #=========================
 #---agroforestry_practice----
 #=========================
-## TO CHECK: NEED TO FIX C_agrof_subpractice=="Open Communial Grazing Land
+## TO CHECK: NEED TO FIX C_agrof_subpractice=="Open Communial Grazing Land"
 ## TO CHECK: THERE ARE AGROFORESTRY PRACTICES IN INTERCROPPING AND CROP ROTATION
-
+## TO CHECK : verify later if it is better to keep track of spatial, component, shade..
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
   cols = c("C_agrof_subpractice", "T_agrof_subpractice"),
@@ -715,22 +746,6 @@ md.era.short.clean <- apply_replace_in_cols(
   cols = c("C_agrof_subpractice", "T_agrof_subpractice"),
   pattern = "Living Fences or Living Fences or Hedgerows",replacement = "Living Fences or Hedgerows") # Apply "Living Fences or Living Fences or Hedgerows" -> "Living Fences or Hedgerows" substitution
 
-# Remove agroforestry practices from intercropping section
-
-md.era.short.clean<-md.era.short.clean%>%
-  mutate(
-    C_intercrop_subpractice= case_when(
-      (doi=="10.1002/agj2.20555"& 
-         C_intercrop_subpractice=="Monoculture"&
-         T_intercrop_subpractice=="Multistrata Agroforestry")~NA,TRUE~C_intercrop_subpractice),
-    T_intercrop_subpractice= case_when(
-      (doi=="10.1002/agj2.20555"& 
-         T_intercrop_subpractice=="Multistrata Agroforestry")~NA,TRUE~T_intercrop_subpractice)
-    )
-  
-#md.era.short.clean<-read_csv(file.path(path.metadata.effectsize,"/fomd10/fomd10_MD_Rosen_24_Effec_Sc.csv"), show_col_types = FALSE)
-
- 
 md.era.short.clean<-md.era.short.clean%>% 
   mutate(
     C_agrof_subpractice= case_when(
@@ -740,7 +755,7 @@ md.era.short.clean<-md.era.short.clean%>%
       TRUE~C_agrof_subpractice)
   )
 
-##CHECK TO : verify later if it is better to keep track of spatial, component, shade..
+# Quick checks
 sort(unique(md.era.short.clean$C_agrof_subpractice_raw))
 sort(unique(md.era.short.clean$T_agrof_subpractice_raw))
 

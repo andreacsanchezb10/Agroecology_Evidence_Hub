@@ -70,6 +70,42 @@ create_density_crop <- function(diversity, density) {
   return(as.character(result))
 }
 
+################################
+# FUNCTIONS to remove agroforestry practices from intercropping section
+##################################
+# Terms that belong in agrof (detected by pattern, not exact match)
+agrof_pattern <- "Multistrata Agroforestry|Alleycropping|Other Agroforestry"
+# Helper: for one row's intercrop string, return list(intercrop=..., agrof=...)
+split_and_route <- function(intercrop_val, agrof_val) {
+  parts <- strsplit(intercrop_val, "\\.\\.")[[1]]
+  
+  is_agrof <- grepl(agrof_pattern, parts)
+  
+  agrof_parts    <- parts[is_agrof]
+  intercrop_parts <- parts[!is_agrof]
+  
+  
+  
+  # Combine with existing agrof value (avoid duplicates)
+  new_agrof <- unique(c(agrof_val[agrof_val != ""], agrof_parts))
+  
+  list(
+    intercrop = paste(intercrop_parts, collapse = ".."),
+    agrof     = paste(new_agrof, collapse = "..")
+  )
+}
+
+# Apply for one prefix
+move_to_agrof <- function(df, prefix) {
+  ic_col <- paste0(prefix, "_intercrop_subpractice")
+  af_col <- paste0(prefix, "_agrof_subpractice")
+  
+  results <- Map(split_and_route, df[[ic_col]], df[[af_col]])
+  
+  df[[ic_col]] <- vapply(results, `[[`, character(1), "intercrop")
+  df[[af_col]] <- vapply(results, `[[`, character(1), "agrof")
+  df
+}
 
 ################################
 # FUNCTIONS FOR CLEANING NAMES
