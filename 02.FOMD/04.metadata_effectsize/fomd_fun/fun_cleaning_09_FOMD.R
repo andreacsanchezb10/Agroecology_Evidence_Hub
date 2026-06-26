@@ -1,10 +1,9 @@
 ############################################
 # Functions to create densities in 10_FOMD
 ############################################
-
-
-
-#--- Reusable function to combine crop_diversity + crop_density columns separated by "/" or "-"
+#-----------------------------------------------------------------------------------------------------
+# Reusable function to combine crop_diversity + crop_density columns separated by "/" or "-"
+#-----------------------------------------------------------------------------------------------------
 create_density_crop <- function(diversity, density) {
   if (is.na(diversity) || diversity == "" || diversity == "NULL") return("")
   
@@ -68,6 +67,115 @@ create_density_crop <- function(diversity, density) {
   }
   
   return(as.character(result))
+}
+
+#------------------------------------------------------------------------------
+# Reusable function to combine amount + unit columns separated by ".."
+#------------------------------------------------------------------------------
+combine_amount_unit <- function(amount, unit, sep = "..") {
+  mapply(function(amt, unt) {
+    if (is.na(amt) || amt == "") return(amt)
+    
+    amounts <- strsplit(amt, "\\.\\.") [[1]]
+    units   <- strsplit(unt, "\\.\\.") [[1]]
+    
+    # Single unit: recycle across all amounts (not a problem)
+    if (length(units) == 1) {
+      units <- rep(units, length(amounts))
+    }
+    
+    units <- ifelse(is.na(units) | units == "", "Unspecified", units)
+    
+    # Only warn when MULTIPLE units exist but count doesn't match amounts
+    if (length(units) > 1 && length(amounts) != length(units)) {
+      warning(paste("Length mismatch: amounts =", length(amounts),
+                    "units =", length(units), "— recycling units."))
+      units <- rep_len(units, length(amounts))
+    }
+    
+    paste(paste0(amounts, "(", units, ")"), collapse = sep)
+    
+  }, amount, unit, USE.NAMES = FALSE)
+}
+
+#------------------------------------------------------------------------------
+# Reusable function to combine ORGANIC fertilizer type + amount + unit separated by ".."
+#------------------------------------------------------------------------------
+combine_type_amount_unit <- function(applied, amount_unit) {
+  if (applied == "" || is.na(applied)) return("")
+  
+  applied_parts     <- strsplit(applied,     "\\.\\.")[[1]]
+  amount_unit_parts <- strsplit(amount_unit, "\\.\\.")[[1]]
+  
+  if (length(applied_parts) == length(amount_unit_parts)) {
+    pairs <- mapply(function(a, au) {
+      if (is.na(au) || grepl("^NA$|^NA\\(|\\(NA\\)", au)) {
+        paste0(a, "[Unspecified(Unspecified)]")
+      } else {
+        au_clean <- gsub("/ha|/m2|/plant", "", au)
+        paste0(a, "[", au_clean, "]")
+      }
+    }, applied_parts, amount_unit_parts)
+  } else {
+    # NA guard here too
+    au <- amount_unit_parts[1]
+    if (is.na(au) || grepl("^NA$|^NA\\(|\\(NA\\)", au)) {
+      pairs <- paste0(applied_parts, "[Unspecified(Unspecified)]")
+    } else {
+      au_clean <- gsub("/ha|/m2|/plant", "", au)
+      pairs <- paste0(applied_parts, "[", au_clean, "]")
+    }
+  }
+  
+  paste(pairs, collapse = "..")
+}
+
+
+
+
+
+
+
+#------------------------------------------------------------------------------
+# Reusable function to combine INORGANIC fertilizer type + amount + unit separated by ".."
+#------------------------------------------------------------------------------
+combine_fert_inor_type_amount_unit <- function(applied, amount_unit) {
+  if (applied == "" || is.na(applied)) return("")
+  
+  applied_parts     <- strsplit(applied,     "\\.\\.")[[1]]
+  amount_unit_parts <- strsplit(amount_unit, "\\.\\.")[[1]]
+  
+  # If one unit provided, broadcast it across all amounts
+  if (length(amount_unit_parts) == 1) {
+    au <- amount_unit_parts[1]
+    if (is.na(au) || grepl("^NA$|^NA\\(|\\(NA\\)", au)) {
+      pairs <- paste0(applied_parts, "[Unspecified(Unspecified)]")
+    } else {
+      au_clean <- gsub("/ha|/m2|/plant", "", au)
+      pairs <- paste0(applied_parts, "[", au_clean, "]")
+    }
+  } else if (length(applied_parts) == length(amount_unit_parts)) {
+    # One unit per amount — zip them together
+    pairs <- mapply(function(a, au) {
+      if (is.na(au) || grepl("^NA$|^NA\\(|\\(NA\\)", au)) {
+        paste0(a, "[Unspecified(Unspecified)]")
+      } else {
+        au_clean <- gsub("/ha|/m2|/plant", "", au)
+        paste0(a, "[", au_clean, "]")
+      }
+    }, applied_parts, amount_unit_parts)
+  } else {
+    # Mismatch — fallback to first unit
+    au <- amount_unit_parts[1]
+    if (is.na(au) || grepl("^NA$|^NA\\(|\\(NA\\)", au)) {
+      pairs <- paste0(applied_parts, "[Unspecified(Unspecified)]")
+    } else {
+      au_clean <- gsub("/ha|/m2|/plant", "", au)
+      pairs <- paste0(applied_parts, "[", au_clean, "]")
+    }
+  }
+  
+  paste(pairs, collapse = "..")
 }
 
 ################################
@@ -232,5 +340,115 @@ pairs_div_den <- list(
   c("T_crop_tree_diversity", "T_crop_tree_density")
 )
 
+#-------------------------------------------------------
+# Code to check mismatch between amount and unit columns
+#-------------------------------------------------------
+# Check mismatches for any amount/unit pair
+check_length_mismatch_amount_unit <- function(df, amount_col, unit_col) {
+  amt <- df[[amount_col]]
+  unt <- df[[unit_col]]
+  
+  mismatches <- mapply(function(a, u, i,doi,study_id) {
+    if (is.na(a) || a == "") return(NULL)
+    na <- length(strsplit(a, "\\.\\.")[[1]])
+    nu <- length(strsplit(u, "\\.\\.")[[1]])
+    if (na != nu) data.frame(row = i, 
+                             doi=doi,study_id=study_id, amount_col, unit_col,
+                             n_amounts = na, n_units = nu,
+                             amount = a, unit = u)
+  }, amt, unt, seq_along(amt),df$doi,df$study_id, SIMPLIFY = FALSE)
+  
+  do.call(rbind, Filter(Negate(is.null), mismatches))
+}
 
+# Run for all relevant pairs
+inorganicNPK_fert_pairs <- list(
+  c("T_fert_inorganicN",   "T_fert_inorganicNPK_unit"),
+  c("T_fert_inorganicP",   "T_fert_inorganicNPK_unit"),
+  c("T_fert_inorganicK",   "T_fert_inorganicNPK_unit"),
+  c("T_fert_inorganicP2O5","T_fert_inorganicNPK_unit"),
+  c("T_fert_inorganicK2O", "T_fert_inorganicNPK_unit"),
+  
+  c("C_fert_inorganicN",   "C_fert_inorganicNPK_unit"),
+  c("C_fert_inorganicP",   "C_fert_inorganicNPK_unit"),
+  c("C_fert_inorganicK",   "C_fert_inorganicNPK_unit"),
+  c("C_fert_inorganicP2O5","C_fert_inorganicNPK_unit"),
+  c("C_fert_inorganicK2O", "C_fert_inorganicNPK_unit")
+)
+
+weed_frequency_unit_pairs<-list(
+  c("C_weed_frequency",   "C_weed_frequency_unit"),
+  c("T_weed_frequency",   "T_weed_frequency_unit")
+)
+
+#-------------------------------------------------------
+# Code to check mismatch between type, amount and unit columns
+#-------------------------------------------------------
+check_length_mismatch_type_amount_unit <- function(df, type_col, amount_col, unit_col) {
+  typ <- df[[type_col]]
+  amt <- df[[amount_col]]
+  unt <- df[[unit_col]]
+  
+  mismatches <- mapply(function(t, a, u, id,doi#,C_fert_inorganic_type_amount_unit
+                                ) {
+    # Use type as the reference if amount is empty
+    if ((is.na(t) || t == "") && (is.na(a) || a == "")) return(NULL)
+    
+    nt <- if (is.na(t) || t == "") NA else length(strsplit(t, "\\.\\.") [[1]])
+    na <- if (is.na(a) || a == "") NA else length(strsplit(a, "\\.\\.") [[1]])
+    nu <- if (is.na(u) || u == "") NA else length(strsplit(u, "\\.\\.") [[1]])
+    
+    # Single unit is fine — not a mismatch
+    if (!is.na(nu) && nu == 1) return(NULL)
+    
+    # Flag if any of the three differ from each other
+    counts <- na.omit(c(nt, na, nu))
+    if (length(unique(counts)) <= 1) return(NULL)
+    
+    data.frame(study_id  = id,
+               doi=doi,
+               #C_fert_inorganic_type_amount_unit=C_fert_inorganic_type_amount_unit,
+               type_col  = type_col,
+               amount_col = amount_col,
+               unit_col  = unit_col,
+               n_types   = nt,
+               n_amounts = na,
+               n_units   = nu,
+               type      = t,
+               amount    = a,
+               unit      = u)
+    
+  }, typ, amt, unt, df$study_id, df$doi,#df$C_fert_inorganic_type_amount_unit,
+  SIMPLIFY = FALSE)
+  
+  do.call(rbind, Filter(Negate(is.null), mismatches))
+}
+
+# Run for all relevant triplets
+inorganic_fert_pairs <- list(
+  c("C_fert_inorganic_type", "C_fert_inorganic_amount", "C_fert_inorganic_unit"),
+  c("T_fert_inorganic_type", "T_fert_inorganic_amount", "T_fert_inorganic_unit")
+)
+
+chem_pairs <- list(
+  c("C_chem_name", "C_chem_amount", "C_chem_amount_unit"),
+  c("T_chem_name", "T_chem_amount", "T_chem_amount_unit")
+)
+
+residues_pairs <- list(
+  c("C_residues_OC",   "C_residues_OC_unit"),
+  c("T_residues_OC",   "T_residues_OC_unit"), 
+  
+  c("C_residues_N",   "C_residues_N_unit"), 
+  c("T_residues_N","T_residues_N_unit"), #missing units
+  
+  c("C_residues_P", "C_residues_P_unit"), 
+  c("T_residues_P",   "T_residues_P_unit"), 
+  
+  c("C_residues_K",   "C_residues_K_unit"),
+  c("T_residues_K",   "T_residues_K_unit"),
+  
+  c("C_residues_material_amount",   "C_residues_material_unit"),
+  c("T_residues_material_amount",   "T_residues_material_unit")
+)
 
