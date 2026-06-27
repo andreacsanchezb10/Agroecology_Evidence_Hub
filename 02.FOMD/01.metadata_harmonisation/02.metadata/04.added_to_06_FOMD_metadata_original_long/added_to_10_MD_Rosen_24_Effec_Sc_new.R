@@ -893,10 +893,9 @@ md.era.short.clean <- md.era.short.clean%>%
          T_fert_inorganicK2O_amount_unit= combine_amount_unit(amount = T_fert_inorganicK2O,unit   = T_fert_inorganicNPK_unit)
   )
 
-
-md.era.short.clean1<-md.era.short.clean
-
 #------------FLAG: TO CHECK----------------------------------
+#md.era.short.clean1<-md.era.short.clean
+
 # Combine fertilizer type + amount + unit separated by ".."
 # TO CHECK: FOR THE MOMENT THE NUMBER OF TYPE, AMOUNT UNIT OF 2196 ROWS DOESN'T MATCH
 #md.era.short.clean1 <- md.era.short.clean1%>%
@@ -914,13 +913,13 @@ md.era.short.clean1<-md.era.short.clean
 
 ## Code to check mismatches for any type/amount/unit pair
 # TO CHECK: FOR THE MOMENT THE NUMBER OF TYPE, AMOUNT UNIT OF 2196 ROWS DOESN'T MATCH
-report_CT_fert_inorganic <- do.call(rbind, lapply(inorganic_fert_pairs, function(p)
-  check_length_mismatch_type_amount_unit(md.era.short.clean1, p[1], p[2], p[3])))%>%
-  filter(n_types!=n_amounts)
+#report_CT_fert_inorganic <- do.call(rbind, lapply(inorganic_fert_pairs, function(p)
+ # check_length_mismatch_type_amount_unit(md.era.short.clean1, p[1], p[2], p[3])))%>%
+  #filter(n_types!=n_amounts)
 
 #x<- report_CT_fert_inorganic%>% filter(n_types==n_amounts)
 
-readr::write_csv(report_CT_fert_inorganic, paste0(path.era, "/v32_error_report/report_CT_fert_inorganic.csv"))
+#readr::write_csv(report_CT_fert_inorganic, paste0(path.era, "/v32_error_report/report_CT_fert_inorganic.csv"))
 
 
 # Quick checks
@@ -1544,37 +1543,6 @@ sort(unique(md.era.short.clean$T_residues_material_source))
 #=========================
 #---pH_amendment_practice----
 #=========================
-##HASTA ACA -------------
-
-combine_material_amount_unit <- function(applied, amount_unit) {
-  if (applied == "" || is.na(applied)) return("")
-  
-  applied_parts     <- strsplit(applied,     "\\.\\.")[[1]]
-  amount_unit_parts <- strsplit(amount_unit, "\\.\\.")[[1]]
-  
-  if (length(applied_parts) == length(amount_unit_parts)) {
-    pairs <- mapply(function(a, au) {
-      if (is.na(au) || grepl("^NA$|^NA\\(|\\(NA\\)", au)) {
-        paste0(a, "[Unspecified(Unspecified)]")
-      } else {
-        au_clean <- gsub("/ha|/m2|/plant", "", au)
-        paste0(a, "[", au_clean, "]")
-      }
-    }, applied_parts, amount_unit_parts)
-  } else {
-    # NA guard here too
-    au <- amount_unit_parts[1]
-    if (is.na(au) || grepl("^NA$|^NA\\(|\\(NA\\)", au)) {
-      pairs <- paste0(applied_parts, "[Unspecified(Unspecified)]")
-    } else {
-      au_clean <- gsub("/ha|/m2|/plant", "", au)
-      pairs <- paste0(applied_parts, "[", au_clean, "]")
-    }
-  }
-  
-  paste(pairs, collapse = "..")
-}
-
 # Apply "; " -> ".." substitution
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
@@ -1598,16 +1566,16 @@ md.era.short.clean <- apply_replace_in_cols(
 # Apply "..." -> ".." 
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
-  cols = c("Ca", "Calcium"),
-  pattern = "...",replacement = "..") 
+  cols = c("C_ph_subpractice", "T_ph_subpractice"),
+  pattern = "Ca",replacement = "Calcium") 
 
 
 # Merge ph_material_amount(ph_material_unit) into ph_material_amount_unit
 md.era.short.clean <- md.era.short.clean%>%
   mutate(C_ph_material_amount_unit1= combine_amount_unit(amount = C_ph_material_amount, unit   = C_ph_material_unit),
          T_ph_material_amount_unit1= combine_amount_unit(amount = T_ph_material_amount, unit   = T_ph_material_unit))%>%
-  mutate(C_ph_material_amount_unit= mapply(combine_material_amount_unit,C_ph_material_applied,C_ph_material_amount_unit1),
-         T_ph_material_amount_unit= mapply(combine_material_amount_unit,T_ph_material_applied,T_ph_material_amount_unit1)
+  mutate(C_ph_material_amount_unit= mapply(combine_ph_material_amount_unit,C_ph_material_applied,C_ph_material_amount_unit1),
+         T_ph_material_amount_unit= mapply(combine_ph_material_amount_unit,T_ph_material_applied,T_ph_material_amount_unit1)
   )
 
 # Quick checks
@@ -1654,7 +1622,6 @@ md.era.short.clean <- apply_replace_in_cols(
   cols = c("C_irrig_subpractice", "T_irrig_subpractice"),
   pattern = "Deficit Irrigation Irrigation",replacement = "Deficit Irrigation") 
 
-
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
   cols = c("C_irrig_subpractice", "T_irrig_subpractice"),
@@ -1675,25 +1642,20 @@ md.era.short.clean <- apply_replace_in_cols(
   cols = c("C_irrig_subpractice", "T_irrig_subpractice"),
   pattern = "Supplemental Irrigation Irrigation",replacement = "Supplemental Irrigation") 
 
-
-
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
   cols = c("C_irrig_subpractice", "T_irrig_subpractice"),
   pattern = "APRI",replacement = "Alternate Partial Rootzone Irrigation") 
-
 
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
   cols = c("C_irrig_water_unit", "T_irrig_water_unit"),
   pattern = "mmweek",replacement = "mm/week") 
 
-#md.era.short.clean$C_irrig_water_unit <- gsub("mmweek", "mm/week", md.era.short.clean$C_irrig_water_unit, fixed = TRUE)
-#md.era.short.clean$T_irrig_water_unit <- gsub("mmweek", "mm/week", md.era.short.clean$T_irrig_water_unit, fixed = TRUE)
-
-md.era.short.clean$C_irrig_water_amount <- gsub("; ", "..", md.era.short.clean$C_irrig_water_amount, fixed = TRUE)
-md.era.short.clean$T_irrig_water_amount <- gsub("; ", "..", md.era.short.clean$T_irrig_water_amount, fixed = TRUE)
-
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_irrig_water_amount", "T_irrig_water_amount"),
+  pattern = "; ",replacement = "..") 
 
 # Merge irrig_water_amount(irrig_water_unit) into irrig_water_amount_unit
 md.era.short.clean <- md.era.short.clean%>%
@@ -1735,8 +1697,10 @@ sort(unique(md.era.short.clean$T_irrig_water_type))
 #=========================
 #---water_harvesting_practice----
 #=========================
-md.era.short.clean$C_watharv_subpractice <- gsub(", ", "..", md.era.short.clean$C_watharv_subpractice, fixed = TRUE)
-md.era.short.clean$T_watharv_subpractice <- gsub(", ", "..", md.era.short.clean$T_watharv_subpractice, fixed = TRUE)
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_watharv_subpractice", "T_watharv_subpractice"),
+  pattern = "; ",replacement = "..") 
 
 # Quick checks
 sort(unique(md.era.short.clean$C_watharv_subpractice_raw))
@@ -1748,8 +1712,8 @@ sort(unique(md.era.short.clean$T_watharv_subpractice))
 #=========================
 #---postharvesting_practice----
 #=========================
-## TO CHECK: C_postharvest_subpractice_raw and T_postharvest_subpractice_raw missing
-## TO CHECK: C_postharvest_subpractice and T_postharvest_subpractice LOOK LIKE RAW VARIABLES
+## TO CHECK: C_postharvest_subpractice_raw and T_postharvest_subpractice_raw missing------------------------
+## TO CHECK: C_postharvest_subpractice and T_postharvest_subpractice LOOK LIKE RAW VARIABLES-----------------------
 
 # Quick checks
 sort(unique(md.era.short.clean$C_postharvest_subpractice_raw)) #MISSING
@@ -1781,35 +1745,48 @@ sort(unique(md.era.short.clean$out_exp_plot_size))
 #=========================
 #---product_outcome----
 #=========================
+md.era.short.clean1 <- md.era.short.clean
+##HASTA ACA -------------
 # TO CHECK: #MAKE A LIST OF MISSING PRODUCTS FROM 01_product_new
-
 md.era.short.clean$C_product <- gsub("\\*", "..", md.era.short.clean$C_product, fixed = TRUE)
-md.era.short.clean$C_product <- gsub(" & ", "..", md.era.short.clean$C_product, fixed = TRUE)
-md.era.short.clean$C_product <- gsub(", ", "..", md.era.short.clean$C_product, fixed = TRUE)
-md.era.short.clean$C_product <- gsub("*", "..", md.era.short.clean$C_product, fixed = TRUE)
-
 md.era.short.clean$T_product <- gsub("\\*", "..", md.era.short.clean$T_product, fixed = TRUE)
-md.era.short.clean$T_product <- gsub(" & ", "..", md.era.short.clean$T_product, fixed = TRUE)
-md.era.short.clean$T_product <- gsub(", ", "..", md.era.short.clean$T_product, fixed = TRUE)
-md.era.short.clean$T_product <- gsub("*", "..", md.era.short.clean$T_product, fixed = TRUE)
 
-md.era.short.clean$C_product_type <- gsub("**", "..", md.era.short.clean$C_product_type, fixed = TRUE)
-md.era.short.clean$T_product_type <- gsub("**", "..", md.era.short.clean$T_product_type, fixed = TRUE)
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_product", "T_product"),
+  pattern=" & ", replacement = "..")
 
-md.era.short.clean$C_product_subtype <- gsub("**", "..", md.era.short.clean$C_product_subtype, fixed = TRUE)
-md.era.short.clean$T_product_subtype <- gsub("**", "..", md.era.short.clean$T_product_subtype, fixed = TRUE)
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_product", "T_product"),
+  pattern=", ", replacement = "..")
 
-md.era.short.clean$C_product_simple <- gsub("**", "..", md.era.short.clean$C_product_simple, fixed = TRUE)
-md.era.short.clean$T_product_simple <- gsub("**", "..", md.era.short.clean$T_product_simple, fixed = TRUE)
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_product", "T_product"),
+  pattern="*", replacement = "..")
 
-md.era.short.clean$C_econ_inputs <- gsub("; ", "..", md.era.short.clean$C_econ_inputs)
-md.era.short.clean$T_econ_inputs <- gsub("; ", "..", md.era.short.clean$T_econ_inputs)
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_product_type", "T_product_type",
+           "C_product_subtype","T_product_subtype",
+           "C_product_simple","T_product_simple"),
+  pattern = "**",replacement = "..")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_econ_inputs", "T_econ_inputs"),
+  pattern="; ", replacement = "..")
+
+# ort items within a string alphabetically
+md.era.short.clean$C_econ_inputs <- sapply(md.era.short.clean$C_econ_inputs, sort_econ_inputs)
+md.era.short.clean$T_econ_inputs <- sapply(md.era.short.clean$T_econ_inputs, sort_econ_inputs)
 
 # Quick checks
 sort(unique(md.era.short.clean$C_product)) #MAKE A LIST OF MISSING PRODUCTS FROM 01_product_new
 sort(unique(md.era.short.clean$T_product)) #MAKE A LIST OF MISSING PRODUCTS FROM 01_product_new
-na_empty_summary1["C_product", ] #in v6 17064 missing values; in v24 3150 empty values
-na_empty_summary1["T_product", ] #in v6 17064 missing values; in v24 3150 empty values
+na_empty_summary1["C_product", ] #in v6 17064 missing values; in v24 3150 empty values; in v32 1646
+na_empty_summary1["T_product", ] #in v6 17064 missing values; in v24 3150 empty values; in v32 1646
 
 sort(unique(md.era.short.clean$C_product_type)) #to RECLASIFIED AGAIN BASED ON C_product_simple
 sort(unique(md.era.short.clean$T_product_type))#to RECLASIFIED AGAIN BASED ON T_product_simple

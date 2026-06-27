@@ -131,11 +131,6 @@ combine_type_amount_unit <- function(applied, amount_unit) {
 }
 
 
-
-
-
-
-
 #------------------------------------------------------------------------------
 # Reusable function to combine INORGANIC fertilizer type + amount + unit separated by ".."
 #------------------------------------------------------------------------------
@@ -177,6 +172,53 @@ combine_fert_inor_type_amount_unit <- function(applied, amount_unit) {
   
   paste(pairs, collapse = "..")
 }
+
+#------------------------------------------------------------------------------
+# Reusable function to combine ph material + amount + unit separated by ".."
+#------------------------------------------------------------------------------
+combine_ph_material_amount_unit <- function(applied, amount_unit) {
+  if (applied == "" || is.na(applied)) return("")
+  
+  applied_parts     <- strsplit(applied,     "\\.\\.")[[1]]
+  amount_unit_parts <- strsplit(amount_unit, "\\.\\.")[[1]]
+  
+  if (length(applied_parts) == length(amount_unit_parts)) {
+    pairs <- mapply(function(a, au) {
+      if (is.na(au) || grepl("^NA$|^NA\\(|\\(NA\\)", au)) {
+        paste0(a, "[Unspecified(Unspecified)]")
+      } else {
+        au_clean <- gsub("/ha|/m2|/plant", "", au)
+        paste0(a, "[", au_clean, "]")
+      }
+    }, applied_parts, amount_unit_parts)
+  } else {
+    # NA guard here too
+    au <- amount_unit_parts[1]
+    if (is.na(au) || grepl("^NA$|^NA\\(|\\(NA\\)", au)) {
+      pairs <- paste0(applied_parts, "[Unspecified(Unspecified)]")
+    } else {
+      au_clean <- gsub("/ha|/m2|/plant", "", au)
+      pairs <- paste0(applied_parts, "[", au_clean, "]")
+    }
+  }
+  
+  paste(pairs, collapse = "..")
+}
+
+#------------------------------------------------------------------------------
+# Function to sort items within a string alphabetically
+#------------------------------------------------------------------------------
+
+sort_econ_inputs <- function(x) {
+  # Handle empty strings
+  if (is.na(x) || x == "") return(x)
+  
+  # Split by "..", sort, and rejoin
+  items <- strsplit(x, "\\.\\.")[[1]]
+  paste(sort(trimws(items)), collapse = "..")
+}
+
+
 
 ################################
 # FUNCTIONS to remove agroforestry practices from intercropping section
