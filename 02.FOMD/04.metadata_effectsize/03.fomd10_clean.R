@@ -69,13 +69,13 @@ comparison_practice_list<-purrr::map(ct_practice_cols, \(col) {
 }) %>%
   dplyr::bind_rows()
 
-nrow(comparison_practice_list) #170
+#nrow(comparison_practice_list) #199
 
 #readr::write_csv(comparison_practice_list, paste0(path.metadata.effectsize, "/era_comparison_practice_list.csv"))
 
 fomd10.clean <- apply_CT_renames(fomd10.clean)
 
-nrow(comparison_practice_list) #15-
+#nrow(comparison_practice_list) #15-
 
 #==========================================================
 # Reclassify C_vs_T subpractices as C_vs_T practice theme 
@@ -101,43 +101,136 @@ comparison_practicetheme_list<-purrr::map(ct_theme_cols, \(col) {
 # Reclassify C_vs_T subpractices as C_vs_T practice domain 
 #==========================================================
 fomd10.clean <- build_analytical_columns(fomd10.clean)
-names(fomd10.clean)
+ names(fomd10.clean)
 ### REPORT
 #Building analytical columns ...
+#varietal_crop_subpractice                 136,699 non-NA rows
+#varietal_crop_practice                    18,286 non-NA rows
+#varietal_crop_theme                       18,286 non-NA rows
+
 #diversification_spatial_subpractice       10,236 non-NA rows
-#diversification_spatial_practice          10,231 non-NA rows
+#diversification_spatial_practice          10,231 non-NA rows  ## TO CHECK: NEED TO FIX C_agrof_subpractice=="Open Communial Grazing Land
 #diversification_spatial_theme             10,231 non-NA rows 
+
 #diversification_temporal_subpractice      24,576 non-NA rows
-#diversification_temporal_practice         23,813 non-NA rows
-#diversification_temporal_theme            23,813 non-NA rows ## TO CHECK: NEED TO FIX "C: Other Time Sequence_vs_T: Other Time Sequence"
-#soil_management_subpractice               33,461 non-NA rows
-#soil_management_practice                  33,381 non-NA rows ## TO CHECK: NEED TO FIX C_agrof_subpractice=="Open Communial Grazing Land
-#soil_management_theme                     33,381 non-NA rows
-#nutrient_management_subpractice           21,301 non-NA rows
-#nutrient_management_practice              21,301 non-NA rows
+#diversification_temporal_practice         23,813 non-NA rows  ## TO CHECK: NEED TO FIX "C: Other Time Sequence_vs_T: Other Time Sequence"
+#diversification_temporal_theme            23,813 non-NA rows  ## TO CHECK: NEED TO FIX "C: Other Time Sequence_vs_T: Other Time Sequence"
+
+#soil_management_subpractice               33,997 non-NA rows 
+#soil_management_practice                  33,997 non-NA rows # READY
+#soil_management_theme                     33,997 non-NA rows # READY
+
+#nutrient_management_subpractice           80,179 non-NA rows 
+#nutrient_management_practice              80,179 non-NA rows # READY
 #nutrient_management_theme                 0 non-NA rows
+
 #pest_management_subpractice               18,999 non-NA rows
-#pest_management_practice                  4,466 non-NA rows
-#pest_management_theme                     4,402 non-NA rows
-#water_management_subpractice              47,291 non-NA rows
-#water_management_practice                 47,068 non-NA rows
-#water_management_theme                    47,068 non-NA rows
+#pest_management_practice                  18,922 non-NA rows ## TO CHECK: NEED TO FIX "Other"
+#pest_management_theme                     5,049 non-NA rows
+
+#water_management_subpractice              47,291 non-NA rows 
+#water_management_practice                 47,291 non-NA rows # READY
+#water_management_theme                    47,291 non-NA rows # READY
+
 #variety_management_subpractice            136,699 non-NA rows
 #variety_management_practice               18,286 non-NA rows
 #variety_management_theme                  18,286 non-NA rows
-#biomass_management_subpractice            7,130 non-NA rows
-#biomass_management_practice               6,541 non-NA rows
-#biomass_management_theme                  1,147 non-NA rows
+
+#biomass_management_subpractice            44,163 non-NA rows
+#biomass_management_practice               44,163 non-NA rows # READY
+#biomass_management_theme                  5,662 non-NA rows
+
 #planting_management_subpractice           12,995 non-NA rows
 #planting_management_practice              5,578 non-NA rows
 #planting_management_theme                 0 non-NA rows
 
 
+sort(unique(fomd10.clean$diversification_spatial_theme))
+sort(unique(fomd10.clean$diversification_temporal_theme))
+
+prueba0<-fomd10.clean%>%
+  select(diversification_spatial_theme,
+         diversification_temporal_theme)
+
 prueba<-fomd10.clean%>%
+  #Biomass management-----
+select(doi, C_residues_subpractice_raw,T_residues_subpractice_raw,
+       C_residues_material,T_residues_material,
+       biomass_management_subpractice,biomass_management_practice ,biomass_management_theme,
+       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
+  filter(!is.na(biomass_management_subpractice))%>%
+  filter(is.na(biomass_management_practice))
+
+
+
+
+sort(unique(prueba$practice_compared))
+x<-prueba[grepl("Inorganic fertilizer", prueba$practice_compared, ignore.case = TRUE), ]
+
+
+
+  #Pest management-----
+select(doi, C_chem_subpractice,
+       pest_management_subpractice,pest_management_practice ,pest_management_theme,
+       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
+  filter(!is.na(pest_management_subpractice))%>%
+  filter(is.na(pest_management_practice))
+
+
+
+  #Nutrient management -----
+
+select(doi, 
+       #C_ph_subpractice,T_ph_subpractice,
+       diversification_spatial_subpractice,
+       C_fert_inorganic_type_amount_unit,
+       #C_fert_inorganicN_amount_unit,
+       #C_fert_inorganicP_amount_unit,
+       #C_fert_inorganicK_amount_unit,
+       #C_fert_inorganicP2O5_amount_unit,
+       #C_fert_inorganicK2O_amount_unit,
+       
+       T_fert_inorganic_type_amount_unit,
+       CT_fert_practice,
+       #T_fert_inorganicN_amount_unit,
+       #T_fert_inorganicP_amount_unit,
+       #T_fert_inorganicK_amount_unit,
+       #T_fert_inorganicP2O5_amount_unit,
+       #T_fert_inorganicK2O_amount_unit,
+       T_fert_subpractice,
+       nutrient_management_subpractice,nutrient_management_practice ,nutrient_management_theme,
+       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
+  filter(!is.na(nutrient_management_subpractice))%>%
+  filter(is.na(nutrient_management_practice))%>%
+  filter(grepl("fertilizer",practice_compared, ignore.case = TRUE))
+filter(nutrient_management_practice=="C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer")
+sort(unique(prueba$nutrient_management_practice))
+
+
   
-  #diversification spatial
+  
+  #Water management-----
+select(doi, C_irrig_subpractice,
+       water_management_subpractice,water_management_practice ,water_management_theme,
+       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
+  filter(!is.na(water_management_subpractice))%>%
+  filter(is.na(water_management_practice))
+
+distinct(water_management_subpractice)
+sort(unique(fomd10.clean$C_planting_subpractice))
+sort(unique(fomd10.clean$C_planting_method))
+  
+
+
+
+#Soil management-----
+select(doi, soil_management_subpractice,soil_management_practice ,soil_management_theme,
+       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
+  filter(!is.na(soil_management_subpractice))%>%
+  filter(is.na(soil_management_practice))
+#diversification spatial-----
   select(doi,study_id,country,
-         C_crop_diversity,T_crop_diversity,
+         C_crop_tree_diversity,T_crop_tree_diversity,
          diversification_spatial_subpractice,
          out_subindicator,C_subpractice_description_raw,T_subpractice_description_raw,C_out_value,T_out_value,
          C_data_location       ,T_data_location,
@@ -158,7 +251,7 @@ prueba<-fomd10.clean%>%
   sort(unique(prueba$doi))
   
   
-  #diversification temporal
+#diversification temporal-----
   #select(doi, diversification_temporal_subpractice,diversification_temporal_practice ,diversification_temporal_theme,
   #      "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
   #filter(!is.na(diversification_temporal_subpractice))%>%
@@ -172,59 +265,7 @@ select(doi, C_planting_method,T_planting_method,
 
 x<-prueba[grepl("planting", prueba$practice_compared, ignore.case = TRUE), ]
 
-#Biomass management
-select(doi, biomass_management_subpractice,biomass_management_practice ,biomass_management_theme,
-       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
-  filter(!is.na(biomass_management_subpractice))%>%
-  filter(is.na(biomass_management_practice))
 
-#Nutrient management
-select(doi, 
-       #C_ph_subpractice,T_ph_subpractice,
-       diversification_spatial_subpractice,
-       C_fert_inorganic_type_amount_unit,
-       C_fert_inorganicN_amount_unit,
-       C_fert_inorganicP_amount_unit,
-       C_fert_inorganicK_amount_unit,
-       C_fert_inorganicP2O5_amount_unit,
-       C_fert_inorganicK2O_amount_unit,
-       
-       T_fert_inorganic_type_amount_unit,
-       T_fert_inorganicN_amount_unit,
-       T_fert_inorganicP_amount_unit,
-       T_fert_inorganicK_amount_unit,
-       T_fert_inorganicP2O5_amount_unit,
-       T_fert_inorganicK2O_amount_unit,
-       
-            nutrient_management_subpractice,nutrient_management_practice ,nutrient_management_theme,
-       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
-  filter(!is.na(nutrient_management_subpractice))%>%
-  filter(is.na(nutrient_management_theme))%>%
-  filter(grepl("fertilizer",practice_compared, ignore.case = TRUE))
-  filter(nutrient_management_practice=="C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer")
-sort(unique(prueba$nutrient_management_practice))
-
-
-sort(unique(prueba$practice_compared))
-x<-prueba[grepl("Inorganic fertilizer", prueba$practice_compared, ignore.case = TRUE), ]
-
-
-
-#Soil management
-select(doi, soil_management_subpractice,soil_management_practice ,soil_management_theme,
-       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
-  filter(!is.na(soil_management_subpractice))%>%
-  filter(is.na(soil_management_practice))
-
-#Water management
-select(doi, water_management_subpractice,water_management_practice ,water_management_theme,
-       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
-  filter(!is.na(water_management_subpractice))%>%
-  filter(is.na(water_management_practice))
-  
-  distinct(water_management_subpractice)
-  sort(unique(fomd10.clean$C_planting_subpractice))
-  sort(unique(fomd10.clean$C_planting_method))
   
 #==========================================================
 # Reclassify C and T crops and trees as FAO commodity 

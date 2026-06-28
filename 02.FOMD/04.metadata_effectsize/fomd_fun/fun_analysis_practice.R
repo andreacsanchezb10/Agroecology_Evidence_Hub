@@ -57,6 +57,8 @@
 # Domain order within each group determines label order when multiple domains
 # are active (first listed = first in the merged label)
 .DOMAIN_GROUPS <- list(
+  varietal_crop= c ("varietal_crop"),
+  breed_animal = c ("varietal_animal"),
   diversification_spatial  = c("agrof", "intercrop"),
   diversification_temporal = c("crop_seq"),
   soil_management          = c("tillage", "ph"),

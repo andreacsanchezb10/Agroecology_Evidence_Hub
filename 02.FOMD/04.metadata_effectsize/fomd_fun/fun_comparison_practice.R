@@ -27,6 +27,7 @@ local({
     "tillage",
     "planting",
     "varietal_crop",
+    "varietal_animal",
     "intercrop",
     "crop_seq",
     "agrof",
