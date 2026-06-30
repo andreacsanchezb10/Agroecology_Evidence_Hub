@@ -277,7 +277,7 @@ eth.practice_list <- purrr::map(ct_practice_cols, \(col) {
 }) %>%
   dplyr::bind_rows()
 
-readr::write_csv(eth.practice_list, paste0(path.metadata.effectsize, "/eth.practice_list.csv"))
+#readr::write_csv(eth.practice_list, paste0(path.metadata.effectsize, "/eth.practice_list.csv"))
 
 sort(unique(eth.practice_list$value))
 
@@ -373,23 +373,42 @@ fomd10.cfra.eth$effect_size_direction <- ifelse(fomd10.cfra.eth$effect_size_vi >
 
 
 sort(unique(fomd10.cfra.eth$water_management_theme))
-sort(unique(fomd10.cfra.eth$nutrient_management_practice))
+sort(unique(fomd10.cfra.eth$nutrient_management_theme))
 
 ### Rename FAO.Food.Groups labels-----
 
 FAO_Food_Group_labels <- c(
   "Cereals" = "Cereals",
-  "Cereals..Leguminous crops"                  = "Cereals-Legumes",
+  "Cereals..Leguminous crops"                  = "Cereals-Pulses",
   "Cereals..Oilseed crops and oleaginous fruits" = "Cereals-Oilcrops",
-  "Cereals..Root tuber crops with high starch or inulin content" = "Cereals-Root tubers",
-  "Fruit and nuts..Root tuber crops with high starch or inulin content..Stimulant, spice and aromatic crops..Sugar crops..Vegetables and melons" = "Mixed crops",
-  "Leguminous crops"                           = "Legumes",
-  "Oilseed crops and oleaginous fruits"        = "Oilcrops",
-  "Root tuber crops with high starch or inulin content" = "Root tubers",
-  "Stimulant, spice and aromatic crops"        = "Stimulant and Spice crops", ## ARREGLAR separar
-  "Stimulant, spice and aromatic crops..Vegetables and melons" = "Stimulant and Spice crops-Vegetables",
-  "Vegetables and melons"                      = "Vegetables"
+  "Leguminous crops"="Pulses",
+  "Stimulant, spice and aromatic crops"= "Stimulants and Spice crops"
 )
+#-----
+focal_sub_cols <- c(
+  "diversification_spatial_subpractice",
+  "diversification_temporal_subpractice",
+  "soil_management_subpractice",
+  "nutrient_management_subpractice",
+  "pest_management_subpractice",
+  "water_management_subpractice",
+  "biomass_management_subpractice"
+)
+
+fomd10.cfra.eth <- fomd10.cfra.eth %>%
+  mutate(
+    active_groups = apply(across(all_of(focal_sub_cols)), 1, function(row) {
+      active <- names(row)[!is.na(row)]
+      active <- gsub("_subpractice", "", active)
+      if (length(active) == 0) NA_character_
+      else paste(active, collapse = " + ")
+    })
+  )
+
+prueba0<-fomd10.cfra.eth%>% count(n_focal_groups, active_groups, sort = TRUE)
+
+
+
 
 out_indicator_recla <- c(
   "Non-Product Yield"= "Yield",
@@ -399,6 +418,7 @@ out_indicator_recla <- c(
 diversification_spatial_temporal_theme_recla<-c(
   "C: Monoculture_vs_T: Agroforestry; C: Monoculture_vs_T: Improved Fallow"="C: Monoculture_vs_T: Agroforestry"
 )
+
 
 fomd10.cfra.eth_analysis<-fomd10.cfra.eth%>%
   mutate(CT_crop_FAO_Food_Group_label = recode(CT_crop_FAO_Food_Group, !!!FAO_Food_Group_labels),
@@ -430,8 +450,12 @@ fomd10.cfra.eth_analysis<-fomd10.cfra.eth_analysis%>%
   group_by(CT_crop_FAO_Food_Group_label,
            diversification_spatial_temporal_theme,
            #diversification_spatial_temporal_practice,
-           #nutrient_management_practice,
-           #water_management_practice,
+           #biomass_management_practice,
+           #nutrient_management_theme,
+           #pest_management_practice,
+           #soil_management_practice,
+           #active_groups,
+           #water_management_practice, #nothing to show here for now
            out_indicator_recla,
            effect_size_direction)%>%
   summarise(n_direction = n(), .groups = "drop")
@@ -439,9 +463,12 @@ fomd10.cfra.eth_analysis<-fomd10.cfra.eth_analysis%>%
 raw_diversification <- fomd10.cfra.eth_analysis %>%
   group_by(CT_crop_FAO_Food_Group_label,
            diversification_spatial_temporal_theme,
-           #diversification_spatial_temporal_practice,
-           #nutrient_management_practice,
-           #water_management_practice,
+           #biomass_management_practice,
+           #nutrient_management_theme,
+           #pest_management_practice,
+           #soil_management_practice,
+           #active_groups,
+           #water_management_practice,#nothing to show here for now
            out_indicator_recla) %>%
   mutate(n = sum(n_direction)) %>%
   ungroup() %>%
@@ -459,7 +486,7 @@ raw_diversification <- fomd10.cfra.eth_analysis %>%
   rename(
     practice = diversification_spatial_temporal_theme,
     #diversification_temporal=diversification_temporal_theme,
-    #nutrient_management=nutrient_management_practice,
+    #nutrient_management=nutrient_management_theme,
     #water_management=water_management_practice,
     
     impact   = out_indicator_recla,
@@ -471,17 +498,10 @@ raw_diversification <- fomd10.cfra.eth_analysis %>%
   
   filter(!practice%in%
            c("C: Agroforestry_vs_T: Agroforestry",
-             "C: Agroforestry_vs_T: Monoculture", #ver para dar la vuelta
              "C: Crop rotation_vs_T: Crop rotation",
-             "C: Intercropping_vs_T: Monoculture", #ver para dar la vuelta
-             "C: Intercropping_vs_T: Intercropping",
-             "C: Crop Rotation (N fixing mixed)_vs_T: Crop Rotation (N fixing mixed)",
-             "C: Crop Rotation (Non N fixing)_vs_T: Crop Rotation (Non N fixing)" ,                  
-             "C: Intercropping (N fixing mixed)_vs_T: Intercropping (N fixing mixed)",
-             "C: Intercropping (N fixing mixed)_vs_T: Monoculture", #ver para dar la vuelta
-             
-             "C: Other Agroforestry_vs_T: Monoculture", #ver para dar la vuelta
-             "C: Other Agroforestry_vs_T: Other Agroforestry"))
+             "C: Intercropping_vs_T: Intercropping"
+           ))%>%
+  filter(CT_crop_FAO_Food_Group_label!="Stimulants and Spice crops")
   filter(diversification_spatial!="C: Agroforestry_vs_T: Monoculture"
          )%>% 
   filter(diversification_spatial!="C: Intercropping_vs_T: Monoculture")

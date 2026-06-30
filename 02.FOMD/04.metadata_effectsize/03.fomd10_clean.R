@@ -104,13 +104,21 @@ fomd10.clean <- build_analytical_columns(fomd10.clean)
  names(fomd10.clean)
 ### REPORT
 #Building analytical columns ...
-#varietal_crop_subpractice                 136,699 non-NA rows
-#varietal_crop_practice                    18,286 non-NA rows
-#varietal_crop_theme                       18,286 non-NA rows
+#variety_management_subpractice            136,699 non-NA rows
+#variety_management_practice               18,286 non-NA rows
+#variety_management_theme                  18,286 non-NA rows
 
+#breed_animal_subpractice                  21,291 non-NA rows
+#breed_animal_practice                     0 non-NA rows
+#breed_animal_theme                        0 non-NA rows
+ 
+#planting_management_subpractice           12,995 non-NA rows
+#planting_management_practice              5,578 non-NA rows
+#planting_management_theme                 0 non-NA rows
+ 
 #diversification_spatial_subpractice       10,236 non-NA rows
 #diversification_spatial_practice          10,231 non-NA rows  ## TO CHECK: NEED TO FIX C_agrof_subpractice=="Open Communial Grazing Land
-#diversification_spatial_theme             10,231 non-NA rows 
+#diversification_spatial_theme             10,231 non-NA rows ## TO CHECK: NEED TO FIX C_agrof_subpractice=="Open Communial Grazing Land
 
 #diversification_temporal_subpractice      24,576 non-NA rows
 #diversification_temporal_practice         23,813 non-NA rows  ## TO CHECK: NEED TO FIX "C: Other Time Sequence_vs_T: Other Time Sequence"
@@ -122,7 +130,7 @@ fomd10.clean <- build_analytical_columns(fomd10.clean)
 
 #nutrient_management_subpractice           80,179 non-NA rows 
 #nutrient_management_practice              80,179 non-NA rows # READY
-#nutrient_management_theme                 0 non-NA rows
+#nutrient_management_theme                 79,098 non-NA rows
 
 #pest_management_subpractice               18,999 non-NA rows
 #pest_management_practice                  18,922 non-NA rows ## TO CHECK: NEED TO FIX "Other"
@@ -132,17 +140,11 @@ fomd10.clean <- build_analytical_columns(fomd10.clean)
 #water_management_practice                 47,291 non-NA rows # READY
 #water_management_theme                    47,291 non-NA rows # READY
 
-#variety_management_subpractice            136,699 non-NA rows
-#variety_management_practice               18,286 non-NA rows
-#variety_management_theme                  18,286 non-NA rows
-
 #biomass_management_subpractice            44,163 non-NA rows
 #biomass_management_practice               44,163 non-NA rows # READY
 #biomass_management_theme                  5,662 non-NA rows
 
-#planting_management_subpractice           12,995 non-NA rows
-#planting_management_practice              5,578 non-NA rows
-#planting_management_theme                 0 non-NA rows
+
 
 
 sort(unique(fomd10.clean$diversification_spatial_theme))
@@ -153,6 +155,40 @@ prueba0<-fomd10.clean%>%
          diversification_temporal_theme)
 
 prueba<-fomd10.clean%>%
+  #Nutrient management -----
+
+select(doi, 
+       #C_ph_subpractice,T_ph_subpractice,
+       #diversification_spatial_subpractice,
+       nutrient_management_theme,
+       C_fert_inorganic_type_amount_unit,
+       #C_fert_inorganicN_amount_unit,
+       #C_fert_inorganicP_amount_unit,
+       #C_fert_inorganicK_amount_unit,
+       #C_fert_inorganicP2O5_amount_unit,
+       #C_fert_inorganicK2O_amount_unit,
+       
+       T_fert_inorganic_type_amount_unit,
+       CT_fert_practice,
+       #T_fert_inorganicN_amount_unit,
+       #T_fert_inorganicP_amount_unit,
+       #T_fert_inorganicK_amount_unit,
+       #T_fert_inorganicP2O5_amount_unit,
+       #T_fert_inorganicK2O_amount_unit,
+       T_fert_subpractice,
+       nutrient_management_subpractice,nutrient_management_practice ,nutrient_management_theme,
+       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
+  filter(!is.na(nutrient_management_practice))%>%
+  filter(is.na(nutrient_management_theme))
+  filter(grepl("fertilizer",practice_compared, ignore.case = TRUE))
+filter(nutrient_management_practice=="C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer")
+sort(unique(prueba$nutrient_management_practice))
+
+
+
+
+
+  
   #Biomass management-----
 select(doi, C_residues_subpractice_raw,T_residues_subpractice_raw,
        C_residues_material,T_residues_material,
@@ -178,37 +214,6 @@ select(doi, C_chem_subpractice,
 
 
 
-  #Nutrient management -----
-
-select(doi, 
-       #C_ph_subpractice,T_ph_subpractice,
-       diversification_spatial_subpractice,
-       C_fert_inorganic_type_amount_unit,
-       #C_fert_inorganicN_amount_unit,
-       #C_fert_inorganicP_amount_unit,
-       #C_fert_inorganicK_amount_unit,
-       #C_fert_inorganicP2O5_amount_unit,
-       #C_fert_inorganicK2O_amount_unit,
-       
-       T_fert_inorganic_type_amount_unit,
-       CT_fert_practice,
-       #T_fert_inorganicN_amount_unit,
-       #T_fert_inorganicP_amount_unit,
-       #T_fert_inorganicK_amount_unit,
-       #T_fert_inorganicP2O5_amount_unit,
-       #T_fert_inorganicK2O_amount_unit,
-       T_fert_subpractice,
-       nutrient_management_subpractice,nutrient_management_practice ,nutrient_management_theme,
-       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
-  filter(!is.na(nutrient_management_subpractice))%>%
-  filter(is.na(nutrient_management_practice))%>%
-  filter(grepl("fertilizer",practice_compared, ignore.case = TRUE))
-filter(nutrient_management_practice=="C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer")
-sort(unique(prueba$nutrient_management_practice))
-
-
-  
-  
   #Water management-----
 select(doi, C_irrig_subpractice,
        water_management_subpractice,water_management_practice ,water_management_theme,
@@ -277,7 +282,7 @@ fomd10.clean <- apply_lookup_commodity_group(
   ref       = fomd01.crops.trees,
   key_col   = "plants",
   value_col = "FAO.Food.Group",
-  src_col   = "C_crop_diversity",
+  src_col   = "C_crop_tree_diversity",
   new_col   = "C_crop_FAO_Food_Group"
 )
 sort(unique(fomd10.clean$C_crop_FAO_Food_Group))
@@ -288,7 +293,7 @@ fomd10.clean <- apply_lookup_commodity_group(
   ref       = fomd01.crops.trees,
   key_col   = "plants",
   value_col = "FAO.Food.Group",
-  src_col   = "T_crop_diversity",
+  src_col   = "T_crop_tree_diversity",
   new_col   = "T_crop_FAO_Food_Group"
 )
 sort(unique(fomd10.clean$T_crop_FAO_Food_Group))
@@ -309,7 +314,7 @@ fomd10.clean <- apply_lookup_commodity_group(
   ref       = fomd01.crops.trees,
   key_col   = "plants",
   value_col = "FAO.Food.SubGroup",
-  src_col   = "C_crop_diversity",
+  src_col   = "C_crop_tree_diversity",
   new_col   = "C_crop_FAO_Food_SubGroup"
 )
 sort(unique(fomd10.clean$C_crop_FAO_Food_SubGroup))
@@ -320,7 +325,7 @@ fomd10.clean <- apply_lookup_commodity_group(
   ref       = fomd01.crops.trees,
   key_col   = "plants",
   value_col = "FAO.Food.SubGroup",
-  src_col   = "T_crop_diversity",
+  src_col   = "T_crop_tree_diversity",
   new_col   = "T_crop_FAO_Food_SubGroup"
 )
 sort(unique(fomd10.clean$T_crop_FAO_Food_SubGroup))
@@ -341,11 +346,11 @@ sort(unique(fomd10.clean$FAO.Food.SubGroup))
 unmatched_crops <- bind_rows(
   fomd10.clean %>% 
     #filter(country=="Ethiopia")%>%
-    select(crop = C_crop_diversity),
+    select(crop = C_crop_tree_diversity),
   fomd10.clean %>%
     #filter(country=="Ethiopia")%>%
     
-    select(crop = T_crop_diversity)
+    select(crop = T_crop_tree_diversity)
 ) %>%
   # Split compound strings into individual tokens
   mutate(crop = str_split(crop, "[-/]")) %>%
@@ -362,94 +367,15 @@ unmatched_crops <- bind_rows(
   arrange(crop)
 
 print(unmatched_crops)
-nrow(unmatched_crops) #107-105-100-99 crops missing Commodity reclassification
+nrow(unmatched_crops) #107-105 crops missing Commodity reclassification
 
 readr::write_csv(fomd10.clean, paste0(path.metadata.effectsize, "/fomd10_clean/fomd10_clean_MD_Rosen_24_Effec_Sc.csv"))
 
 
 
 
-
-
-
-
-
-
-###########################################################
-#NEXT STEPS: Create a column for diversification spatial comparison, diversification temporal comparison and so on...
-# RECLASIFY CROPS AND PRODUCTS...
-
-prueba<-diagnose_CT_missing_practice(fomd10.clean)%>%
-  filter(source_col=="CT_crop_seq_subpractice")
-sort(unique(prueba$source_col))
-sort(unique(prueba$CT_subpractice))
-
-prueba0<-fomd10.clean0%>%
-  #filter(country=="Ethiopia")%>%
-select(doi,
-       #C_crop_diversity,T_crop_diversity, 
-       
-       #C_tree_diversity,T_tree_diversity,
-       CT_intercrop_subpractice,CT_intercrop_practice,
-       CT_intercrop_practicetheme,
-       #CT_crop_seq_subpractice,CT_crop_seq_practice,
-       CT_agrof_subpractice,CT_agrof_practice,
-       
-       "practice_compared","practice_compared_detail", "practice_compared_n")
-  
-    mutate(
-      
-      diversitication_spatial= case_when(
-        C_intercrop_subpractice !=T_intercrop_subpractice~paste0("Intercroppin: ",CT_intercrop_practice),TRUE~NA))%>%
-  
-  select(C_intercrop_subpractice,T_intercrop_subpractice,CT_intercrop_practice,diversitication_spatial)
-        
-        paste0("Intercroppin: ",CT_intercrop_practice,"Agroforestry: ",CT_agrof_practice),
-      
-      diversitication_spatial=case_when(
-      C_intercrop_practice ==T_intercrop_practice~""
-    )
-  )
-  
-  
-  #filter(str_detect(CT_intercrop_practice, "Agroforestry"))%>%
-  #filter(CT_intercrop_practice=="C: Crop Rotation (N fixing mixed)_vs_T: Crop Rotation (N fixing mixed)")
-  
-  select(doi,
-         #C_crop_diversity,T_crop_diversity, 
-         
-         #C_tree_diversity,T_tree_diversity,
-         CT_intercrop_subpractice,CT_intercrop_practice,
-         CT_crop_seq_subpractice,CT_crop_seq_practice,
-         CT_agrof_subpractice,CT_agrof_practice,
-         
-         "practice_compared","practice_compared_detail", "practice_compared_n")
-sort(unique(prueba0$doi))
-
-
-
-sort(unique(fomd10.clean$C_intercrop_subpractice))
-
-# Get the CT_ subpractice column names
-ct_cols <- grep("^CT_.*_subpractice$", names(prueba), value = TRUE)
-
-# Check if any row has NA in ALL CT_ subpractice columns
-all_na_rows <- prueba %>%
-  filter(if_all(all_of(ct_cols), is.na))
-
-# View the count and the rows
-nrow(all_na_rows)#35798-32259-32730-32645
-all_na_rows
-
-
-
-
-################
-
-
-
 subpractice.list<-c(
-  "tillage_subpractice", #soil_management_practice
+  "tillage_subpractice", #soil_management_practice READY
   "planting_subpractice", #planting_practice
   "varietal_crop_subpractice", #improved crop varieties: practice
   "varietal_animal_subpractice", #improved breeds: practice
@@ -467,104 +393,7 @@ subpractice.list<-c(
   
 )
 
-split_subpractice <- function(x) {
-  if (is.na(x) || x == "") return(character(0))
-  
-  parts <- str_split(x, "-", simplify = FALSE)[[1]] %>%
-    str_trim()
-  
-  parts <- parts[parts != ""]
-  
-  unique(parts)
-}
-
-fomd10.subpractice.clean <- fomd10.comparison
-
-fomd10.subpractice.clean$T_subpractice <- apply(fomd10.subpractice.clean, 1, function(x) {
-  out <- c()
-  
-  for (col in subpractice.list) {
-    c_val <- x[[paste0("C_", col)]]
-    t_val <- x[[paste0("T_", col)]]
-    
-    # skip this practice if one side is missing
-    if (is.na(c_val) || is.na(t_val)) next
-    
-    c_parts <- split_subpractice(c_val)
-    t_parts <- split_subpractice(t_val)
-    
-    t_diff <- setdiff(t_parts, c_parts)
-    
-    if (length(t_diff) > 0) {
-      out <- c(out, t_diff)
-    }
-  }
-  
-  out <- unique(out)
-  
-  if (length(out) == 0) NA_character_ else paste(out, collapse = " - ")
-})
-
-fomd10.subpractice.clean$C_subpractice <- apply(fomd10.subpractice.clean, 1, function(x) {
-  out <- c()
-  
-  for (col in subpractice.list) {
-    c_val <- x[[paste0("C_", col)]]
-    t_val <- x[[paste0("T_", col)]]
-    
-    # skip this practice if one side is missing
-    if (is.na(c_val) || is.na(t_val)) next
-    
-    c_parts <- split_subpractice(c_val)
-    t_parts <- split_subpractice(t_val)
-    
-    c_diff <- setdiff(c_parts, t_parts)
-    
-    if (length(c_diff) > 0) {
-      out <- c(out, c_diff)
-    }
-  }
-  
-  out <- unique(out)
-  
-  if (length(out) == 0) NA_character_ else paste(out, collapse = " - ")
-})
-
-subpractice.clean.pairs <- fomd10.subpractice.clean %>%
-  distinct(study_id, C_subpractice, T_subpractice) %>%
-  arrange(C_subpractice, T_subpractice)
-
-#==========================================================
-# Clean practice_type practice_subtype practice_
-#==========================================================
-library(tibble)
-library(purrr)
-
-#--- lookup vector:  values = practice_subtype
-lookup.practice.subtype <- fomd01.practices %>%
-  transmute(
-    subpractice = str_squish(subpractice),
-    practice_subtype    = str_squish(practice_subtype)
-  ) %>%
-  distinct() %>%
-  deframe()
 
 
-fomd10.practice.clean <- fomd10.subpractice.clean %>%
 
-  #---practice_subtype
-  mutate(practice_subtype = map_chr(str_split(str_squish(T_subpractice), "-"), \(x) {
-    out <- unname(lookup.practice.subtype[str_squish(x)])
-    # if something didn't match, keep the original token (change to NA if you prefer)
-    out[is.na(out)] <- str_squish(x)[is.na(out)]
-    paste(out, collapse = "-")
-  }))
-
-sort(unique(fomd10.practice.clean$practice_subtype))
-
-practice.subtype.clean.pairs <- fomd10.practice.clean %>%
-  distinct(study_id, C_subpractice, T_subpractice,practice_subtype) %>%
-  arrange(C_subpractice, T_subpractice,practice_subtype)
-
-readr::write_csv(fomd10.practice.clean, paste0(path.metadata.effectsize, "/fomd10_comparison_clean.csv"))
 

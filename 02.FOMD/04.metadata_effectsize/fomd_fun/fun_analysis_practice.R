@@ -57,17 +57,17 @@
 # Domain order within each group determines label order when multiple domains
 # are active (first listed = first in the merged label)
 .DOMAIN_GROUPS <- list(
-  varietal_crop= c ("varietal_crop"),
+  variety_management= c ("varietal_crop"),
   breed_animal = c ("varietal_animal"),
+  planting_management      = c("planting"),
   diversification_spatial  = c("agrof", "intercrop"),
   diversification_temporal = c("crop_seq"),
   soil_management          = c("tillage", "ph"),
   nutrient_management      = c("fert"),
   pest_management          = c("chem"),
   water_management         = c("irrig", "watharv"),
-  variety_management       = c("varietal_crop"),
-  biomass_management       = c("residues"),   # pending split decision
-  planting_management      = c("planting")
+  biomass_management       = c("residues")   # pending split decision
+  
 )
 
 .LEVELS <- c(
@@ -77,9 +77,14 @@
 )
 
 .FOCAL_GROUPS <- c(
-  "diversification_spatial", "diversification_temporal",
-  "soil_management", "nutrient_management", "pest_management",
-  "water_management", "biomass_management"
+  
+  "diversification_spatial", 
+  "diversification_temporal",
+  "soil_management", 
+  "nutrient_management",
+  "pest_management",
+  "water_management",
+  "biomass_management"
 )
 
 

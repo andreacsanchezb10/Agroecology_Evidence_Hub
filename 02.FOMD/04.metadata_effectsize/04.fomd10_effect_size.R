@@ -25,8 +25,6 @@ source(file.path(path.metadata.effectsize,"/fomd_fun/fun_lookup_ontologies.R")) 
 #---10_FOMD_clean
 fomd10.clean<-read_csv(file.path(path.metadata.effectsize,"/fomd10_clean/fomd10_clean_MD_Rosen_24_Effec_Sc.csv"), show_col_types = FALSE)
   
-
-
 #==========================================================
 # Calculate Mean and Standard deviation 
 #==========================================================
@@ -85,8 +83,8 @@ fomd10.effect.size <- apply_lookup_ontologies(
 x<-fomd10.effect.size %>%
   #select(doi,out_subindicator, out_effect_size) 
   distinct(out_subindicator, effect_size_type)%>%
-  arrange(effect_size_type)
-  #filter(is.na(effect_size_type)) #93 out_subindicator with effect_size_type==NA
+  arrange(effect_size_type)%>%
+  filter(is.na(effect_size_type)) #93-73 out_subindicator with effect_size_type==NA
 
 
 #==========================================================

@@ -29,8 +29,9 @@ library(dplyr)
 # --- 1. TIDY: pivot proportions to long format, deduplicate ---
 
 impacts<- c("Costs",
-                  "Income",
-                  "Yield", 
+            "Income",
+            "Efficiency",
+            "Yield", 
                   "Soil Quality")
 
 df <- raw_diversification %>%
@@ -78,7 +79,9 @@ ggplot(df, aes(x = 2, y = proportion, fill = outcome)) +
   #          switch = "both") +             # labels on left & bottom
   facet_grid2(
     rows = vars(CT_crop_FAO_Food_Group_label,
-                practice),
+                practice#,
+                #nutrient_management
+                ),
     cols = vars(impact),   # two variables on columns side
     switch = "both",
     drop   = TRUE,                   # skip empty combos → no gaps
@@ -96,7 +99,8 @@ ggplot(df, aes(x = 2, y = proportion, fill = outcome)) +
   geom_text(
     data = distinct(df, 
                     CT_crop_FAO_Food_Group_label,
-                    practice, impact, n),
+                    practice, #nutrient_management,
+                    impact, n),
     aes(x = 0.5, y = 0, label = n),
     inherit.aes = FALSE,
     size = 5, fontface = "bold", colour = "#333333"
