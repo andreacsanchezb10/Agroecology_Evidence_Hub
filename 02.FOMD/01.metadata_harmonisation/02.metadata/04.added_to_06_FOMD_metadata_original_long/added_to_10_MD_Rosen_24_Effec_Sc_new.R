@@ -420,7 +420,7 @@ unique_crops_diversity <- rbind(
                str_trim())) %>%
   distinct(crop_tree_diversity) %>%
   arrange(crop_tree_diversity)%>%
-  left_join(fomd01.trees.crops,
+  left_join(fomd01.crops.trees,
             
             by="crop_tree_diversity")%>%
   filter(is.na(type)) 

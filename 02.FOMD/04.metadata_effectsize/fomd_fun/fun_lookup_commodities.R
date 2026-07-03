@@ -8,32 +8,31 @@ local({
          local = environment())
 
 
-fomd01.crops.trees<-plants<-rbind(
-(
-  fomd01.product.new%>%
-  
-  distinct(Product.Simple,SPAM.Food.Group,FAO.Food.SubGroup,FAO.Food.Group)%>%
-  rename("plants"="Product.Simple")%>%
-  filter(!is.na(FAO.Food.SubGroup))%>%
-    filter(!is.na(plants))
+fomd01.crops.trees<-rbind(
+  (fomd01.product.new%>%
+     filter(!is.na(Product.Simple))%>%
+     distinct(Product.Simple,SPAM.Food.Group,FAO.Food.SubGroup,FAO.Food.Group)%>%
+    rename("crop_tree_diversity"="Product.Simple")%>%
+    filter(!is.na(FAO.Food.Group))%>%
+    filter(!is.na(crop_tree_diversity))
   ),
-(fomd01.vars.crops%>%
+  (fomd01.vars.crops%>%
   distinct(V.Product,SPAM.Food.Group,FAO.Food.SubGroup,FAO.Food.Group)%>%
-  rename("plants"="V.Product")%>%
-  filter(!is.na(FAO.Food.SubGroup))),
+  rename("crop_tree_diversity"="V.Product")%>%
+  filter(!is.na(FAO.Food.Group))),
 (fomd01.trees%>%select(tree.latin.name,Tree.Nfix,Tree.Legume)%>%
-   rename("plants"="tree.latin.name",
+   rename("crop_tree_diversity"="tree.latin.name",
           "FAO.Food.SubGroup"= "Tree.Legume",
           "FAO.Food.Group"="Tree.Nfix"
    )%>%
    mutate(FAO.Food.SubGroup=case_when( FAO.Food.SubGroup=="Yes"~"Legume Tree",TRUE~"No Legume Tree"),
-          FAO.Food.Group=case_when(FAO.Food.Group=="Yes"~"No N Fix Tree",TRUE~"No N Fix Tree"),
+          FAO.Food.Group=case_when(FAO.Food.Group=="Yes"~"N Fix Tree",TRUE~"No N Fix Tree"),
           SPAM.Food.Group= "Trees")%>%
-   distinct(plants,FAO.Food.SubGroup,FAO.Food.Group,SPAM.Food.Group)
+   distinct(crop_tree_diversity,FAO.Food.SubGroup,FAO.Food.Group,SPAM.Food.Group)
  )
 )%>%
-  distinct(plants,SPAM.Food.Group,FAO.Food.SubGroup,FAO.Food.Group)%>%
-  arrange(plants)
+  distinct(crop_tree_diversity,SPAM.Food.Group,FAO.Food.SubGroup,FAO.Food.Group)%>%
+  arrange(crop_tree_diversity)
 
 
 

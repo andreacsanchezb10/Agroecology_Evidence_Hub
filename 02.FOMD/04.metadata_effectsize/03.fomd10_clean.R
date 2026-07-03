@@ -280,7 +280,7 @@ x<-prueba[grepl("planting", prueba$practice_compared, ignore.case = TRUE), ]
 fomd10.clean <- apply_lookup_commodity_group(
   df        = fomd10.clean,
   ref       = fomd01.crops.trees,
-  key_col   = "plants",
+  key_col   = "crop_tree_diversity",
   value_col = "FAO.Food.Group",
   src_col   = "C_crop_tree_diversity",
   new_col   = "C_crop_FAO_Food_Group"
@@ -291,7 +291,7 @@ sort(unique(fomd10.clean$C_crop_FAO_Food_Group))
 fomd10.clean <- apply_lookup_commodity_group(
   df        = fomd10.clean,
   ref       = fomd01.crops.trees,
-  key_col   = "plants",
+  key_col   = "crop_tree_diversity",
   value_col = "FAO.Food.Group",
   src_col   = "T_crop_tree_diversity",
   new_col   = "T_crop_FAO_Food_Group"
@@ -312,7 +312,7 @@ sort(unique(fomd10.clean$CT_crop_FAO_Food_Group))
 fomd10.clean <- apply_lookup_commodity_group(
   df        = fomd10.clean,
   ref       = fomd01.crops.trees,
-  key_col   = "plants",
+  key_col   = "crop_tree_diversity",
   value_col = "FAO.Food.SubGroup",
   src_col   = "C_crop_tree_diversity",
   new_col   = "C_crop_FAO_Food_SubGroup"
@@ -323,22 +323,22 @@ sort(unique(fomd10.clean$C_crop_FAO_Food_SubGroup))
 fomd10.clean <- apply_lookup_commodity_group(
   df        = fomd10.clean,
   ref       = fomd01.crops.trees,
-  key_col   = "plants",
+  key_col   = "crop_tree_diversity",
   value_col = "FAO.Food.SubGroup",
   src_col   = "T_crop_tree_diversity",
   new_col   = "T_crop_FAO_Food_SubGroup"
 )
 sort(unique(fomd10.clean$T_crop_FAO_Food_SubGroup))
 
-#--- Get the FAO.Food.SubGroup that are common in the C and T practices
+#--- Get the CT_crop_FAO_Food_SubGroup that are common in the C and T practices
 fomd10.clean <- apply_CT_commodity_group_intersection(
   df      = fomd10.clean,
   col_C   = "C_crop_FAO_Food_SubGroup",
   col_T   = "T_crop_FAO_Food_SubGroup",
-  new_col = "FAO.Food.SubGroup"
+  new_col = "CT_crop_FAO_Food_SubGroup"
 )
 
-sort(unique(fomd10.clean$FAO.Food.SubGroup))
+sort(unique(fomd10.clean$CT_crop_FAO_Food_SubGroup))
 
 # ============================================================
 # Get all unique individual crop commodity from both columns
@@ -360,14 +360,14 @@ unmatched_crops <- bind_rows(
   distinct(crop) %>%
   # Left join to the reference to find what's missing
   left_join(
-    fomd01.crops.trees %>% select(plants, FAO.Food.Group),
-    by = c("crop" = "plants")
+    fomd01.crops.trees %>% select(crop_tree_diversity, FAO.Food.Group),
+    by = c("crop" = "crop_tree_diversity")
   ) %>%
   filter(is.na(FAO.Food.Group)) %>%
   arrange(crop)
 
 print(unmatched_crops)
-nrow(unmatched_crops) #107-105 crops missing Commodity reclassification
+nrow(unmatched_crops) #107-105-97 crops missing Commodity reclassification
 
 readr::write_csv(fomd10.clean, paste0(path.metadata.effectsize, "/fomd10_clean/fomd10_clean_MD_Rosen_24_Effec_Sc.csv"))
 
