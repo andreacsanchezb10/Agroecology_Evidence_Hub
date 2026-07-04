@@ -237,9 +237,12 @@ length(unique(fomd10.cfra$study_id)) #321
 
 nrow(fomd10.cfra) #33848
 
+length(unique(fomd10.cfra$study_id[fomd10.cfra$country=="Ethiopia"])) #186
+
+
 #==========================================================
 #--- Report DEEP-DIVE COUNTRIES:
-#--- ETHIOPIA, KENYA, ZAMBIA
+#--- ETHIOPIA - CEREALS
 #==========================================================
 sort(unique(fomd10.cfra$water_management_subpractice))
 sort(unique(fomd10.cfra$biomass_management_subpractice))

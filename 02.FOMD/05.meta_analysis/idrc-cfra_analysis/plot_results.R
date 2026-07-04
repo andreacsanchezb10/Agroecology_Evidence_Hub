@@ -30,6 +30,7 @@ library(forcats)
 
 # ---- 0. Load data -----------------------------------------------------------
 path.metadata.effectsize<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/04.metadata_effectsize"
+path.metaanalysis<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/05.meta_analysis/idrc-cfra_analysis"
 
 raw <- read.csv(file.path(path.metadata.effectsize, "/cereals_effects_eth.csv"), stringsAsFactors = FALSE, check.names = TRUE)
 
@@ -178,25 +179,20 @@ practice_group <- tribble(
 # summary (e.g. rare categories like Pest & Pathogen, Emissions, Biodiversity
 # with very few observations for this crop group) - add them back in if your
 # audience wants them and there's enough data to support a claim.
-
 metric_map <- tribble(
-  ~impact,          ~metric,
-  "Product Yield",  "Yield",
-  "Efficiency",     "Efficiency",
-  "Labour",         "Labour",
+  ~impact,                ~metric,          ~invert_good,
+  "Product Yield",        "Yield",          FALSE,
+  "Efficiency",           "Efficiency",     FALSE,
+  "Labour",               "Labour",         FALSE,  # <- check this: less labour is usually the goal
   
-  "Costs",          "Costs",
-  "Income",         "Income",
-  "Economic Performance","Profitability",
+  "Costs",                "Costs",          TRUE,   # lower cost = good
+  "Income",                "Income",         FALSE,
+  "Economic Performance", "Profitability",  FALSE,
   
-  "Soil Quality",   "Soil health",
-  #"Carbon stocks", "Carbon stocks", 
-  "Emissions", "GHG emissions",
-  #"Biodiversity","Biodiversity"
-  
-  
-  
- 
+  "Soil Quality",         "Soil health",    FALSE,
+  #"Carbon stocks",       "Carbon stocks",  FALSE,  # <- probably TRUE if you re-enable it
+  "Emissions",            "GHG emissions",  TRUE   # lower emissions = good
+  #"Biodiversity",        "Biodiversity",   FALSE
 )
 
 # ---- 4. Join, flip direction, aggregate (n-weighted) -------------------------
@@ -208,12 +204,13 @@ agg <- single %>%
     control_display   = if_else(flip, t_val, c_val),
     treatment_display = if_else(flip, c_val, t_val),
     pos_adj           = if_else(flip, neg, pos),
-    # merge "grazed" into "removed" for display/grouping purposes -
-    # add more relabels here as needed
+    # NEW: for metrics where an increase is undesirable (Costs, GHG
+    # emissions, etc.), flip pos_adj so it always means "% of comparisons
+    # in the DESIRABLE direction" — consistent with Yield/Income/etc.
+    pos_adj           = if_else(invert_good, 1 - pos_adj, pos_adj),
     control_display   = recode(control_display,"Crop residues grazed" = "Residues removed"),
     control_display   = recode(control_display,"Crop residues removed" = "Residues removed")
-    
-  )%>%
+  ) %>%
   group_by(group, control_display, practice, metric)%>%
   summarise(
     weighted_pos = sum(pos_adj * n) / sum(n),
@@ -228,15 +225,21 @@ agg <- single %>%
 agg <- agg %>%
   mutate(
     category = case_when(
-      weighted_pos >= 0.65 & total_n >= 100 ~ "Strong positive", # >=65%, well-supported -> dark green
-      weighted_pos >= 0.65                  ~ "Positive",         # >=65%, thin evidence   -> light green
-      weighted_pos >= 0.45                  ~ "Mixed",
-      weighted_pos >= 0.25                  ~ "Negative",         # <=45%, thin or strong  -> light red
-      total_n >= 100                        ~ "Strong negative",  # <25%, well-supported   -> dark red
-      TRUE                                  ~ "Negative"          # <25%, thin evidence    -> light red
+      weighted_pos >= 0.65 & total_n >= 100 ~ "Strong positive",  # >=65% positive, n>=100
+      weighted_pos >= 0.65                  ~ "Positive",         # >=65% positive, n<100
+      weighted_pos > 0.35 & total_n >= 100 ~ "Strong neutral",   # 46-64% positive, n>=100
+      weighted_pos > 0.35                  ~ "Neutral",          # 46-64% positive, n<100
+      weighted_pos <= 0.35 & total_n >= 100 ~ "Strong negative",  # >=65% negative, n>=100
+      weighted_pos <= 0.35                  ~ "Negative",         # >=65% negative, n<100
+      
+      
+      total_n >= 100                        ~ "Strong neutral",   # 36-45% positive, n>=100 -> falls back to neutral
+      TRUE                                  ~ "Neutral"           # 36-45% positive, n<100  -> falls back to neutral
     ),
-    low_evidence = k_studies <= 2,
-    label = paste0(round(weighted_pos * 100), "%", if_else(low_evidence, "", ""))
+    pct_shown = if_else(category %in% c("Strong negative", "Negative"),
+                        (1 - weighted_pos) * 100,
+                        weighted_pos * 100),
+    label = paste0(round(pct_shown), "%")
   )
 
 # ---- 6. Order rows/columns for a clean layout --------------------------------
@@ -274,12 +277,12 @@ agg <- all_combos %>%
     label    = if_else(is.na(label), "No data", label),
     n_label  = case_when(
       is.na(total_n)          ~ "",
-      total_n == 1            ~ paste0(total_n, " comparison"),
-      TRUE                    ~ paste0(total_n, " comparisons")
+      total_n == 1            ~ paste0("n= ", total_n),
+      TRUE                    ~ paste0("n= ", total_n)
     )
   )
 
-category_order <- c("Strong negative", "Negative", "Mixed",
+category_order <- c("Strong negative", "Negative", "Neutral", "Strong neutral",
                     "Positive", "Strong positive", "No data")
 
 agg <- agg %>%
@@ -317,38 +320,42 @@ agg <- agg %>%
 
 # ---- 7. Plot ------------------------------------------------------------------
 category_labels <- c(
-  "Strong negative" = "Strong: <25% positive, n\u2265100",
-  "Negative"         = "Other negative (<45%)",
-  "Mixed"            = "Mixed (45-65%)",
-  "Positive"         = "Other positive (\u226565%)",
-  "Strong positive"  = "Strong: \u226565% positive, n\u2265100",
+  "Strong negative" = "Negative (\u226565% negative) \u2013 strong evidence (n\u2265100)",
+  "Negative"         = "Negative (\u226565% negative) \u2013 limited evidence (n<100)",
+  "Strong neutral"   = "Neutral (36-64% positive) \u2013 strong evidence (n\u2265100)",
+  "Neutral"          = "Neutral (36-64% positive) \u2013 limited evidence (n<100)",
+  "Strong positive"  = "Positive (\u226565% positive) \u2013 strong evidence (n\u2265100)",
+  "Positive"         = "Positive (\u226565% positive) \u2013 limited evidence (n<100)",
   "No data"          = "No data"
 )
 fill_colors <- c(
   "Strong positive" = "#556B2F",
   "Positive"         = "#66CD00",
-  "Mixed"            = "grey70",
+  "Strong neutral"   = "grey55",
+  "Neutral"          = "grey85",
   "Negative"         = "#ff99a6",
   "Strong negative"  = "#CD0000",
-  "No data"          = "#EAE7DC"   # distinct light grey, not white/blank
+  "No data"          = "#EAE7DC"
 )
 text_colors <- c(
   "Strong positive" = "white",
   "Positive"         = "#173404",
-  "Mixed"            = "#444441",
-  "Negative"="#444441",
-  
-  "Strong negative"          = "white",
+  "Strong neutral"   = "white",
+  "Neutral"          = "#444441",
+  "Negative"         = "#444441",
+  "Strong negative"  = "white",
   "No data"          = "#A6A08F"
 )
 
 
-p <- ggplot(agg, aes(x = metric, y = practice, fill = category)) +
+
+eth_cereals <- ggplot(agg, aes(x = metric, y = practice, fill = category)) +
   
   
   geom_tile(aes(linetype = category == "No data", alpha = factor(confidence_n)),
-            color = "white", linewidth = 1.5, width = 0.93, height = 0.85) +
-  scale_alpha_manual(values = c(`0` = 1, `1` = 0.5, `2` = 1, `3` = 1), guide = "none")+
+            color = "white", linewidth = 1, width = 0.93, height = 0.85) +
+  scale_alpha_manual(values = c(`0` = 1, `1` = 0.5, `2` = 1, `3` = 1), 
+                     guide = "none")+
 
   
   # emphasized labels: strong positive + high confidence -> bigger + bold
@@ -384,7 +391,8 @@ p <- ggplot(agg, aes(x = metric, y = practice, fill = category)) +
   # "category == 'No data'  FALSE / TRUE" legend chip in your last version -
   # it's ggplot's default legend for a boolean aesthetic, not a bug in the
   # data. Hiding it removes that debug-looking artifact from the slide.
-  guides(linetype = "none") +
+  guides(linetype = "none",
+         fill = guide_legend(nrow = 1, byrow = TRUE)) +
   
   scale_x_discrete(position = "top") +
   facet_grid(group ~ ., scales = "free_y", space = "free_y", switch = "y") +
@@ -397,76 +405,22 @@ p <- ggplot(agg, aes(x = metric, y = practice, fill = category)) +
   ) +
   theme_minimal(base_size = 13) +
   theme(
-    legend.position = "top",
+    legend.position = "bottom",
     panel.grid = element_blank(),
     axis.text.x = element_text(face = "bold", size = 11),
     axis.text.y = element_text(size = 11, hjust = 1),
     axis.ticks = element_blank(),
     strip.placement = "outside",
     strip.text.y.left = element_text(angle = 0, face = "bold", size = 10, hjust = 1),
-    plot.title = element_text(face = "bold", size = 15),
-    plot.subtitle = element_text(size = 10, color = "grey35"),
-    plot.caption = element_text(size = 8, color = "grey50"),
     plot.background = element_rect(fill = "#faf9f6", color = NA),
     panel.background = element_rect(fill = "#faf9f6", color = NA),
     plot.margin = margin(20, 25, 20, 10),
     legend.text = element_text(size = 9)
   )
 
-print(p)
+print(eth_cereals)
 
-p <- ggplot(agg, aes(x = metric, y = practice, fill = category)) +
-  geom_tile(aes(linetype = category == "No data"),
-            color = "white", linewidth = 1.5, width = 0.93, height = 0.85) +
-  # emphasized labels: strong positive + high confidence -> bigger + bold
-  geom_text(data = subset(agg, emphasis),
-            aes(label = label, color = category),
-            vjust = -0.55, size = 5, fontface = "bold") +
-  # normal labels: everything else with data, not emphasized
-  geom_text(data = subset(agg, category != "No data" & !emphasis),
-            aes(label = label, color = category),
-            vjust = -0.55, size = 4, fontface = "plain") +
-  # "No data" labels - smallest, not bold
-  geom_text(data = subset(agg, category == "No data"),
-            aes(label = label, color = category),
-            vjust = -0.55, size = 3.2, fontface = "plain") +
-  geom_text(aes(label = n_label, color = category),
-            vjust = 1.1, size = 2.8) +
-  scale_fill_manual(values = fill_colors, name = NULL) +
-  scale_color_manual(values = text_colors, guide = "none") +
-  scale_x_discrete(position = "top") +
-  facet_grid(group ~ ., scales = "free_y", space = "free_y", switch = "y") +
-  labs(
-    x = NULL, y = NULL,
-    #title = "Effects of sustainable cereal practices on farm outcomes",
-    #subtitle = "% of comparisons finding a beneficial effect, weighted by sample size.\n* = based on only 1-2 independent comparisons - indicative, not conclusive.",
-    #caption = "Source: cereals_effects.csv. Confounded (multi-practice) comparisons excluded; single-practice comparisons only."
-  ) +
-  theme_minimal(base_size = 13) +
-  theme(
-    legend.position = "top",
-    panel.grid = element_blank(),
-    axis.text.x = element_text(face = "bold", size = 11),
-    axis.text.y = element_text(size = 11, hjust = 1),
-    axis.ticks = element_blank(),
-    strip.placement = "outside",
-    strip.text.y.left = element_text(angle = 0, face = "bold", size = 10, hjust = 1),
-    plot.title = element_text(face = "bold", size = 15),
-    plot.subtitle = element_text(size = 10, color = "grey35"),
-    plot.caption = element_text(size = 8, color = "grey50"),
-    plot.background = element_rect(fill = "#faf9f6", color = NA),
-    panel.background = element_rect(fill = "#faf9f6", color = NA),
-    plot.margin = margin(20, 25, 20, 10),
-    legend.text = element_text(size = 9)   # was 12 in the slide version — try smaller
-  
-  )
-
-print(p)
+ggsave(paste0(path.metaanalysis,"/eth_cereals_heatmap.pdf"), plot = eth_cereals,
+       width = 20, height = 15, dpi = 300, bg = "white")
 
 
-ggsave(paste0(path.metadata.effectsize, "/cereals_practice_heatmap.pdf"), p, width = 15, height = 25, dpi = 300, bg = "#faf9f6")
-
-# ---- 8. Also export the underlying numbers, for a companion table -----------
-write.csv(agg %>% arrange(group, practice, metric) %>%
-            select(group, practice, metric, weighted_pos, total_n, k_studies, category),
-          "cereals_practice_heatmap_data.csv", row.names = FALSE)
