@@ -11,6 +11,8 @@ library(rnaturalearthhires)
 library(ggnewscale)
 library(treemapify)
 library(forcats)
+library(terra)
+
 path.metaanalysis<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/05.meta_analysis/idrc-cfra_analysis"
 
 #============================================================
@@ -19,13 +21,11 @@ path.metaanalysis<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecolog
 # ============================================================
 #--- 1. Report n_rows and n_studies per country -----
 country.studies<-fomd10.cfra %>%
-  group_by(country) %>%#,out_pillar) %>%
+  group_by(country) %>%
   summarise(
     n_effect_sizes     = n(),
-    n_studies  = n_distinct(study_id)
-  ) %>%
-  arrange(desc(n_effect_sizes))%>%
-  mutate(country=if_else(country=="Tanzania","United Republic of Tanzania",country))
+    n_studies  = n_distinct(study_id)) %>%
+  arrange(desc(n_effect_sizes))
 
 # ---- 2. Helper: parse "a..b..c" coordinate strings into a list of values -------
 parse_coords <- function(coord_str) {
@@ -33,16 +33,31 @@ parse_coords <- function(coord_str) {
 }
 
 # ---- 3. Expand multi-coordinate rows into one row per point --------------------
-expand_sites <- function(df, country_col, lat_col, lon_col, out_pillar,effect_size_direction) {
+expand_sites <- function(df, country_col, lat_col, lon_col           ) {
   df %>%
     select(country = {{ country_col }},
            lat_str = {{ lat_col }},
            lon_str = {{ lon_col }},
-           out_pillar=out_pillar,
-           #effect_size_direction=effect_size_direction
            ) %>%
-    mutate(out_pillar = out_pillar,
-           #effect_size_direction=effect_size_direction,
+    mutate(row_id = row_number()) %>%
+    rowwise() %>%
+    mutate(
+      lats = list(parse_coords(lat_str)),
+      lons = list(parse_coords(lon_str))) %>%
+    ungroup() %>%
+    mutate(coords = map2(lats, lons, ~ tibble(lat = .x, lon = .y))) %>%
+    select(row_id, country,coords) %>%
+    unnest(coords)
+}
+
+effect_size_expand_sites <- function(df, country_col, lat_col, lon_col, effect_size_id) {
+  df %>%
+    select(country = {{ country_col }},
+           lat_str = {{ lat_col }},
+           lon_str = {{ lon_col }},
+           effect_size_id=effect_size_id
+    ) %>%
+    mutate(effect_size_id=effect_size_id,
            row_id = row_number()) %>%
     rowwise() %>%
     mutate(
@@ -51,27 +66,33 @@ expand_sites <- function(df, country_col, lat_col, lon_col, out_pillar,effect_si
     ) %>%
     ungroup() %>%
     mutate(coords = map2(lats, lons, ~ tibble(lat = .x, lon = .y))) %>%
-    select(row_id, country, out_pillar,
-           #effect_size_direction, 
+    select(row_id, country, 
+           effect_size_id, 
            coords) %>%
     unnest(coords)
 }
 
 # ---- 4. Build the unified points table -----------------------------------------
 x <- fomd10.cfra %>%
-  select(C_country, C_site_latitude, C_site_longitude,out_pillar
-         #,effect_size_direction
-         )%>%
+  select(C_country, C_site_latitude, C_site_longitude)%>%
+  distinct(C_country,
+           C_site_latitude,
+           C_site_longitude) 
+
+control_pts  <- expand_sites(x, C_country, C_site_latitude, C_site_longitude)
+
+cfra.sites <- control_pts %>%
+  filter(!is.na(lat), !is.na(lon))
+
+effect_size_x <- fomd10.cfra %>%
+  select(C_country, C_site_latitude, C_site_longitude,effect_size_id)%>%
   distinct(C_country,
            C_site_latitude,
            C_site_longitude,
-           out_pillar#,effect_size_direction
-           ) 
+           effect_size_id  ) 
 
-control_pts  <- expand_sites(x, C_country, C_site_latitude, C_site_longitude, out_pillar#,effect_size_direction
-                             )
-
-cfra.sites <- control_pts %>%
+effect_sizes_control_pts<-effect_size_expand_sites(
+  effect_size_x, C_country, C_site_latitude, C_site_longitude, effect_size_id)%>%
   filter(!is.na(lat), !is.na(lon))
 
 # Find rows where parsing produces NAs
@@ -81,14 +102,12 @@ error<-x %>%
   mutate(
     lats = list(parse_coords(C_site_latitude)),
     lons = list(parse_coords(C_site_longitude)),
-    has_na = any(is.na(lats)) | any(is.na(lons))
-  ) %>%
+    has_na = any(is.na(lats)) | any(is.na(lons))) %>%
   ungroup() %>%
   filter(has_na) %>%
   select(row_id, C_country, C_site_latitude, C_site_longitude)
 
 # --- 5. Load the data and  (EDIT THIS PATH) ---
-
 # Your CSV must have at minimum:
 #   - a longitude column  (decimal degrees, e.g. 15.3)
 #   - a latitude  column  (decimal degrees, e.g. -4.2)
@@ -98,7 +117,6 @@ error<-x %>%
 lon_col  <- "lon"            # <-- change to your longitude column name
 lat_col  <- "lat"             # <-- change to your latitude  column name
 
-#points_df <- read.csv(csv_path, stringsAsFactors = FALSE)
 
 # Convert to sf object (WGS84)
 points_sf <- st_as_sf(cfra.sites,
@@ -106,106 +124,176 @@ points_sf <- st_as_sf(cfra.sites,
                       crs    = 4326,
                       remove = FALSE)
 
-# --- List of countries to highlight ---
-cfra_country_names <- c("Angola",
-                         "Burundi",
-                         "Malawi",
-                         "Rwanda",
-                         "United Republic of Tanzania",
-                         "Uganda")
-
-deepdive_country_names<-c(
-  "Ethiopia",
-  "Kenya",
-  "Zambia")
-
 # Country borders (ADM0)
 africa_countries <- ne_countries(
   continent = "Africa",
   scale     = "medium",       # "large" for more detail (slower)
   returnclass = "sf"
 )
-  
 
-cfra_countries<-africa_countries%>%
-  filter(admin %in% c(cfra_country_names, deepdive_country_names))%>%
-  mutate(highlight = ifelse(admin %in% cfra_country_names, "CFRA-country", "CFRA-deepdive"))%>%
-  left_join(country.studies,by=c("admin"="country"))%>%
-  mutate(n_effect_sizes=if_else(is.na(n_effect_sizes),0,n_effect_sizes),
-         n_studies=if_else(is.na(n_studies),0,n_studies))
+# --- Agroecological zones----
+eth.agr.zn <- rast(paste0(path.metaanalysis,"/GAEZ/GAEZ_AEZ57_ETH.tif"))
+ken.agr.zn <- rast(paste0(path.metaanalysis,"/GAEZ/GAEZ_AEZ57_KEN.tif"))
+zmb.agr.zn <- rast(paste0(path.metaanalysis,"/GAEZ/GAEZ_AEZ57_ZMB.tif"))
+gaez.lookup <- read.csv(paste0(path.metaanalysis,"/GAEZ/GAEZ_57_lookup.csv"),
+                        stringsAsFactors = FALSE)
+names(eth.agr.zn) <- "value"     # standardize the layer name
+names(ken.agr.zn) <- "value"     # standardize the layer name
+names(zmb.agr.zn) <- "value"     # standardize the layer name
+
+# 1. Named list linking each country to its GAEZ raster --------------
+gaez_rasters <- list(
+  #"Ethiopia" = eth.agr.zn#,
+  #"Kenya"    = ken.agr.zn#,
+  "Zambia"   = zmb.agr.zn
+)
+
+# 2. Helper: extract the raster "value" at each site for one country -
+extract_zone_value <- function(country_name, raster, points_df) {
+  pts <- points_df %>% filter(country == country_name)
+  if (nrow(pts) == 0) return(pts %>% mutate(value = numeric(0)))
   
+  pts_vect <- vect(pts, geom = c("lon", "lat"), crs = "EPSG:4326")
   
-# ADM1 – provinces / states
-africa_adm1 <- ne_states(
-  country     = africa_countries$admin,   # all African countries
-  returnclass = "sf"
+  # If the raster's CRS isn't EPSG:4326, reproject the points first:
+  # pts_vect <- project(pts_vect, crs(raster))
+  
+  zone_vals <- terra::extract(raster, pts_vect)
+  pts %>% mutate(value = zone_vals$value)
+}
+
+# 3. Run the extraction for every country and combine -----------------
+effect_sizes_with_zone <- imap_dfr(
+  gaez_rasters,
+  ~ extract_zone_value(.y, .x, effect_sizes_control_pts)
 ) %>%
-  filter(!is.na(geometry))               # drop any empty rows
+  left_join(gaez.lookup, by = "value")
 
-# ---- 5. PLOT CFRA countries ----
-# Optional: colour points by a column in your CSV, e.g. "category"
-# Set colour_col <- NULL to use a single colour for all points.
-colour_col <- "out_pillar"    # e.g. colour_col <- "category"
+# 4. Flag any sites that fell outside a raster (e.g. masked pixels, ---
+#    coastline rounding) instead of silently dropping them
+effect_sizes_with_zone <- effect_sizes_with_zone %>%
+  mutate(label = if_else(is.na(label), "No zone data (outside raster)", label))
 
-plot.cfra.countries<-
-  ggplot() +
-    # Country borders (darker, thicker)
-    geom_sf(data  = africa_countries,
-            fill  = "grey95",
-            colour = "grey60",
-            linewidth = 0.7) +
-    
-    # CFRA country borders (darker, thicker)
-    geom_sf(data  = cfra_countries,
-            aes(fill = n_studies, linewidth = highlight,
-                colour=highlight)) +
-  scale_fill_viridis_c(option = "mako", direction = -1, 
-                       name = "Studies (N)")+
-    
-    
-    scale_linewidth_manual(values = c("CFRA-country" = 0.7,
-                                      "CFRA-deepdive"    = 2))+
-      scale_colour_manual(values = c("CFRA-country" = "darkorange",
-                                     "CFRA-deepdive"="darkorange"))+
+# 5. Count DISTINCT effect sizes per zone ------------------------------
+# An effect size with multiple site coordinates that fall in different
+# zones will be counted once in each zone it touches. If you'd rather
+# assign each effect size to a single zone (e.g. its first site only),
+# filter effect_sizes_control_pts down to one row per effect_size_id
+# before running the extraction in step 3.
+effect_sizes_per_zone <- effect_sizes_with_zone %>%
+  group_by(label) %>%
+  summarise(n_effect_sizes = n_distinct(effect_size_id)) %>%
+  arrange(desc(n_effect_sizes))
+
+# 6. Keep every GAEZ zone in the output, including ones with zero -----
+#    effect sizes, so the full classification stays visible
+effect_sizes_per_zone_full <- gaez.lookup %>%
+  distinct(label) %>%
+  left_join(effect_sizes_per_zone, by = "label") %>%
+  mutate(n_effect_sizes = replace_na(n_effect_sizes, 0)) %>%
+  arrange(desc(n_effect_sizes))%>%
+  mutate(label_n_effect_sizes=paste0(label," (n= ",n_effect_sizes,")"))
+
+eth_poly <- africa_countries %>% filter(admin == "Ethiopia")
+eth.agr.zn <- mask(eth.agr.zn, vect(eth_poly))
+eth_aez_df <- as.data.frame(eth.agr.zn, xy = TRUE, na.rm = TRUE)
+eth_aez_df <- left_join(eth_aez_df, gaez.lookup, by = "value")
+eth_aez_df<-eth_aez_df%>%
+  left_join(effect_sizes_per_zone_full,by="label")
+
+ken_poly <- africa_countries %>% filter(admin == "Kenya")
+ken.agr.zn <- mask(ken.agr.zn, vect(ken_poly))
+ken_aez_df <- as.data.frame(ken.agr.zn, xy = TRUE, na.rm = TRUE)
+ken_aez_df <- left_join(ken_aez_df, gaez.lookup, by = "value")
+ken_aez_df<-ken_aez_df%>%
+  left_join(effect_sizes_per_zone_full,by="label")
+
+zmb_poly <- africa_countries %>% filter(admin == "Zambia")
+zmb.agr.zn <- mask(zmb.agr.zn, vect(zmb_poly))
+zmb_aez_df <- as.data.frame(zmb.agr.zn, xy = TRUE, na.rm = TRUE)
+zmb_aez_df
+zmb_aez_df <- left_join(zmb_aez_df, gaez.lookup, by = "value")
+zmb_aez_df<-zmb_aez_df%>%
+  left_join(effect_sizes_per_zone_full,by="label")
+
+zone_colors <- setNames(gaez.lookup$color, gaez.lookup$label)
+
+
+# ---- 5. PLOT deep dive countries - Agroecological zones ----
+# Build a lookup: plain label -> "label (n)" text
+# Zones actually present in Ethiopia's raster, ordered by effect size count
+zone_order <- #eth_aez_df %>% #Ethiopia
+  #ken_aez_df %>% #Kenya
+  zmb_aez_df %>% #Zambia
+  distinct(label, n_effect_sizes) %>%
+  arrange(desc(n_effect_sizes)) %>%
+  pull(label)
+
+# Build the "label (n)" lookup, then force it into the same order as zone_order
+label_map <- #eth_aez_df %>% #Ethiopia
+  #ken_aez_df %>% #Kenya
+  zmb_aez_df %>% #Zambia
   
-    new_scale_colour() +
-    geom_sf(data = points_sf,
-            shape = 21,            # shape 21 = circle with separate fill + outline
-                fill = "white",
-                colour = "grey30",
-                size = 2,
-                stroke = 0.5,
-                alpha = 0.6)+
-  # Coordinate limits (full Africa bounding box)
-  coord_sf(xlim = c(-20, 55), ylim = c(-36, 38), expand = FALSE,
-           label_graticule = "") +
+  distinct(label, label_n_effect_sizes) %>%
+  tibble::deframe()
+
+label_map <- label_map[zone_order]   # now same length and order as breaks
+
+plot.agr.zn<-
+ggplot() +
+  #geom_raster(data = eth_aez_df, aes(x = x, y = y, fill = label)) +
+  #geom_raster(data = ken_aez_df, aes(x = x, y = y, fill = label)) +
+  geom_raster(data = zmb_aez_df, aes(x = x, y = y, fill = label)) +
   
-  # Theme
+  scale_fill_manual(
+    values = zone_colors,
+    labels = label_map,
+    breaks = zone_order,
+    name   = "Agroecological zones"
+  ) +  
+  geom_sf(
+    #data = eth_poly,
+    #data = ken_poly,
+    data = zmb_poly,
+          fill = NA, colour = "grey20", linewidth = 0.7) +
+  
+  geom_sf(data = points_sf %>% filter(
+    #country == "Ethiopia"
+    #country == "Kenya"
+    country == "Zambia"
+    
+    ),
+          shape = 21, fill = "black", colour = "grey30",
+          size = 5, stroke = 0.5, alpha = 1) +
+  
+  coord_sf() +
+  guides(fill = guide_legend(ncol = 1)) +
+  
   theme_minimal(base_size = 12) +
   theme(
-    panel.background = element_rect(fill = "White", colour = NA), # ocean
-    panel.grid       = element_line(colour = "White", linewidth = 0.2),
-    axis.title       = element_blank(),
-    legend.position  = "right"
-  ) 
+    panel.background = element_rect(fill = "white", colour = NA),
+    panel.grid        = element_line(colour = "white", linewidth = 0.2),
+    axis.title        = element_blank(),
+    legend.position   = "right",
+    axis.text         = element_blank()
+  )
 
-print(plot.cfra.countries)
-
+print(plot.agr.zn)
 # ---- 6. Save to file ----
-output_file <- paste0(path.metaanalysis,"/plot.cfra.countries.pdf")   # change extension to .pdf / .svg if needed
 
-ggsave(paste0(path.metaanalysis,"/plot.cfra.countries.pdf"), plot = plot.cfra.countries,
-       width = 10, height = 11, dpi = 300, bg = "white")
+ggsave(paste0(path.metaanalysis,"/plot.zmb.agr.zn.pdf"), plot = plot.agr.zn,
+       width = 20, height = 10, dpi = 300, bg = "white")
 
-message("Map saved to: ", normalizePath(output_file))
 
-names(africa_countries)
 
 # ============================================================
 # --- OUTCOMES PILLAR AND SUBINDICATOR ---
 # ============================================================
 # ---- 1. Summarize: count effect sizes per indicator, within each pillar ----
 cfra.indicator <- fomd10.cfra %>%
+  filter(country=="Ethiopia")%>%
+  #filter(country=="Kenya")%>%
+  #filter(country=="Zambia")%>%
   filter(!is.na(out_pillar), !is.na(out_indicator)) %>%
   count(out_pillar, out_indicator, name = "n_comparisons") %>%
   rename(group = out_pillar, indicator = out_indicator)%>%
@@ -303,16 +391,15 @@ plot.cfra.indicators<-ggplot(cfra.indicator,
   geom_col(width = 0.7)+
   geom_text(aes(label = label), hjust = -0.1, size = 3.2, colour = "#374151") +
   scale_fill_manual(values = colors) +
-  scale_x_continuous(expand = expansion(mult = c(0, 0.25))) +
-  base_theme 
-  theme(axis.text.x = element_blank())+
+  scale_x_continuous(limits = c(0, 10000), expand = expansion(mult = c(0, 0.25)))+
+  
+  base_theme +
+  theme(axis.text.x = element_blank())
 print(plot.cfra.indicators)
-
-
 
 # ---- 7. Save to file ----
 
-ggsave(paste0(path.metaanalysis,"/plot.cfra.indicators2.pdf"), plot = plot.cfra.indicators,
+ggsave(paste0(path.metaanalysis,"/plot.eth.indicators.pdf"), plot = plot.cfra.indicators,
        width = 6, height = 9, dpi = 300, bg = "white")
 
 # ============================================================
@@ -570,7 +657,7 @@ ggsave(paste0(path.metaanalysis,"/plot.zam.practices.pdf"), plot = plot.cfra.pra
 # ------------------------------------------------------------------
 #CT_crop_FAO_Food_Group<- c("Cereals")
 
-# --- 1. TIDY: pivot proportions to long format, deduplicate ---
+# --- 1. TIDY: pivot proportions to long format, deduplicate ----
 
 impacts<- c("Costs",
             "Income",
@@ -716,7 +803,7 @@ ggplot() +
 
 print(cfra.countries)
 
-# --- 5. Save to file ---
+# --- 5. Save to file ----
 output_file <- "cfra_countries.png"   # change extension to .pdf / .svg if needed
 
 ggsave("cfra_countries.png", plot = p,
@@ -859,13 +946,39 @@ parse_coords <- function(coord_str) {
 }
 
 # --- 3. Expand multi-coordinate rows into one row per point --------------------
-expand_sites <- function(df, country_col, lat_col, lon_col, out_pillar,effect_size_direction) {
+expand_sites <- function(df, country_col, lat_col, lon_col#, out_pillar,effect_size_id
+                         ) {
+  df %>%
+    select(country = {{ country_col }},
+           lat_str = {{ lat_col }},
+           lon_str = {{ lon_col }},
+           out_pillar=out_pillar#,
+           #effect_size_id=effect_size_id
+           ) %>%
+    mutate(out_pillar = out_pillar,
+           #effect_size_direction=effect_size_direction,
+           row_id = row_number()) %>%
+    rowwise() %>%
+    mutate(
+      lats = list(parse_coords(lat_str)),
+      lons = list(parse_coords(lon_str))
+    ) %>%
+    ungroup() %>%
+    mutate(coords = map2(lats, lons, ~ tibble(lat = .x, lon = .y))) %>%
+    select(row_id, country, out_pillar,#effect_size_id, 
+           coords) %>%
+    unnest(coords)
+}
+
+effect_size_expand_sites <- function(df, country_col, lat_col, lon_col, out_pillar,effect_size_id
+) {
   df %>%
     select(country = {{ country_col }},
            lat_str = {{ lat_col }},
            lon_str = {{ lon_col }},
            out_pillar=out_pillar,
-           effect_size_direction=effect_size_direction) %>%
+           effect_size_id=effect_size_id
+    ) %>%
     mutate(out_pillar = out_pillar,
            effect_size_direction=effect_size_direction,
            row_id = row_number()) %>%
@@ -876,7 +989,8 @@ expand_sites <- function(df, country_col, lat_col, lon_col, out_pillar,effect_si
     ) %>%
     ungroup() %>%
     mutate(coords = map2(lats, lons, ~ tibble(lat = .x, lon = .y))) %>%
-    select(row_id, country, out_pillar,effect_size_direction, coords) %>%
+    select(row_id, country, out_pillar,effect_size_id, 
+           coords) %>%
     unnest(coords)
 }
 
