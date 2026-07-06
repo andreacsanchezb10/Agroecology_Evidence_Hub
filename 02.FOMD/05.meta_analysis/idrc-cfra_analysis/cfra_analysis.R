@@ -41,13 +41,11 @@ cfra.country.names<-c(
   #"Uganda",
   "Zambia")
 
-#pattern.countries <- paste(cfra.countries, collapse = "|")
 
 # Filter rows where country contains any of the target countries
 fomd10.cfra <- fomd10.effect.size %>%
   filter(country %in% cfra.country.names)
   
-  #filter(grepl(pattern.countries, country, ignore.case = TRUE))
 
 sort(unique(fomd10.cfra$country))
 sort(unique(fomd10.cfra$C_site_latitude))
@@ -227,7 +225,6 @@ fomd10.cfra <- fomd10.cfra %>%
     })
   )
   
-  filter(!is.na(active_groups))
 
 # Reclassify themes, practices and subpractices
 sort(unique(fomd10.cfra$diversification_spatial_subpractice))
@@ -237,10 +234,18 @@ length(unique(fomd10.cfra$study_id)) #321
 
 nrow(fomd10.cfra) #33848
 
-length(unique(fomd10.cfra$study_id[fomd10.cfra$country=="Ethiopia"])) #186
-length(unique(fomd10.cfra$study_id[fomd10.cfra$country=="Kenya"])) #112
-length(unique(fomd10.cfra$study_id[fomd10.cfra$country=="Zambia"])) #112
+length(unique(fomd10.cfra$study_id[fomd10.cfra$country=="Ethiopia"])) #186 studies
+length(unique(fomd10.cfra$study_id[fomd10.cfra$country=="Kenya"])) #112 studies
+length(unique(fomd10.cfra$study_id[fomd10.cfra$country=="Zambia"])) #25 studies
 
+
+length(unique(fomd10.cfra$effect_size_id[fomd10.cfra$country=="Ethiopia"])) #14397 studies
+length(unique(fomd10.cfra$effect_size_id[fomd10.cfra$country=="Kenya"])) #17787 studies
+length(unique(fomd10.cfra$effect_size_id[fomd10.cfra$country=="Zambia"])) #1664 studies
+
+sort(unique(fomd10.cfra$year[fomd10.cfra$country=="Ethiopia"])) #186 studies
+sort(unique(fomd10.cfra$year[fomd10.cfra$country=="Kenya"])) #112 studies
+sort(unique(fomd10.cfra$year[fomd10.cfra$country=="Zambia"])) #25 studies
 
 #==========================================================
 #--- Report DEEP-DIVE COUNTRIES:
@@ -306,7 +311,6 @@ cereals.df1<-cereals.df%>%
  
 sort(unique(cereals.df1$diversification_spatial_temporal_practice))
 
-#cereals.df1$effect_size_direction <- ifelse(cereals.df1$effect_size_vi > 0, "Positive", "Negative")
 
 cereals.df1<-cereals.df1%>%
   
@@ -318,15 +322,13 @@ cereals.df1<-cereals.df1%>%
     
   ))
 
-#readr::write_csv(cereals.df1, paste0(path.metadata.effectsize, "/cereals.df1.csv"))
+readr::write_csv(cereals.df1, paste0(path.metadata.effectsize, "/cereals_df_eth.csv"))
 
 cereals.df1_analysis<-cereals.df1%>%
   group_by(CT_crop_FAO_Food_Group_clean,
            diversification_spatial_temporal_theme,
-           #diversification_spatial_temporal_practice,
            biomass_management_practice,
            nutrient_management_practice,
-           #pest_management_practice,
            soil_management_theme,
            active_groups,
            water_management_practice,
@@ -369,16 +371,12 @@ raw_diversification <- cereals.df1_analysis %>%
     pos = Positive,
     neg= Negative
   )
-  filter(!is.na(practice))
-  
-  
-
 
 readr::write_csv(raw_diversification, paste0(path.metadata.effectsize, "/cereals_effects_eth.csv"))
 
 
 
-#---- COMMON BEAN -----
+#---- PULSES -----
 
 
 
@@ -1020,85 +1018,6 @@ sort(unique(raw$CT_crop_FAO_Food_Group))
 
 
 
-#==========================================================
-#--- Report n_rows and n_studies
-#==========================================================
-# Per country
-country.outpillar<-fomd10.cfra %>%
-  group_by(country,out_pillar) %>%
-  summarise(
-    n_effect_sizes     = n(),
-    n_studies  = n_distinct(study_id)
-  ) %>%
-  arrange(desc(n_effect_sizes))
 
-
-# --- Helper: parse "a..b..c" coordinate strings into a list of values -------
-parse_coords <- function(coord_str) {
-  str_split(coord_str, fixed(".."))[[1]] %>% as.numeric()
-}
-
-# --- Expand multi-coordinate rows into one row per point --------------------
-expand_sites <- function(df, country_col, lat_col, lon_col, out_pillar) {
-  df %>%
-    select(country = {{ country_col }},
-           lat_str = {{ lat_col }},
-           lon_str = {{ lon_col }},
-           out_pillar=out_pillar) %>%
-    mutate(out_pillar = out_pillar,
-           row_id = row_number()) %>%
-    rowwise() %>%
-    mutate(
-      lats = list(parse_coords(lat_str)),
-      lons = list(parse_coords(lon_str))
-    ) %>%
-    ungroup() %>%
-    mutate(coords = map2(lats, lons, ~ tibble(lat = .x, lon = .y))) %>%
-    select(row_id, country, out_pillar, coords) %>%
-    unnest(coords)
-}
-
-# --- Build the unified points table -----------------------------------------
-x <- fomd10.cfra %>%
-  select(C_country, C_site_latitude, C_site_longitude,out_pillar)%>%
-  distinct(C_country,
-           C_site_latitude,
-           C_site_longitude,
-           out_pillar) 
-
-control_pts  <- expand_sites(x, C_country, C_site_latitude, C_site_longitude, out_pillar)
-
-cfra.sites <- control_pts %>%
-  filter(!is.na(lat), !is.na(lon))
-
-# Find rows where parsing produces NAs
-error<-x %>%
-  mutate(row_id = row_number()) %>%
-  rowwise() %>%
-  mutate(
-    lats = list(parse_coords(C_site_latitude)),
-    lons = list(parse_coords(C_site_longitude)),
-    has_na = any(is.na(lats)) | any(is.na(lons))
-  ) %>%
-  ungroup() %>%
-  filter(has_na) %>%
-  select(row_id, C_country, C_site_latitude, C_site_longitude)
-
-
-  
-  
-
-# Per indicators (Productivity, Resilience, Biodiversity) 
-subindicator<-fomd10.cfra %>%
-  filter(country=="Ethiopia")%>%
-  group_by(out_pillar,out_subindicator) %>%
-  summarise(
-    n_rows     = n(),
-    n_studies  = n_distinct(study_id)
-  ) %>%
-  arrange(desc(n_rows))
-
-
-C_site_latitude
 
 

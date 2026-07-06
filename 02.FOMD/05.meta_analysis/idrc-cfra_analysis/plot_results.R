@@ -83,15 +83,6 @@ cat(sprintf(
 ))
 
 
-################################# this is only consider the unique practices
-single <- tibble(
-  row_id = raw$row_id[clean_rows],
-  theme  = vapply(clean_rows, function(i) changed_list[[i]][[1]][1], character(1)),
-  c_val  = vapply(clean_rows, function(i) changed_list[[i]][[1]][2], character(1)),
-  t_val  = vapply(clean_rows, function(i) changed_list[[i]][[1]][3], character(1))
-) %>%
-  left_join(raw %>% select(row_id, impact, n, pos, neg), by = "row_id")
-
 #########################################
 # Use ALL changed themes per row (not just rows where exactly 1 changed).
 # Each theme that changed gets its own row, crediting that row's outcome
@@ -120,9 +111,14 @@ practice_map <- tribble(
   ~theme, ~c_val, ~t_val, ~practice, ~flip,
   "nutrient_management_practice", "No Fertilizers Applied", "Inorganic Fertilizer", "Inorganic fertilizer", FALSE,
   "nutrient_management_practice", "No Fertilizers Applied", "Inorganic and Organic Fertilizers", "Mixed fertilizer", FALSE,
+  "nutrient_management_practice", "No Fertilizers Applied", "Organic Fertilizer + Inorganic Fertilizer", "Mixed fertilizer", FALSE,
+  
   "nutrient_management_practice", "No Fertilizers Applied", "Organic Fertilizer", "Organic fertilizer", FALSE,
   "nutrient_management_practice", "No Fertilizers Applied", "Biochar", "Biochar amendment", FALSE,
   "nutrient_management_practice", "No Fertilizers Applied", "Biochar + Inorganic Fertilizer", "Biochar amendment", FALSE,
+  "nutrient_management_practice", "No Fertilizers Applied", "Biochar + Inorganic Fertilizer + Organic Fertilizer", "Mixed fertilizer", FALSE,
+  "nutrient_management_practice", "No Fertilizers Applied", "Biochar + Organic Fertilizer", "Biochar amendment", FALSE,
+
   #"nutrient_management_practice", "Organic Fertilizer", "Inorganic and Organic Fertilizers", "Mixed fertilizer", FALSE,
   
   "soil_management_theme", "Conventional Tillage", "Reduced Tillage", "Reduced tillage", FALSE,
@@ -347,8 +343,6 @@ text_colors <- c(
   "No data"          = "#A6A08F"
 )
 
-
-
 eth_cereals <- ggplot(agg, aes(x = metric, y = practice, fill = category)) +
   
   
@@ -423,4 +417,573 @@ print(eth_cereals)
 ggsave(paste0(path.metaanalysis,"/eth_cereals_heatmap.pdf"), plot = eth_cereals,
        width = 20, height = 15, dpi = 300, bg = "white")
 
+#-----------------------------------------------------
+#####-----ANALYSIS PER AGROECOLOGICAL ZONE -----------
+#-----------------------------------------------------
+eth.cereals <- read.csv(file.path(path.metadata.effectsize, "/cereals_df_eth.csv"), stringsAsFactors = FALSE, check.names = TRUE)
 
+effect_size_expand_sites <- function(df, country_col, lat_col, lon_col, effect_size_id) {
+  df %>%
+    select(country = {{ country_col }},
+           lat_str = {{ lat_col }},
+           lon_str = {{ lon_col }},
+           effect_size_id=effect_size_id
+    ) %>%
+    mutate(effect_size_id=effect_size_id,
+           row_id = row_number()) %>%
+    rowwise() %>%
+    mutate(
+      lats = list(parse_coords(lat_str)),
+      lons = list(parse_coords(lon_str))
+    ) %>%
+    ungroup() %>%
+    mutate(coords = map2(lats, lons, ~ tibble(lat = .x, lon = .y))) %>%
+    select(row_id, country, 
+           effect_size_id, 
+           coords) %>%
+    unnest(coords)
+}
+parse_coords <- function(coord_str) {
+  str_split(coord_str, fixed(".."))[[1]] %>% as.numeric()
+}
+effect_size_x <- eth.cereals %>%
+  select(C_country, C_site_latitude, C_site_longitude,effect_size_id)%>%
+  distinct(C_country,
+           C_site_latitude,
+           C_site_longitude,
+           effect_size_id  ) 
+
+effect_sizes_control_pts<-effect_size_expand_sites(
+  effect_size_x, C_country, C_site_latitude, C_site_longitude, effect_size_id)%>%
+  filter(!is.na(lat), !is.na(lon))
+
+# --- Agroecological zones----
+eth.agr.zn <- rast(paste0(path.metaanalysis,"/GAEZ/GAEZ_AEZ57_ETH.tif"))
+gaez.lookup <- read.csv(paste0(path.metaanalysis,"/GAEZ/GAEZ_57_lookup.csv"),
+                        stringsAsFactors = FALSE)
+names(eth.agr.zn) <- "value"     # standardize the layer name
+
+# 1. Named list linking each country to its GAEZ raster --------------
+gaez_rasters <- list("Ethiopia" = eth.agr.zn)
+
+# 2. Helper: extract the raster "value" at each site for one country -
+extract_zone_value <- function(country_name, raster, points_df) {
+  pts <- points_df %>% filter(country == country_name)
+  if (nrow(pts) == 0) return(pts %>% mutate(value = numeric(0)))
+  
+  pts_vect <- vect(pts, geom = c("lon", "lat"), crs = "EPSG:4326")
+  
+  # If the raster's CRS isn't EPSG:4326, reproject the points first:
+  # pts_vect <- project(pts_vect, crs(raster))
+  
+  zone_vals <- terra::extract(raster, pts_vect)
+  pts %>% mutate(value = zone_vals$value)
+}
+
+# 3. Run the extraction for every country and combine -----------------
+effect_sizes_with_zone <- imap_dfr(
+  gaez_rasters,
+  ~ extract_zone_value(.y, .x, effect_sizes_control_pts)
+) %>%
+  left_join(gaez.lookup, by = "value")
+
+# 4. Flag any sites that fell outside a raster (e.g. masked pixels, ---
+#    coastline rounding) instead of silently dropping them
+effect_sizes_with_zone <- effect_sizes_with_zone %>%
+  mutate(label = if_else(is.na(label), "No zone data (outside raster)", label))
+
+# ---- 1. Count DISTINCT effect sizes per zone ------------------------------
+# An effect size with multiple site coordinates that fall in different
+# zones will be counted once in each zone it touches. If you'd rather
+# assign each effect size to a single zone (e.g. its first site only),
+# filter effect_sizes_control_pts down to one row per effect_size_id
+# before running the extraction in step 3.
+effect_sizes_per_zone <- effect_sizes_with_zone %>%
+  group_by(label) %>%
+  summarise(n_effect_sizes = n_distinct(effect_size_id)) %>%
+  arrange(desc(n_effect_sizes))
+
+
+eth.cereals1<-eth.cereals%>%
+  left_join(effect_sizes_with_zone,by="effect_size_id")%>%
+  filter(label%in%c(
+    "Tropics, highland; sub-humid, no soil/terrain limitations",
+    "Land with severe soil/terrain limitations"
+  ))
+
+  
+eth.cereals.agr<-eth.cereals1%>%
+    group_by(CT_crop_FAO_Food_Group_clean,
+             diversification_spatial_temporal_theme,
+             biomass_management_practice,
+             nutrient_management_practice,
+             soil_management_theme,
+             active_groups,
+             water_management_practice,
+             out_indicator,
+             label,
+             effect_size_direction)%>%
+    summarise(n_direction = n(), .groups = "drop")
+  
+sort(unique(eth.cereals.agr$out_indicator))
+  
+raw_eth.cereals.agr <- eth.cereals.agr %>%
+    group_by(CT_crop_FAO_Food_Group_clean,
+             diversification_spatial_temporal_theme,
+             biomass_management_practice,
+             nutrient_management_practice,
+             soil_management_theme,
+             active_groups,
+             label,
+             out_indicator) %>%
+    mutate(n = sum(n_direction)) %>%
+    ungroup() %>%
+    mutate(prop = n_direction / n) %>%
+    
+    # Drop n_direction BEFORE pivoting so it doesn't prevent row collapse
+    select(-n_direction) %>%
+    
+    pivot_wider(
+      names_from  = effect_size_direction,
+      values_from = prop,
+      values_fill = 0
+    ) %>%
+    
+    rename(
+      agr_zone = label,
+      impact   = out_indicator,
+      pos = Positive,
+      neg= Negative
+    )
+  
+  
+raw_eth.cereals.agr$row_id <- seq_len(nrow(raw_eth.cereals.agr))
+changed_list <- lapply(seq_len(nrow(raw_eth.cereals.agr)), function(i) find_changed(raw_eth.cereals.agr[i, ]))
+n_changed <- vapply(changed_list, length, integer(1))
+
+clean_rows <- which(n_changed == 1)
+cat(sprintf(
+  "Single-practice (clean) comparisons: %d | Confounded (2+ practices changed) excluded: %d\n",
+  length(clean_rows), sum(n_changed > 1)
+))
+
+
+all_changed_rows <- which(n_changed >= 1)
+
+agr.zn.single <- lapply(all_changed_rows, function(i) {
+  ch <- changed_list[[i]]
+  tibble(
+    row_id = raw_eth.cereals.agr$row_id[i],
+    agr_zone = raw_eth.cereals.agr$agr_zone[i],
+    theme  = vapply(ch, `[`, character(1), 1),
+    c_val  = vapply(ch, `[`, character(1), 2),
+    t_val  = vapply(ch, `[`, character(1), 3)
+  )
+}) %>%
+  bind_rows() %>%
+  left_join(raw_eth.cereals.agr %>% select(row_id, impact, n, pos, neg), by = "row_id")
+
+
+# ---- 4. Join, flip direction, aggregate (n-weighted) -------------------------
+agr.zn.agg <- agr.zn.single %>%
+  inner_join(practice_map, by = c("theme", "c_val", "t_val")) %>%
+  inner_join(practice_group, by = "practice") %>%
+  inner_join(metric_map, by = "impact") %>%
+  mutate(
+    control_display   = if_else(flip, t_val, c_val),
+    treatment_display = if_else(flip, c_val, t_val),
+    pos_adj           = if_else(flip, neg, pos),
+    # NEW: for metrics where an increase is undesirable (Costs, GHG
+    # emissions, etc.), flip pos_adj so it always means "% of comparisons
+    # in the DESIRABLE direction" — consistent with Yield/Income/etc.
+    pos_adj           = if_else(invert_good, 1 - pos_adj, pos_adj),
+    control_display   = recode(control_display,"Crop residues grazed" = "Residues removed"),
+    control_display   = recode(control_display,"Crop residues removed" = "Residues removed")
+  ) %>%
+  group_by(group, agr_zone,control_display, practice, metric)%>%
+  summarise(
+    weighted_pos = sum(pos_adj * n) / sum(n),
+    total_n      = sum(n),
+    k_studies    = n(),
+    .groups = "drop"
+  )
+
+# ---- 5. Classify into interpretable bands -----------------------------------
+# Thresholds are a judgement call - tune for your audience/context.
+
+agr.zn.agg <- agr.zn.agg %>%
+  mutate(
+    category = case_when(
+      weighted_pos >= 0.65 & total_n >= 100 ~ "Strong positive",  # >=65% positive, n>=100
+      weighted_pos >= 0.65                  ~ "Positive",         # >=65% positive, n<100
+      weighted_pos > 0.35 & total_n >= 100 ~ "Strong neutral",   # 46-64% positive, n>=100
+      weighted_pos > 0.35                  ~ "Neutral",          # 46-64% positive, n<100
+      weighted_pos <= 0.35 & total_n >= 100 ~ "Strong negative",  # >=65% negative, n>=100
+      weighted_pos <= 0.35                  ~ "Negative",         # >=65% negative, n<100
+      
+      
+      total_n >= 100                        ~ "Strong neutral",   # 36-45% positive, n>=100 -> falls back to neutral
+      TRUE                                  ~ "Neutral"           # 36-45% positive, n<100  -> falls back to neutral
+    ),
+    pct_shown = if_else(category %in% c("Strong negative", "Negative"),
+                        (1 - weighted_pos) * 100,
+                        weighted_pos * 100),
+    label = paste0(round(pct_shown), "%")
+  )
+
+# ---- 6. Order rows/columns for a clean layout --------------------------------
+practice_order <- c(
+  "Deficit irrigation","Supplemental irrigation",
+  "Mulching",    "Residues incorporated","Residues reteined",   
+  "Inorganic fertilizer", "Organic fertilizer", "Mixed fertilizer", 
+  "Reduced tillage", "Zero tillage","Biochar amendment",
+  "Agroforestry", "Green manure","Intercropping","Crop rotation"
+  
+)
+metric_order <- c("Yield","Efficiency" , "Labour","Costs", "Income", "Profitability",
+                  "Soil health")#, "Carbon stocks")
+
+agr.zn.agg <- agr.zn.agg %>%
+  mutate(practice_ct= paste0(practice," vs. " , control_display))%>%
+  mutate(
+    practice = factor(practice, levels = rev(practice_order)),
+    metric   = factor(metric, levels = metric_order)
+  )
+
+# ---- 6b. Expose evidence gaps: complete the practice x metric grid ---------
+# Every (group, practice_ct) combo should show a cell for every metric,
+# even if there's no data for it. Without this, missing combos are just
+# blank background - indistinguishable from a neutral/mixed result.
+
+all_combos <- agr.zn.agg %>%
+  distinct(group, practice, practice_ct,agr_zone) %>%
+  tidyr::crossing(metric = factor(metric_order, levels = metric_order))
+
+agr.zn.agg <- all_combos %>%
+  left_join(agr.zn.agg, by = c("group", "practice", "practice_ct", "metric","agr_zone")) %>%
+  mutate(
+    category = if_else(is.na(category), "No data", category),
+    label    = if_else(is.na(label), "No data", label),
+    n_label  = case_when(
+      is.na(total_n)          ~ "",
+      total_n == 1            ~ paste0("n= ", total_n),
+      TRUE                    ~ paste0("n= ", total_n)
+    )
+  )
+
+category_order <- c("Strong negative", "Negative", "Neutral", "Strong neutral",
+                    "Positive", "Strong positive", "No data")
+
+agr.zn.agg <- agr.zn.agg %>%
+  mutate(category = factor(category, levels = category_order))
+
+# ---- 6c. Confidence rating: how much evidence sits behind each %  ----------
+# Banded on total_n (not k_studies) so the rating agrees with the sample-size
+# text printed under each cell. Stored as an integer (0-3), not a glyph
+# string - the dots themselves get drawn with geom_point() in Step 7, which
+# is font-independent and won't silently fail on Windows like embedded
+# unicode circle characters can.
+
+agr.zn.agg <- agr.zn.agg %>%
+  mutate(
+    confidence_n = case_when(
+      is.na(total_n) ~ 0L,
+      total_n >= 300  ~ 3L,
+      total_n >= 100   ~ 2L,
+      TRUE            ~ 1L
+    )
+  )
+
+agr.zn.agg <- agr.zn.agg %>%
+  mutate(
+    low_n = !is.na(total_n) & total_n <= 2,
+    label = if_else(low_n & category != "No data", paste0(label, "*"), label)
+  )
+
+# ---- 6c-2. Flag cells to emphasize: strong positive AND well-supported ------
+agr.zn.agg <- agr.zn.agg %>%
+  mutate(
+    emphasis = category %in% c("Strong positive", "Positive", "Negative", "Strong negative") &
+      confidence_n %in% c(2, 3)  )
+
+# ---- 7. Plot ------------------------------------------------------------------
+eth_cereals_agr_zn<-
+
+ggplot(agr.zn.agg%>%
+         filter(agr_zone=="Land with severe soil/terrain limitations"),
+       aes(x = metric, y = practice, fill = category)) +
+  
+  
+  geom_tile(aes(linetype = category == "No data", alpha = factor(confidence_n)),
+            color = "white", linewidth = 1, width = 0.93, height = 0.85) +
+  scale_alpha_manual(values = c(`0` = 1, `1` = 0.5, `2` = 1, `3` = 1), 
+                     guide = "none")+
+  # emphasized labels: strong positive + high confidence -> bigger + bold
+  geom_text(data = subset(agr.zn.agg%>%
+                            filter(agr_zone=="Land with severe soil/terrain limitations"),
+                          emphasis),
+            aes(label = label, color = category),
+            vjust = -0.55, size = 5, fontface = "bold") +
+  # normal labels: everything else with data, not emphasized
+  geom_text(data = subset(agr.zn.agg%>%
+                            filter(agr_zone=="Land with severe soil/terrain limitations"),
+                          category != "No data" & !emphasis),
+            aes(label = label, color = category),
+            vjust = -0.55, size = 4, fontface = "plain") +
+  # "No data" labels - smallest, not bold
+  geom_text(data = subset(agr.zn.agg%>%
+                            filter(agr_zone=="Land with severe soil/terrain limitations"),
+                          category == "No data"),
+            aes(label = label, color = category),
+            vjust = -0.55, size = 3.2, fontface = "plain") +
+  geom_text(aes(label = n_label, color = category),
+            vjust = 1.1, size = 2.8) +
+  geom_text(data = subset(agr.zn.agg%>%
+                            filter(agr_zone=="Land with severe soil/terrain limitations"),
+                          category != "No data"),
+            aes(label = strrep("\u25CF", confidence_n)),
+            color = "grey40", size = 2.1, hjust = 1, vjust = -1.4,
+            nudge_x = 0.42) +
+  
+  scale_fill_manual(values = fill_colors, name = NULL,
+                    breaks = category_order,
+                    labels = category_labels[category_order]) +
+  scale_color_manual(values = text_colors, guide = "none") +
+  guides(linetype = "none",
+         fill = guide_legend(nrow = 1, byrow = TRUE)) +
+  
+  scale_x_discrete(position = "top") +
+  facet_grid(group ~ ., scales = "free_y", space = "free_y", switch = "y") +
+  
+  # FIX 6: title/subtitle/caption re-enabled. For a Ministry/NGO audience,
+  # a one-line takeaway matters more than the grid itself - people anchor on
+  # the headline. Edit the wording to match your actual top-line finding.
+  labs(
+    x = NULL, y = NULL
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = "bottom",
+    panel.grid = element_blank(),
+    axis.text.x = element_text(face = "bold", size = 11),
+    axis.text.y = element_text(size = 11, hjust = 1),
+    axis.ticks = element_blank(),
+    strip.placement = "outside",
+    strip.text.y.left = element_text(angle = 0, face = "bold", size = 10, hjust = 1),
+    plot.background = element_rect(fill = "#faf9f6", color = NA),
+    panel.background = element_rect(fill = "#faf9f6", color = NA),
+    plot.margin = margin(20, 25, 20, 10),
+    legend.text = element_text(size = 9)
+  )
+
+print(eth_cereals_agr_zn)
+"Land with severe soil/terrain limitations"
+ggsave(paste0(path.metaanalysis,"/eth_cereals_agr_zn_terrain_limiations.pdf"), plot = eth_cereals_agr_zn,
+       width = 13, height = 7, dpi = 300, bg = "white")
+
+
+# =============================================================================
+# Cereal yield response to fertilizer, by crop and fertilizer type
+# Reproduces the crop x fertilizer heatmap from cereals_crop_comb_eth.csv
+# =============================================================================
+sort(unique(eth.cereals1$out_indicator))
+crop.comb.counts <- eth.cereals1 %>%
+  filter(label == "Land with severe soil/terrain limitations") %>%
+  #filter(out_indicator == "Product Yield") %>%
+  filter(out_indicator =="Soil Quality") %>%
+  filter(nutrient_management_practice != "C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer" | 
+           is.na(nutrient_management_practice)) %>%
+  mutate(nutrient_management_practice1=case_when(
+    nutrient_management_practice%in%c(
+      "C: No Fertilizers Applied_vs_T: Biochar",
+      "C: No Fertilizers Applied_vs_T: Biochar + Inorganic Fertilizer",
+      "C: No Fertilizers Applied_vs_T: Biochar + Organic Fertilizer")
+    ~"C: No Fertilizers Applied_vs_T: Biochar amendment",
+    nutrient_management_practice%in%c(
+      "C: No Fertilizers Applied_vs_T: Biochar + Inorganic Fertilizer + Organic Fertilizer",
+      "C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers",
+      "C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer")
+    ~"C: No Fertilizers Applied_vs_T: Mixed fertilizer",
+    
+    TRUE~nutrient_management_practice
+  ))%>%
+  select(T_crop_tree_diversity,
+         nutrient_management_practice1,
+         active_groups,
+         effect_size_direction) %>%
+  mutate(
+    combo_clean = T_crop_tree_diversity %>%
+      str_split("[/\\-]") %>%
+      map_chr(~ str_trim(.x) %>% sort() %>% paste(collapse = " + "))
+  ) %>%
+  mutate(combo_clean=case_when(
+    combo_clean%in%c(
+      "Acacia nilotica + Cordia africana + Faidherbia albida + Moringa stenopetala + Teff",
+      "Faidherbia albida + Teff",
+      "Acacia abyssinica + Teff",
+      "Teff-Acacia abyssinica")~"Teff + Leguminous tree",
+    combo_clean%in%c(
+      "Teff-Cordia africana",
+      "Teff-Moringa stenopetala",
+      "Moringa stenopetala + Teff",
+      "Cordia africana + Teff")~"Teff + No leguminous tree",
+    TRUE~combo_clean))%>%
+  
+  
+  count(combo_clean,nutrient_management_practice1,effect_size_direction, name = "n_comparisons", sort = TRUE)
+
+sort(unique(crop.comb.counts$nutrient_management_practice1))
+sort(unique(crop.comb.counts$combo_clean))
+
+
+readr::write_csv(crop.comb.counts, paste0(path.metadata.effectsize, "/cereals_crop_comb_eth.csv"))
+
+
+#--------- 1. Load and reshape the raw data ---------
+# Each row in the source file compares "No Fertilizer Applied" (control) vs.
+# a fertilizer treatment, for a given crop/combo, with a count of comparisons
+# showing a Positive or Negative effect direction.
+
+df_raw <- crop.comb.counts
+
+df <- df_raw %>%
+  mutate(
+    fertilizer = str_extract(nutrient_management_practice1, "(?<=vs_T: ).*"),
+    fertilizer = recode(fertilizer,
+                        "Inorganic Fertilizer" = "Inorganic",
+                        "Organic Fertilizer"   = "Organic",
+                        "Mixed fertilizer"     = "Mixed",
+                        "Biochar amendment"    = "Biochar"
+    ),
+    fertilizer = case_when(is.na(fertilizer)~"None",TRUE~fertilizer)
+    
+  )%>% 
+  
+  group_by(combo_clean, fertilizer, effect_size_direction) %>%
+  summarise(n = sum(n_comparisons), .groups = "drop") %>%
+  pivot_wider(names_from = effect_size_direction, values_from = n, values_fill = 0) %>%
+  mutate(
+    total_n = Positive + Negative,
+    weighted_pos  = Positive / total_n
+  )
+
+
+#----- 2. Expand to the full crop x fertilizer grid so untested combinations show -----
+#   up as explicit "no data" cells rather than being silently dropped-----
+
+
+crop_order <- df %>%
+  group_by(combo_clean) %>%
+  summarise(n_total = sum(total_n)) %>%
+  arrange(desc(n_total)) %>%
+  pull(combo_clean)
+
+fert_order <- c("Inorganic", "Organic", "Mixed", "Biochar","None")
+
+df_complete <- df %>%
+  select(combo_clean, fertilizer, weighted_pos, total_n) %>%
+  complete(combo_clean = crop_order, fertilizer = fert_order) %>%
+  mutate(
+    combo_clean  = factor(combo_clean, levels = rev(crop_order)),  # rev: top row = highest n
+    fertilizer   = factor(fertilizer, levels = fert_order),
+    category = case_when(
+      is.na(weighted_pos)                   ~ "No data",          # untested combo (added so these don't fall into "Neutral" below)
+      weighted_pos >= 0.65 & total_n >= 100 ~ "Strong positive",  # >=65% positive, n>=100
+      weighted_pos >= 0.65                  ~ "Positive",         # >=65% positive, n<100
+      weighted_pos > 0.35 & total_n >= 100  ~ "Strong neutral",   # 36-64% positive, n>=100
+      weighted_pos > 0.35                   ~ "Neutral",          # 36-64% positive, n<100
+      weighted_pos <= 0.35 & total_n >= 100 ~ "Strong negative",  # <=35% positive, n>=100
+      weighted_pos <= 0.35                  ~ "Negative",         # <=35% positive, n<100
+      total_n >= 100                        ~ "Strong neutral",   # safety net, shouldn't be reachable
+      TRUE                                  ~ "Neutral"           # safety net, shouldn't be reachable
+    ),
+    category = factor(category, levels = c(
+      "Strong positive", "Positive", "Strong neutral", "Neutral",
+      "Strong negative", "Negative", "No data"
+    )),
+    pct_shown = if_else(category %in% c("Strong negative", "Negative"),
+                        (1 - weighted_pos) * 100,
+                        weighted_pos * 100),
+    label = if_else(
+      category == "No data",
+      "No data",
+      paste0(round(pct_shown), "%")
+    )
+  )%>%
+  mutate(
+    confidence_n = case_when(
+      is.na(total_n) ~ 0L,
+      total_n >= 300  ~ 3L,
+      total_n >= 100   ~ 2L,
+      TRUE            ~ 1L
+    )
+  )%>%
+  mutate(
+    emphasis = category %in% c("Strong positive", "Positive", "Negative", "Strong negative") &
+      confidence_n %in% c(2, 3)  ,
+    n_label  = case_when(
+      is.na(total_n)          ~ "",
+      total_n == 1            ~ paste0("n= ", total_n),
+      TRUE                    ~ paste0("n= ", total_n)
+    )
+    )
+
+
+# -----------------------------------------------------------------------------
+# 3. Plot
+# -----------------------------------------------------------------------------
+eth_cereals_fert_yield<-
+ggplot(df_complete, aes(x = fertilizer, y = combo_clean, fill = category)) +
+  geom_tile(aes(linetype = category == "No data", alpha = factor(confidence_n)),
+            color = "white", linewidth = 1, width = 0.93, height = 0.85) +
+  scale_alpha_manual(values = c(`0` = 1, `1` = 0.5, `2` = 1, `3` = 1), 
+                     guide = "none")+
+  geom_text(data = subset(df_complete, emphasis),
+            aes(label = label, color = category),
+            vjust = -0.55, size = 5, fontface = "bold") +
+  geom_text(data = subset(df_complete, category != "No data" & !emphasis),
+            aes(label = label, color = category),
+            vjust = -0.55, size = 4, fontface = "plain") +
+  geom_text(data = subset(df_complete, category == "No data"),
+            aes(label = label, color = category),
+            vjust = -0.55, size = 3.2, fontface = "plain") +
+  geom_text(aes(label = n_label, color = category),
+            vjust = 1.1, size = 2.8) +
+  geom_text(data = subset(df_complete, category != "No data"),
+            aes(label = strrep("\u25CF", confidence_n)),
+            color = "grey40", size = 2.1, hjust = 1, vjust = -1.4,
+            nudge_x = 0.42) +
+  
+  scale_fill_manual(values = fill_colors, name = NULL,
+                    breaks = category_order,
+                    labels = category_labels[category_order]) +
+  scale_color_manual(values = text_colors, guide = "none") +
+  guides(linetype = "none",
+         fill = guide_legend(nrow = 1, byrow = TRUE)) +
+  
+  scale_x_discrete(position = "top") +
+  labs(
+    x = NULL, y = NULL
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = "bottom",
+    panel.grid = element_blank(),
+    axis.text.x = element_text(face = "bold", size = 11),
+    axis.text.y = element_text(size = 11, hjust = 1),
+    axis.ticks = element_blank(),
+    strip.placement = "outside",
+    strip.text.y.left = element_text(angle = 0, face = "bold", size = 10, hjust = 1),
+    plot.background = element_rect(fill = "#faf9f6", color = NA),
+    panel.background = element_rect(fill = "#faf9f6", color = NA),
+    plot.margin = margin(20, 25, 20, 10),
+    legend.text = element_text(size = 9)
+  )
+
+print(eth_cereals_fert_yield)
+
+
+#---- 4. Save for the slide deck ----------------
+
+ggsave(paste0(path.metaanalysis,"/plot.eth.cereals.fert.yield.agr.zn_heatmap_terrain_limiations.pdf"), plot = eth_cereals_fert_yield,
+       width = 10, height = 7, dpi = 300, bg = "white")

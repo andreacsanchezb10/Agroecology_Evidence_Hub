@@ -1,0 +1,37 @@
+combo_clean,nutrient_management_practice1,effect_size_direction,n_comparisons
+Sorghum,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,Positive,98
+Wheat,NA,Positive,37
+Barley,C: No Fertilizers Applied_vs_T: Biochar amendment,Positive,29
+Barley,C: No Fertilizers Applied_vs_T: Mixed fertilizer,Positive,28
+Teff,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,Positive,27
+Barley,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,Positive,22
+Maize,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,Positive,22
+Sorghum,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,Negative,17
+Wheat,NA,Negative,17
+Wheat,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,Positive,13
+Maize,NA,Positive,10
+Teff,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,Negative,7
+Teff + Leguminous tree,NA,Negative,7
+Hairy Vetch + Maize,NA,Negative,6
+Lablab + Maize,NA,Negative,6
+Teff,C: No Fertilizers Applied_vs_T: Mixed fertilizer,Positive,6
+Teff,C: No Fertilizers Applied_vs_T: Organic Fertilizer,Positive,6
+Wheat,C: No Fertilizers Applied_vs_T: Mixed fertilizer,Positive,6
+Wheat,C: No Fertilizers Applied_vs_T: Organic Fertilizer,Positive,6
+Teff + Leguminous tree,NA,Positive,5
+Fava Bean + Maize + Wheat,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,Positive,4
+Fava Bean + Maize + Wheat,C: No Fertilizers Applied_vs_T: Mixed fertilizer,Positive,4
+Fava Bean + Maize + Wheat,C: No Fertilizers Applied_vs_T: Organic Fertilizer,Positive,4
+Maize + Potato + Wheat,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,Positive,4
+Maize + Potato + Wheat,C: No Fertilizers Applied_vs_T: Mixed fertilizer,Positive,4
+Maize + Potato + Wheat,C: No Fertilizers Applied_vs_T: Organic Fertilizer,Positive,4
+Maize + Wheat,C: No Fertilizers Applied_vs_T: Mixed fertilizer,Positive,4
+Maize + Wheat,C: No Fertilizers Applied_vs_T: Organic Fertilizer,Positive,4
+Teff + No leguminous tree,NA,Negative,4
+Teff + No leguminous tree,NA,Positive,4
+Barley,C: No Fertilizers Applied_vs_T: Organic Fertilizer,Positive,3
+Common Bean + Maize,NA,Positive,3
+Maize,C: No Fertilizers Applied_vs_T: Mixed fertilizer,Positive,3
+Maize + Wheat,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,Positive,3
+Maize,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,Negative,2
+Maize + Wheat,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,Negative,1

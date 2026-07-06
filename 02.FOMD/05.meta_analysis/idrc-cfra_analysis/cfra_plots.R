@@ -222,17 +222,17 @@ zone_colors <- setNames(gaez.lookup$color, gaez.lookup$label)
 # ---- 5. PLOT deep dive countries - Agroecological zones ----
 # Build a lookup: plain label -> "label (n)" text
 # Zones actually present in Ethiopia's raster, ordered by effect size count
-zone_order <- #eth_aez_df %>% #Ethiopia
+zone_order <- eth_aez_df %>% #Ethiopia
   #ken_aez_df %>% #Kenya
-  zmb_aez_df %>% #Zambia
+  #zmb_aez_df %>% #Zambia
   distinct(label, n_effect_sizes) %>%
   arrange(desc(n_effect_sizes)) %>%
   pull(label)
 
 # Build the "label (n)" lookup, then force it into the same order as zone_order
-label_map <- #eth_aez_df %>% #Ethiopia
+label_map <- eth_aez_df %>% #Ethiopia
   #ken_aez_df %>% #Kenya
-  zmb_aez_df %>% #Zambia
+  #zmb_aez_df %>% #Zambia
   
   distinct(label, label_n_effect_sizes) %>%
   tibble::deframe()
@@ -261,7 +261,6 @@ ggplot() +
     #country == "Ethiopia"
     #country == "Kenya"
     country == "Zambia"
-    
     ),
           shape = 21, fill = "black", colour = "grey30",
           size = 5, stroke = 0.5, alpha = 1) +
@@ -284,7 +283,53 @@ print(plot.agr.zn)
 ggsave(paste0(path.metaanalysis,"/plot.zmb.agr.zn.pdf"), plot = plot.agr.zn,
        width = 20, height = 10, dpi = 300, bg = "white")
 
+##############
 
+plot.agr.zn.specific<-
+  ggplot() +
+  geom_raster(data = eth_aez_df%>%
+                filter(label=="Land with severe soil/terrain limitations"),
+              aes(x = x, y = y, fill = label)) +
+  #geom_raster(data = ken_aez_df, aes(x = x, y = y, fill = label)) +
+  #geom_raster(data = zmb_aez_df, aes(x = x, y = y, fill = label)) +
+  
+  scale_fill_manual(
+    values = zone_colors,
+    labels = label_map,
+    breaks = zone_order,
+    name   = "Agroecological zone"
+  ) +
+  geom_sf(
+    data = eth_poly,
+    #data = ken_poly,
+    #data = zmb_poly,
+    fill = NA, colour = "grey20", linewidth = 0.7) +
+  
+  #geom_sf(data = points_sf %>% filter(
+    #  country == "Ethiopia"
+    #country == "Kenya"
+    #country == "Zambia"
+    
+    #),
+    #shape = 21, fill = "black", colour = "grey30",
+    #size = 5, stroke = 0.5, alpha = 1) +
+  
+  coord_sf() +
+  guides(fill = guide_legend(ncol = 1)) +
+  
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.background = element_rect(fill = "white", colour = NA),
+    panel.grid        = element_line(colour = "white", linewidth = 0.2),
+    axis.title        = element_blank(),
+    legend.position   = "right",
+    axis.text         = element_blank()
+  )
+
+print(plot.agr.zn.specific)
+
+ggsave(paste0(path.metaanalysis,"/plot.eth.agr.zn.terrain.limiations.pdf"), plot = plot.agr.zn.specific,
+       width = 20, height = 10, dpi = 300, bg = "white")
 
 # ============================================================
 # --- OUTCOMES PILLAR AND SUBINDICATOR ---
