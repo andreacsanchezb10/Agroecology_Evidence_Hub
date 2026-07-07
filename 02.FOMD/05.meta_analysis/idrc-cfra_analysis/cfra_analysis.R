@@ -247,6 +247,8 @@ sort(unique(fomd10.cfra$year[fomd10.cfra$country=="Ethiopia"])) #186 studies
 sort(unique(fomd10.cfra$year[fomd10.cfra$country=="Kenya"])) #112 studies
 sort(unique(fomd10.cfra$year[fomd10.cfra$country=="Zambia"])) #25 studies
 
+sort(unique(fomd10.cfra$out_subindicator[fomd10.cfra$country=="Ethiopia"&fomd10.cfra$out_indicator=="Soil Quality"]))
+
 #==========================================================
 #--- Report DEEP-DIVE COUNTRIES:
 #--- ETHIOPIA - CEREALS
@@ -315,6 +317,14 @@ sort(unique(cereals.df1$diversification_spatial_temporal_practice))
 cereals.df1<-cereals.df1%>%
   
   mutate(effect_size_direction=case_when(
+    out_subindicator %in% c("Erosion", "Runoff") &
+      effect_size_type == "Log Response Ratio" &
+      effect_size_vi < 0 ~ "Positive",
+    
+    out_subindicator %in% c("Erosion", "Runoff") &
+      effect_size_type == "Log Response Ratio" &
+      effect_size_vi > 0 ~ "Negative",
+    
     effect_size_vi > 0~ "Positive",
     effect_size_type=="Standardized Mean Difference" &
       T_out_value>C_out_value~ "Positive",
@@ -323,6 +333,13 @@ cereals.df1<-cereals.df1%>%
   ))
 
 readr::write_csv(cereals.df1, paste0(path.metadata.effectsize, "/cereals_df_eth.csv"))
+
+sort(unique(cereals.df1$out_indicator))
+sort(unique(cereals.df1$out_subindicator[cereals.df1$out_indicator== "Efficiency"])) 
+
+sort(unique(cereals.df1$out_subindicator[cereals.df1$out_indicator== "Soil Quality"])) 
+sort(unique(cereals.df1$effect_size_type[cereals.df1$out_subindicator== "Runoff"])) 
+
 
 cereals.df1_analysis<-cereals.df1%>%
   group_by(CT_crop_FAO_Food_Group_clean,
@@ -333,6 +350,7 @@ cereals.df1_analysis<-cereals.df1%>%
            active_groups,
            water_management_practice,
            out_indicator,
+           out_subindicator,
            effect_size_direction)%>%
   summarise(n_direction = n(), .groups = "drop")
 
@@ -347,7 +365,9 @@ raw_diversification <- cereals.df1_analysis %>%
            soil_management_theme,
            active_groups,
            #water_management_practice,#nothing to show here for now
-           out_indicator) %>%
+           out_indicator
+           #out_subindicator
+           ) %>%
   mutate(n = sum(n_direction)) %>%
   ungroup() %>%
   mutate(prop = n_direction / n) %>%
@@ -377,9 +397,6 @@ readr::write_csv(raw_diversification, paste0(path.metadata.effectsize, "/cereals
 
 
 #---- PULSES -----
-
-
-
 
 
 

@@ -1,0 +1,451 @@
+combo_clean1,CT_crop_FAO_Food_Group_clean,diversification_spatial_temporal_theme,biomass_management_practice,nutrient_management_practice,soil_management_theme,water_management_practice,impact,agr_zone,n,neg,pos
+Acacia abyssinica + Cordia africana + Croton macrostachyus + Finger Millet + Grevillea robusta,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,"Tropics, lowland; humid, with soil/terrain limitations",4,0.75,0.25
+Acacia abyssinica + Cordia africana + Croton macrostachyus + Grevillea robusta + Maize,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,"Tropics, lowland; humid, with soil/terrain limitations",4,0.75,0.25
+Acacia abyssinica + Cordia africana + Croton macrostachyus + Grevillea robusta + Teff,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,"Tropics, lowland; humid, with soil/terrain limitations",4,0.75,0.25
+Acacia abyssinica + Finger Millet,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,"Tropics, lowland; humid, with soil/terrain limitations",4,0.75,0.25
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar,NA,NA,Product Yield,Land with severe soil/terrain limitations,3,0,1
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar + Inorganic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,20,0,1
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar + Inorganic Fertilizer + Organic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,24,0,1
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar + Organic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,6,0,1
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Costs,"Cold, no permafrost; wet, with soil/terrain limitations",4,0,1
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,"Cold, no permafrost; wet, with soil/terrain limitations",4,0,1
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Cold, no permafrost; wet, with soil/terrain limitations",4,0,1
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,22,0,1
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",4,0,1
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Product Yield,Land with severe soil/terrain limitations,4,0,1
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Soil Quality,Land with severe soil/terrain limitations,1,0,1
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,3,0,1
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Soil Quality,Land with severe soil/terrain limitations,3,0.6666666666666666,0.3333333333333333
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Soil Quality,Land with severe soil/terrain limitations,2,0,1
+Barley + Common Bean + Maize + Teff + Wheat,Cereals..Leguminous crops,NA,C: Crop residues retained_vs_T: Crop residues retained,NA,NA,NA,Carbon Stocks,Ample irrigated soils,1,0,1
+Barley + Common Bean + Maize + Teff + Wheat,Cereals..Leguminous crops,NA,C: Crop residues retained_vs_T: Crop residues retained,NA,NA,NA,Soil Quality,Ample irrigated soils,1,0,1
+Barley + Fava Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,5,1,0
+Barley + Fava Bean,Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,5,1,0
+Barley + Indian Pea + Teff + Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Costs,"Tropics, highland; semi-arid, with soil/terrain limitations",3,0.6666666666666666,0.3333333333333333
+Barley + Indian Pea + Teff + Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Income,"Tropics, highland; semi-arid, with soil/terrain limitations",6,0.3333333333333333,0.6666666666666666
+Barley + Indian Pea + Teff + Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",6,0.3333333333333333,0.6666666666666666
+Barley + Indian Pea + Teff + Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Soil Quality,"Tropics, highland; semi-arid, with soil/terrain limitations",6,0,1
+Barley + Indian Pea + Teff + Wheat,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Costs,"Tropics, highland; semi-arid, with soil/terrain limitations",15,0.8,0.2
+Barley + Indian Pea + Teff + Wheat,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Income,"Tropics, highland; semi-arid, with soil/terrain limitations",30,0.06666666666666667,0.9333333333333333
+Barley + Indian Pea + Teff + Wheat,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",30,0.06666666666666667,0.9333333333333333
+Barley + Indian Pea + Teff + Wheat,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Soil Quality,"Tropics, highland; semi-arid, with soil/terrain limitations",30,0,1
+Barley + Maize + Niger + Rape + Sorghum + Teff + Wheat,Cereals..Oilseed crops and oleaginous fruits,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Organic Fertilizer_vs_T: Organic Fertilizer,NA,NA,Income,Dominantly built-up land,6,0,1
+Barley + Maize + Niger + Rape + Sorghum + Teff + Wheat,Cereals..Oilseed crops and oleaginous fruits,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Organic Fertilizer_vs_T: Organic Fertilizer,NA,NA,Income,Dominantly very steep terrain,6,0,1
+Barley + Maize + Niger + Rape + Sorghum + Teff + Wheat,Cereals..Oilseed crops and oleaginous fruits,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Organic Fertilizer_vs_T: Organic Fertilizer,NA,NA,Income,Land with severe soil/terrain limitations,6,0,1
+Barley + Maize + Niger + Rape + Sorghum + Teff + Wheat,Cereals..Oilseed crops and oleaginous fruits,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Organic Fertilizer_vs_T: Organic Fertilizer,NA,NA,Income,"Tropics, highland; semi-arid, with soil/terrain limitations",6,0,1
+Barley + Maize + Niger + Rape + Sorghum + Teff + Wheat,Cereals..Oilseed crops and oleaginous fruits,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Organic Fertilizer_vs_T: Organic Fertilizer,NA,NA,Income,"Tropics, highland; sub-humid, no soil/terrain limitations",6,0,1
+Barley + Maize + Niger + Rape + Sorghum + Teff + Wheat,Cereals..Oilseed crops and oleaginous fruits,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Organic Fertilizer_vs_T: Organic Fertilizer,NA,NA,Labour,Dominantly built-up land,6,0,1
+Barley + Maize + Niger + Rape + Sorghum + Teff + Wheat,Cereals..Oilseed crops and oleaginous fruits,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Organic Fertilizer_vs_T: Organic Fertilizer,NA,NA,Labour,Dominantly very steep terrain,6,0,1
+Barley + Maize + Niger + Rape + Sorghum + Teff + Wheat,Cereals..Oilseed crops and oleaginous fruits,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Organic Fertilizer_vs_T: Organic Fertilizer,NA,NA,Labour,Land with severe soil/terrain limitations,6,0,1
+Barley + Maize + Niger + Rape + Sorghum + Teff + Wheat,Cereals..Oilseed crops and oleaginous fruits,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Organic Fertilizer_vs_T: Organic Fertilizer,NA,NA,Labour,"Tropics, highland; semi-arid, with soil/terrain limitations",6,0,1
+Barley + Maize + Niger + Rape + Sorghum + Teff + Wheat,Cereals..Oilseed crops and oleaginous fruits,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Organic Fertilizer_vs_T: Organic Fertilizer,NA,NA,Labour,"Tropics, highland; sub-humid, no soil/terrain limitations",6,0,1
+Barley + Peas + Teff + Wheat,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",4,0,1
+Barley + Peas + Teff + Wheat,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Soil Quality,"Tropics, highland; semi-arid, with soil/terrain limitations",2,0,1
+Barley + Peas + Teff + Wheat,Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",12,0.3333333333333333,0.6666666666666666
+Barley + Peas + Teff + Wheat,Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Efficiency,"Tropics, highland; semi-arid, with soil/terrain limitations",4,0,1
+Barley + Peas + Teff + Wheat,Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",8,0,1
+Barley + Peas + Teff + Wheat,Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",16,0,1
+Barley + Peas + Teff + Wheat,Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,NA,Efficiency,"Tropics, highland; semi-arid, with soil/terrain limitations",2,0,1
+Barley + Peas + Teff + Wheat,Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",4,0,1
+Barley + Wheat,Cereals,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Costs,"Tropics, highland; semi-arid, with soil/terrain limitations",12,0.5,0.5
+Barley + Wheat,Cereals,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Income,"Tropics, highland; semi-arid, with soil/terrain limitations",24,0.5,0.5
+Barley + Wheat,Cereals,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Non-Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",12,0,1
+Barley + Wheat,Cereals,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",24,0,1
+Barley + Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar,NA,NA,Soil Quality,"Tropics, highland; humid, with soil/terrain limitations",54,0,1
+Common Bean + Finger Millet,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",15,0.5333333333333333,0.4666666666666667
+Common Bean + Finger Millet,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",15,0.5333333333333333,0.4666666666666667
+Common Bean + Finger Millet,Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",12,0.5833333333333334,0.4166666666666667
+Common Bean + Finger Millet,Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",12,0.5833333333333334,0.4166666666666667
+Common Bean + Finger Millet,Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",14,0,1
+Common Bean + Finger Millet,Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",14,0,1
+Common Bean + Maize + Mung Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",2,1,0
+Common Bean + Pearl Millet,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",12,0.8333333333333334,0.16666666666666666
+Common Bean + Pearl Millet,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",12,0.5833333333333334,0.4166666666666667
+Common Vetch + Finger Millet,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, lowland; humid, with soil/terrain limitations",9,1,0
+Cowpea + Maize,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",1,0,1
+Cowpea + Maize,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",1,0,1
+Cowpea + Maize,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, lowland; sub-humid, with soil/terrain limitations",1,0,1
+Cowpea + Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",1,0,1
+Durum Wheat + Hairy Vetch + Lentil + Teff,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,NA,NA,Costs,"Tropics, highland; sub-humid, with soil/terrain limitations",3,0,1
+Durum Wheat + Hairy Vetch + Lentil + Teff,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,NA,NA,Income,"Tropics, highland; sub-humid, with soil/terrain limitations",3,0.6666666666666666,0.3333333333333333
+Durum Wheat + Hairy Vetch + Lentil + Teff,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",12,0.6666666666666666,0.3333333333333333
+Durum Wheat + Lentil + Teff,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Conventional Tillage,NA,Costs,"Tropics, highland; sub-humid, with soil/terrain limitations",3,0.3333333333333333,0.6666666666666666
+Durum Wheat + Lentil + Teff,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Conventional Tillage,NA,Income,"Tropics, highland; sub-humid, with soil/terrain limitations",3,0.6666666666666666,0.3333333333333333
+Durum Wheat + Lentil + Teff,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Conventional Tillage,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",12,0.6666666666666666,0.3333333333333333
+Durum Wheat + Lentil + Teff,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Reduced Tillage,NA,Costs,"Tropics, highland; sub-humid, with soil/terrain limitations",3,1,0
+Durum Wheat + Lentil + Teff,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Reduced Tillage,NA,Income,"Tropics, highland; sub-humid, with soil/terrain limitations",3,0.6666666666666666,0.3333333333333333
+Durum Wheat + Lentil + Teff,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Reduced Tillage,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",12,0.5,0.5
+Ethiopian Mustard + Maize,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",1,0,1
+Ethiopian Mustard + Maize,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, lowland; sub-humid, with soil/terrain limitations",1,0,1
+Faidherbia albida + Maize,Cereals,C: Monoculture_vs_T: Agroforestry,NA,NA,NA,NA,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",18,0.2777777777777778,0.7222222222222222
+Faidherbia albida + Maize,Cereals..N Fix Tree,C: Agroforestry_vs_T: Agroforestry,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",27,0.2222222222222222,0.7777777777777778
+Faidherbia albida + Wheat,Cereals,C: Monoculture_vs_T: Agroforestry,NA,NA,NA,NA,Product Yield,"Tropics, lowland; semi-arid, no soil/terrain limitations",8,0,1
+Fava Bean + Maize,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",1,1,0
+Fava Bean + Maize,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, lowland; sub-humid, with soil/terrain limitations",1,0,1
+Fava Bean + Maize + Wheat,Cereals..Leguminous crops,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,4,0,1
+Fava Bean + Maize + Wheat,Cereals..Leguminous crops,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,4,0,1
+Fava Bean + Maize + Wheat,Cereals..Leguminous crops,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,4,0,1
+Finger Millet,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",8,0,1
+Finger Millet,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",8,0,1
+Finger Millet + Hairy Vetch,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, lowland; humid, with soil/terrain limitations",3,1,0
+Finger Millet + Lupin,Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",12,1,0
+Finger Millet + Lupin,Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",12,1,0
+Finger Millet + No leguminous tree,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,"Tropics, lowland; humid, with soil/terrain limitations",12,0.4166666666666667,0.5833333333333334
+Finger Millet + Purple Vetch,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, lowland; humid, with soil/terrain limitations",6,1,0
+Finger Millet + Soybean,Cereals..Oilseed crops and oleaginous fruits,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Product Yield,"Tropics, lowland; humid, with soil/terrain limitations",72,0,1
+Finger Millet + Soybean,Cereals..Oilseed crops and oleaginous fruits,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Soil Quality,"Tropics, lowland; humid, with soil/terrain limitations",144,0.4930555555555556,0.5069444444444444
+Grevillea robusta + Maize,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,"Tropics, lowland; humid, with soil/terrain limitations",4,0.25,0.75
+Grevillea robusta + Teff,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,"Tropics, lowland; humid, with soil/terrain limitations",4,0,1
+Hairy Vetch + Maize,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,Land with severe soil/terrain limitations,6,1,0
+Hairy Vetch + Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",1,0,1
+Hairy Vetch + Maize,Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Crop residues removed,NA,NA,C: Supplemental Irrigation_vs_T: Supplemental Irrigation,Efficiency,"Tropics, highland; sub-humid, with soil/terrain limitations",1,1,0
+Hairy Vetch + Maize,Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Crop residues removed,NA,NA,C: Supplemental Irrigation_vs_T: Supplemental Irrigation,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",1,1,0
+Maize,Cereals,C: Monoculture_vs_T: Crop rotation,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",1,1,0
+Maize,Cereals,NA,C: Crop residues incorporated_vs_T: Crop residues incorporated,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",12,0,1
+Maize,Cereals,NA,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",32,0.09375,0.90625
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Income,Land with severe soil/terrain limitations,3,0,1
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Non-Product Yield,Land with severe soil/terrain limitations,3,0.3333333333333333,0.6666666666666666
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Product Yield,Land with severe soil/terrain limitations,3,0,1
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Soil Quality,Land with severe soil/terrain limitations,2,0,1
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Costs,Ample irrigated soils,4,0.5,0.5
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Costs,"Tropics, lowland; sub-humid, no soil/terrain limitations",4,0.5,0.5
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Income,Ample irrigated soils,4,1,0
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Income,"Tropics, lowland; sub-humid, no soil/terrain limitations",4,1,0
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Labour,Ample irrigated soils,2,0,1
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Labour,"Tropics, lowland; sub-humid, no soil/terrain limitations",2,0,1
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Product Yield,"Tropics, lowland; semi-arid, no soil/terrain limitations",2,1,0
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",2,0,1
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",2,0,1
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,NA,NA,Soil Quality,"Tropics, highland; semi-arid, no soil/terrain limitations",25,0.16,0.84
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,Ample irrigated soils,1,0,1
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,NA,Costs,Ample irrigated soils,6,0.8333333333333334,0.16666666666666666
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,NA,Costs,"Tropics, lowland; sub-humid, no soil/terrain limitations",6,0.8333333333333334,0.16666666666666666
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,NA,Income,Ample irrigated soils,6,0.3333333333333333,0.6666666666666666
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,NA,Income,"Tropics, lowland; sub-humid, no soil/terrain limitations",6,0.3333333333333333,0.6666666666666666
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,NA,Labour,Ample irrigated soils,3,0.6666666666666666,0.3333333333333333
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,NA,Labour,"Tropics, lowland; sub-humid, no soil/terrain limitations",3,0.6666666666666666,0.3333333333333333
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,NA,Product Yield,"Tropics, lowland; semi-arid, no soil/terrain limitations",2,1,0
+Maize,Cereals,NA,C: Crop residues retained_vs_T: Crop residues retained,NA,C: Reduced Tillage + Conventional Tillage_vs_T: Reduced Tillage + Conventional Tillage,NA,Product Yield,"Tropics, lowland; sub-humid, with soil/terrain limitations",4,0,1
+Maize,Cereals,NA,C: Crop residues retained_vs_T: Crop residues retained,NA,C: Reduced Tillage + Conventional Tillage_vs_T: Reduced Tillage + Conventional Tillage,NA,Soil Quality,"Tropics, lowland; sub-humid, with soil/terrain limitations",6,0,1
+Maize,Cereals,NA,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Zero Tillage,NA,Non-Product Yield,Ample irrigated soils,3,0,1
+Maize,Cereals,NA,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Zero Tillage,NA,Non-Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",3,1,0
+Maize,Cereals,NA,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Zero Tillage,NA,Product Yield,Ample irrigated soils,3,0.3333333333333333,0.6666666666666666
+Maize,Cereals,NA,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Zero Tillage,NA,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",2,1,0
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Deficit Irrigation,Costs,"Tropics, highland; humid, no soil/terrain limitations",18,1,0
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Deficit Irrigation,Economic Performance,"Tropics, highland; humid, no soil/terrain limitations",15,0.8666666666666667,0.13333333333333333
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Deficit Irrigation,Income,"Tropics, highland; humid, no soil/terrain limitations",36,0.8055555555555556,0.19444444444444445
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Deficit Irrigation,Product Yield,"Tropics, highland; humid, no soil/terrain limitations",18,0.8333333333333334,0.16666666666666666
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Full irrigation,Costs,"Tropics, highland; semi-arid, with soil/terrain limitations",3,1,0
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Full irrigation,Income,"Tropics, highland; semi-arid, with soil/terrain limitations",3,0,1
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,C: Supplemental Irrigation_vs_T: Supplemental Irrigation,Costs,"Tropics, highland; semi-arid, with soil/terrain limitations",3,1,0
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,C: Supplemental Irrigation_vs_T: Supplemental Irrigation,Income,"Tropics, highland; semi-arid, with soil/terrain limitations",3,0,1
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Costs,"Tropics, highland; humid, with soil/terrain limitations",4,0.75,0.25
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Costs,"Tropics, highland; sub-humid, no soil/terrain limitations",4,0.75,0.25
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Costs,"Tropics, highland; sub-humid, with soil/terrain limitations",4,0.75,0.25
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Income,"Tropics, highland; humid, with soil/terrain limitations",8,0,1
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Income,"Tropics, highland; sub-humid, no soil/terrain limitations",8,0,1
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Income,"Tropics, highland; sub-humid, with soil/terrain limitations",8,0.125,0.875
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Non-Product Yield,"Tropics, highland; humid, with soil/terrain limitations",4,0,1
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Non-Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",4,0,1
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Non-Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",4,0.25,0.75
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,528,0.2215909090909091,0.7784090909090909
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",260,0.25769230769230766,0.7423076923076923
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",12,0,1
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",268,0.15671641791044777,0.8432835820895522
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",60,0.45,0.55
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",24,0.3333333333333333,0.6666666666666666
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, lowland; sub-humid, with soil/terrain limitations",12,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,C: Deficit Irrigation_vs_T: Full irrigation,Costs,"Tropics, highland; humid, no soil/terrain limitations",6,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,C: Deficit Irrigation_vs_T: Full irrigation,Income,"Tropics, highland; humid, no soil/terrain limitations",12,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,C: Deficit Irrigation_vs_T: Full irrigation,Product Yield,"Tropics, highland; humid, no soil/terrain limitations",6,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Deficit Irrigation,Costs,"Tropics, highland; humid, no soil/terrain limitations",6,0.5,0.5
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Deficit Irrigation,Income,"Tropics, highland; humid, no soil/terrain limitations",12,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Deficit Irrigation,Product Yield,"Tropics, highland; humid, no soil/terrain limitations",6,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Costs,Ample irrigated soils,8,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Costs,Land with severe soil/terrain limitations,2,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Costs,"Tropics, highland; humid, with soil/terrain limitations",7,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Costs,"Tropics, highland; sub-humid, with soil/terrain limitations",6,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Costs,"Tropics, lowland; humid, with soil/terrain limitations",8,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Costs,"Tropics, lowland; sub-humid, no soil/terrain limitations",8,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Gender Equity,Land with severe soil/terrain limitations,2,1,0
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,Ample irrigated soils,10,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,Dominantly hydromorphic soils,8,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,Land with severe soil/terrain limitations,4,0.5,0.5
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,"Tropics, highland; humid, with soil/terrain limitations",30,0.13333333333333333,0.8666666666666667
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,"Tropics, highland; sub-humid, with soil/terrain limitations",12,0.3333333333333333,0.6666666666666666
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,"Tropics, lowland; humid, with soil/terrain limitations",16,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,"Tropics, lowland; sub-humid, no soil/terrain limitations",12,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Labour,Dominantly hydromorphic soils,4,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Labour,Land with severe soil/terrain limitations,1,1,0
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Labour,"Tropics, highland; humid, with soil/terrain limitations",8,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Non-Product Yield,Dominantly hydromorphic soils,8,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Non-Product Yield,"Tropics, highland; humid, with soil/terrain limitations",22,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Non-Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",2,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,Ample irrigated soils,6,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,Dominantly hydromorphic soils,10,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,24,0.08333333333333333,0.9166666666666666
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; humid, no soil/terrain limitations",4,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",31,0.0967741935483871,0.9032258064516129
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",10,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",93,0.07526881720430108,0.9247311827956989
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, lowland; humid, with soil/terrain limitations",26,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, lowland; semi-arid, no soil/terrain limitations",6,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",5,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, lowland; sub-humid, no soil/terrain limitations",18,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,NA,14,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Soil Quality,Dominantly hydromorphic soils,4,0.75,0.25
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Soil Quality,"Tropics, highland; humid, no soil/terrain limitations",3,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Soil Quality,"Tropics, highland; humid, with soil/terrain limitations",4,0.75,0.25
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Soil Quality,"Tropics, highland; sub-humid, with soil/terrain limitations",6,0.6666666666666666,0.3333333333333333
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Soil Quality,"Tropics, lowland; semi-arid, with soil/terrain limitations",4,0.75,0.25
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Costs,"Tropics, lowland; humid, with soil/terrain limitations",9,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Income,"Tropics, lowland; humid, with soil/terrain limitations",18,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Product Yield,"Tropics, lowland; humid, with soil/terrain limitations",18,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Costs,"Tropics, highland; humid, with soil/terrain limitations",3,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Costs,"Tropics, highland; sub-humid, with soil/terrain limitations",2,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Costs,"Tropics, lowland; humid, with soil/terrain limitations",3,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Income,"Tropics, highland; humid, with soil/terrain limitations",6,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Income,"Tropics, highland; sub-humid, with soil/terrain limitations",4,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Income,"Tropics, lowland; humid, with soil/terrain limitations",6,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Non-Product Yield,Ample irrigated soils,2,0.5,0.5
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Non-Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",2,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,Ample irrigated soils,2,0.5,0.5
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,"Tropics, highland; humid, no soil/terrain limitations",4,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",3,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",4,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,"Tropics, lowland; humid, with soil/terrain limitations",6,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Soil Quality,Ample irrigated soils,2,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Soil Quality,"Tropics, highland; humid, no soil/terrain limitations",3,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Soil Quality,"Tropics, highland; sub-humid, with soil/terrain limitations",6,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Costs,"Tropics, highland; humid, with soil/terrain limitations",9,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Costs,"Tropics, highland; sub-humid, with soil/terrain limitations",4,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Income,"Tropics, highland; humid, with soil/terrain limitations",18,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Income,"Tropics, highland; sub-humid, with soil/terrain limitations",8,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Non-Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",4,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,Dominantly hydromorphic soils,2,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,3,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; humid, no soil/terrain limitations",16,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",11,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",11,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",2,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,NA,2,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Soil Quality,Dominantly hydromorphic soils,4,0.5,0.5
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Soil Quality,"Tropics, highland; humid, no soil/terrain limitations",12,0.08333333333333333,0.9166666666666666
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Soil Quality,"Tropics, highland; humid, with soil/terrain limitations",4,0.5,0.5
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Soil Quality,"Tropics, highland; sub-humid, with soil/terrain limitations",12,0,1
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Soil Quality,"Tropics, lowland; semi-arid, with soil/terrain limitations",4,0.5,0.5
+Maize,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Costs,NA,2,1,0
+Maize,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Efficiency,"Tropics, lowland; semi-arid, no soil/terrain limitations",10,0.3,0.7
+Maize,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Income,Land with severe soil/terrain limitations,1,0,1
+Maize,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Income,NA,4,0,1
+Maize,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Product Yield,Land with severe soil/terrain limitations,1,0,1
+Maize,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",12,0.16666666666666666,0.8333333333333334
+Maize,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Product Yield,"Tropics, lowland; semi-arid, no soil/terrain limitations",6,0.3333333333333333,0.6666666666666666
+Maize,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Product Yield,"Tropics, lowland; sub-humid, no soil/terrain limitations",12,0.5,0.5
+Maize,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Soil Quality,"Tropics, highland; sub-humid, no soil/terrain limitations",22,0.4090909090909091,0.5909090909090909
+Maize,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Soil Quality,"Tropics, lowland; semi-arid, no soil/terrain limitations",1152,0.2065972222222222,0.7934027777777778
+Maize,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Soil Quality,"Tropics, lowland; sub-humid, no soil/terrain limitations",22,0.36363636363636365,0.6363636363636364
+Maize,Cereals,NA,NA,NA,C: No liming_vs_T: Liming,NA,Costs,"Tropics, highland; semi-arid, with soil/terrain limitations",9,0,1
+Maize,Cereals,NA,NA,NA,C: No liming_vs_T: Liming,NA,Income,"Tropics, highland; semi-arid, with soil/terrain limitations",18,0.2222222222222222,0.7777777777777778
+Maize,Cereals,NA,NA,NA,C: No liming_vs_T: Liming,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",18,0,1
+Maize,Cereals,NA,NA,NA,C: No liming_vs_T: Liming,NA,Soil Quality,"Tropics, highland; semi-arid, with soil/terrain limitations",27,0.3333333333333333,0.6666666666666666
+Maize,Cereals,NA,NA,NA,C: Reduced Tillage + Conventional Tillage_vs_T: Reduced Tillage + Conventional Tillage,NA,Product Yield,Land with severe soil/terrain limitations,6,0,1
+Maize,Cereals,NA,NA,NA,C: Reduced Tillage + Conventional Tillage_vs_T: Reduced Tillage + Conventional Tillage,NA,Soil Quality,Land with severe soil/terrain limitations,9,0,1
+Maize,Cereals,NA,NA,NA,C: Reduced Tillage_vs_T: Reduced Tillage,NA,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",8,0.75,0.25
+Maize,Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,NA,Costs,"Tropics, lowland; sub-humid, with soil/terrain limitations",4,1,0
+Maize,Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,NA,Income,"Tropics, lowland; sub-humid, with soil/terrain limitations",4,0,1
+Maize,Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,NA,Product Yield,"Tropics, lowland; sub-humid, with soil/terrain limitations",4,0,1
+Maize,Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,NA,Soil Quality,"Tropics, lowland; sub-humid, with soil/terrain limitations",890,0.4404494382022472,0.5595505617977528
+Maize,Cereals,NA,NA,NA,NA,C: Contour bunding_vs_T: Contour bunding,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",96,0.4375,0.5625
+Maize,Cereals,NA,NA,NA,NA,C: Deficit Irrigation_vs_T: Deficit Irrigation,Efficiency,Ample irrigated soils,12,0.6666666666666666,0.3333333333333333
+Maize,Cereals,NA,NA,NA,NA,C: Deficit Irrigation_vs_T: Deficit Irrigation,Product Yield,Ample irrigated soils,24,0.875,0.125
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Deficit Irrigation,Costs,"Tropics, highland; humid, no soil/terrain limitations",2,1,0
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Deficit Irrigation,Efficiency,Ample irrigated soils,6,0.16666666666666666,0.8333333333333334
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Deficit Irrigation,Efficiency,"Tropics, highland; humid, no soil/terrain limitations",2,0,1
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Deficit Irrigation,Efficiency,"Tropics, highland; semi-arid, with soil/terrain limitations",3,1,0
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Deficit Irrigation,Income,"Tropics, highland; humid, no soil/terrain limitations",4,0.5,0.5
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Deficit Irrigation,Product Yield,Ample irrigated soils,12,1,0
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Deficit Irrigation,Product Yield,"Tropics, highland; humid, no soil/terrain limitations",4,1,0
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Deficit Irrigation,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",114,0.6228070175438597,0.37719298245614036
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Full irrigation,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",6,0,1
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Full irrigation,Soil Quality,"Tropics, highland; sub-humid, no soil/terrain limitations",121,0.45454545454545453,0.5454545454545454
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Supplemental Irrigation,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",10,0.4,0.6
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Supplemental Irrigation,Soil Quality,"Tropics, highland; sub-humid, no soil/terrain limitations",484,0.5495867768595041,0.45041322314049587
+Maize + Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Conventional Tillage,NA,Non-Product Yield,Ample irrigated soils,3,0.6666666666666666,0.3333333333333333
+Maize + Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Conventional Tillage,NA,Product Yield,Ample irrigated soils,3,0.6666666666666666,0.3333333333333333
+Maize + Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Non-Product Yield,Ample irrigated soils,3,0,1
+Maize + Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Non-Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",3,1,0
+Maize + Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Product Yield,Ample irrigated soils,3,0.3333333333333333,0.6666666666666666
+Maize + Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",2,1,0
+Maize + Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",1,1,0
+Maize + Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",20,0.2,0.8
+Maize + Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,Land with severe soil/terrain limitations,3,0,1
+Maize + Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",6,0,1
+Maize + Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",2,1,0
+Maize + Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",13,0.23076923076923078,0.7692307692307693
+Maize + Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",1,0,1
+Maize + Common Bean,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Costs,Ample irrigated soils,4,0,1
+Maize + Common Bean,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,Ample irrigated soils,4,0,1
+Maize + Common Bean,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,Ample irrigated soils,2,0,1
+Maize + Common Bean,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,C: Crop residues retained_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Conventional Tillage,NA,Product Yield,Ample irrigated soils,6,1,0
+Maize + Lablab,Cereals,C: Monoculture_vs_T: Green manure,NA,NA,NA,NA,Non-Product Yield,Ample irrigated soils,1,0,1
+Maize + Lablab,Cereals,C: Monoculture_vs_T: Green manure,NA,NA,NA,NA,Product Yield,Ample irrigated soils,1,0,1
+Maize + Lablab,Cereals,C: Monoculture_vs_T: Green manure,NA,NA,NA,NA,Soil Quality,Ample irrigated soils,1,0,1
+Maize + Lablab,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Non-Product Yield,"Tropics, highland; humid, with soil/terrain limitations",2,1,0
+Maize + Lablab,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Non-Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",2,0,1
+Maize + Lablab,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Non-Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",2,0.5,0.5
+Maize + Lablab,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,Land with severe soil/terrain limitations,6,1,0
+Maize + Lablab,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",2,0,1
+Maize + Lablab,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",2,0,1
+Maize + Lablab,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",2,0,1
+Maize + Lablab,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",1,0,1
+Maize + Leguminous tree,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,"Tropics, lowland; humid, with soil/terrain limitations",4,0.5,0.5
+Maize + Leguminous tree,Cereals,C: Monoculture_vs_T: Agroforestry,NA,NA,NA,NA,Product Yield,"Tropics, lowland; semi-arid, no soil/terrain limitations",152,0.7960526315789473,0.20394736842105263
+Maize + Leguminous tree,Cereals,C: Monoculture_vs_T: Green manure,NA,NA,NA,NA,Non-Product Yield,"Tropics, highland; humid, with soil/terrain limitations",2,1,0
+Maize + Leguminous tree,Cereals,C: Monoculture_vs_T: Green manure,NA,NA,NA,NA,Non-Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",2,0.5,0.5
+Maize + Leguminous tree,Cereals,C: Monoculture_vs_T: Green manure,NA,NA,NA,NA,Non-Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",2,0.5,0.5
+Maize + Leguminous tree,Cereals,C: Monoculture_vs_T: Green manure,NA,NA,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",2,1,0
+Maize + Leguminous tree,Cereals,C: Monoculture_vs_T: Green manure,NA,NA,NA,NA,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",2,0,1
+Maize + Leguminous tree,Cereals,C: Monoculture_vs_T: Green manure,NA,NA,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",2,0.5,0.5
+Maize + Leguminous tree,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Product Yield,"Tropics, lowland; semi-arid, no soil/terrain limitations",6,0.6666666666666666,0.3333333333333333
+Maize + Leguminous tree,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,NA,Product Yield,"Tropics, lowland; semi-arid, no soil/terrain limitations",2,1,0
+Maize + Mung Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",1,1,0
+Maize + Mung Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",8,0.25,0.75
+Maize + Mung Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",8,0.25,0.75
+Maize + No leguminous tree,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,"Tropics, lowland; humid, with soil/terrain limitations",8,0.5,0.5
+Maize + Pigeon Pea,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,NA,Product Yield,"Tropics, lowland; sub-humid, with soil/terrain limitations",2,0,1
+Maize + Potato,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",1,1,0
+Maize + Potato,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, lowland; sub-humid, with soil/terrain limitations",1,1,0
+Maize + Potato,Cereals..Root tuber crops with high starch or inulin content,C: Crop rotation_vs_T: Crop rotation,C: Crop residues incorporated_vs_T: Crop residues incorporated,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; humid, no soil/terrain limitations",1,0,1
+Maize + Potato,Cereals..Root tuber crops with high starch or inulin content,C: Crop rotation_vs_T: Crop rotation,C: Crop residues incorporated_vs_T: Crop residues incorporated,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; humid, no soil/terrain limitations",3,0,1
+Maize + Potato + Wheat,Cereals..Root tuber crops with high starch or inulin content,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,4,0,1
+Maize + Potato + Wheat,Cereals..Root tuber crops with high starch or inulin content,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,4,0,1
+Maize + Potato + Wheat,Cereals..Root tuber crops with high starch or inulin content,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,4,0,1
+Maize + Sesame,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",1,0,1
+Maize + Soybean,Cereals,C: Monoculture_vs_T: Intercropping,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",2,0,1
+Maize + Soybean,Cereals,C: Monoculture_vs_T: Intercropping,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",2,0,1
+Maize + Soybean,Cereals,C: Monoculture_vs_T: Intercropping,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",2,0,1
+Maize + Soybean,Cereals,C: Monoculture_vs_T: Intercropping,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",2,0,1
+Maize + Sweet Potato,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",1,1,0
+Maize + Tick Clover sp,Cereals,C: Monoculture_vs_T: Intercropping,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",2,0,1
+Maize + Tick Clover sp,Cereals,C: Monoculture_vs_T: Intercropping,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",2,0,1
+Maize + Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,4,0.25,0.75
+Maize + Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,4,0,1
+Maize + Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,4,0,1
+Mung Bean + Pearl Millet,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",12,0.5833333333333334,0.4166666666666667
+Mung Bean + Pearl Millet,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",12,0.4166666666666667,0.5833333333333334
+Mung Bean + Sorghum,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",4,1,0
+Pearl Millet,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",72,0.3333333333333333,0.6666666666666666
+Pearl Millet,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",96,0.21875,0.78125
+Rice,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Costs,"Tropics, lowland; semi-arid, with soil/terrain limitations",12,0,1
+Rice,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,"Tropics, lowland; semi-arid, with soil/terrain limitations",24,0,1
+Rice,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, lowland; sub-humid, with soil/terrain limitations",12,0,1
+Sorghum,Cereals,NA,C: Crop residues removed_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",50,0.22,0.78
+Sorghum,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",20,0.05,0.95
+Sorghum,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",12,0,1
+Sorghum,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",24,0.08333333333333333,0.9166666666666666
+Sorghum,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Non-Product Yield,Land with severe soil/terrain limitations,115,0.5130434782608696,0.48695652173913045
+Sorghum,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Non-Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",150,0.46,0.54
+Sorghum,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,115,0.14782608695652175,0.8521739130434782
+Sorghum,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",150,0.16666666666666666,0.8333333333333334
+Sorghum,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Conventional Tillage,C: Contour bunding_vs_T: Contour bunding,Efficiency,"Tropics, lowland; semi-arid, with soil/terrain limitations",10,0.5,0.5
+Sorghum,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Conventional Tillage,C: Contour bunding_vs_T: Contour bunding,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",10,0.2,0.8
+Sorghum,Cereals,NA,NA,NA,C: Reduced Tillage_vs_T: Reduced Tillage,NA,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",4,0,1
+Sorghum,Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,NA,Efficiency,"Tropics, lowland; semi-arid, with soil/terrain limitations",10,0.5,0.5
+Sorghum,Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,NA,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",10,0.2,0.8
+Sorghum,Cereals,NA,NA,NA,NA,C: Contour bunding_vs_T: Contour bunding,Product Yield,"Tropics, highland; sub-humid, no soil/terrain limitations",32,0,1
+Sorghum + Soybean,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",48,0.22916666666666666,0.7708333333333334
+Teff,Cereals,NA,C: Crop residues grazed_vs_T: Crop residues grazed,C: Inorganic and Organic Fertilizers_vs_T: Inorganic and Organic Fertilizers,NA,NA,Product Yield,"Tropics, lowland; semi-arid, with soil/terrain limitations",1,0,1
+Teff,Cereals,NA,C: Crop residues grazed_vs_T: Crop residues grazed,C: Inorganic and Organic Fertilizers_vs_T: Inorganic and Organic Fertilizers,NA,NA,Soil Quality,"Tropics, lowland; semi-arid, with soil/terrain limitations",2,0,1
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Conventional Tillage,NA,Costs,Land with severe soil/terrain limitations,1,0,1
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Conventional Tillage,NA,Costs,"Tropics, lowland; semi-arid, no soil/terrain limitations",1,0,1
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Conventional Tillage,NA,Income,Land with severe soil/terrain limitations,2,0.5,0.5
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Conventional Tillage,NA,Income,"Tropics, lowland; semi-arid, no soil/terrain limitations",2,0,1
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Conventional Tillage,NA,Product Yield,Land with severe soil/terrain limitations,2,0,1
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Conventional Tillage,NA,Product Yield,"Tropics, lowland; semi-arid, no soil/terrain limitations",2,0,1
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,NA,Costs,Land with severe soil/terrain limitations,1,0,1
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,NA,Costs,"Tropics, lowland; semi-arid, no soil/terrain limitations",1,0,1
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,NA,Income,Land with severe soil/terrain limitations,2,0.5,0.5
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,NA,Income,"Tropics, lowland; semi-arid, no soil/terrain limitations",2,0,1
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,NA,Product Yield,Land with severe soil/terrain limitations,2,0,1
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,NA,Product Yield,"Tropics, lowland; semi-arid, no soil/terrain limitations",2,0,1
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,NA,Costs,Land with severe soil/terrain limitations,1,0,1
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,NA,Costs,"Tropics, lowland; semi-arid, no soil/terrain limitations",1,0,1
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,NA,Income,Land with severe soil/terrain limitations,2,0,1
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,NA,Income,"Tropics, lowland; semi-arid, no soil/terrain limitations",2,0,1
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,NA,Product Yield,Land with severe soil/terrain limitations,2,0,1
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,NA,Product Yield,"Tropics, lowland; semi-arid, no soil/terrain limitations",2,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Full irrigation,Efficiency,"Tropics, highland; semi-arid, with soil/terrain limitations",2,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Supplemental Irrigation,Efficiency,"Tropics, highland; semi-arid, with soil/terrain limitations",2,1,0
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Costs,Dominantly very steep terrain,3,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Costs,"Tropics, highland; semi-arid, with soil/terrain limitations",6,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,Dominantly very steep terrain,6,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,"Tropics, highland; humid, with soil/terrain limitations",2,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,"Tropics, highland; semi-arid, with soil/terrain limitations",12,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Non-Product Yield,"Tropics, highland; humid, with soil/terrain limitations",4,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,Dominantly very steep terrain,6,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,34,0.20588235294117646,0.7941176470588235
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",8,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",28,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",18,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, lowland; sub-humid, with soil/terrain limitations",69,0.4782608695652174,0.5217391304347826
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Soil Quality,Land with severe soil/terrain limitations,16,0.125,0.875
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Income,"Tropics, highland; humid, with soil/terrain limitations",4,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Non-Product Yield,"Tropics, highland; humid, with soil/terrain limitations",8,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",16,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Income,"Tropics, highland; humid, with soil/terrain limitations",4,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Non-Product Yield,"Tropics, highland; humid, with soil/terrain limitations",8,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,6,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",16,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Soil Quality,Land with severe soil/terrain limitations,8,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,6,0,1
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Soil Quality,Land with severe soil/terrain limitations,8,0,1
+Teff,Cereals,NA,NA,NA,C: No liming_vs_T: Liming,NA,Income,"Tropics, highland; humid, with soil/terrain limitations",1,0,1
+Teff,Cereals,NA,NA,NA,C: No liming_vs_T: Liming,NA,Non-Product Yield,"Tropics, highland; humid, with soil/terrain limitations",2,0,1
+Teff,Cereals,NA,NA,NA,C: No liming_vs_T: Liming,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",4,0,1
+Teff,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Supplemental Irrigation,Efficiency,"Tropics, highland; semi-arid, with soil/terrain limitations",1,1,0
+Teff + Leguminous tree,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,Land with severe soil/terrain limitations,12,0.5833333333333334,0.4166666666666667
+Teff + Leguminous tree,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,"Tropics, lowland; humid, with soil/terrain limitations",4,0,1
+Teff + Leguminous tree,Cereals,C: Monoculture_vs_T: Agroforestry,NA,NA,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",2,0,1
+Teff + Leguminous tree,Cereals,C: Monoculture_vs_T: Agroforestry,NA,NA,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",3,0,1
+Teff + Leguminous tree,Cereals,C: Monoculture_vs_T: Agroforestry; C: Monoculture_vs_T: Improved Fallow,NA,NA,NA,NA,Costs,"Tropics, highland; humid, with soil/terrain limitations",2,1,0
+Teff + Leguminous tree,Cereals,C: Monoculture_vs_T: Agroforestry; C: Monoculture_vs_T: Improved Fallow,NA,NA,NA,NA,Costs,"Tropics, highland; sub-humid, with soil/terrain limitations",3,1,0
+Teff + Leguminous tree,Cereals,C: Monoculture_vs_T: Agroforestry; C: Monoculture_vs_T: Improved Fallow,NA,NA,NA,NA,Income,"Tropics, highland; humid, with soil/terrain limitations",10,0.2,0.8
+Teff + Leguminous tree,Cereals,C: Monoculture_vs_T: Agroforestry; C: Monoculture_vs_T: Improved Fallow,NA,NA,NA,NA,Income,"Tropics, highland; sub-humid, with soil/terrain limitations",15,0.2,0.8
+Teff + Lupin,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",24,0.6666666666666666,0.3333333333333333
+Teff + No leguminous tree,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,Land with severe soil/terrain limitations,8,0.5,0.5
+Teff + No leguminous tree,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,"Tropics, lowland; humid, with soil/terrain limitations",8,0.25,0.75
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Income,Land with severe soil/terrain limitations,3,0,1
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Income,"Tropics, highland; semi-arid, no soil/terrain limitations",3,0,1
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Income,"Tropics, highland; sub-humid, with soil/terrain limitations",6,0,1
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Product Yield,Land with severe soil/terrain limitations,6,0,1
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Product Yield,"Tropics, highland; semi-arid, no soil/terrain limitations",6,0,1
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",12,0,1
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Zero Tillage_vs_T: Zero Tillage,NA,Product Yield,Land with severe soil/terrain limitations,12,0.75,0.25
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Zero Tillage_vs_T: Zero Tillage,NA,Soil Quality,Land with severe soil/terrain limitations,12,0.75,0.25
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,NA,C: Zero Tillage_vs_T: Conventional Tillage,NA,Product Yield,Land with severe soil/terrain limitations,18,0.16666666666666666,0.8333333333333334
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,NA,C: Zero Tillage_vs_T: Conventional Tillage,NA,Soil Quality,Land with severe soil/terrain limitations,18,0.05555555555555555,0.9444444444444444
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,NA,C: Zero Tillage_vs_T: Reduced Tillage,NA,Product Yield,Land with severe soil/terrain limitations,18,0.2777777777777778,0.7222222222222222
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,NA,C: Zero Tillage_vs_T: Reduced Tillage,NA,Soil Quality,Land with severe soil/terrain limitations,18,0.16666666666666666,0.8333333333333334
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Costs,"Tropics, highland; humid, with soil/terrain limitations",6,0,1
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,"Tropics, highland; humid, with soil/terrain limitations",12,0.16666666666666666,0.8333333333333334
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Non-Product Yield,"Tropics, highland; humid, with soil/terrain limitations",6,0,1
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,Dominantly very steep terrain,1,0,1
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,13,0,1
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",6,0,1
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; semi-arid, with soil/terrain limitations",1,0,1
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, highland; sub-humid, with soil/terrain limitations",51,0.0392156862745098,0.9607843137254902
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,"Tropics, lowland; semi-arid, no soil/terrain limitations",6,0.16666666666666666,0.8333333333333334
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Soil Quality,Land with severe soil/terrain limitations,16,0,1
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Costs,"Tropics, highland; humid, with soil/terrain limitations",3,0,1
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Income,"Tropics, highland; humid, with soil/terrain limitations",6,0,1
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Non-Product Yield,"Tropics, highland; humid, with soil/terrain limitations",3,0,1
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",3,0,1
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Costs,"Tropics, highland; humid, with soil/terrain limitations",1,0,1
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Income,"Tropics, highland; humid, with soil/terrain limitations",2,0,1
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Non-Product Yield,"Tropics, highland; humid, with soil/terrain limitations",1,0,1
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,6,0,1
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,"Tropics, highland; humid, with soil/terrain limitations",1,0,1
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Soil Quality,Land with severe soil/terrain limitations,8,0,1
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,Land with severe soil/terrain limitations,6,0,1
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Soil Quality,Land with severe soil/terrain limitations,8,0,1

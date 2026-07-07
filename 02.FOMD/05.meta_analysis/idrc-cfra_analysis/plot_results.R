@@ -27,6 +27,7 @@ library(tidyr)
 library(stringr)
 library(ggplot2)
 library(forcats)
+library(terra)
 
 # ---- 0. Load data -----------------------------------------------------------
 path.metadata.effectsize<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/04.metadata_effectsize"
@@ -414,7 +415,7 @@ eth_cereals <- ggplot(agg, aes(x = metric, y = practice, fill = category)) +
 
 print(eth_cereals)
 
-ggsave(paste0(path.metaanalysis,"/eth_cereals_heatmap.pdf"), plot = eth_cereals,
+ggsave(paste0(path.metaanalysis,"/plot.eth.cereals.heatmap.pdf"), plot = eth_cereals,
        width = 20, height = 15, dpi = 300, bg = "white")
 
 #-----------------------------------------------------
@@ -503,15 +504,19 @@ effect_sizes_per_zone <- effect_sizes_with_zone %>%
   summarise(n_effect_sizes = n_distinct(effect_size_id)) %>%
   arrange(desc(n_effect_sizes))
 
-
 eth.cereals1<-eth.cereals%>%
-  left_join(effect_sizes_with_zone,by="effect_size_id")%>%
+  left_join(effect_sizes_with_zone,by="effect_size_id")
   filter(label%in%c(
-    "Tropics, highland; sub-humid, no soil/terrain limitations",
-    "Land with severe soil/terrain limitations"
+    #"Tropics, highland; sub-humid, no soil/terrain limitations", # FERTILIZER HAD A POSITIVE SIGNIFICANT EFFECT
+    #"Tropics, lowland; semi-arid, no soil/terrain limitations", #AGROFORESTRY HAD A NEGATIVE SIGNIFICANT EFFECT
+    "Land with severe soil/terrain limitations",
+    "Tropics, lowland; sub-humid, with soil/terrain limitations", # NO DATA ON ANY IMPORTANT PRACTICE
+    "Tropics, highland; sub-humid, with soil/terrain limitations", # COULD BE
+    "Tropics, highland; humid, with soil/terrain limitations" ,# COULD BE
+    "Tropics, highland; semi-arid, with soil/terrain limitations"
   ))
 
-  
+
 eth.cereals.agr<-eth.cereals1%>%
     group_by(CT_crop_FAO_Food_Group_clean,
              diversification_spatial_temporal_theme,
@@ -708,9 +713,11 @@ agr.zn.agg <- agr.zn.agg %>%
 
 # ---- 7. Plot ------------------------------------------------------------------
 eth_cereals_agr_zn<-
-
-ggplot(agr.zn.agg%>%
-         filter(agr_zone=="Land with severe soil/terrain limitations"),
+  ggplot(agr.zn.agg%>%
+       #filter(agr_zone=="Land with severe soil/terrain limitations"),
+         #filter(agr_zone=="Tropics, highland; sub-humid, with soil/terrain limitations"),
+       filter(agr_zone=="Tropics, highland; humid, with soil/terrain limitations" ),
+       
        aes(x = metric, y = practice, fill = category)) +
   
   
@@ -720,26 +727,40 @@ ggplot(agr.zn.agg%>%
                      guide = "none")+
   # emphasized labels: strong positive + high confidence -> bigger + bold
   geom_text(data = subset(agr.zn.agg%>%
-                            filter(agr_zone=="Land with severe soil/terrain limitations"),
+                            #filter(agr_zone=="Land with severe soil/terrain limitations"),
+                            #filter(agr_zone=="Tropics, highland; sub-humid, with soil/terrain limitations"),
+                          filter(agr_zone=="Tropics, highland; humid, with soil/terrain limitations" ),
+                          
                           emphasis),
             aes(label = label, color = category),
             vjust = -0.55, size = 5, fontface = "bold") +
   # normal labels: everything else with data, not emphasized
   geom_text(data = subset(agr.zn.agg%>%
-                            filter(agr_zone=="Land with severe soil/terrain limitations"),
+                            #filter(agr_zone=="Land with severe soil/terrain limitations"),
+                           # filter(agr_zone=="Tropics, highland; sub-humid, with soil/terrain limitations"),
+                          filter(agr_zone=="Tropics, highland; humid, with soil/terrain limitations" ),
+                          
                           category != "No data" & !emphasis),
             aes(label = label, color = category),
             vjust = -0.55, size = 4, fontface = "plain") +
   # "No data" labels - smallest, not bold
   geom_text(data = subset(agr.zn.agg%>%
-                            filter(agr_zone=="Land with severe soil/terrain limitations"),
+                          #filter(agr_zone=="Land with severe soil/terrain limitations"),
+                            #filter(agr_zone=="Tropics, highland; sub-humid, with soil/terrain limitations"),
+                          filter(agr_zone=="Tropics, highland; humid, with soil/terrain limitations" ),
+                          
+                          
                           category == "No data"),
             aes(label = label, color = category),
             vjust = -0.55, size = 3.2, fontface = "plain") +
   geom_text(aes(label = n_label, color = category),
             vjust = 1.1, size = 2.8) +
   geom_text(data = subset(agr.zn.agg%>%
-                            filter(agr_zone=="Land with severe soil/terrain limitations"),
+                          #filter(agr_zone=="Land with severe soil/terrain limitations"),
+                            #filter(agr_zone=="Tropics, highland; sub-humid, with soil/terrain limitations"),
+                            filter(agr_zone=="Tropics, highland; humid, with soil/terrain limitations" ),
+                          
+                          
                           category != "No data"),
             aes(label = strrep("\u25CF", confidence_n)),
             color = "grey40", size = 2.1, hjust = 1, vjust = -1.4,
@@ -754,10 +775,6 @@ ggplot(agr.zn.agg%>%
   
   scale_x_discrete(position = "top") +
   facet_grid(group ~ ., scales = "free_y", space = "free_y", switch = "y") +
-  
-  # FIX 6: title/subtitle/caption re-enabled. For a Ministry/NGO audience,
-  # a one-line takeaway matters more than the grid itself - people anchor on
-  # the headline. Edit the wording to match your actual top-line finding.
   labs(
     x = NULL, y = NULL
   ) +
@@ -778,7 +795,9 @@ ggplot(agr.zn.agg%>%
 
 print(eth_cereals_agr_zn)
 "Land with severe soil/terrain limitations"
-ggsave(paste0(path.metaanalysis,"/eth_cereals_agr_zn_terrain_limiations.pdf"), plot = eth_cereals_agr_zn,
+#"Tropics, highland; sub-humid, with soil/terrain limitations"
+"Tropics, highland; humid, with soil/terrain limitations" 
+ggsave(paste0(path.metaanalysis,"/plot.eth.cereals.agr.zn.tropics.highland.humid.soil.limiations.pdf"), plot = eth_cereals_agr_zn,
        width = 13, height = 7, dpi = 300, bg = "white")
 
 
@@ -787,11 +806,82 @@ ggsave(paste0(path.metaanalysis,"/eth_cereals_agr_zn_terrain_limiations.pdf"), p
 # Reproduces the crop x fertilizer heatmap from cereals_crop_comb_eth.csv
 # =============================================================================
 sort(unique(eth.cereals1$out_indicator))
+
+crop.comb.counts <- eth.cereals1 %>%
+  group_by(T_crop_tree_diversity,
+           CT_crop_FAO_Food_Group_clean,
+           diversification_spatial_temporal_theme,
+           biomass_management_practice,
+           nutrient_management_practice,
+           soil_management_theme,
+           water_management_practice,
+           out_indicator,
+           effect_size_direction)%>%
+  summarise(n_direction = n(), .groups = "drop")
+
+sort(unique(cereals.df1_analysis$out_indicator))
+
+cereal.comb.raw_diversification <- crop.comb.counts %>%
+  group_by(T_crop_tree_diversity,
+           CT_crop_FAO_Food_Group_clean,
+           diversification_spatial_temporal_theme,
+           biomass_management_practice,
+           nutrient_management_practice,
+           soil_management_theme,
+           water_management_practice,
+           out_indicator) %>%
+  mutate(n = sum(n_direction)) %>%
+  ungroup() %>%
+  mutate(prop = n_direction / n) %>%
+  
+  # Drop n_direction BEFORE pivoting so it doesn't prevent row collapse
+  select(-n_direction) %>%
+  
+  pivot_wider(
+    names_from  = effect_size_direction,
+    values_from = prop,
+    values_fill = 0
+  ) %>%
+  
+  rename(
+    # practice = diversification_spatial_temporal_theme,
+    #diversification_temporal=diversification_temporal_theme,
+    #nutrient_management=nutrient_management_theme,
+    #water_management=water_management_practice,
+    
+    impact   = out_indicator,
+    pos = Positive,
+    neg= Negative
+  )%>%
+
+  mutate(
+    combo_clean = T_crop_tree_diversity %>%
+      str_split("[/\\-]") %>%
+      map_chr(~ str_trim(.x) %>% sort() %>% paste(collapse = " + "))
+  ) %>%
+  mutate(combo_clean=case_when(
+    combo_clean%in%c(
+      "Acacia nilotica + Cordia africana + Faidherbia albida + Moringa stenopetala + Teff",
+      "Faidherbia albida + Teff",
+      "Acacia abyssinica + Teff",
+      "Teff-Acacia abyssinica")~"Teff + Leguminous tree",
+    combo_clean%in%c(
+      "Teff-Cordia africana",
+      "Teff-Moringa stenopetala",
+      "Moringa stenopetala + Teff",
+      "Cordia africana + Teff")~"Teff + No leguminous tree",
+    TRUE~combo_clean))
+
+readr::write_csv(raw_diversification, paste0(path.metadata.effectsize, "/cereals_effects_eth.csv"))
+
+
+
+
 crop.comb.counts <- eth.cereals1 %>%
   filter(label == "Land with severe soil/terrain limitations") %>%
   #filter(out_indicator == "Product Yield") %>%
-  filter(out_indicator =="Soil Quality") %>%
-  filter(nutrient_management_practice != "C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer" | 
+  #filter(out_indicator =="Soil Quality") %>%
+  #filter(nutrient_management_practice != "C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer" | 
            is.na(nutrient_management_practice)) %>%
   mutate(nutrient_management_practice1=case_when(
     nutrient_management_practice%in%c(

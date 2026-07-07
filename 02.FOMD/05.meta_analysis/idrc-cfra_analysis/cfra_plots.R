@@ -11,7 +11,6 @@ library(rnaturalearthhires)
 library(ggnewscale)
 library(treemapify)
 library(forcats)
-library(terra)
 
 path.metaanalysis<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/05.meta_analysis/idrc-cfra_analysis"
 
@@ -288,7 +287,9 @@ ggsave(paste0(path.metaanalysis,"/plot.zmb.agr.zn.pdf"), plot = plot.agr.zn,
 plot.agr.zn.specific<-
   ggplot() +
   geom_raster(data = eth_aez_df%>%
-                filter(label=="Land with severe soil/terrain limitations"),
+                #filter(label=="Land with severe soil/terrain limitations"),
+                filter(label=="Tropics, highland; humid, with soil/terrain limitations" ),
+              
               aes(x = x, y = y, fill = label)) +
   #geom_raster(data = ken_aez_df, aes(x = x, y = y, fill = label)) +
   #geom_raster(data = zmb_aez_df, aes(x = x, y = y, fill = label)) +
@@ -328,7 +329,11 @@ plot.agr.zn.specific<-
 
 print(plot.agr.zn.specific)
 
-ggsave(paste0(path.metaanalysis,"/plot.eth.agr.zn.terrain.limiations.pdf"), plot = plot.agr.zn.specific,
+ggsave(paste0(path.metaanalysis,
+              #"/plot.eth.agr.zn.terrain.limiations.pdf"),
+              "/plot.eth.agr.zn.tropics.highland.humid.soil.limiations.pdf"),
+       
+       plot = plot.agr.zn.specific,
        width = 20, height = 10, dpi = 300, bg = "white")
 
 # ============================================================
