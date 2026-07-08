@@ -1,298 +1,300 @@
-CT_crop_FAO_Food_Group_clean,diversification_spatial_temporal_theme,biomass_management_practice,nutrient_management_practice,soil_management_theme,active_groups,water_management_practice,impact,out_subindicator,n,neg,pos
-Cereals,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Reduced Tillage,biomass_management..diversification_temporal..nutrient_management..soil_management,NA,Costs,Variable Cost,12,0.5,0.5
-Cereals,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Reduced Tillage,biomass_management..diversification_temporal..nutrient_management..soil_management,NA,Income,Gross Return,12,0.5,0.5
-Cereals,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Reduced Tillage,biomass_management..diversification_temporal..nutrient_management..soil_management,NA,Income,Net Return,12,0.5,0.5
-Cereals,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Reduced Tillage,biomass_management..diversification_temporal..nutrient_management..soil_management,NA,Non-Product Yield,Crop Residue Yield,12,0,1
-Cereals,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Reduced Tillage,biomass_management..diversification_temporal..nutrient_management..soil_management,NA,Product Yield,Biomass Yield,12,0,1
-Cereals,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Reduced Tillage,biomass_management..diversification_temporal..nutrient_management..soil_management,NA,Product Yield,Crop Yield,12,0,1
-Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,biomass_management..diversification_spatial,NA,Product Yield,Biomass Yield,40,0.6,0.4
-Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,biomass_management..diversification_spatial,NA,Product Yield,Crop Yield,40,0.325,0.675
-Cereals,C: Monoculture_vs_T: Agroforestry,NA,NA,NA,diversification_spatial,NA,Product Yield,Biomass Yield,72,0.7083333333333334,0.2916666666666667
-Cereals,C: Monoculture_vs_T: Agroforestry,NA,NA,NA,diversification_spatial,NA,Product Yield,Crop Yield,111,0.6756756756756757,0.32432432432432434
-Cereals,C: Monoculture_vs_T: Agroforestry; C: Monoculture_vs_T: Improved Fallow,NA,NA,NA,diversification_spatial..diversification_temporal,NA,Costs,Total Cost,1,1,0
-Cereals,C: Monoculture_vs_T: Agroforestry; C: Monoculture_vs_T: Improved Fallow,NA,NA,NA,diversification_spatial..diversification_temporal,NA,Income,Gross Margin,4,0.25,0.75
-Cereals,C: Monoculture_vs_T: Agroforestry; C: Monoculture_vs_T: Improved Fallow,NA,NA,NA,diversification_spatial..diversification_temporal,NA,Income,Gross Return,1,0,1
-Cereals,C: Monoculture_vs_T: Crop rotation,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Zero Tillage,biomass_management..diversification_temporal..soil_management,NA,Product Yield,Crop Yield,1,1,0
-Cereals,C: Monoculture_vs_T: Green manure,NA,NA,NA,diversification_spatial,NA,Non-Product Yield,Crop Residue Yield,6,0.6666666666666666,0.3333333333333333
-Cereals,C: Monoculture_vs_T: Green manure,NA,NA,NA,diversification_spatial,NA,Product Yield,Crop Yield,6,0.5,0.5
-Cereals,C: Monoculture_vs_T: Green manure,NA,NA,NA,diversification_temporal,NA,Non-Product Yield,Crop Residue Yield,1,0,1
-Cereals,C: Monoculture_vs_T: Green manure,NA,NA,NA,diversification_temporal,NA,Product Yield,Crop Yield,1,0,1
-Cereals,C: Monoculture_vs_T: Green manure,NA,NA,NA,diversification_temporal,NA,Soil Quality,Infiltration Rate,1,0,1
-Cereals,C: Monoculture_vs_T: Intercropping,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,biomass_management..diversification_spatial,NA,Product Yield,Crop Yield,8,0,1
-Cereals,C: Monoculture_vs_T: Intercropping,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,NA,biomass_management..diversification_spatial,NA,Product Yield,Crop Yield,4,0,1
-Cereals,C: Monoculture_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Conventional Tillage,biomass_management..diversification_spatial..soil_management,NA,Non-Product Yield,Crop Residue Yield,3,0.6666666666666666,0.3333333333333333
-Cereals,C: Monoculture_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Conventional Tillage,biomass_management..diversification_spatial..soil_management,NA,Product Yield,Crop Yield,3,0.6666666666666666,0.3333333333333333
-Cereals,C: Monoculture_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Zero Tillage,biomass_management..diversification_spatial..soil_management,NA,Non-Product Yield,Crop Residue Yield,6,0.5,0.5
-Cereals,C: Monoculture_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Zero Tillage,biomass_management..diversification_spatial..soil_management,NA,Product Yield,Crop Yield,5,0.6,0.4
-Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,diversification_spatial..nutrient_management,NA,Product Yield,Biomass Yield,29,0.6551724137931034,0.3448275862068966
-Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,diversification_spatial..nutrient_management,NA,Product Yield,Crop Yield,54,0.6481481481481481,0.35185185185185186
-Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,diversification_spatial..soil_management,NA,Product Yield,Crop Yield,2,0,1
-Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,diversification_spatial,NA,Non-Product Yield,Crop Residue Yield,6,0.5,0.5
-Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,diversification_spatial,NA,Product Yield,Biomass Yield,65,0.4153846153846154,0.5846153846153846
-Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,diversification_spatial,NA,Product Yield,Crop Yield,108,0.39814814814814814,0.6018518518518519
-Cereals,NA,C: Crop residues grazed_vs_T: Crop residues grazed,C: Inorganic and Organic Fertilizers_vs_T: Inorganic and Organic Fertilizers,NA,biomass_management..nutrient_management,NA,Product Yield,Crop Yield,1,0,1
-Cereals,NA,C: Crop residues grazed_vs_T: Crop residues grazed,C: Inorganic and Organic Fertilizers_vs_T: Inorganic and Organic Fertilizers,NA,biomass_management..nutrient_management,NA,Soil Quality,Soil Organic Matter,1,0,1
-Cereals,NA,C: Crop residues grazed_vs_T: Crop residues grazed,C: Inorganic and Organic Fertilizers_vs_T: Inorganic and Organic Fertilizers,NA,biomass_management..nutrient_management,NA,Soil Quality,Soil Total Nitrogen,1,0,1
-Cereals,NA,C: Crop residues incorporated_vs_T: Crop residues incorporated,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Product Yield,Crop Yield,12,0,1
-Cereals,NA,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,biomass_management,NA,Product Yield,Crop Yield,32,0.09375,0.90625
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues incorporated,NA,NA,biomass_management,NA,Product Yield,Crop Yield,50,0.22,0.78
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Conventional Tillage,biomass_management..nutrient_management..soil_management,NA,Costs,Variable Cost,2,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Conventional Tillage,biomass_management..nutrient_management..soil_management,NA,Income,Gross Margin,2,0.5,0.5
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Conventional Tillage,biomass_management..nutrient_management..soil_management,NA,Income,Gross Return,2,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Conventional Tillage,biomass_management..nutrient_management..soil_management,NA,Product Yield,Biomass Yield,2,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Conventional Tillage,biomass_management..nutrient_management..soil_management,NA,Product Yield,Crop Yield,2,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,biomass_management..nutrient_management..soil_management,NA,Costs,Variable Cost,2,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,biomass_management..nutrient_management..soil_management,NA,Income,Gross Margin,2,0.5,0.5
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,biomass_management..nutrient_management..soil_management,NA,Income,Gross Return,2,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,biomass_management..nutrient_management..soil_management,NA,Product Yield,Biomass Yield,2,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,biomass_management..nutrient_management..soil_management,NA,Product Yield,Crop Yield,2,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Costs,Variable Cost,3,0.6666666666666666,0.3333333333333333
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Income,Gross Margin,3,0.3333333333333333,0.6666666666666666
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Income,Gross Return,3,0.3333333333333333,0.6666666666666666
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Product Yield,Biomass Yield,3,0.3333333333333333,0.6666666666666666
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Product Yield,Crop Yield,3,0.3333333333333333,0.6666666666666666
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Soil Quality,Erosion,3,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Soil Quality,Runoff,3,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Product Yield,Crop Yield,20,0.05,0.95
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,biomass_management..soil_management,NA,Income,Net Return,6,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,biomass_management..soil_management,NA,Non-Product Yield,Crop Residue Yield,3,0.3333333333333333,0.6666666666666666
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,biomass_management..soil_management,NA,Product Yield,Biomass Yield,3,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,biomass_management..soil_management,NA,Product Yield,Crop Yield,6,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,biomass_management..soil_management,NA,Soil Quality,Cation Exchange Capacity,1,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,biomass_management..soil_management,NA,Soil Quality,Soil Organic Carbon,1,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Zero Tillage_vs_T: Zero Tillage,biomass_management..soil_management,NA,Product Yield,Biomass Yield,6,0.6666666666666666,0.3333333333333333
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Zero Tillage_vs_T: Zero Tillage,biomass_management..soil_management,NA,Product Yield,Crop Yield,6,0.8333333333333334,0.16666666666666666
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Zero Tillage_vs_T: Zero Tillage,biomass_management..soil_management,NA,Soil Quality,Erosion,6,0.5,0.5
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Zero Tillage_vs_T: Zero Tillage,biomass_management..soil_management,NA,Soil Quality,Runoff,6,1,0
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,biomass_management,NA,Costs,Labour Cost,2,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,biomass_management,NA,Costs,Variable Cost,2,1,0
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,biomass_management,NA,Income,Gross Margin,2,1,0
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,biomass_management,NA,Income,Gross Return,2,1,0
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,biomass_management,NA,Labour,Labour Person Hours,2,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,biomass_management,NA,Product Yield,Biomass Yield,4,0.75,0.25
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,biomass_management,NA,Product Yield,Crop Yield,4,0.75,0.25
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,biomass_management..nutrient_management..soil_management,NA,Costs,Variable Cost,2,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,biomass_management..nutrient_management..soil_management,NA,Income,Gross Margin,2,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,biomass_management..nutrient_management..soil_management,NA,Income,Gross Return,2,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,biomass_management..nutrient_management..soil_management,NA,Product Yield,Biomass Yield,2,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,biomass_management..nutrient_management..soil_management,NA,Product Yield,Crop Yield,2,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,NA,C: Zero Tillage_vs_T: Conventional Tillage,biomass_management..soil_management,NA,Product Yield,Biomass Yield,9,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,NA,C: Zero Tillage_vs_T: Conventional Tillage,biomass_management..soil_management,NA,Product Yield,Crop Yield,9,0.3333333333333333,0.6666666666666666
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,NA,C: Zero Tillage_vs_T: Conventional Tillage,biomass_management..soil_management,NA,Soil Quality,Erosion,9,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,NA,C: Zero Tillage_vs_T: Conventional Tillage,biomass_management..soil_management,NA,Soil Quality,Runoff,9,0.1111111111111111,0.8888888888888888
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,NA,C: Zero Tillage_vs_T: Reduced Tillage,biomass_management..soil_management,NA,Product Yield,Biomass Yield,9,0.1111111111111111,0.8888888888888888
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,NA,C: Zero Tillage_vs_T: Reduced Tillage,biomass_management..soil_management,NA,Product Yield,Crop Yield,9,0.4444444444444444,0.5555555555555556
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,NA,C: Zero Tillage_vs_T: Reduced Tillage,biomass_management..soil_management,NA,Soil Quality,Erosion,9,0.1111111111111111,0.8888888888888888
-Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,NA,C: Zero Tillage_vs_T: Reduced Tillage,biomass_management..soil_management,NA,Soil Quality,Runoff,9,0.2222222222222222,0.7777777777777778
-Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,NA,biomass_management,NA,Product Yield,Crop Yield,4,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,NA,biomass_management,NA,Soil Quality,Runoff,10,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,NA,biomass_management,NA,Soil Quality,Soil Moisture,10,0.1,0.9
-Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,NA,biomass_management,NA,Soil Quality,Soil Organic Matter,5,0.6,0.4
-Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Costs,Variable Cost,15,0.8,0.2
-Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Income,Gross Margin,15,0.06666666666666667,0.9333333333333333
-Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Income,Gross Return,15,0.06666666666666667,0.9333333333333333
-Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Product Yield,Biomass Yield,15,0.06666666666666667,0.9333333333333333
-Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Product Yield,Crop Yield,16,0.0625,0.9375
-Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Soil Quality,Erosion,15,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Soil Quality,Runoff,15,0,1
-Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,biomass_management,NA,Costs,Labour Cost,3,0.6666666666666666,0.3333333333333333
-Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,biomass_management,NA,Costs,Variable Cost,3,1,0
-Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,biomass_management,NA,Income,Gross Margin,3,0.3333333333333333,0.6666666666666666
-Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,biomass_management,NA,Income,Gross Return,3,0.3333333333333333,0.6666666666666666
-Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,biomass_management,NA,Labour,Labour Person Hours,3,0.6666666666666666,0.3333333333333333
-Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,biomass_management,NA,Product Yield,Biomass Yield,2,1,0
-Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,biomass_management,NA,Product Yield,Crop Yield,2,1,0
-Cereals,NA,C: Crop residues retained_vs_T: Crop residues retained,NA,C: Reduced Tillage + Conventional Tillage_vs_T: Reduced Tillage + Conventional Tillage,biomass_management..soil_management,NA,Product Yield,Biomass Yield,2,0,1
-Cereals,NA,C: Crop residues retained_vs_T: Crop residues retained,NA,C: Reduced Tillage + Conventional Tillage_vs_T: Reduced Tillage + Conventional Tillage,biomass_management..soil_management,NA,Product Yield,Crop Yield,2,0,1
-Cereals,NA,C: Crop residues retained_vs_T: Crop residues retained,NA,C: Reduced Tillage + Conventional Tillage_vs_T: Reduced Tillage + Conventional Tillage,biomass_management..soil_management,NA,Soil Quality,Cation Exchange Capacity,2,0,1
-Cereals,NA,C: Crop residues retained_vs_T: Crop residues retained,NA,C: Reduced Tillage + Conventional Tillage_vs_T: Reduced Tillage + Conventional Tillage,biomass_management..soil_management,NA,Soil Quality,Soil Nitrogen,2,0,1
-Cereals,NA,C: Crop residues retained_vs_T: Crop residues retained,NA,C: Reduced Tillage + Conventional Tillage_vs_T: Reduced Tillage + Conventional Tillage,biomass_management..soil_management,NA,Soil Quality,Soil Organic Carbon,2,0,1
-Cereals,NA,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Zero Tillage,biomass_management..nutrient_management..soil_management,NA,Non-Product Yield,Crop Residue Yield,6,0.5,0.5
-Cereals,NA,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Zero Tillage,biomass_management..nutrient_management..soil_management,NA,Product Yield,Crop Yield,5,0.6,0.4
-Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Costs,Variable Cost,12,0.75,0.25
-Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Income,Gross Margin,12,0.08333333333333333,0.9166666666666666
-Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Income,Gross Return,12,0,1
-Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Non-Product Yield,Crop Residue Yield,12,0.08333333333333333,0.9166666666666666
-Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Product Yield,Biomass Yield,60,0.3333333333333333,0.6666666666666666
-Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Product Yield,Crop Yield,663,0.22624434389140272,0.7737556561085973
-Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,nutrient_management..water_management,C: Full irrigation_vs_T: Deficit Irrigation,Costs,Variable Cost,24,0.75,0
-Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,nutrient_management..water_management,C: Full irrigation_vs_T: Deficit Irrigation,Economic Performance,Marginal Rate of Return,15,0.8666666666666667,0.13333333333333333
-Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,nutrient_management..water_management,C: Full irrigation_vs_T: Deficit Irrigation,Income,Gross Margin,24,0.5833333333333334,0.16666666666666666
-Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,nutrient_management..water_management,C: Full irrigation_vs_T: Deficit Irrigation,Income,Gross Return,18,0.8333333333333334,0.16666666666666666
-Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,nutrient_management..water_management,C: Full irrigation_vs_T: Deficit Irrigation,Product Yield,Crop Yield,18,0.8333333333333334,0.16666666666666666
-Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,nutrient_management..water_management,C: Full irrigation_vs_T: Full irrigation,Costs,Variable Cost,24,0.125,0
-Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,nutrient_management..water_management,C: Full irrigation_vs_T: Full irrigation,Income,Gross Margin,24,0,0.125
-Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,nutrient_management..water_management,C: Supplemental Irrigation_vs_T: Supplemental Irrigation,Costs,Variable Cost,24,0.125,0
-Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,nutrient_management..water_management,C: Supplemental Irrigation_vs_T: Supplemental Irrigation,Income,Gross Margin,24,0,0.125
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar,NA,nutrient_management,NA,Product Yield,Biomass Yield,1,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar,NA,nutrient_management,NA,Product Yield,Crop Yield,2,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar,NA,nutrient_management,NA,Soil Quality,Soil Organic Carbon,27,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar,NA,nutrient_management,NA,Soil Quality,Soil Total Nitrogen,27,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar + Inorganic Fertilizer,NA,nutrient_management,NA,Product Yield,Biomass Yield,8,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar + Inorganic Fertilizer,NA,nutrient_management,NA,Product Yield,Crop Yield,12,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar + Inorganic Fertilizer + Organic Fertilizer,NA,nutrient_management,NA,Product Yield,Biomass Yield,8,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar + Inorganic Fertilizer + Organic Fertilizer,NA,nutrient_management,NA,Product Yield,Crop Yield,16,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar + Organic Fertilizer,NA,nutrient_management,NA,Product Yield,Biomass Yield,2,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar + Organic Fertilizer,NA,nutrient_management,NA,Product Yield,Crop Yield,4,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Costs,Labour Cost,6,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Costs,Total Cost,4,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Costs,Variable Cost,48,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Gender Equity,Labour Female,1,1,0
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Gender Equity,Labour Male,1,1,0
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Income,Gross Margin,44,0.045454545454545456,0.9545454545454546
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Income,Gross Return,74,0.06756756756756757,0.9324324324324325
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Income,Net Return,34,0.14705882352941177,0.8529411764705882
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Labour,Labour Person Hours,13,0.07692307692307693,0.9230769230769231
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Non-Product Yield,Crop Residue Yield,92,0.25,0.75
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Product Yield,Biomass Yield,147,0.07482993197278912,0.9251700680272109
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Product Yield,Crop Yield,629,0.14467408585055644,0.8553259141494436
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Soil Quality,Cation Exchange Capacity,3,0.6666666666666666,0.3333333333333333
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Soil Quality,Soil NH4,4,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Soil Quality,Soil NO3,4,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Soil Quality,Soil Nitrogen,1,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Soil Quality,Soil Organic Carbon,9,0.3333333333333333,0.6666666666666666
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Soil Quality,Soil Total Nitrogen,8,0.375,0.625
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management..water_management,C: Deficit Irrigation_vs_T: Full irrigation,Costs,Variable Cost,12,0,0.5
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management..water_management,C: Deficit Irrigation_vs_T: Full irrigation,Income,Gross Margin,12,0,0.5
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management..water_management,C: Deficit Irrigation_vs_T: Full irrigation,Income,Gross Return,12,0,0.5
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management..water_management,C: Deficit Irrigation_vs_T: Full irrigation,Product Yield,Crop Yield,12,0,0.5
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management..water_management,C: Full irrigation_vs_T: Deficit Irrigation,Costs,Variable Cost,12,0.25,0.25
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management..water_management,C: Full irrigation_vs_T: Deficit Irrigation,Income,Gross Margin,12,0,0.5
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management..water_management,C: Full irrigation_vs_T: Deficit Irrigation,Income,Gross Return,12,0,0.5
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management..water_management,C: Full irrigation_vs_T: Deficit Irrigation,Product Yield,Crop Yield,12,0,0.5
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management..water_management,C: Full irrigation_vs_T: Full irrigation,Efficiency,Water Use Efficiency,4,0,0.5
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management..water_management,C: Full irrigation_vs_T: Supplemental Irrigation,Efficiency,Water Use Efficiency,4,0.5,0
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,nutrient_management,NA,Costs,Variable Cost,12,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,nutrient_management,NA,Income,Gross Margin,12,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,nutrient_management,NA,Income,Gross Return,16,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,nutrient_management,NA,Non-Product Yield,Crop Residue Yield,11,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,nutrient_management,NA,Product Yield,Biomass Yield,17,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,nutrient_management,NA,Product Yield,Crop Yield,24,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,nutrient_management,NA,Soil Quality,Soil Total Nitrogen,1,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,nutrient_management,NA,Costs,Variable Cost,9,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,nutrient_management,NA,Income,Gross Margin,6,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,nutrient_management,NA,Income,Gross Return,13,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,nutrient_management,NA,Income,Net Return,3,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,nutrient_management,NA,Non-Product Yield,Crop Residue Yield,13,0.07692307692307693,0.9230769230769231
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,nutrient_management,NA,Product Yield,Biomass Yield,18,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,nutrient_management,NA,Product Yield,Crop Yield,31,0.03225806451612903,0.967741935483871
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,nutrient_management,NA,Soil Quality,Cation Exchange Capacity,3,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,nutrient_management,NA,Soil Quality,Infiltration Rate,2,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,nutrient_management,NA,Soil Quality,Soil NH4,2,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,nutrient_management,NA,Soil Quality,Soil NO3,2,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,nutrient_management,NA,Soil Quality,Soil Nitrogen,1,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,nutrient_management,NA,Soil Quality,Soil Organic Carbon,5,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,nutrient_management,NA,Soil Quality,Soil Total Nitrogen,7,0.2857142857142857,0.7142857142857143
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,nutrient_management,NA,Costs,Variable Cost,13,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,nutrient_management,NA,Income,Gross Margin,4,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,nutrient_management,NA,Income,Gross Return,13,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,nutrient_management,NA,Income,Net Return,9,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,nutrient_management,NA,Non-Product Yield,Crop Residue Yield,4,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,nutrient_management,NA,Product Yield,Biomass Yield,8,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,nutrient_management,NA,Product Yield,Crop Yield,49,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,nutrient_management,NA,Soil Quality,Cation Exchange Capacity,8,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,nutrient_management,NA,Soil Quality,Soil NH4,2,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,nutrient_management,NA,Soil Quality,Soil NO3,2,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,nutrient_management,NA,Soil Quality,Soil Nitrogen,4,0.25,0.75
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,nutrient_management,NA,Soil Quality,Soil Organic Carbon,12,0,1
-Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,nutrient_management,NA,Soil Quality,Soil Total Nitrogen,10,0.2,0.8
-Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Conventional Tillage,soil_management..water_management,C: Contour bunding_vs_T: Contour bunding,Efficiency,Water Use Efficiency,10,0.5,0.5
-Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Conventional Tillage,soil_management..water_management,C: Contour bunding_vs_T: Contour bunding,Product Yield,Crop Yield,10,0.2,0.8
-Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,soil_management,NA,Costs,Variable Cost,2,1,0
-Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,soil_management,NA,Efficiency,Water Use Efficiency,10,0.3,0.7
-Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,soil_management,NA,Income,Gross Margin,3,0,1
-Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,soil_management,NA,Income,Gross Return,2,0,1
-Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,soil_management,NA,Product Yield,Biomass Yield,12,0.3333333333333333,0.6666666666666666
-Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,soil_management,NA,Product Yield,Crop Yield,19,0.3157894736842105,0.6842105263157895
-Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,soil_management,NA,Soil Quality,Soil Moisture,1164,0.20618556701030927,0.7938144329896907
-Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,soil_management,NA,Soil Quality,Soil Organic Carbon,16,0.4375,0.5625
-Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,soil_management,NA,Soil Quality,Soil Total Nitrogen,16,0.5,0.5
-Cereals,NA,NA,NA,C: No liming_vs_T: Liming,soil_management,NA,Costs,Variable Cost,9,0,1
-Cereals,NA,NA,NA,C: No liming_vs_T: Liming,soil_management,NA,Income,Gross Margin,9,0.4444444444444444,0.5555555555555556
-Cereals,NA,NA,NA,C: No liming_vs_T: Liming,soil_management,NA,Income,Gross Return,10,0,1
-Cereals,NA,NA,NA,C: No liming_vs_T: Liming,soil_management,NA,Non-Product Yield,Crop Residue Yield,2,0,1
-Cereals,NA,NA,NA,C: No liming_vs_T: Liming,soil_management,NA,Product Yield,Biomass Yield,11,0,1
-Cereals,NA,NA,NA,C: No liming_vs_T: Liming,soil_management,NA,Product Yield,Crop Yield,11,0,1
-Cereals,NA,NA,NA,C: No liming_vs_T: Liming,soil_management,NA,Soil Quality,Cation Exchange Capacity,9,0.1111111111111111,0.8888888888888888
-Cereals,NA,NA,NA,C: No liming_vs_T: Liming,soil_management,NA,Soil Quality,Soil Organic Carbon,9,0.1111111111111111,0.8888888888888888
-Cereals,NA,NA,NA,C: No liming_vs_T: Liming,soil_management,NA,Soil Quality,Soil Total Nitrogen,9,0.7777777777777778,0.2222222222222222
-Cereals,NA,NA,NA,C: Reduced Tillage + Conventional Tillage_vs_T: Reduced Tillage + Conventional Tillage,soil_management,NA,Product Yield,Biomass Yield,3,0,1
-Cereals,NA,NA,NA,C: Reduced Tillage + Conventional Tillage_vs_T: Reduced Tillage + Conventional Tillage,soil_management,NA,Product Yield,Crop Yield,3,0,1
-Cereals,NA,NA,NA,C: Reduced Tillage + Conventional Tillage_vs_T: Reduced Tillage + Conventional Tillage,soil_management,NA,Soil Quality,Cation Exchange Capacity,3,0,1
-Cereals,NA,NA,NA,C: Reduced Tillage + Conventional Tillage_vs_T: Reduced Tillage + Conventional Tillage,soil_management,NA,Soil Quality,Soil Nitrogen,3,0,1
-Cereals,NA,NA,NA,C: Reduced Tillage + Conventional Tillage_vs_T: Reduced Tillage + Conventional Tillage,soil_management,NA,Soil Quality,Soil Organic Carbon,3,0,1
-Cereals,NA,NA,NA,C: Reduced Tillage_vs_T: Reduced Tillage,soil_management,NA,Product Yield,Crop Yield,12,0.5,0.5
-Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,soil_management,NA,Costs,Labour Cost,2,1,0
-Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,soil_management,NA,Costs,Variable Cost,2,1,0
-Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,soil_management,NA,Efficiency,Water Use Efficiency,10,0.5,0.5
-Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,soil_management,NA,Income,Gross Return,2,0,1
-Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,soil_management,NA,Income,Net Return,2,0,1
-Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,soil_management,NA,Product Yield,Crop Yield,14,0.14285714285714285,0.8571428571428571
-Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,soil_management,NA,Soil Quality,Erosion,4,0.25,0.75
-Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,soil_management,NA,Soil Quality,Runoff,4,0,1
-Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,soil_management,NA,Soil Quality,Soil Moisture,882,0.4433106575963719,0.5566893424036281
-Cereals,NA,NA,NA,NA,water_management,C: Contour bunding_vs_T: Contour bunding,Product Yield,Crop Yield,162,0.25925925925925924,0.5308641975308642
-Cereals,NA,NA,NA,NA,water_management,C: Deficit Irrigation_vs_T: Deficit Irrigation,Efficiency,Water Use Efficiency,24,0.3333333333333333,0.16666666666666666
-Cereals,NA,NA,NA,NA,water_management,C: Deficit Irrigation_vs_T: Deficit Irrigation,Product Yield,Biomass Yield,136,0.07352941176470588,0.014705882352941176
-Cereals,NA,NA,NA,NA,water_management,C: Deficit Irrigation_vs_T: Deficit Irrigation,Product Yield,Crop Yield,162,0.06790123456790123,0.006172839506172839
-Cereals,NA,NA,NA,NA,water_management,C: Full irrigation_vs_T: Deficit Irrigation,Costs,Variable Cost,2,1,0
-Cereals,NA,NA,NA,NA,water_management,C: Full irrigation_vs_T: Deficit Irrigation,Efficiency,Water Use Efficiency,24,0.16666666666666666,0.2916666666666667
-Cereals,NA,NA,NA,NA,water_management,C: Full irrigation_vs_T: Deficit Irrigation,Income,Gross Margin,2,0,1
-Cereals,NA,NA,NA,NA,water_management,C: Full irrigation_vs_T: Deficit Irrigation,Income,Gross Return,2,1,0
-Cereals,NA,NA,NA,NA,water_management,C: Full irrigation_vs_T: Deficit Irrigation,Product Yield,Biomass Yield,136,0.5367647058823529,0.3161764705882353
-Cereals,NA,NA,NA,NA,water_management,C: Full irrigation_vs_T: Deficit Irrigation,Product Yield,Crop Yield,162,0.08641975308641975,0
-Cereals,NA,NA,NA,NA,water_management,C: Full irrigation_vs_T: Full irrigation,Product Yield,Biomass Yield,136,0,0.022058823529411766
-Cereals,NA,NA,NA,NA,water_management,C: Full irrigation_vs_T: Full irrigation,Product Yield,Crop Yield,162,0,0.018518518518518517
-Cereals,NA,NA,NA,NA,water_management,C: Full irrigation_vs_T: Full irrigation,Soil Quality,Soil Moisture,605,0.09090909090909091,0.10909090909090909
-Cereals,NA,NA,NA,NA,water_management,C: Full irrigation_vs_T: Supplemental Irrigation,Efficiency,Water Use Efficiency,24,0.041666666666666664,0
-Cereals,NA,NA,NA,NA,water_management,C: Full irrigation_vs_T: Supplemental Irrigation,Product Yield,Biomass Yield,136,0.014705882352941176,0.022058823529411766
-Cereals,NA,NA,NA,NA,water_management,C: Full irrigation_vs_T: Supplemental Irrigation,Product Yield,Crop Yield,162,0.012345679012345678,0.018518518518518517
-Cereals,NA,NA,NA,NA,water_management,C: Full irrigation_vs_T: Supplemental Irrigation,Soil Quality,Soil Moisture,605,0.4396694214876033,0.3603305785123967
-Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Reduced Tillage,biomass_management..diversification_temporal..soil_management,NA,Product Yield,Biomass Yield,2,0,1
-Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Reduced Tillage,biomass_management..diversification_temporal..soil_management,NA,Product Yield,Crop Yield,2,0,1
-Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Reduced Tillage,biomass_management..diversification_temporal..soil_management,NA,Soil Quality,Soil Nitrogen,2,0,1
-Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,C: Crop residues retained_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Conventional Tillage,biomass_management..diversification_temporal..nutrient_management..soil_management,NA,Product Yield,Crop Yield,6,1,0
-Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Conventional Tillage,diversification_temporal..soil_management,NA,Costs,Variable Cost,3,0.3333333333333333,0.6666666666666666
-Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Conventional Tillage,diversification_temporal..soil_management,NA,Income,Gross Margin,3,0.6666666666666666,0.3333333333333333
-Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Conventional Tillage,diversification_temporal..soil_management,NA,Product Yield,Biomass Yield,6,0.6666666666666666,0.3333333333333333
-Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Conventional Tillage,diversification_temporal..soil_management,NA,Product Yield,Crop Yield,6,0.6666666666666666,0.3333333333333333
-Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Reduced Tillage,diversification_temporal..soil_management,NA,Costs,Variable Cost,3,1,0
-Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Reduced Tillage,diversification_temporal..soil_management,NA,Income,Gross Margin,3,0.6666666666666666,0.3333333333333333
-Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Reduced Tillage,diversification_temporal..soil_management,NA,Product Yield,Biomass Yield,6,0.5,0.5
-Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Reduced Tillage,diversification_temporal..soil_management,NA,Product Yield,Crop Yield,6,0.5,0.5
-Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,NA,diversification_temporal,NA,Costs,Variable Cost,3,0,1
-Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,NA,diversification_temporal,NA,Income,Gross Margin,3,0.6666666666666666,0.3333333333333333
-Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,NA,diversification_temporal,NA,Product Yield,Biomass Yield,6,0.6666666666666666,0.3333333333333333
-Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,NA,diversification_temporal,NA,Product Yield,Crop Yield,6,0.6666666666666666,0.3333333333333333
-Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Crop residues removed,NA,NA,biomass_management..diversification_spatial..water_management,C: Supplemental Irrigation_vs_T: Supplemental Irrigation,Efficiency,Total Factor Productivity,1,1,0
-Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Crop residues removed,NA,NA,biomass_management..diversification_spatial..water_management,C: Supplemental Irrigation_vs_T: Supplemental Irrigation,Product Yield,Crop Yield,1,1,0
-Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,diversification_spatial..nutrient_management,NA,Product Yield,Biomass Yield,5,1,0
-Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,diversification_spatial..nutrient_management,NA,Product Yield,Crop Yield,24,0.7916666666666666,0.20833333333333334
-Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,diversification_spatial..nutrient_management,NA,Product Yield,Biomass Yield,6,0,1
-Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,diversification_spatial..nutrient_management,NA,Product Yield,Crop Yield,8,0,1
-Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Product Yield,Biomass Yield,6,0.3333333333333333,0.6666666666666666
-Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Product Yield,Crop Yield,6,0.3333333333333333,0.6666666666666666
-Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,biomass_management,NA,Efficiency,Water Use Efficiency,4,0,1
-Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,biomass_management,NA,Product Yield,Biomass Yield,4,0,1
-Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,biomass_management,NA,Product Yield,Crop Yield,4,0,1
-Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Product Yield,Biomass Yield,8,0,1
-Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,biomass_management..nutrient_management,NA,Product Yield,Crop Yield,8,0,1
-Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,biomass_management,NA,Efficiency,Water Use Efficiency,2,0,1
-Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,biomass_management,NA,Product Yield,Biomass Yield,2,0,1
-Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,biomass_management,NA,Product Yield,Crop Yield,2,0,1
-Cereals..Leguminous crops,NA,C: Crop residues retained_vs_T: Crop residues retained,NA,NA,biomass_management,NA,Carbon Stocks,Soil Carbon Stocks,1,0,1
-Cereals..Leguminous crops,NA,C: Crop residues retained_vs_T: Crop residues retained,NA,NA,biomass_management,NA,Soil Quality,Soil Organic Matter,1,0,1
-Cereals..Leguminous crops,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Product Yield,Crop Yield,4,0,1
-Cereals..Leguminous crops,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,nutrient_management,NA,Product Yield,Crop Yield,4,0,1
-Cereals..Leguminous crops,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,nutrient_management,NA,Product Yield,Crop Yield,4,0,1
-Cereals..N Fix Tree,C: Agroforestry_vs_T: Agroforestry,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,diversification_spatial..nutrient_management,NA,Product Yield,Crop Yield,27,0.2222222222222222,0.7777777777777778
-Cereals..Oilseed crops and oleaginous fruits,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Organic Fertilizer_vs_T: Organic Fertilizer,NA,biomass_management..nutrient_management,NA,Income,Gross Return,6,0,1
-Cereals..Oilseed crops and oleaginous fruits,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Organic Fertilizer_vs_T: Organic Fertilizer,NA,biomass_management..nutrient_management,NA,Labour,Labour Person Hours,6,0,1
-Cereals..Oilseed crops and oleaginous fruits,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,nutrient_management,NA,Product Yield,Crop Yield,72,0,1
-Cereals..Oilseed crops and oleaginous fruits,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,nutrient_management,NA,Soil Quality,Soil Organic Carbon,72,0.4027777777777778,0.5972222222222222
-Cereals..Oilseed crops and oleaginous fruits,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,nutrient_management,NA,Soil Quality,Soil Total Nitrogen,72,0.5833333333333334,0.4166666666666667
-Cereals..Root tuber crops with high starch or inulin content,C: Crop rotation_vs_T: Crop rotation,C: Crop residues incorporated_vs_T: Crop residues incorporated,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,biomass_management..diversification_temporal..nutrient_management,NA,Product Yield,Crop Yield,1,0,1
-Cereals..Root tuber crops with high starch or inulin content,C: Crop rotation_vs_T: Crop rotation,C: Crop residues incorporated_vs_T: Crop residues incorporated,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,biomass_management..diversification_temporal..nutrient_management,NA,Product Yield,Crop Yield,3,0,1
-Cereals..Root tuber crops with high starch or inulin content,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,nutrient_management,NA,Product Yield,Crop Yield,4,0,1
-Cereals..Root tuber crops with high starch or inulin content,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,nutrient_management,NA,Product Yield,Crop Yield,4,0,1
-Cereals..Root tuber crops with high starch or inulin content,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,nutrient_management,NA,Product Yield,Crop Yield,4,0,1
+T_crop_tree_diversity,CT_crop_FAO_Food_Group_clean,diversification_spatial_temporal_theme,biomass_management_practice,nutrient_management_practice,soil_management_theme,water_management_practice,impact,n,neg,pos,combo_clean
+Acacia decurrens-Teff/Acacia decurrens-Unspecified Fodder Grass/Acacia decurrens/Acacia decurrens/Acacia decurrens,Cereals,C: Monoculture_vs_T: Agroforestry; C: Monoculture_vs_T: Improved Fallow,NA,NA,NA,NA,Costs,5,1,0,Acacia decurrens + Acacia decurrens + Acacia decurrens + Acacia decurrens + Acacia decurrens + Teff + Unspecified Fodder Grass
+Acacia decurrens-Teff/Acacia decurrens-Unspecified Fodder Grass/Acacia decurrens/Acacia decurrens/Acacia decurrens,Cereals,C: Monoculture_vs_T: Agroforestry; C: Monoculture_vs_T: Improved Fallow,NA,NA,NA,NA,Income,25,0.2,0.8,Acacia decurrens + Acacia decurrens + Acacia decurrens + Acacia decurrens + Acacia decurrens + Teff + Unspecified Fodder Grass
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar,NA,NA,Product Yield,3,0,1,Barley
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar + Inorganic Fertilizer,NA,NA,Product Yield,20,0,1,Barley
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar + Inorganic Fertilizer + Organic Fertilizer,NA,NA,Product Yield,24,0,1,Barley
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar + Organic Fertilizer,NA,NA,Product Yield,6,0,1,Barley
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Costs,4,0,1,Barley
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,4,0,1,Barley
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,30,0,1,Barley
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Product Yield,4,0,1,Barley
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Soil Quality,1,0,1,Barley
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,3,0,1,Barley
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Soil Quality,3,0.6666666666666666,0.3333333333333333,Barley
+Barley,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Soil Quality,2,0,1,Barley
+Barley-Fava Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,5,1,0,Barley + Fava Bean
+Barley-Fava Bean,Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,5,1,0,Barley + Fava Bean
+Barley-Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Biochar,NA,NA,Soil Quality,54,0,1,Barley + Wheat
+Barley/Indian Pea/Teff/Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Costs,3,0.6666666666666666,0.3333333333333333,Barley + Indian Pea + Teff + Wheat
+Barley/Indian Pea/Teff/Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Income,6,0.3333333333333333,0.6666666666666666,Barley + Indian Pea + Teff + Wheat
+Barley/Indian Pea/Teff/Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,6,0.3333333333333333,0.6666666666666666,Barley + Indian Pea + Teff + Wheat
+Barley/Indian Pea/Teff/Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Soil Quality,6,0,1,Barley + Indian Pea + Teff + Wheat
+Barley/Indian Pea/Teff/Wheat,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Costs,15,0.8,0.2,Barley + Indian Pea + Teff + Wheat
+Barley/Indian Pea/Teff/Wheat,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Income,30,0.06666666666666667,0.9333333333333333,Barley + Indian Pea + Teff + Wheat
+Barley/Indian Pea/Teff/Wheat,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,30,0.06666666666666667,0.9333333333333333,Barley + Indian Pea + Teff + Wheat
+Barley/Indian Pea/Teff/Wheat,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Soil Quality,30,0,1,Barley + Indian Pea + Teff + Wheat
+Barley/Peas/Teff/Wheat,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Product Yield,4,0,1,Barley + Peas + Teff + Wheat
+Barley/Peas/Teff/Wheat,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Soil Quality,2,0,1,Barley + Peas + Teff + Wheat
+Barley/Peas/Teff/Wheat,Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,12,0.3333333333333333,0.6666666666666666,Barley + Peas + Teff + Wheat
+Barley/Peas/Teff/Wheat,Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Efficiency,4,0,1,Barley + Peas + Teff + Wheat
+Barley/Peas/Teff/Wheat,Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Product Yield,8,0,1,Barley + Peas + Teff + Wheat
+Barley/Peas/Teff/Wheat,Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,16,0,1,Barley + Peas + Teff + Wheat
+Barley/Peas/Teff/Wheat,Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,NA,Efficiency,2,0,1,Barley + Peas + Teff + Wheat
+Barley/Peas/Teff/Wheat,Cereals..Leguminous crops,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,NA,Product Yield,4,0,1,Barley + Peas + Teff + Wheat
+Barley/Wheat,Cereals,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Costs,12,0.5,0.5,Barley + Wheat
+Barley/Wheat,Cereals,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Income,24,0.5,0.5,Barley + Wheat
+Barley/Wheat,Cereals,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Non-Product Yield,12,0,1,Barley + Wheat
+Barley/Wheat,Cereals,C: Crop rotation_vs_T: Crop rotation,C: Crop residues removed_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Product Yield,24,0,1,Barley + Wheat
+Common Bean-Maize,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,15,0.2,0.8,Common Bean + Maize
+Common Bean/Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Costs,4,0,1,Common Bean + Maize
+Common Bean/Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,4,0,1,Common Bean + Maize
+Common Bean/Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,2,0,1,Common Bean + Maize
+Common Bean/Maize,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,C: Crop residues retained_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Conventional Tillage,NA,Product Yield,6,1,0,Common Bean + Maize
+Cowpea-Maize,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,3,0,1,Cowpea + Maize
+Durum Wheat/Hairy Vetch/Lentil/Teff,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,NA,NA,Costs,3,0,1,Durum Wheat + Hairy Vetch + Lentil + Teff
+Durum Wheat/Hairy Vetch/Lentil/Teff,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,NA,NA,Income,3,0.6666666666666666,0.3333333333333333,Durum Wheat + Hairy Vetch + Lentil + Teff
+Durum Wheat/Hairy Vetch/Lentil/Teff,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,NA,NA,Product Yield,12,0.6666666666666666,0.3333333333333333,Durum Wheat + Hairy Vetch + Lentil + Teff
+Durum Wheat/Lentil/Teff,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Conventional Tillage,NA,Costs,3,0.3333333333333333,0.6666666666666666,Durum Wheat + Lentil + Teff
+Durum Wheat/Lentil/Teff,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Conventional Tillage,NA,Income,3,0.6666666666666666,0.3333333333333333,Durum Wheat + Lentil + Teff
+Durum Wheat/Lentil/Teff,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Conventional Tillage,NA,Product Yield,12,0.6666666666666666,0.3333333333333333,Durum Wheat + Lentil + Teff
+Durum Wheat/Lentil/Teff,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Reduced Tillage,NA,Costs,3,1,0,Durum Wheat + Lentil + Teff
+Durum Wheat/Lentil/Teff,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Reduced Tillage,NA,Income,3,0.6666666666666666,0.3333333333333333,Durum Wheat + Lentil + Teff
+Durum Wheat/Lentil/Teff,Cereals..Leguminous crops,C: Crop rotation_vs_T: Crop rotation,NA,NA,C: Reduced Tillage_vs_T: Reduced Tillage,NA,Product Yield,12,0.5,0.5,Durum Wheat + Lentil + Teff
+Ethiopian Mustard-Maize,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,2,0,1,Ethiopian Mustard + Maize
+Fava Bean-Maize,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,2,0.5,0.5,Fava Bean + Maize
+Fava Bean/Maize/Wheat,Cereals..Leguminous crops,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,4,0,1,Fava Bean + Maize + Wheat
+Fava Bean/Maize/Wheat,Cereals..Leguminous crops,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,4,0,1,Fava Bean + Maize + Wheat
+Fava Bean/Maize/Wheat,Cereals..Leguminous crops,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,4,0,1,Fava Bean + Maize + Wheat
+Finger Millet,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,16,0,1,Finger Millet
+Finger Millet-Acacia abyssinica,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,4,0.75,0.25,Acacia abyssinica + Finger Millet
+Finger Millet-Acacia abyssinica-Cordia africana-Grevillea robusta-Croton macrostachyus,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,4,0.75,0.25,Acacia abyssinica + Cordia africana + Croton macrostachyus + Finger Millet + Grevillea robusta
+Finger Millet-Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,30,0.5333333333333333,0.4666666666666667,Common Bean + Finger Millet
+Finger Millet-Common Bean,Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,24,0.5833333333333334,0.4166666666666667,Common Bean + Finger Millet
+Finger Millet-Common Bean,Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,28,0,1,Common Bean + Finger Millet
+Finger Millet-Common Vetch,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,9,1,0,Common Vetch + Finger Millet
+Finger Millet-Cordia africana,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,4,0.5,0.5,Cordia africana + Finger Millet
+Finger Millet-Croton macrostachyus,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,4,0.5,0.5,Croton macrostachyus + Finger Millet
+Finger Millet-Grevillea robusta,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,4,0.25,0.75,Finger Millet + Grevillea robusta
+Finger Millet-Hairy Vetch,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,3,1,0,Finger Millet + Hairy Vetch
+Finger Millet-Lupin,Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,24,1,0,Finger Millet + Lupin
+Finger Millet-Purple Vetch,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,6,1,0,Finger Millet + Purple Vetch
+Finger Millet/Soybean,Cereals..Oilseed crops and oleaginous fruits,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Product Yield,72,0,1,Finger Millet + Soybean
+Finger Millet/Soybean,Cereals..Oilseed crops and oleaginous fruits,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Soil Quality,144,0.4930555555555556,0.5069444444444444,Finger Millet + Soybean
+Lablab/Maize,Cereals,C: Monoculture_vs_T: Green manure,NA,NA,NA,NA,Non-Product Yield,1,0,1,Lablab + Maize
+Lablab/Maize,Cereals,C: Monoculture_vs_T: Green manure,NA,NA,NA,NA,Product Yield,1,0,1,Lablab + Maize
+Lablab/Maize,Cereals,C: Monoculture_vs_T: Green manure,NA,NA,NA,NA,Soil Quality,1,0,1,Lablab + Maize
+Maize,Cereals,C: Monoculture_vs_T: Crop rotation,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Product Yield,1,1,0,Maize
+Maize,Cereals,NA,C: Crop residues incorporated_vs_T: Crop residues incorporated,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,12,0,1,Maize
+Maize,Cereals,NA,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,32,0.09375,0.90625,Maize
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Income,3,0,1,Maize
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Non-Product Yield,3,0.3333333333333333,0.6666666666666666,Maize
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Product Yield,3,0,1,Maize
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Soil Quality,2,0,1,Maize
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Costs,8,0.5,0.5,Maize
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Income,8,1,0,Maize
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Labour,4,0,1,Maize
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Product Yield,2,1,0,Maize
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,NA,NA,Product Yield,4,0,1,Maize
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,NA,NA,Soil Quality,25,0.16,0.84,Maize
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,1,0,1,Maize
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,NA,Costs,12,0.8333333333333334,0.16666666666666666,Maize
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,NA,Income,12,0.3333333333333333,0.6666666666666666,Maize
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,NA,Labour,6,0.6666666666666666,0.3333333333333333,Maize
+Maize,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,NA,Product Yield,2,1,0,Maize
+Maize,Cereals,NA,C: Crop residues retained_vs_T: Crop residues retained,NA,C: Reduced Tillage + Conventional Tillage_vs_T: Reduced Tillage + Conventional Tillage,NA,Product Yield,4,0,1,Maize
+Maize,Cereals,NA,C: Crop residues retained_vs_T: Crop residues retained,NA,C: Reduced Tillage + Conventional Tillage_vs_T: Reduced Tillage + Conventional Tillage,NA,Soil Quality,6,0,1,Maize
+Maize,Cereals,NA,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Zero Tillage,NA,Non-Product Yield,6,0.5,0.5,Maize
+Maize,Cereals,NA,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Conventional Tillage_vs_T: Zero Tillage,NA,Product Yield,5,0.6,0.4,Maize
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Deficit Irrigation,Costs,18,1,0,Maize
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Deficit Irrigation,Economic Performance,15,0.8666666666666667,0.13333333333333333,Maize
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Deficit Irrigation,Income,36,0.8055555555555556,0.19444444444444445,Maize
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Deficit Irrigation,Product Yield,18,0.8333333333333334,0.16666666666666666,Maize
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Full irrigation,Costs,3,1,0,Maize
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Full irrigation,Income,3,0,1,Maize
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,C: Supplemental Irrigation_vs_T: Supplemental Irrigation,Costs,3,1,0,Maize
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,C: Supplemental Irrigation_vs_T: Supplemental Irrigation,Income,3,0,1,Maize
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Costs,12,0.75,0.25,Maize
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Income,24,0.041666666666666664,0.9583333333333334,Maize
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Non-Product Yield,12,0.08333333333333333,0.9166666666666666,Maize
+Maize,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,1164,0.22422680412371135,0.7757731958762887,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,C: Deficit Irrigation_vs_T: Full irrigation,Costs,6,0,1,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,C: Deficit Irrigation_vs_T: Full irrigation,Income,12,0,1,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,C: Deficit Irrigation_vs_T: Full irrigation,Product Yield,6,0,1,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Deficit Irrigation,Costs,6,0.5,0.5,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Deficit Irrigation,Income,12,0,1,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Deficit Irrigation,Product Yield,6,0,1,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Costs,39,0,1,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Gender Equity,2,1,0,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,92,0.10869565217391304,0.8913043478260869,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Labour,13,0.07692307692307693,0.9230769230769231,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Non-Product Yield,32,0,1,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,247,0.048582995951417005,0.951417004048583,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Soil Quality,21,0.6190476190476191,0.38095238095238093,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Costs,9,0,1,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Income,18,0,1,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Product Yield,18,0,1,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Costs,8,0,1,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Income,16,0,1,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Non-Product Yield,4,0.25,0.75,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,19,0.05263157894736842,0.9473684210526315,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Soil Quality,11,0,1,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Costs,13,0,1,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Income,26,0,1,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Non-Product Yield,4,0,1,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,47,0,1,Maize
+Maize,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Soil Quality,36,0.19444444444444445,0.8055555555555556,Maize
+Maize,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Costs,2,1,0,Maize
+Maize,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Efficiency,10,0.3,0.7,Maize
+Maize,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Income,5,0,1,Maize
+Maize,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Product Yield,31,0.3225806451612903,0.6774193548387096,Maize
+Maize,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Reduced Tillage,NA,Soil Quality,1196,0.21321070234113712,0.7867892976588629,Maize
+Maize,Cereals,NA,NA,NA,C: No liming_vs_T: Liming,NA,Costs,9,0,1,Maize
+Maize,Cereals,NA,NA,NA,C: No liming_vs_T: Liming,NA,Income,18,0.2222222222222222,0.7777777777777778,Maize
+Maize,Cereals,NA,NA,NA,C: No liming_vs_T: Liming,NA,Product Yield,18,0,1,Maize
+Maize,Cereals,NA,NA,NA,C: No liming_vs_T: Liming,NA,Soil Quality,27,0.3333333333333333,0.6666666666666666,Maize
+Maize,Cereals,NA,NA,NA,C: Reduced Tillage + Conventional Tillage_vs_T: Reduced Tillage + Conventional Tillage,NA,Product Yield,6,0,1,Maize
+Maize,Cereals,NA,NA,NA,C: Reduced Tillage + Conventional Tillage_vs_T: Reduced Tillage + Conventional Tillage,NA,Soil Quality,9,0,1,Maize
+Maize,Cereals,NA,NA,NA,C: Reduced Tillage_vs_T: Reduced Tillage,NA,Product Yield,8,0.75,0.25,Maize
+Maize,Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,NA,Costs,4,1,0,Maize
+Maize,Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,NA,Income,4,0,1,Maize
+Maize,Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,NA,Product Yield,4,0,1,Maize
+Maize,Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,NA,Soil Quality,890,0.4404494382022472,0.5595505617977528,Maize
+Maize,Cereals,NA,NA,NA,NA,C: Contour bunding_vs_T: Contour bunding,Product Yield,96,0.4375,0.5625,Maize
+Maize,Cereals,NA,NA,NA,NA,C: Deficit Irrigation_vs_T: Deficit Irrigation,Efficiency,12,0.6666666666666666,0.3333333333333333,Maize
+Maize,Cereals,NA,NA,NA,NA,C: Deficit Irrigation_vs_T: Deficit Irrigation,Product Yield,24,0.875,0.125,Maize
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Deficit Irrigation,Costs,2,1,0,Maize
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Deficit Irrigation,Efficiency,11,0.36363636363636365,0.6363636363636364,Maize
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Deficit Irrigation,Income,4,0.5,0.5,Maize
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Deficit Irrigation,Product Yield,130,0.6692307692307692,0.33076923076923076,Maize
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Full irrigation,Product Yield,6,0,1,Maize
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Full irrigation,Soil Quality,121,0.45454545454545453,0.5454545454545454,Maize
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Supplemental Irrigation,Product Yield,10,0.4,0.6,Maize
+Maize,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Supplemental Irrigation,Soil Quality,484,0.5495867768595041,0.45041322314049587,Maize
+Maize-Acacia abyssinica,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,4,0.5,0.5,Acacia abyssinica + Maize
+Maize-Acacia abyssinica-Cordia africana-Grevillea robusta-Croton macrostachyus,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,4,0.75,0.25,Acacia abyssinica + Cordia africana + Croton macrostachyus + Grevillea robusta + Maize
+Maize-Acacia tortilis,Cereals,C: Monoculture_vs_T: Agroforestry,NA,NA,NA,NA,Product Yield,152,0.7960526315789473,0.20394736842105263,Acacia tortilis + Maize
+Maize-Acacia tortilis,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Product Yield,6,0.6666666666666666,0.3333333333333333,Acacia tortilis + Maize
+Maize-Acacia tortilis,Cereals,NA,C: Crop residues removed_vs_T: Organic mulch (unspecified),NA,NA,NA,Product Yield,2,1,0,Acacia tortilis + Maize
+Maize-Barley-Teff-Wheat-Common Bean,Cereals..Leguminous crops,NA,C: Crop residues retained_vs_T: Crop residues retained,NA,NA,NA,Carbon Stocks,1,0,1,Barley + Common Bean + Maize + Teff + Wheat
+Maize-Barley-Teff-Wheat-Common Bean,Cereals..Leguminous crops,NA,C: Crop residues retained_vs_T: Crop residues retained,NA,NA,NA,Soil Quality,1,0,1,Barley + Common Bean + Maize + Teff + Wheat
+Maize-Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Conventional Tillage,NA,Non-Product Yield,3,0.6666666666666666,0.3333333333333333,Common Bean + Maize
+Maize-Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Conventional Tillage,NA,Product Yield,3,0.6666666666666666,0.3333333333333333,Common Bean + Maize
+Maize-Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Non-Product Yield,6,0.5,0.5,Common Bean + Maize
+Maize-Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Organic mulch (herbaceus),NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Product Yield,5,0.6,0.4,Common Bean + Maize
+Maize-Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,21,0.23809523809523808,0.7619047619047619,Common Bean + Maize
+Maize-Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,10,0.2,0.8,Common Bean + Maize
+Maize-Common Bean-Mung Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,1,1,0,Common Bean + Maize + Mung Bean
+Maize-Cordia africana,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,4,0.25,0.75,Cordia africana + Maize
+Maize-Cowpea,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,1,0,1,Cowpea + Maize
+Maize-Crotalaria juncea,Cereals,C: Monoculture_vs_T: Green manure,NA,NA,NA,NA,Non-Product Yield,6,0.6666666666666666,0.3333333333333333,Crotalaria juncea + Maize
+Maize-Crotalaria juncea,Cereals,C: Monoculture_vs_T: Green manure,NA,NA,NA,NA,Product Yield,6,0.5,0.5,Crotalaria juncea + Maize
+Maize-Croton macrostachyus,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,4,0.75,0.25,Croton macrostachyus + Maize
+Maize-Faidherbia albida,Cereals,C: Monoculture_vs_T: Agroforestry,NA,NA,NA,NA,Product Yield,18,0.2777777777777778,0.7222222222222222,Faidherbia albida + Maize
+Maize-Faidherbia albida,Cereals..N Fix Tree,C: Agroforestry_vs_T: Agroforestry,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,27,0.2222222222222222,0.7777777777777778,Faidherbia albida + Maize
+Maize-Grevillea robusta,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,4,0.25,0.75,Grevillea robusta + Maize
+Maize-Hairy Vetch,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,6,1,0,Hairy Vetch + Maize
+Maize-Hairy Vetch,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,1,0,1,Hairy Vetch + Maize
+Maize-Hairy Vetch,Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Crop residues removed,NA,NA,C: Supplemental Irrigation_vs_T: Supplemental Irrigation,Efficiency,1,1,0,Hairy Vetch + Maize
+Maize-Hairy Vetch,Cereals..Leguminous crops,C: Intercropping_vs_T: Intercropping,C: Organic mulch (herbaceus)_vs_T: Crop residues removed,NA,NA,C: Supplemental Irrigation_vs_T: Supplemental Irrigation,Product Yield,1,1,0,Hairy Vetch + Maize
+Maize-Lablab,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Non-Product Yield,6,0.5,0.5,Lablab + Maize
+Maize-Lablab,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,12,0.5,0.5,Lablab + Maize
+Maize-Lablab,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,1,0,1,Lablab + Maize
+Maize-Mung Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,9,0.3333333333333333,0.6666666666666666,Maize + Mung Bean
+Maize-Mung Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,8,0.25,0.75,Maize + Mung Bean
+Maize-Mung Bean-Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,1,1,0,Common Bean + Maize + Mung Bean
+Maize-Pigeon Pea,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,NA,Product Yield,2,0,1,Maize + Pigeon Pea
+Maize-Sorghum-Wheat-Barley-Rape-Niger-Teff,Cereals..Oilseed crops and oleaginous fruits,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Organic Fertilizer_vs_T: Organic Fertilizer,NA,NA,Income,30,0,1,Barley + Maize + Niger + Rape + Sorghum + Teff + Wheat
+Maize-Sorghum-Wheat-Barley-Rape-Niger-Teff,Cereals..Oilseed crops and oleaginous fruits,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Organic Fertilizer_vs_T: Organic Fertilizer,NA,NA,Labour,30,0,1,Barley + Maize + Niger + Rape + Sorghum + Teff + Wheat
+Maize-Soybean,Cereals,C: Monoculture_vs_T: Intercropping,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Product Yield,4,0,1,Maize + Soybean
+Maize-Soybean,Cereals,C: Monoculture_vs_T: Intercropping,C: Crop residues removed_vs_T: Organic mulch (herbaceus),NA,NA,NA,Product Yield,4,0,1,Maize + Soybean
+Maize-Tick Clover sp,Cereals,C: Monoculture_vs_T: Intercropping,C: Crop residues removed_vs_T: Crop residues removed,NA,NA,NA,Product Yield,4,0,1,Maize + Tick Clover sp
+Maize/Potato,Cereals..Root tuber crops with high starch or inulin content,C: Crop rotation_vs_T: Crop rotation,C: Crop residues incorporated_vs_T: Crop residues incorporated,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,1,0,1,Maize + Potato
+Maize/Potato,Cereals..Root tuber crops with high starch or inulin content,C: Crop rotation_vs_T: Crop rotation,C: Crop residues incorporated_vs_T: Crop residues incorporated,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,3,0,1,Maize + Potato
+Maize/Potato/Wheat,Cereals..Root tuber crops with high starch or inulin content,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,4,0,1,Maize + Potato + Wheat
+Maize/Potato/Wheat,Cereals..Root tuber crops with high starch or inulin content,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,4,0,1,Maize + Potato + Wheat
+Maize/Potato/Wheat,Cereals..Root tuber crops with high starch or inulin content,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,4,0,1,Maize + Potato + Wheat
+Maize/Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,4,0.25,0.75,Maize + Wheat
+Maize/Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,4,0,1,Maize + Wheat
+Maize/Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,4,0,1,Maize + Wheat
+Pearl Millet,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,72,0.3333333333333333,0.6666666666666666,Pearl Millet
+Pearl Millet,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,96,0.21875,0.78125,Pearl Millet
+Pearl Millet-Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,12,0.8333333333333334,0.16666666666666666,Common Bean + Pearl Millet
+Pearl Millet-Common Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,12,0.5833333333333334,0.4166666666666667,Common Bean + Pearl Millet
+Pearl Millet-Mung Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,12,0.5833333333333334,0.4166666666666667,Mung Bean + Pearl Millet
+Pearl Millet-Mung Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,12,0.4166666666666667,0.5833333333333334,Mung Bean + Pearl Millet
+Potato-Maize,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,2,1,0,Maize + Potato
+Rice,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Costs,12,0,1,Rice
+Rice,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,24,0,1,Rice
+Rice,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,12,0,1,Rice
+Sesame-Maize,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,1,0,1,Maize + Sesame
+Sorghum,Cereals,NA,C: Crop residues removed_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,50,0.22,0.78,Sorghum
+Sorghum,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,20,0.05,0.95,Sorghum
+Sorghum,Cereals,NA,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,36,0.05555555555555555,0.9444444444444444,Sorghum
+Sorghum,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Non-Product Yield,265,0.4830188679245283,0.5169811320754717,Sorghum
+Sorghum,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,265,0.15849056603773584,0.8415094339622642,Sorghum
+Sorghum,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Conventional Tillage,C: Contour bunding_vs_T: Contour bunding,Efficiency,10,0.5,0.5,Sorghum
+Sorghum,Cereals,NA,NA,NA,C: Conventional Tillage_vs_T: Conventional Tillage,C: Contour bunding_vs_T: Contour bunding,Product Yield,10,0.2,0.8,Sorghum
+Sorghum,Cereals,NA,NA,NA,C: Reduced Tillage_vs_T: Reduced Tillage,NA,Product Yield,4,0,1,Sorghum
+Sorghum,Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,NA,Efficiency,10,0.5,0.5,Sorghum
+Sorghum,Cereals,NA,NA,NA,C: Zero Tillage_vs_T: Conventional Tillage,NA,Product Yield,10,0.2,0.8,Sorghum
+Sorghum,Cereals,NA,NA,NA,NA,C: Contour bunding_vs_T: Contour bunding,Product Yield,32,0,1,Sorghum
+Sorghum-Mung Bean,Cereals,C: Monoculture_vs_T: Intercropping,NA,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,4,1,0,Mung Bean + Sorghum
+Sorghum-Soybean,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,48,0.22916666666666666,0.7708333333333334,Sorghum + Soybean
+Sweet Potato-Maize,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,1,1,0,Maize + Sweet Potato
+Teff,Cereals,NA,C: Crop residues grazed_vs_T: Crop residues grazed,C: Inorganic and Organic Fertilizers_vs_T: Inorganic and Organic Fertilizers,NA,NA,Product Yield,1,0,1,Teff
+Teff,Cereals,NA,C: Crop residues grazed_vs_T: Crop residues grazed,C: Inorganic and Organic Fertilizers_vs_T: Inorganic and Organic Fertilizers,NA,NA,Soil Quality,2,0,1,Teff
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Conventional Tillage,NA,Costs,2,0,1,Teff
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Conventional Tillage,NA,Income,4,0.25,0.75,Teff
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Conventional Tillage,NA,Product Yield,4,0,1,Teff
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,NA,Costs,2,0,1,Teff
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,NA,Income,4,0.25,0.75,Teff
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,NA,Product Yield,4,0,1,Teff
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,NA,Costs,2,0,1,Teff
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,NA,Income,4,0,1,Teff
+Teff,Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer,C: Zero Tillage_vs_T: Reduced Tillage,NA,Product Yield,4,0,1,Teff
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Full irrigation,Efficiency,2,0,1,Teff
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,C: Full irrigation_vs_T: Supplemental Irrigation,Efficiency,2,1,0,Teff
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Costs,9,0,1,Teff
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,20,0,1,Teff
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Non-Product Yield,4,0,1,Teff
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,163,0.24539877300613497,0.754601226993865,Teff
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Soil Quality,16,0.125,0.875,Teff
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Income,4,0,1,Teff
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Non-Product Yield,8,0,1,Teff
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Product Yield,16,0,1,Teff
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Income,4,0,1,Teff
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Non-Product Yield,8,0,1,Teff
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,22,0,1,Teff
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Soil Quality,8,0,1,Teff
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,6,0,1,Teff
+Teff,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Soil Quality,8,0,1,Teff
+Teff,Cereals,NA,NA,NA,C: No liming_vs_T: Liming,NA,Income,1,0,1,Teff
+Teff,Cereals,NA,NA,NA,C: No liming_vs_T: Liming,NA,Non-Product Yield,2,0,1,Teff
+Teff,Cereals,NA,NA,NA,C: No liming_vs_T: Liming,NA,Product Yield,4,0,1,Teff
+Teff,Cereals,NA,NA,NA,NA,C: Full irrigation_vs_T: Supplemental Irrigation,Efficiency,1,1,0,Teff
+Teff-Acacia abyssinica,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,8,0.375,0.625,Teff + Leguminous tree
+Teff-Acacia abyssinica-Cordia africana-Grevillea robusta-Croton macrostachyus,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,4,0.75,0.25,Acacia abyssinica + Cordia africana + Croton macrostachyus + Grevillea robusta + Teff
+Teff-Acacia decurrens,Cereals,C: Monoculture_vs_T: Agroforestry,NA,NA,NA,NA,Product Yield,5,0,1,Acacia decurrens + Teff
+Teff-Cordia africana,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,8,0.375,0.625,Teff + No leguminous tree
+Teff-Croton macrostachyus,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,4,0.25,0.75,Croton macrostachyus + Teff
+Teff-Faidherbia albida,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,4,0.5,0.5,Teff + Leguminous tree
+Teff-Faidherbia albida-Moringa stenopetala-Acacia nilotica-Cordia africana,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,4,0.5,0.5,Teff + Leguminous tree
+Teff-Grevillea robusta,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,4,0,1,Grevillea robusta + Teff
+Teff-Lupin,Cereals,C: Monoculture_vs_T: Intercropping,NA,NA,NA,NA,Product Yield,24,0.6666666666666666,0.3333333333333333,Lupin + Teff
+Teff-Moringa stenopetala,Cereals,C: Monoculture_vs_T: Agroforestry,C: Crop residues incorporated_vs_T: Crop residues incorporated,NA,NA,NA,Product Yield,4,0.5,0.5,Teff + No leguminous tree
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Income,12,0,1,Wheat
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Conventional Tillage_vs_T: Zero Tillage,NA,Product Yield,24,0,1,Wheat
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Zero Tillage_vs_T: Zero Tillage,NA,Product Yield,12,0.75,0.25,Wheat
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues removed,NA,C: Zero Tillage_vs_T: Zero Tillage,NA,Soil Quality,12,0.75,0.25,Wheat
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,NA,C: Zero Tillage_vs_T: Conventional Tillage,NA,Product Yield,18,0.16666666666666666,0.8333333333333334,Wheat
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,NA,C: Zero Tillage_vs_T: Conventional Tillage,NA,Soil Quality,18,0.05555555555555555,0.9444444444444444,Wheat
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,NA,C: Zero Tillage_vs_T: Reduced Tillage,NA,Product Yield,18,0.2777777777777778,0.7222222222222222,Wheat
+Wheat,Cereals,NA,C: Crop residues removed_vs_T: Crop residues retained,NA,C: Zero Tillage_vs_T: Reduced Tillage,NA,Soil Quality,18,0.16666666666666666,0.8333333333333334,Wheat
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Costs,6,0,1,Wheat
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Income,12,0.16666666666666666,0.8333333333333334,Wheat
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Non-Product Yield,6,0,1,Wheat
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Product Yield,78,0.038461538461538464,0.9615384615384616,Wheat
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic Fertilizer,NA,NA,Soil Quality,16,0,1,Wheat
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Costs,3,0,1,Wheat
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Income,6,0,1,Wheat
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Non-Product Yield,3,0,1,Wheat
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Inorganic and Organic Fertilizers,NA,NA,Product Yield,3,0,1,Wheat
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Costs,1,0,1,Wheat
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Income,2,0,1,Wheat
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Non-Product Yield,1,0,1,Wheat
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Product Yield,7,0,1,Wheat
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer,NA,NA,Soil Quality,8,0,1,Wheat
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Product Yield,6,0,1,Wheat
+Wheat,Cereals,NA,NA,C: No Fertilizers Applied_vs_T: Organic Fertilizer + Inorganic Fertilizer,NA,NA,Soil Quality,8,0,1,Wheat
+Wheat-Faidherbia albida,Cereals,C: Monoculture_vs_T: Agroforestry,NA,NA,NA,NA,Product Yield,8,0,1,Faidherbia albida + Wheat
