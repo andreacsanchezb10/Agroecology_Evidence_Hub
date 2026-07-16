@@ -66,7 +66,9 @@
   nutrient_management      = c("fert"),
   pest_management          = c("chem"),
   water_management         = c("irrig", "watharv"),
-  biomass_management       = c("residues")   # pending split decision
+  biomass_management       = c("residues"),   # pending split decision
+  postharvest       = c("postharvest") ,  
+  harvest       = c("harvest")   
   
 )
 

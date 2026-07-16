@@ -36,7 +36,9 @@ local({
     "residues",
     "ph",
     "irrig",
-    "watharv"
+    "watharv",
+    "postharvest",
+    "harvest"
   )
   
   
@@ -44,6 +46,12 @@ local({
       path  = file.path(path.metadata.effectsize, "fomd_fun/comparison_practice.xlsx"),
       sheet = "CT_practice"
     )
+    
+    CT_subpractice_rename <- readxl::read_excel(
+      path  = file.path(path.metadata.effectsize, "fomd_fun/comparison_practice.xlsx"),
+      sheet = "CT_subpractice"
+    )%>%
+      dplyr::mutate(dplyr::across(where(is.character), ~ gsub("\u00a0", " ", .x)))
   
   # -----------------------------------------------------------------------------
   # Helper Functions
@@ -228,7 +236,7 @@ local({
     data
   }
   
-apply_CT_renames <<- function(data, ref = CT_practice_rename) {
+apply_CT_renames_practice <<- function(data, ref = CT_practice_rename) {
     # Keep only rows where a rename is defined
     ref_filtered <- ref %>%
       dplyr::filter(!is.na(CT_practice_rename) & CT_practice_rename != "")
@@ -252,7 +260,33 @@ apply_CT_renames <<- function(data, ref = CT_practice_rename) {
     }
     
     data
+}
+
+apply_CT_renames_subpractice <<- function(data, ref = CT_subpractice_rename) {
+  # Keep only rows where a rename is defined
+  ref_filtered <- ref %>%
+    dplyr::filter(!is.na(CT_subpractice_rename) & CT_subpractice_rename != "")
+  
+  # Loop over each (col, old_value, new_value) triplet
+  for (i in seq_len(nrow(ref_filtered))) {
+    col       <- ref_filtered$CT_subpractice_col[i]
+    old_val   <- ref_filtered$CT_subpractice[i]
+    new_val   <- ref_filtered$CT_subpractice_rename[i]
+    
+    if (!col %in% names(data)) {
+      message("Skipping: column '", col, "' not found in data.")
+      next
+    }
+    
+    data[[col]] <- dplyr::if_else(
+      data[[col]] == old_val,
+      new_val,
+      data[[col]]
+    )
   }
+  
+  data
+}
   
   
   # =============================================================================

@@ -37,6 +37,7 @@ length(unique(fomd04$study_id))#2106
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v12.csv"))
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v16.csv"))
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v22.csv"))
+#md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v24.csv"))
 md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v24.csv"))
 
 length(unique(md.era.short$study_id)) #1811 studies

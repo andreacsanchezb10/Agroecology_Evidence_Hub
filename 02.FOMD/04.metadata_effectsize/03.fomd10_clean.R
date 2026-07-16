@@ -13,7 +13,6 @@ path.metadata.effectsize<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agr
 list.files(path.metadata.structure)
 list.files(path.metadata.effectsize)
 
-
 #==========================================================
 # Read functions
 #==========================================================
@@ -33,11 +32,21 @@ sort(unique(fomd10$T_tillage_subpractice))
 #==========================================================
 fomd10.clean <- apply_CT_subpractie(fomd10)
 
+fomd10.clean <- apply_CT_renames_subpractice(fomd10.clean)
+
+
 summarise_CT_subpractice(fomd10.clean)
 
 # Quick checks
-sort(unique(fomd10.clean$CT_tillage_subpractice))
-sort(unique(fomd10.clean$CT_varietal_crop_subpractice))
+ct_subpractice_cols <- grep("^CT_.*_subpractice$", names(fomd10.clean), value = TRUE)
+
+comparison_subpractice_list<-purrr::map(ct_subpractice_cols, \(col) {
+  fomd10.clean %>%
+    dplyr::filter(!is.na(.data[[col]])) %>%
+    dplyr::count(column = col, value = .data[[col]], name = "n")
+}) %>%
+  dplyr::bind_rows()
+
 
 # Diversitication (spatial and temporal)
 sort(unique(fomd10.clean$CT_intercrop_subpractice))
@@ -58,8 +67,6 @@ sort(unique(fomd10.clean$CT_irrig_subpractice))
 #==========================================================
 fomd10.clean <- apply_CT_practice(fomd10.clean)
 
-sort(unique(fomd10.clean$CT_intercrop_practice))
-sort(unique(fomd10.clean$CT_intercrop_subpractice))
 ct_practice_cols <- grep("_practice$", names(fomd10.clean), value = TRUE)
 
 comparison_practice_list<-purrr::map(ct_practice_cols, \(col) {
@@ -73,7 +80,7 @@ comparison_practice_list<-purrr::map(ct_practice_cols, \(col) {
 
 #readr::write_csv(comparison_practice_list, paste0(path.metadata.effectsize, "/era_comparison_practice_list.csv"))
 
-fomd10.clean <- apply_CT_renames(fomd10.clean)
+fomd10.clean <- apply_CT_renames_practice(fomd10.clean)
 
 #nrow(comparison_practice_list) #15-
 
@@ -105,20 +112,20 @@ fomd10.clean <- build_analytical_columns(fomd10.clean)
 ### REPORT
 #Building analytical columns ...
 #variety_management_subpractice            136,699 non-NA rows
-#variety_management_practice               18,286 non-NA rows
-#variety_management_theme                  18,286 non-NA rows
+#variety_management_practice               21,612 non-NA rows
+#variety_management_theme                  21,612 non-NA rows
 
 #breed_animal_subpractice                  21,291 non-NA rows
 #breed_animal_practice                     0 non-NA rows
 #breed_animal_theme                        0 non-NA rows
  
 #planting_management_subpractice           12,995 non-NA rows
-#planting_management_practice              5,578 non-NA rows
+#planting_management_practice              5,578 non-NA rows  #Poner methods en methods, y subpractices en subpractices
 #planting_management_theme                 0 non-NA rows
  
-#diversification_spatial_subpractice       10,236 non-NA rows
-#diversification_spatial_practice          10,231 non-NA rows  ## TO CHECK: NEED TO FIX C_agrof_subpractice=="Open Communial Grazing Land
-#diversification_spatial_theme             10,231 non-NA rows ## TO CHECK: NEED TO FIX C_agrof_subpractice=="Open Communial Grazing Land
+#diversification_spatial_subpractice       11,060 non-NA rows
+#diversification_spatial_practice          11,055 non-NA rows  ## TO CHECK: NEED TO FIX C_agrof_subpractice=="Open Communal Grazing Land
+#diversification_spatial_theme             11,055 non-NA rows ## TO CHECK: NEED TO FIX C_agrof_subpractice=="Open Communal Grazing Land
 
 #diversification_temporal_subpractice      24,576 non-NA rows
 #diversification_temporal_practice         23,813 non-NA rows  ## TO CHECK: NEED TO FIX "C: Other Time Sequence_vs_T: Other Time Sequence"
@@ -128,13 +135,13 @@ fomd10.clean <- build_analytical_columns(fomd10.clean)
 #soil_management_practice                  33,997 non-NA rows # READY
 #soil_management_theme                     33,997 non-NA rows # READY
 
-#nutrient_management_subpractice           80,179 non-NA rows 
-#nutrient_management_practice              80,179 non-NA rows # READY
-#nutrient_management_theme                 79,098 non-NA rows
+#nutrient_management_subpractice           80,069 non-NA rows 
+#nutrient_management_practice              80,069 non-NA rows # READY
+#nutrient_management_theme                 80,069 non-NA rows # READY
 
-#pest_management_subpractice               18,999 non-NA rows
-#pest_management_practice                  18,922 non-NA rows ## TO CHECK: NEED TO FIX "Other"
-#pest_management_theme                     5,049 non-NA rows
+#pest_management_subpractice               32,113 non-NA rows
+#pest_management_practice                  30,827 non-NA rows ## TO CHECK: NEED TO FIX "Other"
+#pest_management_theme                     16,887 non-NA rows
 
 #water_management_subpractice              47,291 non-NA rows 
 #water_management_practice                 47,291 non-NA rows # READY
@@ -143,9 +150,14 @@ fomd10.clean <- build_analytical_columns(fomd10.clean)
 #biomass_management_subpractice            44,163 non-NA rows
 #biomass_management_practice               44,163 non-NA rows # READY
 #biomass_management_theme                  5,662 non-NA rows
-
-
-
+ 
+#postharvest_subpractice                   16,300 non-NA rows
+#postharvest_practice                      0 non-NA rows
+#postharvest_theme                         15,989 non-NA rows
+ 
+#harvest_subpractice                       289 non-NA rows
+#harvest_practice                          0 non-NA rows
+#harvest_theme                             0 non-NA rows
 
 sort(unique(fomd10.clean$diversification_spatial_theme))
 sort(unique(fomd10.clean$diversification_temporal_theme))
@@ -155,40 +167,33 @@ prueba0<-fomd10.clean%>%
          diversification_temporal_theme)
 
 prueba<-fomd10.clean%>%
-  #Nutrient management -----
+  # variety crop
+  select(doi, C_varietal_crop_subpractice,T_varietal_crop_subpractice,
+         CT_varietal_crop_subpractice,
+         variety_management_subpractice ,variety_management_practice,variety_management_theme,
+         "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
+  filter(!is.na(variety_management_subpractice))%>%
+  filter(is.na(variety_management_practice))
 
-select(doi, 
-       #C_ph_subpractice,T_ph_subpractice,
-       #diversification_spatial_subpractice,
-       nutrient_management_theme,
-       C_fert_inorganic_type_amount_unit,
-       #C_fert_inorganicN_amount_unit,
-       #C_fert_inorganicP_amount_unit,
-       #C_fert_inorganicK_amount_unit,
-       #C_fert_inorganicP2O5_amount_unit,
-       #C_fert_inorganicK2O_amount_unit,
-       
-       T_fert_inorganic_type_amount_unit,
-       CT_fert_practice,
-       #T_fert_inorganicN_amount_unit,
-       #T_fert_inorganicP_amount_unit,
-       #T_fert_inorganicK_amount_unit,
-       #T_fert_inorganicP2O5_amount_unit,
-       #T_fert_inorganicK2O_amount_unit,
-       T_fert_subpractice,
-       nutrient_management_subpractice,nutrient_management_practice ,nutrient_management_theme,
-       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
-  filter(!is.na(nutrient_management_practice))%>%
-  filter(is.na(nutrient_management_theme))
-  filter(grepl("fertilizer",practice_compared, ignore.case = TRUE))
-filter(nutrient_management_practice=="C: Inorganic Fertilizer_vs_T: Inorganic Fertilizer")
-sort(unique(prueba$nutrient_management_practice))
+sort(unique(prueba$CT_varietal_crop_subpractice))
 
+  #Planting management #Poner methods en methods, y subpractices en subpractices
+  select(doi, C_planting_method,T_planting_method,
+         planting_management_subpractice,planting_management_practice ,planting_management_theme,
+         "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
+  filter(!is.na(planting_management_subpractice))%>%
+  filter(is.na(planting_management_practice))
 
-
-
-
+x<-prueba[grepl("planting", prueba$practice_compared, ignore.case = TRUE), ]
   
+  #Pest management-----
+select(doi, C_chem_subpractice,T_chem_subpractice,
+       CT_chem_subpractice,
+       pest_management_subpractice,pest_management_practice ,pest_management_theme,
+       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
+  filter(!is.na(pest_management_subpractice))%>%
+  filter(is.na(pest_management_practice))
+sort(unique(prueba$CT_chem_subpractice))
   #Biomass management-----
 select(doi, C_residues_subpractice_raw,T_residues_subpractice_raw,
        C_residues_material,T_residues_material,
@@ -203,18 +208,7 @@ select(doi, C_residues_subpractice_raw,T_residues_subpractice_raw,
 sort(unique(prueba$practice_compared))
 x<-prueba[grepl("Inorganic fertilizer", prueba$practice_compared, ignore.case = TRUE), ]
 
-
-
-  #Pest management-----
-select(doi, C_chem_subpractice,
-       pest_management_subpractice,pest_management_practice ,pest_management_theme,
-       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
-  filter(!is.na(pest_management_subpractice))%>%
-  filter(is.na(pest_management_practice))
-
-
-
-  #Water management-----
+#Water management-----
 select(doi, C_irrig_subpractice,
        water_management_subpractice,water_management_practice ,water_management_theme,
        "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
@@ -261,14 +255,7 @@ select(doi, soil_management_subpractice,soil_management_practice ,soil_managemen
   #      "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
   #filter(!is.na(diversification_temporal_subpractice))%>%
   #filter(is.na(diversification_temporal_practice))
-#Planting management #Poner methods en methods, y subpractices en subpractices
-select(doi, C_planting_method,T_planting_method,
-       planting_management_subpractice,planting_management_practice ,planting_management_theme,
-       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
-  filter(!is.na(planting_management_subpractice))%>%
-  filter(is.na(planting_management_practice))
 
-x<-prueba[grepl("planting", prueba$practice_compared, ignore.case = TRUE), ]
 
 
   
