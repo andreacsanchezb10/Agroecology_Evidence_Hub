@@ -1,5 +1,5 @@
 #==========================================================
-# Function: Calculate Mean & SD
+# Function: Calculate Mean & Standard deviation (SD)
 #==========================================================
 
 calculate_mean_sd <- function(data,

@@ -23,9 +23,6 @@ source(file.path(path.metadata.effectsize, "/fomd_fun/fun_analysis_practice.R"))
 #---fomd10
 fomd10<-read_csv(file.path(path.metadata.effectsize,"/fomd10/fomd10_MD_Rosen_24_Effec_Sc.csv"), show_col_types = FALSE)
 
-sort(unique(fomd10$C_tillage_subpractice))
-sort(unique(fomd10$T_tillage_subpractice))
-
 #==========================================================
 # Put C_vs_T subpractices in one column for each practice type
 # NOTE: There are rows that has the same subpractice for control and treatment
@@ -112,15 +109,15 @@ fomd10.clean <- build_analytical_columns(fomd10.clean)
 ### REPORT
 #Building analytical columns ...
 #variety_management_subpractice            136,699 non-NA rows
-#variety_management_practice               21,612 non-NA rows
-#variety_management_theme                  21,612 non-NA rows
+#variety_management_practice               136,699 non-NA rows ##READY
+#variety_management_theme                  136,699 non-NA rows ##READY
 
-#breed_animal_subpractice                  21,291 non-NA rows
-#breed_animal_practice                     0 non-NA rows
+#breed_animal_subpractice                  22,827 non-NA rows ## READY
+#breed_animal_practice                     22,827 non-NA rows ## READY
 #breed_animal_theme                        0 non-NA rows
  
-#planting_management_subpractice           12,995 non-NA rows
-#planting_management_practice              5,578 non-NA rows  #Poner methods en methods, y subpractices en subpractices
+#planting_management_subpractice           5,578 non-NA rows
+#planting_management_practice              5,578 non-NA rows ## READY
 #planting_management_theme                 0 non-NA rows
  
 #diversification_spatial_subpractice       11,060 non-NA rows
@@ -128,19 +125,19 @@ fomd10.clean <- build_analytical_columns(fomd10.clean)
 #diversification_spatial_theme             11,055 non-NA rows ## TO CHECK: NEED TO FIX C_agrof_subpractice=="Open Communal Grazing Land
 
 #diversification_temporal_subpractice      24,576 non-NA rows
-#diversification_temporal_practice         23,813 non-NA rows  ## TO CHECK: NEED TO FIX "C: Other Time Sequence_vs_T: Other Time Sequence"
-#diversification_temporal_theme            23,813 non-NA rows  ## TO CHECK: NEED TO FIX "C: Other Time Sequence_vs_T: Other Time Sequence"
+#diversification_temporal_practice         24,576 non-NA rows ## READY
+#diversification_temporal_theme            24,576 non-NA rows ## READY
 
 #soil_management_subpractice               33,997 non-NA rows 
 #soil_management_practice                  33,997 non-NA rows # READY
 #soil_management_theme                     33,997 non-NA rows # READY
 
-#nutrient_management_subpractice           80,069 non-NA rows 
-#nutrient_management_practice              80,069 non-NA rows # READY
-#nutrient_management_theme                 80,069 non-NA rows # READY
+#nutrient_management_subpractice           80,038 non-NA rows 
+#nutrient_management_practice              80,038 non-NA rows # READY
+#nutrient_management_theme                 80,038 non-NA rows # READY
 
 #pest_management_subpractice               32,113 non-NA rows
-#pest_management_practice                  30,827 non-NA rows ## TO CHECK: NEED TO FIX "Other"
+#pest_management_practice                  30,374 non-NA rows ## TO CHECK: NEED TO FIX "Other"
 #pest_management_theme                     16,887 non-NA rows
 
 #water_management_subpractice              47,291 non-NA rows 
@@ -152,40 +149,17 @@ fomd10.clean <- build_analytical_columns(fomd10.clean)
 #biomass_management_theme                  5,662 non-NA rows
  
 #postharvest_subpractice                   16,300 non-NA rows
-#postharvest_practice                      0 non-NA rows
-#postharvest_theme                         15,989 non-NA rows
+#postharvest_practice                      16,300 non-NA rows # READY
+#postharvest_theme                         16,300 non-NA rows # READY
  
-#harvest_subpractice                       289 non-NA rows
-#harvest_practice                          0 non-NA rows
+#harvest_subpractice                       297 non-NA rows
+#harvest_practice                          297 non-NA rows  # READY
 #harvest_theme                             0 non-NA rows
 
 sort(unique(fomd10.clean$diversification_spatial_theme))
 sort(unique(fomd10.clean$diversification_temporal_theme))
 
-prueba0<-fomd10.clean%>%
-  select(diversification_spatial_theme,
-         diversification_temporal_theme)
-
 prueba<-fomd10.clean%>%
-  # variety crop
-  select(doi, C_varietal_crop_subpractice,T_varietal_crop_subpractice,
-         CT_varietal_crop_subpractice,
-         variety_management_subpractice ,variety_management_practice,variety_management_theme,
-         "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
-  filter(!is.na(variety_management_subpractice))%>%
-  filter(is.na(variety_management_practice))
-
-sort(unique(prueba$CT_varietal_crop_subpractice))
-
-  #Planting management #Poner methods en methods, y subpractices en subpractices
-  select(doi, C_planting_method,T_planting_method,
-         planting_management_subpractice,planting_management_practice ,planting_management_theme,
-         "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
-  filter(!is.na(planting_management_subpractice))%>%
-  filter(is.na(planting_management_practice))
-
-x<-prueba[grepl("planting", prueba$practice_compared, ignore.case = TRUE), ]
-  
   #Pest management-----
 select(doi, C_chem_subpractice,T_chem_subpractice,
        CT_chem_subpractice,
@@ -194,6 +168,44 @@ select(doi, C_chem_subpractice,T_chem_subpractice,
   filter(!is.na(pest_management_subpractice))%>%
   filter(is.na(pest_management_practice))
 sort(unique(prueba$CT_chem_subpractice))
+
+  # variety crop ----
+  select(doi, C_varietal_crop_subpractice,T_varietal_crop_subpractice,
+         CT_varietal_crop_subpractice,
+         variety_management_subpractice ,variety_management_practice,variety_management_theme,
+         "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
+  filter(!is.na(variety_management_subpractice))%>%
+  filter(is.na(variety_management_practice))
+  #nutrient management ----
+  select(doi, CT_fert_subpractice,CT_fert_practice,
+         nutrient_management_subpractice ,nutrient_management_practice,nutrient_management_theme,
+         "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
+  filter(!is.na(nutrient_management_subpractice))%>%
+  filter(is.na(nutrient_management_practice))
+
+  
+  # post-harvest practices
+  select(doi, C_postharvest_subpractice,T_postharvest_subpractice,
+         CT_postharvest_subpractice,postharvest_subpractice,
+         postharvest_practice,harvest_theme,
+         "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
+  filter(!is.na(postharvest_subpractice))%>%
+  filter(is.na(postharvest_practice))
+
+  
+  # harvest practices ----
+  select(doi, C_harvest_subpractice,T_harvest_subpractice,
+         CT_harvest_subpractice,harvest_subpractice,
+         harvest_practice,harvest_theme,
+         "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
+  filter(!is.na(harvest_subpractice))%>%
+  filter(is.na(harvest_practice))
+
+
+  
+
+sort(unique(prueba$CT_varietal_crop_subpractice))
+
   #Biomass management-----
 select(doi, C_residues_subpractice_raw,T_residues_subpractice_raw,
        C_residues_material,T_residues_material,
@@ -332,11 +344,8 @@ sort(unique(fomd10.clean$CT_crop_FAO_Food_SubGroup))
 # ============================================================
 unmatched_crops <- bind_rows(
   fomd10.clean %>% 
-    #filter(country=="Ethiopia")%>%
     select(crop = C_crop_tree_diversity),
   fomd10.clean %>%
-    #filter(country=="Ethiopia")%>%
-    
     select(crop = T_crop_tree_diversity)
 ) %>%
   # Split compound strings into individual tokens
@@ -354,7 +363,7 @@ unmatched_crops <- bind_rows(
   arrange(crop)
 
 print(unmatched_crops)
-nrow(unmatched_crops) #107-105-97 crops missing Commodity reclassification
+nrow(unmatched_crops) #34 crops missing Commodity reclassification
 
 readr::write_csv(fomd10.clean, paste0(path.metadata.effectsize, "/fomd10_clean/fomd10_clean_MD_Rosen_24_Effec_Sc.csv"))
 

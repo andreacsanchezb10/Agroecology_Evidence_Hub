@@ -50,7 +50,8 @@ length(unique(fomd04$study_id))#2106
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v22.csv"))
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v24.csv"))
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v32.csv"))
-md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v41.csv"))
+#md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v41.csv"))
+md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v45.csv"))
 
 
 length(unique(md.era.short$study_id)) #1811 studies
@@ -256,7 +257,18 @@ md.era.short.clean <- md.era.short.clean %>%
   ) %>%
   ungroup()
 
-# Quick checks
+site_cols <- c("country",  "site_type", "site_id", "site_admin",
+               "site_agg", "site_latlong_type", "site_latitude", "site_longitude",
+               "site_buffer", "site_key")
+
+# Create T_ and C_ versions, keeping originals
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(across(all_of(site_cols), ~ .x, .names = "T_{.col}")) %>%
+  mutate(across(all_of(site_cols), ~ .x, .names = "C_{.col}"))
+
+# Quick checks----
+length(unique(md.era.short.clean$T_site_key))  #1891
+length(unique(md.era.short.clean$C_site_key))  #1891
 sort(unique(md.era.short.clean$country))
 sort(unique(md.era.short.clean$site_type))
 sort(unique(md.era.short.clean$site_id))
@@ -267,19 +279,6 @@ sort(unique(md.era.short.clean$site_latitude))
 sort(unique(md.era.short.clean$site_longitude))
 sort(unique(md.era.short.clean$site_buffer))
 sort(unique(md.era.short.clean$site_key))
-
-site_cols <- c("country",  "site_type", "site_id", "site_admin",
-               "site_agg", "site_latlong_type", "site_latitude", "site_longitude",
-               "site_buffer", "site_key")
-
-# Create T_ and C_ versions, keeping originals
-md.era.short.clean <- md.era.short.clean %>%
-  mutate(across(all_of(site_cols), ~ .x, .names = "T_{.col}")) %>%
-  mutate(across(all_of(site_cols), ~ .x, .names = "C_{.col}"))
-
-# Quick checks
-length(unique(md.era.short.clean$T_site_key))  #1891
-length(unique(md.era.short.clean$C_site_key))  #1891
 
 #=============================================
 #---experiment_details----
@@ -336,7 +335,6 @@ crop_tree_cols <- c("C_crop_tree_diversity", "T_crop_tree_diversity",
 
 md.era.short.clean <- md.era.short.clean %>%
   mutate(across(all_of(crop_tree_cols), ~ apply_crop_fixes(., crop_name_fixes)))
-
 
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
@@ -417,9 +415,6 @@ md.era.short.clean <- md.era.short.clean%>%
     T_crop_tree_density=mapply(create_density_crop,T_crop_tree_diversity,T_crop_tree_density)
   )
 
-### ARREGLAR MANUALMENTE NO SE POR QUE PUSE ESTO ACA, VERIFICAR MAS TARDE
-"10.1007/s10457-019-00405-4"
-"10.1016/j.agrformet.2018.03.026"
 
 ## Quick checks----
 sort(unique(md.era.short.clean$C_crop_tree_diversity))
@@ -446,11 +441,8 @@ unique_crops_diversity <- rbind(
             by="crop_tree_diversity")%>%
   filter(is.na(FAO.Food.Group)) 
 
-length(unique(unique_crops_diversity$crop_tree_diversity)) #70-v41: 31
+length(unique(unique_crops_diversity$crop_tree_diversity)) #70-v41: 57
 #readr::write_csv(unique_crops_diversity, paste0(path.era, "/v41_error_report/missing_crops_01.csv"))
-
-sort(unique(md.era.short.clean$C_crop_tree_variety))
-sort(unique(md.era.short.clean$T_crop_tree_variety))
 
 unique_crops_variety <- data.frame(
   crop_tree_diversity = unique(c(
@@ -461,7 +453,7 @@ unique_crops_variety <- data.frame(
   left_join(fomd01.crops.trees,
             by="crop_tree_diversity")%>%
   filter(is.na(FAO.Food.Group)) 
-length(unique(unique_crops_variety$crop_tree_diversity))#v41: 41
+length(unique(unique_crops_variety$crop_tree_diversity))#v45: 63
 
 sort(unique(md.era.short.clean$C_crop_tree_density))
 sort(unique(md.era.short.clean$T_crop_tree_density))
@@ -474,7 +466,7 @@ unique_crops_density <- data.frame(
   left_join(fomd01.crops.trees,
             by="crop_tree_diversity")%>%
   filter(is.na(FAO.Food.Group)) 
-length(unique(unique_crops_density$crop_tree_diversity)) #v41: 23
+length(unique(unique_crops_density$crop_tree_diversity)) #v45: 36
 
 
 #=============================================
@@ -560,9 +552,21 @@ md.era.short.clean <- md.era.short.clean%>%
     T_varietal_crop_trait = gsub("\\$+", "..", T_varietal_crop_trait)
   )
 
+
 md.era.short.clean <- apply_replace_in_cols(
-  md.era.short.clean,cols = c("C_varietal_crop_subpractice","T_varietal_crop_subpractice"),
-  pattern = "Unspecified",replacement =  "Unspecified variety")
+  md.era.short.clean,
+  cols = c("C_varietal_crop_subpractice","T_varietal_crop_subpractice"),
+  pattern = "Other Improved Variety (Traits Known)",replacement =  "Improved Variety (Traits Known)") 
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_varietal_crop_subpractice","T_varietal_crop_subpractice"),
+  pattern = "Unspecified",replacement =  "Unspecified Variety") 
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_varietal_crop_subpractice","T_varietal_crop_subpractice"),
+  pattern = "Unspecified Variety Variety",replacement =  "Unspecified Variety") 
 
 # Quick checks ----
 sort(unique(md.era.short.clean$C_varietal_crop_subpractice_raw))
@@ -591,6 +595,11 @@ md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,cols = c("C_varietal_animal_subpractice","T_varietal_animal_subpractice",
                                "C_varietal_animal_type","T_varietal_animal_type"),
   pattern = "*",replacement =  "..")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,cols = c("C_varietal_animal_subpractice","T_varietal_animal_subpractice",
+                              "C_varietal_animal_type","T_varietal_animal_type"),
+  pattern = "Unspecified",replacement =  "Unspecified Breed")
 
 # Quick checks ----
 sort(unique(md.era.short.clean$C_varietal_animal_subpractice_raw))
@@ -709,23 +718,13 @@ sort(unique(md.era.short.clean$T_intercrop_residues_fate))
 #=============================================
 #---crop_sequence_practice----
 #=========================
-## TO CHECK: NEED TO FIX "C: Other Time Sequence_vs_T: Other Time Sequence"----------------------
-# CHECK PAPER BY PAPER IF THIS IS OK OR NOT
 md.era.short.clean <- apply_replace_in_cols(md.era.short.clean,
   cols = c("C_crop_seq_residues_fate", "T_crop_seq_residues_fate"),
-  pattern = "; ",replacement = "..") # Apply ";" -> ".." substitution
+  pattern = "; ",replacement = "..")
 
 md.era.short.clean <- apply_replace_in_cols(md.era.short.clean,
   cols = c("C_crop_seq_residues_fate", "T_crop_seq_residues_fate"),
-  pattern = "NA",replacement = "Unspecified") # Apply "NA" -> "Unspecified" substitution
-
-md.era.short.clean <- apply_replace_in_cols(md.era.short.clean,
-  cols = c("C_crop_seq_subpractice", "T_crop_seq_subpractice"),
-  pattern = "&",replacement = "and") # Apply "&" -> "and" substitution
-
-md.era.short.clean <- apply_replace_in_cols(md.era.short.clean,
-  cols = c("C_crop_seq_subpractice", "T_crop_seq_subpractice"),
-  pattern = "Improved Fallow (N and Non N fixing)",replacement = "Improved Fallow (N fixing and Non N fixing)") 
+  pattern = "NA",replacement = "Unspecified")
 
 # Quick checks ----
 sort(unique(md.era.short.clean$C_crop_seq_subpractice_raw))
@@ -749,36 +748,6 @@ sort(unique(md.era.short.clean$T_crop_seq_residues_fate))
 ## TO CHECK: NEED TO FIX C_agrof_subpractice=="Open Communal Grazing Land"----------------
 ## TO CHECK: THERE ARE AGROFORESTRY PRACTICES IN CROP ROTATION--------------
 ## TO CHECK : verify later if it is better to keep track of spatial, component, shade..-----------
-md.era.short.clean <- apply_replace_in_cols(
-  md.era.short.clean,
-  cols = c("C_agrof_subpractice", "T_agrof_subpractice"),
-  pattern = "Multistrata",replacement = "Multistrata Agroforestry") # Apply "Multistrata" -> "Multistrata Agroforestry" substitution
-
-md.era.short.clean <- apply_replace_in_cols(
-  md.era.short.clean,
-  cols = c("C_agrof_subpractice", "T_agrof_subpractice"),
-  pattern = "Multistrata Agroforestry Agroforestry",replacement = "Multistrata Agroforestry")
-
-
-md.era.short.clean <- apply_replace_in_cols(
-  md.era.short.clean,
-  cols = c("C_agrof_subpractice", "T_agrof_subpractice"),
-  pattern = "Hedgerows",replacement = "Living Fences or Hedgerows") # Apply "Hedgerows" -> "Living Fences or Hedgerows" substitution
-
-md.era.short.clean <- apply_replace_in_cols(
-  md.era.short.clean,
-  cols = c("C_agrof_subpractice", "T_agrof_subpractice"),
-  pattern = "Living Fences or Living Fences or Hedgerows",replacement = "Living Fences or Hedgerows") # Apply "Living Fences or Living Fences or Hedgerows" -> "Living Fences or Hedgerows" substitution
-
-md.era.short.clean <- apply_replace_in_cols(
-  md.era.short.clean,
-  cols = c("C_agrof_subpractice", "T_agrof_subpractice"),
-  pattern = "Alleycropping (Mixed)",replacement = "Alleycropping (N fixing and Non N fixing)") ## Apply "Alleycropping (Mixed)" -> "Alleycropping (N fixing and Non N fixing)" substitution
-
-md.era.short.clean <- apply_replace_in_cols(
-  md.era.short.clean,
-  cols = c("C_agrof_subpractice", "T_agrof_subpractice"),
-  pattern = "Open Communial Grazing Land",replacement = "Open Communal Grazing Land") 
 
 md.era.short.clean<-md.era.short.clean%>% 
   mutate(
@@ -808,38 +777,11 @@ sort(unique(md.era.short.clean$agrof_dhb_mean_min_max))#Missing from ERA
 #==================================================
 #---nutrient_management_practice (inorganic)----
 #==================================================
-## TO CHECK: C_fert_inorganic_type C_fert_inorganic_unit C_fert_inorganic_amount-------------
-## TO CHECK: T_fert_inorganic_type T_fert_inorganic_unit T_fert_inorganic_amount----------------
-
-# Apply "Inorganic" -> "Inorganic Fertilizer" substitution
-md.era.short.clean <- apply_replace_in_cols(
-  md.era.short.clean,
-  cols = c("C_fert_subpractice", "T_fert_subpractice"),
-  pattern = "Inorganic",replacement = "Inorganic Fertilizer") 
-
-# Apply "MicroNutrient" -> "Inorganic Micronutrients Inputs" substitution
-md.era.short.clean <- apply_replace_in_cols(
-  md.era.short.clean,
-  cols = c("C_fert_subpractice", "T_fert_subpractice"),
-  pattern = "MicroNutrient",replacement = "Inorganic Micronutrients Inputs") 
-
 # Apply "No Fertilizer Application" -> "No Fertilizers Applied" substitution
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
   cols = c("C_fert_subpractice", "T_fert_subpractice"),
   pattern = "No Fertilizer Application",replacement = "No Fertilizers Applied") 
-
-# Apply "Organic_Other" -> "Organic (Other)" substitution
-md.era.short.clean <- apply_replace_in_cols(
-  md.era.short.clean,
-  cols = c("C_fert_subpractice", "T_fert_subpractice"),
-  pattern = "Organic_Other",replacement = "Organic (Other)") 
-
-# Apply "Biosolid" -> "Organic (Other)" substitution
-md.era.short.clean <- apply_replace_in_cols(
-  md.era.short.clean,
-  cols = c("C_fert_subpractice", "T_fert_subpractice"),
-  pattern = "Biosolid",replacement = "Biosolids") 
 
 # Apply "Unspecified" -> "Unspecified (if  fertilizer org or inorg was applied)" substitution
 md.era.short.clean <- apply_replace_in_cols(
@@ -912,8 +854,6 @@ md.era.short.clean <- apply_replace_in_cols(
            "C_fert_inorganicP2O5", "T_fert_inorganicP2O5"),
   pattern = "999999",replacement = "") 
 
-
-
 # Extract unique units by splitting on ".." and getting distinct non-empty values
 md.era.short.clean <- md.era.short.clean %>%
   mutate(C_fert_inorganic_unit = C_fert_inorganic_unit %>%
@@ -963,18 +903,6 @@ sort(unique(md.era.short.clean$T_fert_subpractice_raw))
 
 sort(unique(md.era.short.clean$C_fert_subpractice)) 
 sort(unique(md.era.short.clean$T_fert_subpractice)) 
-
-sort(unique(md.era.short.clean$C_fert_inorganic_category)) 
-sort(unique(md.era.short.clean$T_fert_inorganic_category)) 
-
-sort(unique(md.era.short.clean$C_fert_inorganic_type)) 
-sort(unique(md.era.short.clean$T_fert_inorganic_type)) 
-
-sort(unique(md.era.short.clean$C_fert_inorganic_unit)) #TO CHECK: Need to combine type with amount and unit
-sort(unique(md.era.short.clean$T_fert_inorganic_unit)) #TO CHECK: Need to combine type with amount and unit
-
-sort(unique(md.era.short.clean$C_fert_inorganic_amount)) #TO CHECK: Need to combine type with amount and unit
-sort(unique(md.era.short.clean$T_fert_inorganic_amount)) #TO CHECK: Need to combine type with amount and unit
 
 sort(unique(md.era.short.clean$C_fert_inorganic_type_amount_unit)) #TO CHECK: Need to combine type with amount and unit
 sort(unique(md.era.short.clean$T_fert_inorganic_type_amount_unit)) #TO CHECK: Need to combine type with amount and unit
@@ -1064,14 +992,6 @@ md.era.short.clean <- apply_replace_in_cols(
            "C_fert_organicK", "T_fert_organicK"),
   pattern = "999999",replacement = "Unspecified") 
 
-# Combine fertilizer type + amount + unit separated by ".."
-#md.era.short.clean <- md.era.short.clean%>%
- # mutate(C_fert_organic_amount_unit1= combine_amount_unit(amount = C_fert_organic_amount, unit   = C_fert_organic_unit),
-  #       T_fert_organic_amount_unit1= combine_amount_unit(amount = T_fert_organic_amount, unit   = T_fert_organic_unit))%>%
-#  mutate(C_fert_organic_type_amount_unit= mapply(combine_type_amount_unit,C_fert_organic_type,C_fert_organic_amount_unit1),
- #        T_fert_organic_type_amount_unit= mapply(combine_type_amount_unit,T_fert_organic_type,T_fert_organic_amount_unit1)
-  #)
-
 # Combine amount + unit columns separated by ".."
 md.era.short.clean <- md.era.short.clean%>%
   mutate(C_fert_organicN_amount_unit= combine_amount_unit(amount = C_fert_organicN,unit   = C_fert_organicNPK_unit),
@@ -1091,14 +1011,8 @@ md.era.short.clean <- md.era.short.clean%>%
 sort(unique(md.era.short.clean$C_fert_organic_category))  
 sort(unique(md.era.short.clean$T_fert_organic_category))  
 
-sort(unique(md.era.short.clean$C_fert_organic_type)) # Merged 
-sort(unique(md.era.short.clean$T_fert_organic_type)) # Merged
-
-sort(unique(md.era.short.clean$C_fert_organic_unit)) # Merged
-sort(unique(md.era.short.clean$T_fert_organic_unit)) # Merged
-
 sort(unique(md.era.short.clean$C_fert_organic_type_amount_unit)) # Merged
-sort(unique(md.era.short.clean$T_fert_organic_amount)) # Merged
+sort(unique(md.era.short.clean$T_fert_organic_type_amount_unit)) # Merged
 
 sort(unique(md.era.short.clean$C_fert_organic_amount[md.era.short.clean$C_fert_organic_unit==""]))
 #[1] ""
@@ -1201,7 +1115,6 @@ sort(unique(md.era.short.clean$T_weed_frequency[md.era.short.clean$T_weed_freque
 #---chemical_management_practice----
 #=========================
 ## TO CHECK  C_chem_subpractice,T_chem_subpractice --------------------------
-#md.era.short.clean<-md.era.short
 
 # Apply "..." -> ".." substitution
 md.era.short.clean <- apply_replace_in_cols(
@@ -1234,8 +1147,6 @@ md.era.short.clean <- apply_replace_in_cols(
   cols = c("C_chem_combined", "T_chem_combined"),
   pattern = "()",replacement = "(Unspecified[Unspecified])") 
   
-
-
 replacements <- c(
   "Inoculation - Seed"= "Seed inoculation",
   "Inoculation - Soil" = "Soil inoculation",
@@ -1775,8 +1686,6 @@ sort(unique(md.era.short.clean$T_watharv_subpractice))
 #=========================
 #---harvesting_practice----
 #=========================
- 
-
 # Quick checks ----
 sort(unique(md.era.short.clean$C_harvest_subpractice_raw))
 sort(unique(md.era.short.clean$T_harvest_subpractice_raw))
@@ -1871,8 +1780,8 @@ md.era.short.clean$T_econ_inputs <- sapply(md.era.short.clean$T_econ_inputs, sor
 # Quick checks ----
 sort(unique(md.era.short.clean$C_product)) #MAKE A LIST OF MISSING PRODUCTS FROM 01_product_new
 sort(unique(md.era.short.clean$T_product)) #MAKE A LIST OF MISSING PRODUCTS FROM 01_product_new
-na_empty_summary1["C_product", ] #in v6 17064 missing values; in v24 3150 empty values; in v32 1646
-na_empty_summary1["T_product", ] #in v6 17064 missing values; in v24 3150 empty values; in v32 1646
+na_empty_summary["C_product", ] #in v6 17064 missing values; in v24 3150 empty values; in v32 1646
+na_empty_summary["T_product", ] #in v6 17064 missing values; in v24 3150 empty values; in v32 1646
 
 sort(unique(md.era.short.clean$C_product_type)) #to RECLASIFIED AGAIN BASED ON C_product_simple
 sort(unique(md.era.short.clean$T_product_type))#to RECLASIFIED AGAIN BASED ON T_product_simple
@@ -2134,9 +2043,6 @@ names(md.era.short.clean)
 # columns missing in md.era.short.clean
 missing_cols <- setdiff(fomd10.names, names(md.era.short.clean))
 missing_cols
-#[1] "C_fert_inorganic_type_amount_unit" "T_fert_inorganic_type_amount_unit" "C_chem_name_amount_unit"          
-#[4] "T_chem_name_amount_unit"               
-
 
 # add missing columns as NA
 md.era.clean <- md.era.short.clean

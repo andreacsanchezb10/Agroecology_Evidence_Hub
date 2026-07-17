@@ -26,7 +26,8 @@ source(file.path(path.metadata.effectsize,"/fomd_fun/fun_lookup_ontologies.R")) 
 fomd10.clean<-read_csv(file.path(path.metadata.effectsize,"/fomd10_clean/fomd10_clean_MD_Rosen_24_Effec_Sc.csv"), show_col_types = FALSE)
   
 #==========================================================
-# Calculate Mean and Standard deviation 
+# Calculate Mean and Standard deviation
+# From available variance values
 #==========================================================
 sort(unique(fomd10.clean$C_out_metric))
 sort(unique(fomd10.clean$T_out_metric))
@@ -63,6 +64,11 @@ X<-fomd10.effect.size %>%
          T_out_var_metric, T_out_var_value, 
          T_out_sample_size,
          T_out_mean,T_out_sd)
+
+#==========================================================
+# Calculate Standard deviation
+# From observations that don't provide variance values
+#==========================================================
 
 
 #==========================================================
