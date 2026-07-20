@@ -15,8 +15,9 @@ list.files(path.metadata.effectsize)
 # Read functions
 #==========================================================
 source(file.path(path.metadata.effectsize,"/fomd_fun/fun_mean_sd.R"))
-source(file.path(path.metadata.effectsize,"/fomd_fun/fun_load_data_ontologies.R"))
+#source(file.path(path.metadata.effectsize,"/fomd_fun/fun_load_data_ontologies.R"))
 source(file.path(path.metadata.effectsize,"/fomd_fun/fun_lookup_ontologies.R")) # TO CHECK VER COMO METER LOAD DATA ONTOLOGIES DENTRO DE ESTA EQUACION
+source(file.path(path.metadata.effectsize,"/fomd_fun/fun_cv_missing_calculation.R"))
 
 
 #==========================================================
@@ -29,47 +30,69 @@ fomd10.clean<-read_csv(file.path(path.metadata.effectsize,"/fomd10_clean/fomd10_
 # Calculate Mean and Standard deviation
 # From available variance values
 #==========================================================
+#-- Check mean metrics
 sort(unique(fomd10.clean$C_out_metric))
 sort(unique(fomd10.clean$T_out_metric))
 
-sort(unique(fomd10.clean$C_out_value))
-sort(unique(fomd10.clean$T_out_value))
-
+#-- Check variance metrics
 sort(unique(fomd10.clean$C_out_var_metric))
 sort(unique(fomd10.clean$T_out_var_metric))
 
-sort(unique(fomd10.clean$C_out_var_value))
-sort(unique(fomd10.clean$T_out_var_value))
-
 #---- Apply equation to calculate Mean AND SD ----
-## TO CHECK: Need to decide what to do with missing SD
-fomd10.effect.size<-calculate_mean_sd(fomd10.clean)
+fomd10.mean.sd<-calculate_mean_sd(fomd10.clean)
 
 
-# Quick checks
-# Check for NaN in C_out_sd 
+# Quick checks ----
+# Check for NaN in C_out_sd and T_out_sd
 cols <- c("C_out_metric","C_out_value","C_out_var_metric","C_out_var_value", "C_out_sample_size","C_out_mean","C_out_sd",
           "T_out_metric","T_out_value","T_out_var_metric","T_out_var_value", "T_out_sample_size","T_out_mean","T_out_sd")
 
 data.frame(
   column  = cols,
-  n_na    = colSums(is.na(fomd10.effect.size[, cols])),
-  pct_na  = colMeans(is.na(fomd10.effect.size[, cols])) * 100
-)
+  n_na    = colSums(is.na(fomd10.mean.sd[, cols])),
+  pct_na  = colMeans(is.na(fomd10.mean.sd[, cols])) * 100)
 
-X<-fomd10.effect.size %>%
+NA.out_sd<-fomd10.mean.sd %>%
   filter(is.na(T_out_sd)) %>%
   select(doi,
-         T_out_value,
-         T_out_var_metric, T_out_var_value, 
-         T_out_sample_size,
-         T_out_mean,T_out_sd)
+         C_out_value,C_out_var_metric, C_out_var_value, C_out_sample_size,C_out_mean,C_out_sd,
+         T_out_value,T_out_var_metric, T_out_var_value, T_out_sample_size, T_out_mean,T_out_sd)
+nrow(NA.out_sd) #is.na(C_out_sd) 183,744
+nrow(NA.out_sd) #is.na(T_out_sd) 183434
+
+
 
 #==========================================================
 # Calculate Standard deviation
 # From observations that don't provide variance values
 #==========================================================
+product.mismatches<- fomd10.mean.sd %>%
+  filter(C_product_simple != T_product_simple)
 
+
+dt_result <- cv_calculation(
+  dt               = fomd10.mean.sd,                       # your original dataframe
+  rules            = outcome_grouping_rules,
+  outcome_col      = "out_subindicator"        # default, can omit if same name
+)
+prueba<-dt_result%>%
+  select(authors,doi,"C_product","T_product",T_product_simple,C_product_simple, out_subindicator,T_out_sample_size,382:396)%>%
+  filter(out_subindicator%in%c("Crop Yield", "Biomass Yield", "Gross Return"))%>%
+  filter(C_product_simple==T_product_simple)%>%
+  filter(T_product_simple=="Maize")
+filter(is.na(C_out_cv_filled))
+names(dt_result)
+
+readr::write_csv(prueba, paste0(path.metadata.effectsize, "/prueba.csv"))
+
+dt_result
+NA.out_sd<-dt_result %>%
+  filter(is.na(C_out_cv_filled))
+nrow(NA.out_sd) #is.na(C_out_sd) 157,316
+nrow(NA.out_sd) #is.na(T_out_sd) 157,316
+
+
+sort(unique(fomd10.clean$T_out_metric))
 
 #==========================================================
 # Reclassifying out_subindicator as effect_size_type
