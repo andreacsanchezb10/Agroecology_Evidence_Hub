@@ -68,14 +68,14 @@ names(fomd10)
 #--- NA and empty strings count + percentage per column
 n <- nrow(md.era.short)
 
-na_empty_summary1 <- data.frame(
+na_empty_summary <- data.frame(
   na_count          = colSums(is.na(md.era.short)),
   empty_count       = colSums(md.era.short == "", na.rm = TRUE),
   total_missing     = colSums(is.na(md.era.short)) + colSums(md.era.short == "", na.rm = TRUE),
   total_missing_pct = round((colSums(is.na(md.era.short)) + colSums(md.era.short == "", na.rm = TRUE)) / n * 100, 2)
 )
 
-print(na_empty_summary1)
+print(na_empty_summary)
 
 #---bibliographic----
 md.era.short.clean<-md.era.short
@@ -1975,12 +1975,6 @@ unique_countries <-data.frame(
 
 sort(unique(md.era.short.clean$country))
 sort(unique(md.era.short.clean$country_ISO))
-
-#=========================
-#---product_outcome----
-#=========================
-#I NEED TO DO THIS BUT LATER AFTER EFFECT SIZE CALCULATION
-
 
 #=========================
 #---outcome----

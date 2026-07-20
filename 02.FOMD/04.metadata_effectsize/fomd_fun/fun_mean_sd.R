@@ -1,6 +1,18 @@
 #==========================================================
 # Function: Calculate Mean & Standard deviation (SD)
 #==========================================================
+#sort(unique(fomd10.clean$C_out_var_metric))
+#[1] "CV (Co-efficient of Variation)"                          
+#[2] "Grouped SD (Standard Deviation)"                         
+#[3] "Grouped SE (Standard Error)"                             
+#[4] "Grouped SED (Standard Error of Difference Between Means)"
+#[5] "Grouped SEM (Standard Error of Mean)"                    
+#[6] "Mean Squared Error"                                      
+#[7] "SD (Standard Deviation)"                                 
+#[8] "SE (Standard Error)"                                     
+#[9] "SEM (Standard Error of Mean)"                            
+#[10] "Unspecified"
+
 
 calculate_mean_sd <- function(data,
                               prefix_c = "C",
