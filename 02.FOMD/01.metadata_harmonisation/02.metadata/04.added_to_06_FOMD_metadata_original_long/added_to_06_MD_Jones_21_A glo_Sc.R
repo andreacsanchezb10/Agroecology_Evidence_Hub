@@ -7,6 +7,7 @@ library(stringr)
 
 path.metadata<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/01.metadata_harmonisation/02.metadata"
 path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure"
+FOMD<-"C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/"
 list.files(path.metadata)
 list.files(path.metadata.structure)
 list.files(paste0(path.metadata,"/02.selected"))
@@ -19,10 +20,12 @@ fomd04<-read_xlsx(file.path(path.metadata.structure,"/04_FOMD_screening.xlsx"), 
   filter(ss_id=="MD_Jones_21_A glo_Sc")%>%
   filter(status%in%c("PI","I","unresolved"))%>%
   select(ss_id,study_id_ss,study_id)
-length(unique(fomd04$study_id)) #234
+length(unique(fomd04$study_id)) #236
 
 #---09_FOMD_metadata_extraction_long
-fomd09.names<-names(read_xlsx(file.path(path.metadata.structure,"09_FOMD_metadata_extraction_long.xlsx"), sheet = "09_FOMD_metadata_extraction_lon"))
+fomd09.names<-names(read_xlsx(
+  file.path(FOMD,"09_FOMD_metadata_extraction_long_stats4sd_V3.xlsm"), 
+                              sheet = "09_FOMD_metadata_extraction_lon"))
 fomd09.names
 
 #---Metadata dictionary
@@ -110,62 +113,36 @@ md.data.long.clean<-md.data.long.clean%>%
   separate_wider_delim(
     cols = crops_all_common, 
     delim = "; ", 
-    names = c("crop01", "crop02", "crop03","crop04","crop05","crop06","crop07","crop08","crop09",
-              "crop10","crop11","crop12","crop13","crop14","crop15"),
+    names = c("crop_tree01", "crop_tree02", "crop_tree03","crop_tree04","crop_tree05","crop_tree06","crop_tree07","crop_tree08","crop_tree09",
+              "crop_tree10","crop_tree11","crop_tree12","crop_tree13","crop_tree14","crop_tree15"),
     too_many = "merge",        
     too_few = "align_start")
-sort(unique(md.data.long.clean$crop01))
-sort(unique(md.data.long.clean$crop02))
-sort(unique(md.data.long.clean$crop03))
-sort(unique(md.data.long.clean$crop04))
-sort(unique(md.data.long.clean$crop05))
-sort(unique(md.data.long.clean$crop06))
-sort(unique(md.data.long.clean$crop07))
-sort(unique(md.data.long.clean$crop08))
-sort(unique(md.data.long.clean$crop09))
-sort(unique(md.data.long.clean$crop10))
-sort(unique(md.data.long.clean$crop11))
-sort(unique(md.data.long.clean$crop12))
-sort(unique(md.data.long.clean$crop13))
-sort(unique(md.data.long.clean$crop14))
-sort(unique(md.data.long.clean$crop15))
-
-#--- Separate multiple trees into multiple columns
-sort(unique(md.data.long.clean$crops_all_scientific))
-sort(unique(md.data.long.clean$System))
-
-md.data.long.clean<-md.data.long.clean%>%
-  mutate(
-    crops_all_scientific = str_replace_all(crops_all_scientific, ",\\s*", "; ")
-  ) %>%
-  mutate(
-    trees_scientific= if_else(
-      System %in% c("Abandoned", "Agroforestry", "Associated plant species", "Combined practices",
-                    "Embedded natural" , "Natural"    ),
-      crops_all_scientific, NA_character_))%>%
-  separate_wider_delim(
-    cols = trees_scientific, 
-    delim = "; ", 
-    names = c("tree01", "tree02", "tree03","tree04","tree05","tree06","tree07","tree08","tree09",
-              "tree10","tree11","tree12","tree13","tree14","tree15"),
-    too_many = "merge",        
-    too_few = "align_start")
-sort(unique(md.data.long.clean$tree01))
-sort(unique(md.data.long.clean$tree11))
-sort(unique(md.data.long.clean$tree10))
-
-sort(unique(md.data.long.clean$tree15))
+sort(unique(md.data.long.clean$crop_tree01))
+sort(unique(md.data.long.clean$crop_tree02))
+sort(unique(md.data.long.clean$crop_tree03))
+sort(unique(md.data.long.clean$crop_tree04))
+sort(unique(md.data.long.clean$crop_tree05))
+sort(unique(md.data.long.clean$crop_tree06))
+sort(unique(md.data.long.clean$crop_tree07))
+sort(unique(md.data.long.clean$crop_tree08))
+sort(unique(md.data.long.clean$crop_tree09))
+sort(unique(md.data.long.clean$crop_tree10))
+sort(unique(md.data.long.clean$crop_tree11))
+sort(unique(md.data.long.clean$crop_tree12))
+sort(unique(md.data.long.clean$crop_tree13))
+sort(unique(md.data.long.clean$crop_tree14))
+sort(unique(md.data.long.clean$crop_tree15))
 
 #==========================================================
 # Add study_id 
 #==========================================================
-length(unique(fomd04$study_id)) #234
+length(unique(fomd04$study_id)) #236
 md.data.long.clean<-md.data.long.clean%>%
   left_join(fomd04,
             by=c("ID"="study_id_ss"))%>%
   filter(!is.na(study_id))
 
-length(unique(md.data.long.clean$study_id)) #234
+length(unique(md.data.long.clean$study_id)) #236
 sort(unique(md.data.long.clean$ss_id))
 
 #==========================================================
@@ -367,14 +344,14 @@ fomd06.clean<-rbind(fomd06.biodiversity.clean,fomd06.yield.clean)
 #==========================================================
 # Remove duplicate columns
 #==========================================================  
-nrow(fomd06.clean) #11269
-nrow(distinct(fomd06.clean)) #5474
+nrow(fomd06.clean) #11273
+nrow(distinct(fomd06.clean)) #5487
 
 fomd06.clean<-fomd06.clean %>%
   distinct()
 
-nrow(fomd06.clean) #5474
-nrow(distinct(fomd06.clean)) #5474
+nrow(fomd06.clean) #5487
+nrow(distinct(fomd06.clean)) #5487
 
 readr::write_csv(fomd06.clean, paste0(path.metadata, "/04.added_to_06_FOMD_metadata_original_long/added_to_06_MD_Jones_21_A glo_Sc.csv"))
 

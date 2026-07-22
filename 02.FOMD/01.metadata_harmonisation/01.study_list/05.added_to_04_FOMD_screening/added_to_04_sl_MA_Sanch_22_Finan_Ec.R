@@ -2,9 +2,8 @@ library(readxl)
 library(dplyr)
 library(stringr)
 
-path.studylist<-setwd("C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Knowledge_Hub/02.FOMD/01.metadata_harmonisation/01.study_list")
-path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Knowledge_Hub/02.FOMD/02.metadata_structure/"
-list.files(path.studylist)
+path.study.list<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/01.metadata_harmonisation/01.study_list"
+path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure/"
 list.files(path.metadata.structure)
 
 #==========================================================
@@ -36,7 +35,8 @@ fomd02 <- read_xlsx(
 fomd04 <- read_xlsx(
   path  = paste0(path.metadata.structure,"04_FOMD_screening.xlsx"),
   sheet = "04_FOMD_screening") %>%
-  mutate(key_ty = make_key_ty(title, authors))
+  mutate(key_ty = make_key_ty(title, authors))%>%
+  filter(ss_id%in%c("MD_Rosen_24_Effec_Sc"))
 
 #-----------------------------
 # Build MA_Sanch_22_Finan_Ec
@@ -75,5 +75,6 @@ deduplicated.MA_Sanch_22_Finan_Ec <- MA_Sanch_22_Finan_Ec %>%
   select(-key_ty)
 
 
-writexl::write_xlsx(deduplicated.MA_Sanch_22_Finan_Ec,"05_added_to_06_FOMD_screening/added_to_06_sl_MA_Sanch_22_Finan_Ec.xlsx")
+writexl::write_xlsx(deduplicated.MA_Sanch_22_Finan_Ec,
+                    paste0(path.study.list,"/05.added_to_04_FOMD_screening/added_to_04_sl_MA_Sanch_22_Finan_Ec.xlsx"))
 

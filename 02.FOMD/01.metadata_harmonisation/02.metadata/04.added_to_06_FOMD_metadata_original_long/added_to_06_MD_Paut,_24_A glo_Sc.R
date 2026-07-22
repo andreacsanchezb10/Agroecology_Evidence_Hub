@@ -6,6 +6,8 @@ library(openxlsx)
 
 path.metadata<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/01.metadata_harmonisation/02.metadata"
 path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure"
+FOMD<-"C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/"
+
 list.files(path.metadata)
 list.files(path.metadata.structure)
 list.files(paste0(path.metadata,"/02.selected"))
@@ -16,13 +18,16 @@ list.files(paste0(path.metadata,"/02.selected"))
 #---04_FOMD_screening
 fomd04<-read_xlsx(file.path(path.metadata.structure,"/04_FOMD_screening.xlsx"), sheet = "04_FOMD_screening")%>%
   filter(ss_id=="MD_Paut,_24_A glo_Sc")%>%
-  #filter(status%in%c("PI","I","unresolved"))%>%
+  filter(status%in%c("PI","I","unresolved"))%>%
   select(ss_id,study_id_ss,study_id)
 length(unique(fomd04$study_id)) #274
 
 #---09_FOMD_metadata_extraction_long
-fomd09.names<-names(read_xlsx(file.path(path.metadata.structure,"09_FOMD_metadata_extraction_long.xlsx"), sheet = "09_FOMD_metadata_extraction_lon"))
+fomd09.names<-names(read_xlsx(
+  file.path(FOMD,"09_FOMD_metadata_extraction_long_stats4sd_V3.xlsm"), 
+  sheet = "09_FOMD_metadata_extraction_lon"))
 fomd09.names
+
 
 #---Metadata dictionary
 file_md <- file.path(path.metadata, "02.selected", "md_MD_Paut,_24_A glo_Sc.xlsx")
@@ -84,7 +89,7 @@ md.data.T<-md.data%>%
   #select(!ends_with("_C_recla"))%>%
   rename_with(~ gsub("_intercropped$", "", .x), ends_with("_intercropped"))%>%
   rename_with(~ gsub("_intercrop$", "", .x), ends_with("_intercrop"))
-  filter(!(is.na(C1_yield)&is.na(C2_yield)))
+  #filter(!(is.na(C1_yield)&is.na(C2_yield)))
 
 names(md.data.T)
 #length(sort(unique(md.data.T$ES_ID)))
@@ -93,7 +98,7 @@ names(md.data.T)
 #--- Get data long version (one row per practice)
 md.data.long<-rbind(md.data.C1,md.data.C2 ,md.data.T)
 #sort(unique(md.data.long$Year_assessment))
-length(sort(unique(md.data.long$Id_article)))  #266
+length(sort(unique(md.data.long$Id_article)))  #292
 length(sort(unique(md.data.T$Id_article)))  #292
 length(sort(unique(md.data.C1$Id_article)))  #256
 length(sort(unique(md.data.C2$Id_article)))  #156
@@ -126,8 +131,8 @@ md.data.long.clean<-md.data.long.clean%>%
    names = c("time_year_start", "time_year_end"),
    too_many = "merge",        #
    too_few = "align_start")
-sort(unique(md.data.long.clean$time_year_start)) #44
-sort(unique(md.data.long.clean$time_year_end)) #35
+sort(unique(md.data.long.clean$time_year_start)) #43
+sort(unique(md.data.long.clean$time_year_end)) #32
 
 #--- Separate Experiment_period and time_year_start  time_year_end
 sort(unique(md.data.long.clean$Experiment_year))
@@ -139,9 +144,9 @@ md.data.long.clean<-md.data.long.clean%>%
     too_many = "merge",        #
     too_few = "align_start")%>%
   mutate(out_year= if_else(is.na(out_year_end),out_year_start,NA ))
-sort(unique(md.data.long.clean$out_year)) #44
-sort(unique(md.data.long.clean$out_year_start)) #44
-sort(unique(md.data.long.clean$out_year_end)) #35
+sort(unique(md.data.long.clean$out_year)) #43
+sort(unique(md.data.long.clean$out_year_start)) #46
+sort(unique(md.data.long.clean$out_year_end)) #30
 
 #--- Separate multiple crops into multiple columns
 #sort(unique(md.data.long$crops_all_common))
@@ -244,10 +249,10 @@ md.data.long.rename<-md.data.long.clean%>%
     #time_season=,
     
     ###---crop commodity
-    "crop01"="Crop_1_Common_Name",
-    "crop_variety01"="Crop_1_Variety",
-    "crop02"="Crop_2_Common_Name",
-    "crop_variety02"="Crop_2_Variety",
+    "crop_tree01"="Crop_1_Common_Name",
+    "crop_tree_variety01"="Crop_1_Variety",
+    "crop_tree02"="Crop_2_Common_Name",
+    "crop_tree_variety02"="Crop_2_Variety",
     
     ###---practice
     "subpractice_description_raw"= "Additional_factor",
@@ -321,8 +326,8 @@ md.data.long.rename<-md.data.long.clean%>%
     intercrop_subpractice_raw=subpractice_description_raw,
     
     ###---product_outcome
-    product01=crop01,
-    product02=crop02)
+    product01=crop_tree01,
+    product02=crop_tree02)
 
 names(md.data.long.rename)
 sort(unique(md.data.long.rename$product02))
@@ -395,14 +400,14 @@ names(fomd06.clean)
 #==========================================================
 # Remove duplicate columns
 #==========================================================  
-nrow(fomd06.clean) #4715
-nrow(distinct(fomd06.clean)) #4480
+nrow(fomd06.clean) #4732
+nrow(distinct(fomd06.clean)) #4497
 
 fomd06.clean<-fomd06.clean %>%
   distinct()
 
-nrow(fomd06.clean) #4480
-nrow(distinct(fomd06.clean)) #4480
+nrow(fomd06.clean) #4497
+nrow(distinct(fomd06.clean)) #4497
 
 readr::write_csv(fomd06.clean, paste0(path.metadata, "/04.added_to_06_FOMD_metadata_original_long/added_to_06_MD_Paut,_24_A glo_Sc.csv"))
 
