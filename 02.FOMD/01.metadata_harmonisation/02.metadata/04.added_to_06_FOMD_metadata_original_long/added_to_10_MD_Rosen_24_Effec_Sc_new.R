@@ -41,7 +41,8 @@ fomd01.outcomes<-fomd01.outcomes%>%
 fomd04<-read_xlsx(file.path(path.metadata.structure,"04_FOMD_screening.xlsx"), sheet = "04_FOMD_screening")%>%
   filter(ss_id=="MD_Rosen_24_Effec_Sc")%>%
   filter(status =="I")
-length(unique(fomd04$study_id))#2106
+length(unique(fomd04$study_id))#1720
+length(unique(fomd04$study_id_ss))#1811
 
 #---ERA metadata short
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v6.csv"))
@@ -51,7 +52,8 @@ length(unique(fomd04$study_id))#2106
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v24.csv"))
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v32.csv"))
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v41.csv"))
-md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v45.csv"))
+#md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v45.csv"))
+md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v46.csv"))
 
 
 length(unique(md.era.short$study_id)) #1811 studies
@@ -441,7 +443,7 @@ unique_crops_diversity <- rbind(
             by="crop_tree_diversity")%>%
   filter(is.na(FAO.Food.Group)) 
 
-length(unique(unique_crops_diversity$crop_tree_diversity)) #70-v41: 57
+length(unique(unique_crops_diversity$crop_tree_diversity)) #70-v41: 57; v45: 34
 #readr::write_csv(unique_crops_diversity, paste0(path.era, "/v41_error_report/missing_crops_01.csv"))
 
 unique_crops_variety <- data.frame(
@@ -453,7 +455,7 @@ unique_crops_variety <- data.frame(
   left_join(fomd01.crops.trees,
             by="crop_tree_diversity")%>%
   filter(is.na(FAO.Food.Group)) 
-length(unique(unique_crops_variety$crop_tree_diversity))#v45: 63
+length(unique(unique_crops_variety$crop_tree_diversity))#v45: 63, v46:41
 
 sort(unique(md.era.short.clean$C_crop_tree_density))
 sort(unique(md.era.short.clean$T_crop_tree_density))
@@ -466,7 +468,7 @@ unique_crops_density <- data.frame(
   left_join(fomd01.crops.trees,
             by="crop_tree_diversity")%>%
   filter(is.na(FAO.Food.Group)) 
-length(unique(unique_crops_density$crop_tree_diversity)) #v45: 36
+length(unique(unique_crops_density$crop_tree_diversity)) #v45: 36; v46:22
 
 
 #=============================================
@@ -1705,8 +1707,6 @@ sort(unique(md.era.short.clean$T_harvest_days_after_planting))
 #=========================
 #---postharvesting_practice----
 #=========================
-## TO CHECK: C_postharvest_subpractice and T_postharvest_subpractice LOOK LIKE RAW VARIABLES-----------------------
-
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
   cols = c("C_postharvest_subpractice", "T_postharvest_subpractice"),
@@ -1780,8 +1780,9 @@ md.era.short.clean$T_econ_inputs <- sapply(md.era.short.clean$T_econ_inputs, sor
 # Quick checks ----
 sort(unique(md.era.short.clean$C_product)) #MAKE A LIST OF MISSING PRODUCTS FROM 01_product_new
 sort(unique(md.era.short.clean$T_product)) #MAKE A LIST OF MISSING PRODUCTS FROM 01_product_new
-na_empty_summary["C_product", ] #in v6 17064 missing values; in v24 3150 empty values; in v32 1646
-na_empty_summary["T_product", ] #in v6 17064 missing values; in v24 3150 empty values; in v32 1646
+na_empty_summary["C_product", ] #in v6 17064 missing values; in v24 3150 empty values; in v32 1646; in v46 0
+na_empty_summary["T_product", ] #in v6 17064 missing values; in v24 3150 empty values; in v32 1646; in v46 0
+
 
 sort(unique(md.era.short.clean$C_product_type)) #to RECLASIFIED AGAIN BASED ON C_product_simple
 sort(unique(md.era.short.clean$T_product_type))#to RECLASIFIED AGAIN BASED ON T_product_simple
@@ -1812,7 +1813,7 @@ sort(unique(md.era.short.clean$out_subindicator))
 #The other 8 I left blank on purpose: 3 are a fertilizer-cost figure that doesn't match any of our outcome categories,
 #and 5 (JS0232) had values I couldn't trace to anything in the published paper, so we can exclude those.
 nrow(md.era.short.clean[md.era.short.clean$out_subindicator == "", ]) #15 in v6, 8 in v24  rows with empty out_subindicator, is this ok?
-
+#v46 8 missing
 sort(unique(md.era.short.clean$out_indicator)) # RECLASSIFIED BASED ON out_subindicator
 sort(unique(md.era.short.clean$out_subpillar)) # RECLASSIFIED BASED ON out_subindicator
 sort(unique(md.era.short.clean$out_pillar)) # RECLASSIFIED BASED ON out_subindicator
@@ -1842,8 +1843,8 @@ md.era.short.clean<-md.era.short.clean%>%
 # Quick checks ----
 sort(unique(md.era.short.clean$C_out_metric))
 sort(unique(md.era.short.clean$T_out_metric))
-na_empty_summary1["C_out_metric", ] #0
-na_empty_summary1["T_out_metric", ] #0
+na_empty_summary["C_out_metric", ] #0
+na_empty_summary["T_out_metric", ] #0
 
 sort(unique(md.era.short.clean$C_out_value))
 sort(unique(md.era.short.clean$T_out_value))
@@ -1855,9 +1856,9 @@ sort(unique(md.era.short.clean$T_out_value))
 #(Land Equivalent Ratio, Nitrogen/Phosphorus Agronomic Efficiency) that don't have a control value by definition. 
 #Overall the outcome data is about 99.5% complete
 
-na_empty_summary1["C_out_value", ]
+na_empty_summary["C_out_value", ]
 nrow(md.era.short.clean[md.era.short.clean$C_out_value == "", ]) #1075 missing C_out_value values
-na_empty_summary1["T_out_value", ]
+na_empty_summary["T_out_value", ]
 nrow(md.era.short.clean[md.era.short.clean$T_out_value == "", ]) #6 missing T_out_value values
 
 sort(unique(md.era.short.clean$C_out_var_metric))
@@ -1869,7 +1870,7 @@ sort(unique(md.era.short.clean$C_out_var_value))
 sort(unique(md.era.short.clean$T_out_var_value))
 na_empty_summary1["C_out_var_value", ]
 nrow(md.era.short.clean[md.era.short.clean$C_out_var_value == "", ]) #183075; in v32 183067
-na_empty_summary1["T_out_var_value", ]
+na_empty_summary["T_out_var_value", ]
 nrow(md.era.short.clean[md.era.short.clean$T_out_var_value == "", ])#182988; in v32 182996
 
 #Reports for Lolita
@@ -1889,8 +1890,8 @@ nrow(report_T_out_var_metric) #in v6 86 there are 86 rows that have C_out_var_va
 
 sort(unique(md.era.short.clean$C_out_sample_size))
 sort(unique(md.era.short.clean$T_out_sample_size))
-na_empty_summary1["C_out_sample_size", ] #in v6 17064 missing values; in v24 16896; in v32 12722
-na_empty_summary1["T_out_sample_size", ] #in v6 17064 missing values; in v24 16896; in v32 12722
+na_empty_summary["C_out_sample_size", ] #in v6 17064 missing values; in v24 16896; in v32 12722
+na_empty_summary["T_out_sample_size", ] #in v6 17064 missing values; in v24 16896; in v32 12722
 
 report_C_out_sample_size<-md.era.short.clean %>%
   filter(is.na(C_out_sample_size)) %>%

@@ -282,9 +282,9 @@ fomd10.clean <- apply_lookup_commodity_group(
   key_col   = "crop_tree_diversity",
   value_col = "FAO.Food.Group",
   src_col   = "C_crop_tree_diversity",
-  new_col   = "C_crop_FAO_Food_Group"
+  new_col   = "C_crop_tree_FAO_Food_Group"
 )
-sort(unique(fomd10.clean$C_crop_FAO_Food_Group))
+sort(unique(fomd10.clean$C_crop_tree_FAO_Food_Group))
 
 #--- Reclassifying T_crop_diversity as T_crop_FAO_Food_Group
 fomd10.clean <- apply_lookup_commodity_group(
@@ -293,19 +293,19 @@ fomd10.clean <- apply_lookup_commodity_group(
   key_col   = "crop_tree_diversity",
   value_col = "FAO.Food.Group",
   src_col   = "T_crop_tree_diversity",
-  new_col   = "T_crop_FAO_Food_Group"
+  new_col   = "T_crop_tree_FAO_Food_Group"
 )
 sort(unique(fomd10.clean$T_crop_FAO_Food_Group))
 
 #--- Get the FAO_Food_Groups that are common in the C and T practices
 fomd10.clean <- apply_CT_commodity_group_intersection(
   df      = fomd10.clean,
-  col_C   = "C_crop_FAO_Food_Group",
-  col_T   = "T_crop_FAO_Food_Group",
-  new_col = "CT_crop_FAO_Food_Group"
+  col_C   = "C_crop_tree_FAO_Food_Group",
+  col_T   = "T_crop_tree_FAO_Food_Group",
+  new_col = "CT_crop_tree_FAO_Food_Group"
 )
 
-sort(unique(fomd10.clean$CT_crop_FAO_Food_Group))
+sort(unique(fomd10.clean$CT_crop_tree_FAO_Food_Group))
 
 #--- Reclassifying C_crop_diversity as C_crop_FAO_Food_SubGroup
 fomd10.clean <- apply_lookup_commodity_group(
@@ -314,7 +314,7 @@ fomd10.clean <- apply_lookup_commodity_group(
   key_col   = "crop_tree_diversity",
   value_col = "FAO.Food.SubGroup",
   src_col   = "C_crop_tree_diversity",
-  new_col   = "C_crop_FAO_Food_SubGroup"
+  new_col   = "C_crop_tree_FAO_Food_SubGroup"
 )
 sort(unique(fomd10.clean$C_crop_FAO_Food_SubGroup))
 
@@ -325,16 +325,16 @@ fomd10.clean <- apply_lookup_commodity_group(
   key_col   = "crop_tree_diversity",
   value_col = "FAO.Food.SubGroup",
   src_col   = "T_crop_tree_diversity",
-  new_col   = "T_crop_FAO_Food_SubGroup"
+  new_col   = "T_crop_tree_FAO_Food_SubGroup"
 )
 sort(unique(fomd10.clean$T_crop_FAO_Food_SubGroup))
 
 #--- Get the CT_crop_FAO_Food_SubGroup that are common in the C and T practices
 fomd10.clean <- apply_CT_commodity_group_intersection(
   df      = fomd10.clean,
-  col_C   = "C_crop_FAO_Food_SubGroup",
-  col_T   = "T_crop_FAO_Food_SubGroup",
-  new_col = "CT_crop_FAO_Food_SubGroup"
+  col_C   = "C_crop_tree_FAO_Food_SubGroup",
+  col_T   = "T_crop_tree_FAO_Food_SubGroup",
+  new_col = "CT_crop_tree_FAO_Food_SubGroup"
 )
 
 sort(unique(fomd10.clean$CT_crop_FAO_Food_SubGroup))
