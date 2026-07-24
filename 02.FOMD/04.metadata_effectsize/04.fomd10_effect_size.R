@@ -4,6 +4,7 @@ library(purrr)
 library(metafor) 
 library(readxl)
 library(metafor)
+
 path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure"
 path.metadata.effectsize<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/04.metadata_effectsize"
 
@@ -17,6 +18,7 @@ list.files(path.metadata.effectsize)
 source(file.path(path.metadata.effectsize,"/fomd_fun/fun_mean_sd_calculation.R"))
 source(file.path(path.metadata.effectsize,"/fomd_fun/fun_lookup_ontologies.R")) # TO CHECK VER COMO METER LOAD DATA ONTOLOGIES DENTRO DE ESTA EQUACION
 source(file.path(path.metadata.effectsize,"/fomd_fun/fun_cv_missing_calculation.R"))
+source(file.path(path.metadata.effectsize,"/fomd_fun/fun_effect_sizes_calculation.R"))
 
 #==========================================================
 # Read datasets
@@ -40,11 +42,12 @@ sort(unique(fomd10.clean$T_out_var_metric))
 fomd10.mean.sd<-calculate_mean_sd(fomd10.clean)
 
 #---- Replace mean==0 to mean=0.0001 ----
-# This step is to avoid Inf values when calculating CV
+## To calculate LOG RESPONSE RATIO effect size -> zero values have to be replaced by 0.0001
+
 fomd10.mean.sd <- fomd10.mean.sd %>%
   mutate(
-    T_out_mean = if_else(T_out_mean == 0, 0.00001, T_out_mean),
-    C_out_mean = if_else(C_out_mean == 0, 0.00001, C_out_mean)
+    T_out_mean = if_else(effect_size_type=="Log Response Ratio"&T_out_mean == 0, 0.0001, T_out_mean),
+    C_out_mean = if_else(effect_size_type=="Log Response Ratio"&C_out_mean == 0, 0.0001, C_out_mean)
   )
 
 #==========================================================
@@ -163,116 +166,101 @@ missing.effect.size.type<-fomd10.n.cv %>%
 #==========================================================
 # Calculate Effect sizes 
 #==========================================================
-#--------- Calculate Log Response Ratio ------------
 ## THIS IS TEMPORARY, JUST FOR THE CFRA ANALYSIS, LATER I NEED TO IMPLEMENT A EQUATION
 ## TO CHECK: there are negative yield values, see what to do here!
 
 ## First: Replace the C_out_mean==0 and T_out_mean==0 by 0.00001
 names(fomd10.n.cv)
 
-library(metafor)
-
-fomd10.lRR.effectsize<-
-  escalc(measure = "ROM", m1i= T_out_sd, m2i= C_out_sd,
-       sd1i= T_out_mean,sd2i= C_out_mean,
-       n1i= T_out_sample_size_imputed, n2i= C_out_sample_size_imputed, 
-       data= fomd10.n.cv, 
-       var.names=c("lnRR","lnRR_var"),
-       vtype="LS",digits=4)
 
 fomd10.effectsize <- fomd10.n.cv %>%
-  filter(effect_size_type=="Log Response Ratio")%>%
-  filter(T_out_sd<0)%>%
-  select(doi,"C_product","T_product",T_product_simple,C_product_simple, 
-         out_subindicator,C_out_sample_size,
-         C_out_var_metric,C_out_var_value,
-         T_out_var_metric,T_out_var_value,
+  calc_lnRR_effectsize(T_out_mean, C_out_mean,
+                      T_out_sd, C_out_sd,
+                      T_out_sample_size_imputed, C_out_sample_size_imputed)%>%
+  calc_SMD_effectsize(T_out_mean, C_out_mean,
+                       T_out_sd, C_out_sd,
+                       T_out_sample_size_imputed, C_out_sample_size_imputed)%>%
+  
+  mutate(
+    effect_size_yi=case_when(
+      effect_size_type=="Log Response Ratio"& !is.na(lnRR_cv_final)~lnRR_cv_final,
+      effect_size_type=="Log Response Ratio"& is.na(lnRR_cv_final)~lnRR,
+      effect_size_type=="Standardized Mean Difference"~SMD,
+      
+      TRUE~NA),
+    effect_size_vi=case_when(
+      effect_size_type=="Log Response Ratio"& !is.na(lnRR_var_cv_final)~lnRR_var_cv_final,
+      effect_size_type=="Log Response Ratio"& is.na(lnRR_var_cv_final)~lnRR_var,
+      effect_size_type=="Standardized Mean Difference"~SMD_var,
+      
+      TRUE~NA)
+    )
 
-         T_out_sample_size,382:397)
+  names(fomd10.effectsize)
+  
+  
+  select(doi,"C_product","T_product",
+         out_subindicator,effect_size_type,
+         C_out_mean,T_out_mean,
+         C_out_sd,T_out_sd,
+         T_out_sample_size_imputed, C_out_sample_size_imputed,
+         "lnRR", "lnRR_var",
+         SMD,
+         C_out_cv_group_avg,T_out_cv_group_avg,
+         C_out_cv_final,
+         T_out_cv_final,
+         lnRR_cv_group_avg,
+         lnRR_cv_final,effect_size_yi,
+         effect_size_vi)
+
+
+#--------- Remove irrelevant columns ------------
+practices <- c("tillage", "planting", "varietal_crop", "varietal_animal",
+               "intercrop", "crop_seq", "agrof", "fert", "chem",
+               "residues", "ph", "irrig", "watharv", "postharvest", "harvest")
+
+pattern <- paste0("^CT_(", paste(practices, collapse = "|"), ")_(subpractice|practice|practicetheme)$")
+
+
+fomd10.effectsize<-fomd10.effectsize%>%
+  select(-matches(pattern),
+         -"n_focal_groups",-"is_bundled" ,                         
+         -"has_variety_bg"  ,-"is_vet_chem",
+         -"C_out_cv_reported" ,
+         -"T_out_cv_reported",
+         "lnRR_cv_group_avg" ,                  
+         
+         "lnRR_var_cv_group_avg",                "lnRR_cv_final" ,                      
+         "lnRR_var_cv_final",                    "cv_grouping_method" ,                 
+         "lnRR" ,                                "lnRR_var" ,                           
+         "SMD" ,                                 "SMD_var"  )
+
+names(fomd10.effectsize)
 
 sort(unique(fomd10.effectsize$T_out_sd))
 
-  mutate(
-    rom = escalc(measure = "ROM",
-                 m1i = T_out_mean, m2i = C_out_mean,
-                 sd1i = T_out_sd,  sd2i = C_out_sd,
-                 n1i = T_out_sample_size_imputed, n2i = C_out_sample_size_imputed,
-                 data = ., vtype = "LS", digits = 4)
-  )
+write_csv(fomd10.effectsize, paste0(path.metadata.effectsize, "/fomd10_effect_size.csv"))
 
 
-var.names=c("Financial_mean","Financial_var")
+#==========================================================
+# #Subset the Ethiopia data to send to the Modelling team
+#==========================================================
+fomd10.effectsize.eth<-fomd10.effectsize%>%
+  filter(str_detect(country, "Ethiopia"))
+write_csv(fomd10.effectsize.eth, paste0(path.metadata.effectsize, "/fomd10_subset_modelling_teams/ETH.fomd10_effect_size.v1.csv"))
 
+#---10_FOMD_metadata_dictionary
+fomd10.dictionary<-read_xlsx(file.path(path.metadata.structure,"10_FOMD_metadata_synthesis_short.xlsx"), sheet = "10_FOMD_readme")%>%
+  select(4:7)
+names(fomd10.dictionary)
 
-fomd10.effectsize<-fomd10.n.cv%>%
-%>%
-mutate(
-  
+write_csv(fomd10.dictionary, paste0(path.metadata.effectsize, "/fomd10_subset_modelling_teams/fomd10.dictionary.csv"))
 
-
-  
-  case_when(
-  #Use the lRR values already calculated using the cv_final values
-  effect_size_type=="Log Response Ratio"& !is.na(lnRR_cv_final)~lnRR_cv_final,
-  #Calculate lRR for the other rows
-  effect_size_type=="Log Response Ratio"& is.na(lnRR_cv_final)~
-    ,
-    
-  
-  TRUE~NA))
-  
-  
-
-  
-  
-)
-
-
-
-
-
-
-fomd10.effect.size<-fomd10.effect.size%>%
-    mutate(C_out_mean=case_when(C_out_mean==0 & effect_size_type=="Log Response Ratio"~0.00001,TRUE~C_out_mean),
-           T_out_mean=case_when(T_out_mean==0 & effect_size_type=="Log Response Ratio"~0.00001,TRUE~T_out_mean))%>%
-  mutate(
-    effect_size_vi=case_when( 
-      (!is.na(C_out_mean)& !is.na(T_out_mean) &effect_size_type=="Log Response Ratio")~log(T_out_mean/C_out_mean),
-      TRUE~NA))
-
-#--------- Calculate Standardized Mean Difference ------------
-
-
-
-  
-fomd10.effect.size<-fomd10.effect.size%>%
-  #mutate(C_out_mean=case_when(C_out_mean==0 & effect_size_type=="Log Response Ratio"~0.00001,TRUE~C_out_mean),
-  #       T_out_mean=case_when(T_out_mean==0 & effect_size_type=="Log Response Ratio"~0.00001,TRUE~T_out_mean))%>%
-  
-  mutate(
-    effect_size_vi=case_when( 
-      (!is.na(C_out_mean)&
-          !is.na(T_out_mean) &
-          !is.na(C_out_sd)&
-          !is.na(T_out_sd)&
-          !is.na(C_out_sample_size)&
-          !is.na(T_out_sample_size)&
-          effect_size_type=="Standardized Mean Difference")~
-        (T_out_mean - C_out_mean) / (sqrt(((T_out_sample_size-1)*T_out_sd^2 + (C_out_sample_size-1)*C_out_sd^2) / (T_out_sample_size+C_out_sample_size-2))),
-      TRUE~effect_size_vi))  
-
-readr::write_csv(fomd10.effect.size, paste0(path.metadata.effectsize, "/fomd10_effect_size.csv"))
-  
-
-# Quick checks
-    select(doi,country,effect_size_type,out_subindicator,C_out_mean,T_out_mean,effect_size_vi,C_data_location)%>%
-    #filter(doi=="10.1016/j.fcr.2022.108788")
-    filter(effect_size_type=="Log Response Ratio")
-    filter(is.na(effect_size_vi))%>%
-    filter(out_subindicator=="Crop Yield")
-
-
-
-
- ##############################################################
-
+#---01_FOMD_ontologies: 01_practices
+ontologies_01practices<-read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies.xlsx"), sheet = "01_practices")%>%
+  select(-"code.ERA",
+         -"theme.code.ERA",-"practice.code.ERA",-"subpractice.code.ERA",
+         -"Subpractice.Suffix",-"practice_description",-"Subpractice.Suffix" ,-"Subpractice.S",
+         -"note_for_lolita")
+names(ontologies_01practices)
+write_csv(ontologies_01practices, paste0(path.metadata.effectsize, "/fomd10_subset_modelling_teams/ontologies_01practices.csv"))

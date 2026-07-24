@@ -149,7 +149,7 @@ n_cv_calculation <- function(dt, rules, outcome_col = "out_subindicator") {
       
      lnRR_cv_final = log(T_out_mean  / C_out_mean) +
        0.5 * (C_out_cv_final^2 / n2 - T_out_cv_final^2 / n1),
-     var_missing_cases = (T_out_cv_final^2 / n1) + (C_out_cv_final^2 / n2) +
+     lnRR_var_cv_final = (T_out_cv_final^2 / n1) + (C_out_cv_final^2 / n2) +
        (T_out_cv_final^4 / (2 * n1^2)) + (C_out_cv_final^4 / (2 * n2^2)),
       
       cv_grouping_method = paste(grouping_vars, collapse = " + ")  # audit trail

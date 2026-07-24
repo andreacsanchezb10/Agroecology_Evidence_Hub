@@ -388,6 +388,21 @@ unmatched_crops <- bind_rows(
 print(unmatched_crops)
 nrow(unmatched_crops) #34 crops missing Commodity reclassification
 
+
+#--------- Remove irrelevant columns ------------
+practices <- c("tillage", "planting", "varietal_crop", "varietal_animal",
+               "intercrop", "crop_seq", "agrof", "fert", "chem",
+               "residues", "ph", "irrig", "watharv", "postharvest", "harvest")
+
+pattern <- paste0("^CT_(", paste(practices, collapse = "|"), ")_(subpractice|practice|practicetheme)$")
+
+
+fomd10.clean<-fomd10.clean%>%
+  select(-matches(pattern),
+         -"n_focal_groups",-"is_bundled" ,                         
+         -"has_variety_bg"  ,-"is_vet_chem" )
+
+
 readr::write_csv(fomd10.clean, paste0(path.metadata.effectsize, "/fomd10_clean/fomd10_clean_MD_Rosen_24_Effec_Sc.csv"))
 
 

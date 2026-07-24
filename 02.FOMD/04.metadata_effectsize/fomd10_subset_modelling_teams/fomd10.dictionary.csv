@@ -1,0 +1,607 @@
+field_name,data_type,description,Example
+study_id,Character,"Each paper is assigned a unique code that can be used to identify the source of the data in the database. The code consists of <study_type>_<authors>_<year>_<title_<journal>, using the first 5 letters of the first author, last two digits of publication year, first 5 letters of the title, and first 2 letters of the journal.","JA_Sun, _21_Crop _AG"
+effect_size_id,Numeric,A unique number identifiying an single observation (i.e. row) in ERA.,NA
+authors,Character,"The name of the first author, last name comes first with no punctuation. Use all initials given and do not include spaces between initials.",Bucagu C 
+title,NA,NA,NA
+year,Positive Integer,The year of publication.,NA
+journal,Character,Abbreviation of the journal name. We use WoS abbreviations that can be found here: https://images.webofknowledge.com/images/help/WOS/A_abrvjt.html This field will autofill using the data in the Levels tab matching to the user selected journal name.,Soil & Tillage Research = STR 
+doi,Character,DOI (or url if no DOI available) of article. DOI = Digital Object Identifier.,NA
+country,Character,"Country Name. When study was performed in multiple countries, country names are separated by .. (e.g., Kenya..Ghana)",Kenya
+country_ISO,Character,"Standardized country name using ISO.3166-1.alpha-3. This field should be auto filled using the country selected and data in the Levels Tab. When study was performed in multiple countries, country iso names are separated by .. (e.g., KEN..GHA)",KEN
+C_country,Character,"Country Name. When study was performed in multiple countries, country names are separated by .. (e.g., Kenya..Ghana)",NA
+C_site_type,Character,"One of the following: Farm, Station, Greenhouse, Survey, or Lab. When study was performed in multiple countries, site_type names are separated by .. (e.g., Farm..Station)
+Farm research is conducted in a farmer’s field and can be managed by the farmer or researcher. 
+Station research is conducted in a controlled setting of research station, university or school. 
+Survey research is conducted via interviews that yields quantitative data based on testimonial. 
+Greenhouse is conducted in a greenhouse and is only relevant for studies of greenhouse gas emissions data. 
+Lab studies can include fisheries feeding trials conducted at a small scale in university research labs. ",NA
+C_site_id,Character,"Free text name to identify the site. Include institution/station name and location or village/town in county/district, but not the country. When study was performed in multiple countries, site_id names are separated by .. (e.g., Chitedze ARS, Lilongwe..Murehua)",NA
+C_site_admin,Character,"A qualitative measure of how accurate you think the location reporting is. If the study is at a research station, but we only know the location of the city where the station is,  we record ""City"". If we know the exact location of the station record ""Facility"". When study was performed in multiple countries, site_admin are separated by .. (e.g., District..County)",NA
+C_site_agg,Character,"Does the location contain sub-locations?. State yes if a paper reports a general location which contains sub-locations that you do not know the co-ordinates of. For example a paper might state ""we repeated the experiment on 10 farms in 5 villages in Busia county, Kenya"" so we have a county location and know there are 5 village sub-locations in this county, we don't know where these villages are and results are reported averaged across all the farms and villages. If we know the location or names of the villages (e.g. results are reported per village) then we create one site per village and state ""no"" in this field. When study was performed in multiple countries, site_agg are separated by .. (e.g., No..Yes)",NA
+C_site_latlong_type,Character,"Source and derivation type of the geographic coordinates associated with the study site. Indicates whether coordinates were directly reported in the publication or derived during data extraction. When study was performed in multiple countries, site_latlong_type are separated by .. (e.g., Original..Middle point)",NA
+C_site_latitude,Numeric,"Latitude of study location in degrees or decimal degrees, the latter recorded to same accuracy as in publication (or estimated from googlemaps where locations were found from site names/descriptions. When study was performed in multiple countries, latitudes are separated by ..",NA
+C_site_longitude,Numeric,"Longitude of study location in degrees or decimal degrees, the latter recorded to same accuracy as in publication (or estimated from googlemaps where locations were found from site names/descriptions. When study was performed in multiple countries, longitude are separated by ..",NA
+C_site_buffer,Character,"Manual estimation (e.g. from measuring on google earth) in m of the spatial uncertainty for a point location. The site should within an X m radius (the buffer.manual amount) of the point location specified. Unit is meters. When study was performed in multiple countries, site_buffer are separated by ..",NA
+C_site_key,Character,"Longitude, latitude and buffer for the site",NA
+T_country,Character,"Country Name. When study was performed in multiple countries, country names are separated by .. (e.g., Kenya..Ghana)",NA
+T_site_type,Character,"One of the following: Farm, Station, Greenhouse, Survey, or Lab. When study was performed in multiple countries, site_type names are separated by .. (e.g., Farm..Station)
+Farm research is conducted in a farmer’s field and can be managed by the farmer or researcher. 
+Station research is conducted in a controlled setting of research station, university or school. 
+Survey research is conducted via interviews that yields quantitative data based on testimonial. 
+Greenhouse is conducted in a greenhouse and is only relevant for studies of greenhouse gas emissions data. 
+Lab studies can include fisheries feeding trials conducted at a small scale in university research labs. ",NA
+T_site_id,Character,"Free text name to identify the site. Include institution/station name and location or village/town in county/district, but not the country. When study was performed in multiple countries, site_id names are separated by .. (e.g., Chitedze ARS, Lilongwe..Murehua)",NA
+T_site_admin,Character,"A qualitative measure of how accurate you think the location reporting is. If the study is at a research station, but we only know the location of the city where the station is,  we record ""City"". If we know the exact location of the station record ""Facility"". When study was performed in multiple countries, site_admin are separated by .. (e.g., District..County)",NA
+T_site_agg,Character,"Does the location contain sub-locations?. State yes if a paper reports a general location which contains sub-locations that you do not know the co-ordinates of. For example a paper might state ""we repeated the experiment on 10 farms in 5 villages in Busia county, Kenya"" so we have a county location and know there are 5 village sub-locations in this county, we don't know where these villages are and results are reported averaged across all the farms and villages. If we know the location or names of the villages (e.g. results are reported per village) then we create one site per village and state ""no"" in this field. When study was performed in multiple countries, site_agg are separated by .. (e.g., No..Yes)",NA
+T_site_latlong_type,Character,"Source and derivation type of the geographic coordinates associated with the study site. Indicates whether coordinates were directly reported in the publication or derived during data extraction. When study was performed in multiple countries, site_latlong_type are separated by .. (e.g., Original..Middle point)",NA
+T_site_latitude,Numeric,"Latitude of study location in degrees or decimal degrees, the latter recorded to same accuracy as in publication (or estimated from googlemaps where locations were found from site names/descriptions. When study was performed in multiple countries, latitudes are separated by ..",NA
+T_site_longitude,Numeric,"Longitude of study location in degrees or decimal degrees, the latter recorded to same accuracy as in publication (or estimated from googlemaps where locations were found from site names/descriptions. When study was performed in multiple countries, longitude are separated by ..",NA
+T_site_buffer,Character,"Manual estimation (e.g. from measuring on google earth) in m of the spatial uncertainty for a point location. The site should within an X m radius (the buffer.manual amount) of the point location specified. Unit is meters. When study was performed in multiple countries, site_buffer are separated by ..",NA
+T_site_key,Character,"Longitude, latitude and buffer for the site",NA
+exp_design,Character,A plan specification that states how treatments are allocated to the experimental units during an agronomic trial. It refers to the conceptual framework within which the experiment is conducted. Source: AGRO,NA
+C_exp_plot_size,Numeric,"The size of a treatment and control plots in the experiment in meter squares, if variable use the mean value or mid-point of the size range.",NA
+T_exp_plot_size,Numeric,"The size of a treatment and control plots in the experiment in meter squares, if variable use the mean value or mid-point of the size range.",NA
+C_exp_field_size,Numeric,Field size in hectares,2.6 10.8
+T_exp_field_size,Numeric,Field size in hectares,2.6 10.8
+exp_duration,Numeric,"Length of time the experiment has been ongoing up to the date the data are being reported for in years. In bimodal rainfall systems with multiple growing seasons, seasons are identified by fractions of the year, 0.5, etc. If outcomes are reported in a unimodal rainfall system with one growing season per year, the duration can be equivalent to one year.",0.5 1 5
+time_raw,NA,Complete with the specific time period name the study provide,NA
+time_year_start,NA,Year when the experiment started. Year Start as stated by the author,NA
+time_year_end,NA,Year when the experiment stopped. Year End as stated by the author,NA
+time_season,NA,Season as stated by the author,NA
+C_subpractice_description_raw,Character,Free text description of the control practice practice. Use sufficient detail to easily identify the practices.,Conventional tillage with 20 kg N/ha
+T_subpractice_description_raw,Character,Free text description of the treatment practice. Use sufficient detail to easily identify all the component practices.,Reduced tillage with mulch
+C_system_type,Character,NA,NA
+T_system_type,Character,NA,NA
+C_crop_tree_diversity,Character,"Name of crop species present in the control system. Record crop names using common names with the first letter capitalized and the remaining letters in lowercase. When multiple crops are present, separate species using a dash (-) for intercrops and a forward slash (/) for rotations. Maintain the order in which crops occur within the system.",Maize-cowpea/groundnut
+C_crop_tree_variety,Character,"Commercial or local name of the crop variety associated with each crop listed in C_crop_diversity (e.g., Katumani, G2333, Maasai Red). When multiple varieties of the same crop are present, separate varieties using an asterisk (*). When multiple crops are present, record varieties in the same crop order and using the same separators as C_crop_diversity, where - denotes intercrops and / denotes rotations.",Maize(TZR-EW)-Soybean(TGx 1448-2E)
+C_crop_tree_density,Character,"Planting density for each crop listed in C_crop_diversity. Density values must follow the same crop order and separator structure as C_crop_diversity, where - denotes intercrops and / denotes rotations. Record each entry using the format value(unit). If planting density is not reported for a crop, record NA.",Soybean[44000(plants/ha)]/Maize[444444(plants/ha)]
+T_crop_tree_diversity,Character,"Name of crop species present in the intervention (treatment) system. Record crop names using common names with the first letter capitalized and the remaining letters in lowercase. When multiple crops are present, separate species using a dash (-) for intercrops and a forward slash (/) for rotations. Maintain the order in which crops occur within the system.",Maize-cowpea/groundnut
+T_crop_tree_variety,Character,"Commercial or local name of the crop variety associated with each crop listed in T_crop_diversity (e.g., Katumani, G2333, Maasai Red). When multiple varieties of the same crop are present, separate varieties using an asterisk (*). When multiple crops are present, record varieties in the same crop order and using the same separators as T_crop_diversity, where - denotes intercrops and / denotes rotations.",Maize(TZR-EW)-Soybean(TGx 1448-2E)
+T_crop_tree_density,Character,"Planting density for each crop listed in T_crop_diversity. Density values must follow the same crop order and separator structure as T_crop_diversity, where - denotes intercrops and / denotes rotations. Record each entry using the format value(unit). If planting density is not reported for a crop, record NA.",Soybean[44000(plants/ha)]/Maize[444444(plants/ha)]
+C_animal_diversity,Character,"Name of animal species present in the control system. Record common names with the first letter capitalized and the remaining letters in lowercase (e.g., Cattle, Goat, Chicken). When multiple animal species are present, separate species using a dash (-) for species managed simultaneously and a forward slash (/) for species managed sequentially or in rotation within the production system. Maintain the order in which species occur within the system.",Cattle-Goat/Chicken
+C_animal_breed,Character,"Breed or variety associated with each animal species listed in C_animal_diversity (e.g., Holstein, Boer, Rhode Island Red). When multiple breeds of the same species are present, separate breeds using an asterisk (*). When multiple animal species are present, record breeds in the same species order and using the same separators as C_animal_diversity, where - denotes species managed simultaneously and / denotes species managed sequentially.",Holstein-Boer/Rhode Island Red
+C_animal_density,Character,"Stocking density for each animal species listed in C_animal_diversity. Density values must follow the same species order and separator structure as C_animal_diversity, where - denotes species managed simultaneously and / denotes species managed sequentially. Record each entry using the format value(unit). If stocking density is not reported for a species, record NA.",2(head/ha)-5(head/ha)/15(birds/ha)
+T_animal_diversity,Character,"Name of animal species present in the intervention (treatment) system. Record common names with the first letter capitalized and the remaining letters in lowercase. When multiple animal species are present, separate species using a dash (-) for species managed simultaneously and a forward slash (/) for species managed sequentially within the production system. Maintain the order in which species occur within the system.",Cattle-Goat/Chicken
+T_animal_breed,Character,"Breed or variety associated with each animal species listed in T_animal_diversity (e.g., Holstein, Boer, Rhode Island Red). When multiple breeds of the same species are present, separate breeds using an asterisk (*). When multiple animal species are present, record breeds in the same species order and using the same separators as T_animal_diversity, where - denotes species managed simultaneously and / denotes species managed sequentially.",Holstein*Jersey-Boer/Rhode Island Red
+T_animal_density,Character,"Stocking density for each animal species listed in T_animal_diversity. Density values must follow the same species order and separator structure as T_animal_diversity, where - denotes species managed simultaneously and / denotes species managed sequentially. Record each entry using the format value(unit). If stocking density is not reported for a species, record NA.",2(head/ha)-NA/15(birds/ha)
+C_tillage_subpractice_raw,Character,"Complete with an easy to recognize name for the tillage practice, you will use this name to reference it when building treatments later in the extraction process. Avoid using special characters.",NA
+C_tillage_subpractice,Character,"Name of the tillage practice implemented in the control system (e.g., Conventional tillage, Reduced tillage, No-tillage, Strip tillage). Record the specific tillage practice used to prepare the soil prior to planting or during crop establishment.",Conventional tillage
+C_tillage_method,Character,"Tillage method or implement used to perform the tillage operation in the control system (e.g., Moldboard plough, Disc plough, Chisel plough, Hand hoe, Animal-drawn plough). Record the primary implement or technique used for soil preparation.",Moldboard plough
+C_tillage_method_other,Character,Other soil preparation methods used in the control system that are not captured by the predefined categories in C_tillage_method. Provide a short description of the method or implement used.,Ripper tine
+C_tillage_depth,Character,"Depth at which the soil is tilled in the control system, reported in centimeters. Record the depth as value(cm). If multiple depths are reported for different operations, record them in the order reported in the study. If not reported, record NA.",20
+C_tillage_frequency,Character,"Number of times the land was tilled during one experimental season in the control system. Record the number of tillage operations performed within the cropping season. If not reported, record NA.",2
+T_tillage_subpractice_raw,Character,"Complete with an easy to recognize name for the tillage practice, you will use this name to reference it when building treatments later in the extraction process. Avoid using special characters.",NA
+T_tillage_subpractice,Character,"Name of the tillage practice implemented in the intervention (treatment) system (e.g., Conventional tillage, Reduced tillage, No-tillage, Strip tillage). Record the specific tillage practice used to prepare the soil prior to planting or during crop establishment.",No-tillage
+T_tillage_method,Character,"Tillage method or implement used to perform the tillage operation in the intervention system (e.g., Direct seeder, Strip tiller, Hand hoe, Chisel plough). Record the primary implement or technique used for soil preparation.",Direct seeder
+T_tillage_method_other,Character,Other soil preparation methods used in the intervention system that are not captured by the predefined categories in T_tillage_method. Provide a short description of the method or implement used.,Manual planting stick
+T_tillage_depth,Character,"Depth at which the soil is tilled in the intervention system, reported in centimeters. Record the depth as value(cm). If the system involves no soil disturbance (e.g., no-tillage), record 0(cm) or NA if depth is not applicable.",0(cm)
+T_tillage_frequency,Character,"Number of times the land was tilled during one experimental season in the intervention system. Record the number of tillage operations performed within the cropping season. If not reported, record NA.",0
+C_planting_subpractice_raw,NA,NA,NA
+C_planting_subpractice,Character,"Name of the planting subpractice implemented in the control system. Record the specific planting approach used for crop establishment (e.g., Direct seeding, Transplanting, Dibbling, Broadcasting, Row planting).",NA
+C_planting_method,Character,"Planting method or technique used to establish crops in the control system (e.g., Hand planting, Mechanical planter, Broadcasting by hand, Dibbling with stick). Record the primary method used to place seeds or seedlings in the field.",NA
+C_planting_date_start,Character,"Start date of the planting period in the control system. Record dates using the format DD/MM/YYYY-DD/MM/YYYY, where the first date indicates the beginning of planting and the second date indicates the end of planting. If planting occurred on a single day, record the same date twice. If not reported, record NA.",15/05/18-18/05/18
+C_planting_date_end,Character,"end date of the planting period in the control system. Record dates using the format DD/MM/YYYY-DD/MM/YYYY, where the first date indicates the beginning of planting and the second date indicates the end of planting. If planting occurred on a single day, record the same date twice. If not reported, record NA.",NA
+T_planting_subpractice_raw,NA,NA,NA
+T_planting_subpractice,Character,"Name of the planting subpractice implemented in the intervention (treatment) system. Record the specific planting approach used for crop establishment (e.g., Direct seeding, Transplanting, Dibbling, Broadcasting, Row planting).",Direct seeding
+T_planting_method,Character,"Planting method or technique used to establish crops in the intervention system (e.g., Hand planting, Mechanical planter, Dibbling with stick, Nursery transplanting). Record the primary method used to place seeds or seedlings in the field.",Hand planting in rows
+T_planting_date_start,Character,"Start date of the planting period in the intervention system. Record dates using the format dd/mm/yy-dd/mm/yy, where the first date indicates the beginning of planting and the second date indicates the end of planting. If planting occurred on a single day, record the same date twice. If not reported, record NA.",10/05/18-12/05/18
+T_planting_date_end,Character,"end date of the planting period in the intervention system. Record dates using the format dd/mm/yy-dd/mm/yy, where the first date indicates the beginning of planting and the second date indicates the end of planting. If planting occurred on a single day, record the same date twice. If not reported, record NA.",NA
+C_varietal_crop_subpractice_raw,NA,NA,NA
+C_varietal_crop_variety,Character,"Name of the crop variety or cultivar used in the control system. Record the commercial or commonly reported name of the variety (e.g., Katumani, G2333, Hybrid 614). If the variety name is not reported, record NA.",Common Bean(NABE 10C)
+C_varietal_crop_subpractice,Character,"Breeding category of the crop variety used in the control system. Indicate whether the variety is Improved, Hybrid, Unimproved, or another category reported in the study. This variable captures the varietal management practice being compared in the experiment.",Improved Seeds
+C_varietal_crop_type,Character,"Specific agronomic or genetic trait of the crop variety used in the control system, if reported (e.g., drought tolerant, pest resistant, early maturing, high yielding). Record any relevant characteristic mentioned in the study. If multiple crops are present, record traits in the same crop order and using the same separators as C_crop_diversity. If not reported, record NA.",NA
+C_varietal_crop_trait,Character,"Specific agronomic, physiological, or genetic traits of the crop variety used in the control system, if reported in the study (e.g., drought tolerant, pest resistant, early maturing, high yielding). Record traits exactly as described in the study. When multiple traits are reported for the same variety, separate traits using two dots (..). If no trait information is reported, record NA.",Drought tolerant..Early maturing
+T_varietal_crop_subpractice_raw,NA,NA,NA
+T_varietal_crop_variety,Character,"Name of the crop variety or cultivar used in the intervention (agroecological) system. Record the commercial or local name of the variety as reported in the study. If multiple crops are present, record varieties in the same crop order and using the same separators as T_crop_diversity, where - denotes intercrops and / denotes rotations. If the variety name is not reported, record Unespecified.",NA
+T_varietal_crop_subpractice,Character,"Breeding category of the crop variety used in the intervention system. Indicate whether the variety is Improved, Hybrid, Unimproved, or another category reported in the study. If multiple crops are present, record values in the same crop order and using the same separators as T_crop_diversity. If not reported, record NA.",NA
+T_varietal_crop_type,Character,"Type or origin of the crop variety used in the intervention system, describing whether the variety is local, traditional, or improved (e.g., Local variety, Landrace, Improved variety). If multiple crops are present, record entries in the same crop order and using the same separators as T_crop_diversity. If not reported, record NA.",Local variety
+T_varietal_crop_trait,Character,"Specific agronomic, physiological, or genetic traits of the crop variety used in the intervention system, if reported in the study (e.g., drought tolerant, pest resistant, early maturing, high yielding). Record traits exactly as described in the study. When multiple traits are reported for the same variety, separate traits using two dots (..). If no trait information is reported, record NA.",NA
+C_varietal_animal_breed,Character,"Name of the animal breed used in the control system. Record the commonly reported breed name as described in the study (e.g., Holstein, Jersey, Boer, Rhode Island Red). If the breed name is not reported, record NA.",Holstein
+C_varietal_animal_subpractice,Character,"Breeding category of the animal breed used in the control system. Indicate whether the breed is Improved, Hybrid, Crossbred, Unimproved, or another category reported in the study. This variable captures the animal breeding practice being compared in the experiment. If not reported, record NA.",Improved
+C_varietal_animal_type,Character,"Origin or classification of the animal breed used in the control system, describing whether the breed is Local, Indigenous, Exotic, or another category reported in the study. If not reported, record NA.",Exotic breed
+T_varietal_animal_breed,Character,"Name of the animal breed used in the intervention (agroecological) system. Record the commonly reported breed name as described in the study (e.g., Nguni, Red Maasai, Indigenous chicken). If the breed name is not reported, record NA.",Nguni
+T_varietal_animal_subpractice,Character,"Breeding category of the animal breed used in the intervention system. Indicate whether the breed is Improved, Hybrid, Crossbred, Unimproved, or another category reported in the study. If not reported, record NA.",Unimproved
+T_varietal_animal_type,Character,"Origin or classification of the animal breed used in the intervention system, describing whether the breed is Local, Indigenous, Exotic, or another category reported in the study. If not reported, record NA.",Local breed
+C_intercrop_subpractice_raw,Character,NA,NA
+C_intercrop_subpractice,Character,Name of the intercropping subpractice implemented in the control system. Record the specific intercropping practice described in the study,Monoculture
+C_intercrop_design,Character,"Intercropping design used in the control system, describing how component species were combined in relation to their sole-crop densities. Record the design reported in the study, such as Replacement or Additive. If not reported, record NA.",NA
+C_intercrop_pattern,Character,"Spatial arrangement of the intercropped species in the control system. Record how the species were sown or planted in relation to each other, such as Strip, Row, or Mixed. If not reported, record NA.",NA
+C_intercrop_start_year,Character,"Start year of the intercropping practice in the control system. Record the calendar year in which the intercropping treatment began. If not reported, record NA.",NA
+C_intercrop_start_season,Character,"Starting season of the intercropping treatment in the control system for systems with more than one growing season per year. Record the season as reported in the study (e.g., Long rains, Short rains, Wet season, Dry season). If the region has unimodal rainfall, seasonality is not specified, or the information is not relevant, leave blank.",NA
+C_intercrop_residues_fate,Character,"Fate of crop residues from the previous season in the intercrop control system. Record how residues were managed before establishment of the intercropping treatment (e.g., Removed, Retained, Burned, Incorporated, Grazed). If not reported, record NA.",NA
+T_intercrop_subpractice_raw,Character,NA,NA
+T_intercrop_subpractice,Character,Name of the intercropping subpractice implemented in the intervention system. Record the specific intercropping practice described in the study,Intercropping
+T_intercrop_design,Character,"Intercropping design used in the intervention system, describing how component species were combined in relation to their sole-crop densities. Record the design reported in the study, such as Replacement or Additive.",Additive
+T_intercrop_pattern,Character,"Spatial arrangement of the intercropped species in the intervention system. Record how the species were sown or planted in relation to each other, such as Strip, Row, or Mixed. If not reported, record NA.",Row
+T_intercrop_start_year,Character,"Start year of the intercropping practice in the intervention system. Record the calendar year in which the intercropping treatment began. If not reported, record NA.",2018
+T_intercrop_start_season,Character,"Starting season of the intercropping treatment in the intervention system for systems with more than one growing season per year. Record the season as reported in the study (e.g., Long rains, Short rains, Wet season, Dry season). If the region has unimodal rainfall, seasonality is not specified, or the information is not relevant, leave blank.",2
+T_intercrop_residues_fate,Character,"Fate of crop residues from the previous season in the intercrop intervention system. Record how residues were managed before establishment of the intercropping treatment (e.g., Removed, Retained, Burned, Incorporated, Grazed). If not reported, record NA.",Incorporated
+C_crop_seq_subpractice_raw,NA,NA,NA
+C_crop_seq_subpractice,Character,"Name of the crop sequence subpractice implemented in the control system. Record the crop sequence or rotational practice described in the study (e.g., monoculture, crop rotation, fallow system, green manure, cover crop). When multiple traits are reported for the same variety, separate traits using two dots (-).",Monoculture
+C_crop_seq_start_year,Character,"Start year of the crop sequence practice in the control system. Record the calendar year in which the crop sequence or rotation treatment began. If not reported, record Unspecified.",NA
+C_crop_seq_start_season,Character,"Starting season of the experimental treatment in systems with more than one growing season. Record the season as reported (e.g., Long rains, Short rains, Wet season, Dry season). If the region has unimodal rainfall or seasonality is not specified, leave the field blank.",NA
+C_crop_seq_residues_fate,Character,"Fate of crop residues from the previous season in the control system before establishing the next crop in the sequence (e.g., Removed, Retained, Burned, Incorporated, Grazed). If not reported, record Unspecified.",Removed
+T_crop_seq_subpractice_raw,NA,NA,NA
+T_crop_seq_subpractice,Character,"Name of the crop sequence subpractice implemented in the intervention (agroecological) system. Record the crop sequence or rotational practice described in the study (e.g., rotation with N-fixing crop, cover crop system, green manure rotation). When multiple traits are reported for the same variety, separate traits using two dots (-).",Complex Rotation-Rotation (N fixing and Non N fixing)
+T_crop_seq_start_year,Character,"Start year of the crop sequence practice in the intervention system. Record the calendar year in which the crop sequence or rotation treatment began. If not reported, record Unspecified.",2025
+T_crop_seq_start_season,Character,"Starting season of the experimental treatment in systems with more than one growing season. Record the season as reported (e.g., Long rains, Short rains, Wet season, Dry season). If the region has unimodal rainfall or seasonality is not specified, leave the field blank.",1
+T_crop_seq_residues_fate,Character,"Fate of crop residues from the previous season in the intervention system before establishing the next crop in the sequence (e.g., Removed, Retained, Burned, Incorporated, Grazed). If not reported, record Unspecified.",Incorporated
+C_agrof_subpractice_raw,Character,NA,NA
+C_agrof_subpractice,Character,"Description of the agroforestry subpractice implemented in the control system. Record the agroforestry system in terms of species composition, spatial arrangement, and shade management.",Monoculture
+C_agrof_shade_mean_min_max,Character,"Percentage of shade provided by trees in the control system. Record the mean, minimum, and maximum shade levels using the format mean(min-max)%. If only one value is reported (e.g., mean), record the value followed by (Unspecified). If not reported, record Unspecified.",0(0-0)
+C_agrof_canopy_height_mean_min_max,Character,"Canopy height of trees in the control agroforestry system. Record the mean, minimum, and maximum canopy height in meters using the format mean(min-max) m. If only one value is reported, record the value followed by (Unspecified). If not reported, record Unspecified.",0(0-0)
+C_agrof_dhb_mean_min_max,Character,"Diameter at breast height (DBH) of trees in the control agroforestry system. Record the mean, minimum, and maximum DBH in centimeters using the format mean(min-max) cm. If only one value is reported, record the value followed by (Unspecified). If not reported, record Unspecified.",0(0-0)
+T_agrof_subpractice_raw,Character,NA,NA
+T_agrof_subpractice,Character,"Description of the agroforestry subpractice implemented in the intervention (agroecological) system. Record the agroforestry system in terms of species composition, spatial arrangement, and shade management. If not reported, record Unspecified.","""Multistrata Agroforestry-Agroforestry (high diversity)"
+T_agrof_shade_mean_min_max,Character,"Percentage of shade provided by trees in the intervention system. Record the mean, minimum, and maximum shade levels using the format mean(min-max)%. If only one value is reported, record the value followed by (Unspecified). If not reported, record Unspecified.",55(40-70)%
+T_agrof_canopy_height_mean_min_max,Character,"Canopy height of trees in the intervention agroforestry system. Record the mean, minimum, and maximum canopy height in meters using the format mean(min-max) m. If only one value is reported, record the value followed by (Unspecified). If not reported, record Unspecified.",15(10-22)m
+T_agrof_dhb_mean_min_max,Character,"Diameter at breast height (DBH) of trees in the intervention agroforestry system. Record the mean, minimum, and maximum DBH in centimeters using the format mean(min-max) cm. If only one value is reported, record the value followed by (Unspecified). If not reported, record Unspecified.",30(15-45)cm
+C_fert_subpractice_raw,NA,NA,NA
+C_fert_subpractice,Character,"Name of the nutrient management subpractice implemented in the control system. Record the type of fertilization practice used (e.g., Synthetic fertilizers, Organic fertilizers, Integrated nutrient management, No fertilization).",Synthetic fertilizers
+C_fert_inorganic_category,Character,"Category of inorganic fertilizer used in the control system. Record the fertilizer category (e.g., Inorganic, Mineral fertilizer). If not reported, record Unspecified.",Inorganic
+C_fert_inorganic_type_amount_unit,Character,"Name of the inorganic fertilizer applied [Total amount of inorganic fertilizer applied(Unit used to report the total amount of inorganic fertilizer applied. )]. If multiple fertilizers are applied, separate them using two dots (..).",Compound[200(kg/ha)]..Urea[200(kg/ha)]
+C_fert_inorganicN_amount_unit,Numeric,"Total elemental nitrogen applied from inorganic fertilizers (e.g., urea, ammonium nitrate, DAP) (Unit used to report elemental nutrient quantities)",157(kg/ha)
+C_fert_inorganicP_amount_unit,Numeric,"Total elemental phosphorus applied from inorganic fertilizers (e.g., rock phosphate or DAP) (Unit used to report elemental nutrient quantities)",157(kg/ha)
+C_fert_inorganicK_amount_unit,Numeric,"Total elemental potassium applied from inorganic fertilizers (e.g., potassium chloride or monopotassium phosphate) (Unit used to report elemental nutrient quantities)",157(kg/ha)
+C_fert_inorganicP2O5_amount_unit,Numeric,Total phosphorus applied from inorganic fertilizers reported as phosphorus pentoxide (P₂O₅) (Unit used to report elemental nutrient quantities),157(kg/ha)
+C_fert_inorganicK2O_amount_unit,Numeric,Total potassium applied from inorganic fertilizers reported as potassium oxide (K₂O) (Unit used to report elemental nutrient quantities),157(kg/ha)
+C_fert_organic_category,Character,"Category of organic fertilizer used in the control system (e.g., Organic fertilizer, Manure, Compost, Green manure).",NA
+C_fert_organic_type_amount_unit,Character,"Name of the organic fertilizer applied [Total amount of organic fertilizer applied(Unit used to report the total amount of organic fertilizer applied)]. If multiple organic fertilizers are applied, separate them using two dots (..).",Cattle Manure[5000(kg/ha)]
+C_fert_organicN_amount_unit,Character,"Total elemental nitrogen applied from organic fertilizers (e.g., manure, compost, crop residues). (Unit used to report elemental nutrient quantities)",0.12(% of Total)
+C_fert_organicP_amount_unit,Character,Total elemental phosphorus applied from organic fertilizers. (Unit used to report elemental nutrient quantities),0.12(% of Total)
+C_fert_organicK_amount_unit,Character,Total elemental potassium applied from organic fertilizers. (Unit used to report elemental nutrient quantities),0.12(% of Total)
+C_fert_organic_source,Character,"Source of the organic fertilizer material (e.g., on-farm manure, purchased manure, compost, crop residues, biosolids). Only required for organic materials.",NA
+T_fert_subpractice_raw,NA,NA,NA
+T_fert_subpractice,Character,"Name of the nutrient management subpractice implemented in the intervention system. Record the fertilization practice used (e.g., Synthetic fertilizers, Organic fertilizers, Integrated nutrient management, No fertilization).",Organic fertilizers
+T_fert_inorganic_category,Character,"Category of inorganic fertilizer used in the intervention system. If not reported, record Unspecified.",NA
+T_fert_inorganic_type_amount_unit,Character,"Name of the inorganic fertilizer applied [Total amount of inorganic fertilizer applied(Unit used to report the total amount of inorganic fertilizer applied. )]. If multiple fertilizers are applied, separate them using two dots (..).",Compound[200(kg/ha)]..Urea[200(kg/ha)]
+T_fert_inorganicN_amount_unit,Numeric,"Total elemental nitrogen applied from inorganic fertilizers (e.g., urea, ammonium nitrate, DAP) (Unit used to report elemental nutrient quantities)",157(kg/ha)
+T_fert_inorganicP_amount_unit,Numeric,"Total elemental phosphorus applied from inorganic fertilizers (e.g., rock phosphate or DAP) (Unit used to report elemental nutrient quantities)",157(kg/ha)
+T_fert_inorganicK_amount_unit,Numeric,"Total elemental potassium applied from inorganic fertilizers (e.g., potassium chloride or monopotassium phosphate) (Unit used to report elemental nutrient quantities)",157(kg/ha)
+T_fert_inorganicP2O5_amount_unit,Numeric,Total phosphorus applied from inorganic fertilizers reported as phosphorus pentoxide (P₂O₅) (Unit used to report elemental nutrient quantities),157(kg/ha)
+T_fert_inorganicK2O_amount_unit,Numeric,Total potassium applied from inorganic fertilizers reported as potassium oxide (K₂O) (Unit used to report elemental nutrient quantities),157(kg/ha)
+T_fert_organic_category,Character,"Category of organic fertilizer used in the intervention system (e.g., Organic fertilizer, Manure, Compost, Green manure).",Manure
+T_fert_organic_type_amount_unit,Character,"Name of the organic fertilizer applied [Total amount of organic fertilizer applied(Unit used to report the total amount of organic fertilizer applied)]. If multiple organic fertilizers are applied, separate them using two dots (..).",Cattle Manure[5000(kg/ha)]
+T_fert_organicN_amount_unit,Character,"Total elemental nitrogen applied from organic fertilizers (e.g., manure, compost, crop residues). (Unit used to report elemental nutrient quantities)",0.12(% of Total)
+T_fert_organicP_amount_unit,Character,Total elemental phosphorus applied from organic fertilizers. (Unit used to report elemental nutrient quantities),0.12(% of Total)
+T_fert_organicK_amount_unit,Character,Total elemental potassium applied from organic fertilizers. (Unit used to report elemental nutrient quantities),0.12(% of Total)
+T_fert_organic_source,Character,"Source of the organic fertilizer material (e.g., on-farm manure, purchased manure, compost, crop residues, biosolids). Only required for organic materials.",NA
+C_weed_method_raw,Character,"Complete with an easy to recognize name for the weeding practice, you will use this name to reference it when building treatments later in the extraction process. Avoid using special characters. This section is for physical weeding only, herbicides application should be noted under the chemicals columns.",NA
+C_weed_method,Character,"Name of the weeding subpractice implemented in the control system. Record the physical or mechanical weed control method used (e.g., Hand hoe, Mechanical weeder, Hand pulling, Mulching). If only chemical weed control was applied, record Chemical weed control and provide details in the chemical management section.",Hand Hoe
+C_weed_frequency_unit,Character,Frequency of the weeding practice(Weeding frequency time unit),2(season)
+T_weed_method_raw,Character,"Complete with an easy to recognize name for the weeding practice, you will use this name to reference it when building treatments later in the extraction process. Avoid using special characters. This section is for physical weeding only, herbicides application should be noted under the chemicals columns.",NA
+T_weed_method,Character,"Name of the weeding subpractice implemented in the intervention system. Record the physical or mechanical weed control method used. If only chemical weed control was applied, record Chemical weed control and provide details in the chemical management section.",Hand Hoe
+T_weed_frequency_unit,Character,Frequency of the weeding practice(Weeding frequency time unit),2(season)
+C_chem_subpractice_raw,Character,NA,NA
+C_chem_subpractice,Character,"Name of pest, weed, or biological management subpractices used in the control system. Separate multiple subpractices using a dash (-) following the same order across related chemical variables.",Herbicide-No Inoculation-Insecticide
+C_chem_name_amount_unit,Character,"Active ingredient name[amount(unit of the chemical)] applied for each subpractice listed in C_chem_subpractice. Record entries in the same order as the subpractices. Use the format ingredient:value(unit). Separate entries using a dash (-). If a subpractice does not involve a chemical application, record 0. If information is not reported, record Unspecified.",roundup[7.5(l/ha)]..harness[1(l/ha)]
+T_chem_subpractice_raw,NA,NA,NA
+T_chem_subpractice,Character,"Name of pest, weed, or biological management subpractices used in the intervention system. Separate multiple subpractices using a dash (-).",Hand Hoe-No Inoculation- No Insecticide Applied
+T_chem_name_amount_unit,Character,"Active ingredient name[amount(unit of the chemical)] applied for each subpractice listed in T_chem_subpractice. Record entries in the same order as the subpractices. Use the format ingredient:value(unit). Separate entries using a dash (-). If a subpractice does not involve a chemical application, record 0. If information is not reported, record Unspecified.",roundup[7.5(l/ha)]..harness[1(l/ha)]
+C_residues_subpractice_raw,NA,NA,NA
+C_residues_subpractice,Character,"Name of the residues management subpractice implemented in the control system. If multiple subpractices are present, separate them using a dash (-).",No-mulch
+C_residues_OC_amount_unit,Numeric,Organic Carbon (OC) amount (application unit),NA
+C_residues_N_amount_unit,Numeric,Total elemental nitrogen (N) added from non-composted organic materials in the control system. Record the value using the unit defined in C_residues_unit.,NA
+C_residues_P_amount_unit,Numeric,Total elemental phosphorus (P) added from non-composted organic materials in the control system. Record the value using the unit defined in C_residues_unit.,NA
+C_residues_K_amount_unit,Numeric,Total elemental potassium (K) added from non-composted organic materials in the control system. Record the value using the unit defined in C_residues_unit.,NA
+C_residues_tree,Character,"Tree or shrub species from which the residue material was derived. Only required if the applied material comes from a tree or shrub. Record the full scientific name where possible. If not applicable, leave blank.",NA
+C_residues_material,Character,Mulch or residue material applied in the control system. Choose from the predefined list or add a new material if no suitable match exists. Do not enter details here for mulched crop residues already captured elsewhere.,NA
+C_residues_material_amount_unit,Character,Amount of material applied in the control system in the treatment system (Unit of Application),2500(kg/ha)
+C_residues_material_source,Character,"Source of the residue material. Record as In-field (from inside the experimental field), On-farm (from outside the experimental field but within the same landholding), or Off-farm (from outside the farm). If not reported, record Unspecified.",NA
+C_residues_processing,Character,"Type of processing applied to the residue material before application (e.g., Fresh, Dried, Chopped, Crushed). If not reported, record Unspecified.",NA
+T_residues_subpractice_raw,Character,NA,NA
+T_residues_subpractice,Character,"Name of the residues management subpractice implemented in the intervention system. If multiple subpractices are present, separate them using a dash (-).",Mulch (Non N fixing)
+T_residues_OC_amount_unit,Numeric,Organic Carbon (OC) amount,NA
+T_residues_N_amount_unit,Numeric,"Total elemental nitrogen (N) added from non-composted organic materials in the intervention system. Record the value using the unit defined in T_residues_unit. If not reported, record NA.",Unspecified
+T_residues_P_amount_unit,Numeric,"Total elemental phosphorus (P) added from non-composted organic materials in the intervention system. Record the value using the unit defined in T_residues_unit. If not reported, record NA.",Unspecified
+T_residues_K_amount_unit,Numeric,"Total elemental potassium (K) added from non-composted organic materials in the intervention system. Record the value using the unit defined in T_residues_unit. If not reported, record NA.",Unspecified
+T_residues_tree,Character,"Tree or shrub species from which the residue material was derived. Only required if the applied material comes from a tree or shrub. Record the full scientific name where possible. If not applicable, leave blank.",NA
+T_residues_material,Character,Mulch or residue material applied in the intervention system. Choose from the predefined list or add a new material if no suitable match exists. Do not enter details here for mulched crop residues already captured elsewhere.,Hyparrhenia Grass Species
+T_residues_material_amount_unit,Character,Amount of material applied in the control system in the treatment system (Unit of Application),2500(kg/ha)
+T_residues_material_source,Character,"Source of the residue material. Record as In-field, On-farm, or Off-farm. If not reported, record Unspecified.",Unspecified
+T_residues_processing,Character,"Type of processing applied to the residue material before application (e.g., Fresh, Dried, Chopped, Crushed). If not reported, record Unspecified.",Unspecified
+C_ph_subpractice_raw,Character,NA,NA
+C_ph_subpractice,Character,"Name of the soil pH management subpractice implemented in the control system. Record the practice used to modify or regulate soil acidity or alkalinity (e.g., Liming, Gypsum application, No pH management). If not reported, record Unspecified.",No pH management
+C_ph_material_amount_unit,Character,Material applied to influence soil pH in the intervention system. Record the specific material used. Total amount of pH-altering material applied in the intervention system. Record the value using the format value(unit).,Limestone[2100(kg)]..Phosphogypsum[2300(kg)]
+T_ph_subpractice_raw,Character,NA,NA
+T_ph_subpractice,Character,"Name of the soil pH management subpractice implemented in the intervention system. Record the practice used to modify or regulate soil acidity or alkalinity (e.g., Liming, Gypsum application). If not reported, record Unspecified.",Liming
+T_ph_material_amount_unit,Character,Material applied to influence soil pH in the intervention system. Record the specific material used. Total amount of pH-altering material applied in the intervention system. Record the value using the format value(unit).,Limestone[2100(kg)]..Phosphogypsum[2300(kg)]
+C_irrig_subpractice_raw,Character,NA,NA
+C_irrig_subpractice,Character,"Name of the irrigation subpractice implemented in the control system. Record the irrigation method used (e.g., Flood irrigation, Furrow irrigation, Drip irrigation, Sprinkler irrigation, No irrigation).",NA
+C_irrig_method,Character,NA,NA
+C_irrig_date_start,Date,"Start date of the irrigation period in the control system. Record the dates using the format YYYY/MM/DD-YYYY/MM/DD. If irrigation occurs continuously during the season or dates are not reported, record Unspecified.",2018/02/01-2018/03/02
+C_irrig_date_end,Date,"End date of the irrigation period in the control system. Record the dates using the format YYYY/MM/DD-YYYY/MM/DD. If irrigation occurs continuously during the season or dates are not reported, record Unspecified.",NA
+C_irrig_water_amount_unit,Character,Total amount of irrigation water applied in the control system. Record using the format value(unit) or value(unit/time) if the study reports a time component.,1000(l/ha/year)
+C_irrig_water_type,Character,"Type or source of irrigation water used in the control system (e.g., Groundwater, Surface water, Rainwater harvesting, Treated wastewater). If not reported, record Unspecified.",Groundwater
+T_irrig_subpractice_raw,Character,NA,NA
+T_irrig_subpractice,Character,"Name of the irrigation subpractice implemented in the intervention system. Record the irrigation method used (e.g., Flood irrigation, Drip irrigation, Sprinkler irrigation).",NA
+T_irrig_method,Character,NA,NA
+T_irrig_date_start,Date,Start date of the irrigation period in the intervention system. Record the dates using the format YYYY/MM/DD-YYYY/MM/DD.,2018/02/01-2018/03/02
+T_irrig_date_end,Date,End date of the irrigation period in the intervention system. Record the dates using the format YYYY/MM/DD-YYYY/MM/DD.,NA
+T_irrig_water_amount_unit,Character,Total amount of irrigation water applied in the intervention system. Record using the format value(unit) or value(unit/time) if reported in the study.,1000(l/ha/year)
+T_irrig_water_type,Character,Type or source of irrigation water used in the intervention system.,NA
+C_watharv_subpractice_raw,NA,NA,NA
+C_watharv_subpractice,Character,"Name of the water harvesting subpractice implemented in the control system. Record the technique used to collect, store, or concentrate water for agricultural use. If multiple subpractices are present, separate them using a dash (-).",NA
+T_watharv_subpractice_raw,NA,NA,NA
+T_watharv_subpractice,Character,"Name of the water harvesting subpractice implemented in the intervention system. Record the technique used to collect, store, or concentrate water for agricultural use. If multiple subpractices are present, separate them using a dash (-).",NA
+C_harvest_subpractice_raw,Character,NA,NA
+C_harvest_subpractice,Character,"Name of the harvest subpractice implemented in the control system. Record the harvest method or management practice used (e.g., Manual harvest, Mechanical harvest, Selective harvest, Single harvest).",NA
+C_harvest_date_start,Date,"Start dates of the harvest period in the control system. Record the dates using the format DD/MM/YYYY-DD/MM/YYYY. If the harvest occurs on a single date, repeat the same date twice. If not reported, record Unspecified.",2018/02/01-2018/03/02
+C_harvest_date_end,Date,"End dates of the harvest period in the control system. Record the dates using the format DD/MM/YYYY-DD/MM/YYYY. If the harvest occurs on a single date, repeat the same date twice. If not reported, record Unspecified.",NA
+C_harvest_days_after_planting,Integer,"Number of days between planting and harvest in the control system. Record the number of days as reported in the study. If not reported, record NA.",NA
+T_harvest_subpractice_raw,Character,NA,NA
+T_harvest_subpractice,Character,Name of the harvest subpractice implemented in the intervention system. Record the harvest method or management practice used.,NA
+T_harvest_date_start,Date,Start dates of the harvest period in the intervention system. Record the dates using the format YYYY/MM/DD-YYYY/MM/DD.,2018/02/01-2018/03/02
+T_harvest_date_end,Date,End dates of the harvest period in the intervention system. Record the dates using the format YYYY/MM/DD-YYYY/MM/DD.,NA
+T_harvest_days_after_planting,Integer,"Number of days between planting and harvest in the intervention system. Record the number of days as reported. If not reported, record NA.",NA
+C_postharvest_subpractice,Character,"Name of the post harvesting subpractice implemented in the control system. Record the technique used to collect, store, or concentrate water for agricultural use. If multiple subpractices are present, separate them using a dash (-).",NA
+C_postharvest_date_start_end,Date,"Start and end dates of the postharvest storage or processing period in the control system. Record dates using the format YYYY/MM/DD-YYYY/MM/DD. If not reported, record Unspecified.",NA
+C_postharvest_days_after_storage,Integer,"Number of days between harvest and the end of the postharvest storage or processing period in the control system. Record the number of days as reported in the study. If not reported, record NA.",NA
+T_postharvest_subpractice,Character,"Name of the post harvesting subpractice implemented in the intervention system. Record the technique used to collect, store, or concentrate water for agricultural use. If multiple subpractices are present, separate them using a dash (-).",NA
+T_postharvest_date_start_end,Date,"Start and end dates of the postharvest storage or processing period in the intervention system. Record dates using the format YYYY/MM/DD-YYYY/MM/DD. If not reported, record Unspecified.",NA
+T_postharvest_days_after_storage,Integer,"Number of days between harvest and the end of the postharvest storage or processing period in the intervention system. Record the number of days as reported in the study. If not reported, record NA.",NA
+C_land_structure_subpractice_raw,NA,NA,NA
+C_land_structure_subpractice,NA,NA,NA
+C_land_structure_function,NA,NA,NA
+C_land_structure_origin,NA,NA,NA
+C_land_structure_manage,NA,NA,NA
+T_land_structure_subpractice_raw,NA,NA,NA
+T_land_structure_subpractice,NA,NA,NA
+T_land_structure_function,NA,NA,NA
+T_land_structure_origin,NA,NA,NA
+T_land_structure_manage,NA,NA,NA
+out_exp_design,Character,"Experimental design used for the measurement of a specific outcome. Record the sampling/measurement unit on which the outcome was assessed (e.g., plot-level measurement, plant subsampling within plots, quadrats within plots, repeated measurements over time). This may differ from the treatment experimental unit.",NA
+out_exp_plot_size,NA,"Size of the area (m2) from which a specific outcome was measured or sampled. Record the dimensions or area actually used for outcome assessment (e.g., harvest area, central sampling area, quadrat, subplot). This may be equal or smaller than the full treatment plot.",NA
+C_product,Character,"The full name of the product, including aspect of the component such as grain, meat or milk",Sorghum
+C_product_type,Character,Product type name,Plant
+C_product_subtype,Character,Product subtype name,Cereals
+C_product_simple,Character,"Simplified product name, excluding any aspects of component",Sorghum
+C_econ_inputs,Character,"Inputs (e.g., fertilizer, fertilizer application, pesticide, seeds, labor, etc.) included in the financial outcome calculation",NA
+T_product,Character,"The full name of the product, including aspect of the component such as grain, meat or milk",Sorghum
+T_product_type,Character,Product type name,Plant
+T_product_subtype,Character,Product subtype name,Cereals
+T_product_simple,Character,"Simplified product name, excluding any aspects of component",Sorghum
+T_econ_inputs,Character,"Inputs (e.g., fertilizer, fertilizer application, pesticide, seeds, labor, etc.) included in the financial outcome calculation",NA
+bio_func_group,Character,NA,NA
+bio_ground_ref,Character,NA,NA
+out_subindicator,Character,"Harmonised sub-outcome category assigned to the reported outcome, based on the controlled ontology.",Crop Yield
+out_indicator,Character,Outcome indicator name,Product Yield
+out_subpillar,NA,NA,NA
+out_pillar,Character,Outcome pillar name,Productivity
+out_subindicator_unit,Character,Unit of measurement for the outcome (please use SI units),kg/ha
+C_out_soil_depth_u,Numeric,"The depth for which the MeanC and MeanT correspond for soil properties in cm (lowest depth value = upper, so if you have a depth of 0-20 cm the lowest value = 20).",0
+T_out_soil_depth_u,NA,NA,NA
+C_out_soil_depth_l,Numeric,"The depth for which the MeanC and MeanT correspond for soil properties in cm (highest depth value = lower, so if you have a depth of 0-20 cm the highest value = 0).",10
+T_out_soil_depth_l,NA,NA,NA
+C_out_metric,Character,NA,NA
+C_out_value,Numeric,"The value that corresponds to the control treatment and outcome. Please standard yields to t/ha where appropropriate, keeping as many decimal places as there is data for.",1.5
+C_out_var_metric,Character,NA,NA
+C_out_var_value,Numeric,NA,NA
+C_out_sample_size,Numeric,NA,NA
+C_data_location,Character,"The location in the paper where the data can be found. This should be three letters (fig, tab, or txt) in lowercase and a number (for figures and tables) to signify figure, table or text, respectively.",Fig. 1 Table 2
+T_out_metric,Character,NA,NA
+T_out_value,Numeric,"The value that corresponds to the CSA treatment and outcome. Please standard yields to kg/ha where appropropriate, keeping as many decimal places as there is data for.",3.7
+T_out_var_metric,NA,NA,NA
+T_out_var_value,Numeric,NA,NA
+T_out_sample_size,Numeric,NA,NA
+T_data_location,Character,"The location in the paper where the data can be found. This should be three letters (fig, tab, or txt) in lowercase and a number (for figures and tables) to signify figure, table or text, respectively.",Fig. 1 Table 2
+C_out_agg_stat,Character,Statistics if outcome temporally aggregatted,NA
+T_out_agg_stat,NA,NA,NA
+C_out_year,Character,The calendar year the measurement was taken. Seasons in multi-season systems are identified by decimals ‘.1’ or ‘.2’ for the first and second season respectively. When the measurements are average values for more than one year create a decimal for the years covered.,1999 2002.2 19992
+T_out_year,NA,NA,NA
+C_out_year_start,Postive Integer,First year the measurement was taken (YYYY). For yield or similar outcomes this should relate to the harvest year (rather than the planting year). Where data are aggregated across years also complete the Measurement End Year Field.,NA
+T_out_year_start,NA,NA,NA
+C_out_year_end,Postive Integer,"This only required for temporally aggregated observations (e.g. a result that has been averaged from crop yields reported from 2000,2001 and 2002). Here report the last year of the period over for which observations were aggregated (in the previous example this would be 2002).",NA
+T_out_year_end,NA,NA,NA
+C_out_season_start,Postive Integer,"This only required in areas where there are mutiple growing seasons in a year (e.g., areas with bimodal rainfall or irrigated cropping in dry seasons of a unimodal system). Leave blank where there is only one growing season per year or no seasonal information is presented with the data. Code the season in order 1,2,etc. Determine the season sequence by harvest year. If there are two cropping seasons, with crops harvested in Feb and Sept, Feb = season 1 and Sept = season 2.",NA
+T_out_season_start,NA,NA,NA
+out_season_end,Postive Integer,"This only required for temporally aggregated observations in areas with more than one growing season (e.g. a result that has been averaged from crop yields reported from 2000 season 1,2001 season 1 and 2002 season 1). Here report the last season of the period over for which observations were aggregated (in the previous example this would be 1).",NA
+C_out_mean,NA,Calculated mean from reported values for the control system,NA
+T_out_mean,NA,Calculated mean from reported values for the treatment system,NA
+C_out_sd,NA,Calculated standard deviation from reported values for the control system,NA
+T_out_sd,NA,Calculated standard deviation from reported values for the treatment system,NA
+C_out_sample_size_imputed,NA,"Estimated sample size for the control system, estimated only when there was no reported sample size",NA
+T_out_sample_size_imputed,NA,"Estimated sample size for the treatment system, estimated only when there was no reported sample size",NA
+C_out_cv_group_avg,NA,"The group's average CV, used to fill in missing variance values",NA
+T_out_cv_group_avg,NA,"The group's average CV, used to fill in missing variance values",NA
+C_out_cv_final,NA,"The CV actually used downstream — reported if available, otherwise the group average for the control",NA
+T_out_cv_final,NA,"The CV actually used downstream — reported if available, otherwise the group average for the treatment",NA
+cv_grouping_method,NA,"Audit trail: which variables defined the ""group"" for averaging cv",NA
+effect_size_type,NA,Effect size type: Log Response Ratio or Standardized mean difference,NA
+effect_size_yi,NA,NA,NA
+effect_size_vi,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+"##### from here is only for ler, it is not related to ERA","##### from here is only for ler, it is not related to ERA",NA,NA
+NA,NA,NA,NA
+C_out_mean_product_component01,Numeric,NA,NA
+C_out_sd_product_component01,Numeric,NA,NA
+C2_out_mean_product_component02,Numeric,NA,NA
+C2_out_sd_product_component02,Numeric,NA,NA
+C2_out_sample_size_product_component02,Numeric,NA,NA
+C3_out_mean_product_component03,Numeric,NA,NA
+C3_out_sd_product_component03,Numeric,NA,NA
+C3_out_sample_size_product_component03,NA,NA,NA
+C4_out_mean_product_component04,Numeric,NA,NA
+C4_out_sd_product_component04,Numeric,NA,NA
+C5_out_mean_product_component05,Numeric,NA,NA
+C5_out_sd_product_component05,Numeric,NA,NA
+T_out_mean_product_component01,Numeric,NA,NA
+T_out_sd_product_component01,Numeric,NA,NA
+T_out_mean_product_component02,Numeric,NA,NA
+T_out_sd_product_component02,Numeric,NA,NA
+T_out_mean_product_component03,Numeric,NA,NA
+T_out_sd_product_component03,Numeric,NA,NA
+T_out_mean_product_component04,Numeric,NA,NA
+T_out_sd_product_component04,Numeric,NA,NA
+T_out_mean_product_component05,Numeric,NA,NA
+T_out_sd_product_component05,Numeric,NA,NA
+C2_subpractice_description_raw,Character,Free text description of the control practice practice. Use sufficient detail to easily identify the practices.,NA
+C3_subpractice_description_raw,Character,Free text description of the control practice practice. Use sufficient detail to easily identify the practices.,NA
+C4_subpractice_description_raw,Character,Free text description of the control practice practice. Use sufficient detail to easily identify the practices.,NA
+C5_subpractice_description_raw,Character,Free text description of the control practice practice. Use sufficient detail to easily identify the practices.,NA
+C2_crop_diversity,Character,"Name of crop species present in the control system. Record crop names using common names with the first letter capitalized and the remaining letters in lowercase. When multiple crops are present, separate species using a dash (-) for intercrops and a forward slash (/) for rotations. Maintain the order in which crops occur within the system.",NA
+C2_crop_variety,Character,"Commercial or local name of the crop variety associated with each crop listed in C_crop_diversity (e.g., Katumani, G2333, Maasai Red). When multiple varieties of the same crop are present, separate varieties using an asterisk (*). When multiple crops are present, record varieties in the same crop order and using the same separators as C_crop_diversity, where - denotes intercrops and / denotes rotations.",NA
+C2_crop_density,Character,"Planting density for each crop listed in C_crop_diversity. Density values must follow the same crop order and separator structure as C_crop_diversity, where - denotes intercrops and / denotes rotations. Record each entry using the format value(unit). If planting density is not reported for a crop, record NA.",NA
+C3_crop_diversity,Character,"Name of crop species present in the control system. Record crop names using common names with the first letter capitalized and the remaining letters in lowercase. When multiple crops are present, separate species using a dash (-) for intercrops and a forward slash (/) for rotations. Maintain the order in which crops occur within the system.",NA
+C3_crop_variety,Character,"Commercial or local name of the crop variety associated with each crop listed in C_crop_diversity (e.g., Katumani, G2333, Maasai Red). When multiple varieties of the same crop are present, separate varieties using an asterisk (*). When multiple crops are present, record varieties in the same crop order and using the same separators as C_crop_diversity, where - denotes intercrops and / denotes rotations.",NA
+C3_crop_density,Character,"Planting density for each crop listed in C_crop_diversity. Density values must follow the same crop order and separator structure as C_crop_diversity, where - denotes intercrops and / denotes rotations. Record each entry using the format value(unit). If planting density is not reported for a crop, record NA.",NA
+C4_crop_diversity,Character,"Name of crop species present in the control system. Record crop names using common names with the first letter capitalized and the remaining letters in lowercase. When multiple crops are present, separate species using a dash (-) for intercrops and a forward slash (/) for rotations. Maintain the order in which crops occur within the system.",NA
+C4_crop_variety,Character,"Commercial or local name of the crop variety associated with each crop listed in C_crop_diversity (e.g., Katumani, G2333, Maasai Red). When multiple varieties of the same crop are present, separate varieties using an asterisk (*). When multiple crops are present, record varieties in the same crop order and using the same separators as C_crop_diversity, where - denotes intercrops and / denotes rotations.",NA
+C4_crop_density,Character,"Planting density for each crop listed in C_crop_diversity. Density values must follow the same crop order and separator structure as C_crop_diversity, where - denotes intercrops and / denotes rotations. Record each entry using the format value(unit). If planting density is not reported for a crop, record NA.",NA
+C5_crop_diversity,Character,"Name of crop species present in the control system. Record crop names using common names with the first letter capitalized and the remaining letters in lowercase. When multiple crops are present, separate species using a dash (-) for intercrops and a forward slash (/) for rotations. Maintain the order in which crops occur within the system.",NA
+C5_crop_variety,Character,"Commercial or local name of the crop variety associated with each crop listed in C_crop_diversity (e.g., Katumani, G2333, Maasai Red). When multiple varieties of the same crop are present, separate varieties using an asterisk (*). When multiple crops are present, record varieties in the same crop order and using the same separators as C_crop_diversity, where - denotes intercrops and / denotes rotations.",NA
+C5_crop_density,Character,"Planting density for each crop listed in C_crop_diversity. Density values must follow the same crop order and separator structure as C_crop_diversity, where - denotes intercrops and / denotes rotations. Record each entry using the format value(unit). If planting density is not reported for a crop, record NA.",NA
+C2_tree_diversity,Character,"Scientific names of tree or shrub species present in the control system. Record full scientific names using the format Genus species and do not abbreviate the genus (e.g., Mangifera indica, not M. indica). When multiple species are present, separate species using a dash (-) for species grown simultaneously (e.g., mixed or intercropped systems) and a forward slash (/) for species occurring sequentially in rotation. Maintain the order in which tree species occur within the system.",NA
+C2_tree_density,Character,"Planting density for each tree species listed in C_tree_diversity. Density values must follow the same species order and separator structure as C_tree_diversity, where - denotes species present simultaneously and / denotes species occurring sequentially in rotation. Record each entry using the format value(unit). If density is not reported for a species, record NA.",NA
+C3_tree_diversity,Character,"Scientific names of tree or shrub species present in the control system. Record full scientific names using the format Genus species and do not abbreviate the genus (e.g., Mangifera indica, not M. indica). When multiple species are present, separate species using a dash (-) for species grown simultaneously (e.g., mixed or intercropped systems) and a forward slash (/) for species occurring sequentially in rotation. Maintain the order in which tree species occur within the system.",NA
+C3_tree_density,Character,"Planting density for each tree species listed in C_tree_diversity. Density values must follow the same species order and separator structure as C_tree_diversity, where - denotes species present simultaneously and / denotes species occurring sequentially in rotation. Record each entry using the format value(unit). If density is not reported for a species, record NA.",NA
+C2_tillage_subpractice,Character,"Name of the tillage practice implemented in the control system (e.g., Conventional tillage, Reduced tillage, No-tillage, Strip tillage). Record the specific tillage practice used to prepare the soil prior to planting or during crop establishment.",Conventional tillage
+C2_tillage_method,Character,"Tillage method or implement used to perform the tillage operation in the control system (e.g., Moldboard plough, Disc plough, Chisel plough, Hand hoe, Animal-drawn plough). Record the primary implement or technique used for soil preparation.",Moldboard plough
+C2_tillage_method_other,Character,Other soil preparation methods used in the control system that are not captured by the predefined categories in C_tillage_method. Provide a short description of the method or implement used.,Ripper tine
+C2_tillage_depth,Character,"Depth at which the soil is tilled in the control system, reported in centimeters. Record the depth as value(cm). If multiple depths are reported for different operations, record them in the order reported in the study. If not reported, record NA.",20
+C2_tillage_frequency,Character,"Number of times the land was tilled during one experimental season in the control system. Record the number of tillage operations performed within the cropping season. If not reported, record NA.",2
+C3_tillage_subpractice,Character,"Name of the tillage practice implemented in the control system (e.g., Conventional tillage, Reduced tillage, No-tillage, Strip tillage). Record the specific tillage practice used to prepare the soil prior to planting or during crop establishment.",Conventional tillage
+C3_tillage_method,Character,"Tillage method or implement used to perform the tillage operation in the control system (e.g., Moldboard plough, Disc plough, Chisel plough, Hand hoe, Animal-drawn plough). Record the primary implement or technique used for soil preparation.",Moldboard plough
+C3_tillage_method_other,Character,Other soil preparation methods used in the control system that are not captured by the predefined categories in C_tillage_method. Provide a short description of the method or implement used.,Ripper tine
+C3_tillage_depth,Character,"Depth at which the soil is tilled in the control system, reported in centimeters. Record the depth as value(cm). If multiple depths are reported for different operations, record them in the order reported in the study. If not reported, record NA.",20
+C3_tillage_frequency,Character,"Number of times the land was tilled during one experimental season in the control system. Record the number of tillage operations performed within the cropping season. If not reported, record NA.",2
+C2_planting_subpractice,Character,"Name of the planting subpractice implemented in the control system. Record the specific planting approach used for crop establishment (e.g., Direct seeding, Transplanting, Dibbling, Broadcasting, Row planting).",NA
+C2_planting_method,Character,"Planting method or technique used to establish crops in the control system (e.g., Hand planting, Mechanical planter, Broadcasting by hand, Dibbling with stick). Record the primary method used to place seeds or seedlings in the field.",NA
+C2_planting_date_start_end,Character,"Start and end dates of the planting period in the control system. Record dates using the format DD/MM/YYYY-DD/MM/YYYY, where the first date indicates the beginning of planting and the second date indicates the end of planting. If planting occurred on a single day, record the same date twice. If not reported, record NA.",15/05/18-18/05/18
+C3_planting_subpractice,Character,"Name of the planting subpractice implemented in the control system. Record the specific planting approach used for crop establishment (e.g., Direct seeding, Transplanting, Dibbling, Broadcasting, Row planting).",NA
+C3_planting_method,Character,"Planting method or technique used to establish crops in the control system (e.g., Hand planting, Mechanical planter, Broadcasting by hand, Dibbling with stick). Record the primary method used to place seeds or seedlings in the field.",NA
+C3_planting_date_start_end,Character,"Start and end dates of the planting period in the control system. Record dates using the format DD/MM/YYYY-DD/MM/YYYY, where the first date indicates the beginning of planting and the second date indicates the end of planting. If planting occurred on a single day, record the same date twice. If not reported, record NA.",15/05/18-18/05/18
+C2_varietal_crop_variety,Character,"Name of the crop variety or cultivar used in the control system. Record the commercial or commonly reported name of the variety (e.g., Katumani, G2333, Hybrid 614). If the variety name is not reported, record NA.",Hybrid 614
+C2_varietal_crop_subpractice,Character,"Breeding category of the crop variety used in the control system. Indicate whether the variety is Improved, Hybrid, Unimproved, or another category reported in the study. This variable captures the varietal management practice being compared in the experiment.",Improved Seeds
+C2_varietal_crop_type,Character,"Specific agronomic or genetic trait of the crop variety used in the control system, if reported (e.g., drought tolerant, pest resistant, early maturing, high yielding). Record any relevant characteristic mentioned in the study. If multiple crops are present, record traits in the same crop order and using the same separators as C_crop_diversity. If not reported, record NA.",NA
+C2_varietal_crop_trait,Character,"Specific agronomic, physiological, or genetic traits of the crop variety used in the control system, if reported in the study (e.g., drought tolerant, pest resistant, early maturing, high yielding). Record traits exactly as described in the study. When multiple traits are reported for the same variety, separate traits using two dots (..). If no trait information is reported, record NA.",Drought tolerant..Early maturing
+C3_varietal_crop_variety,Character,"Name of the crop variety or cultivar used in the control system. Record the commercial or commonly reported name of the variety (e.g., Katumani, G2333, Hybrid 614). If the variety name is not reported, record NA.",Hybrid 614
+C3_varietal_crop_subpractice,Character,"Breeding category of the crop variety used in the control system. Indicate whether the variety is Improved, Hybrid, Unimproved, or another category reported in the study. This variable captures the varietal management practice being compared in the experiment.",Improved Seeds
+C3_varietal_crop_type,Character,"Specific agronomic or genetic trait of the crop variety used in the control system, if reported (e.g., drought tolerant, pest resistant, early maturing, high yielding). Record any relevant characteristic mentioned in the study. If multiple crops are present, record traits in the same crop order and using the same separators as C_crop_diversity. If not reported, record NA.",NA
+C3_varietal_crop_trait,Character,"Specific agronomic, physiological, or genetic traits of the crop variety used in the control system, if reported in the study (e.g., drought tolerant, pest resistant, early maturing, high yielding). Record traits exactly as described in the study. When multiple traits are reported for the same variety, separate traits using two dots (..). If no trait information is reported, record NA.",Drought tolerant..Early maturing
+C2_intercrop_subpractice,Character,NA,NA
+C3_intercrop_subpractice,Character,NA,NA
+C2_agrof_subpractice,Character,"Description of the agroforestry subpractice implemented in the control system. Record the agroforestry system in terms of species composition, spatial arrangement, temporal arrangement, and shade management.",Monoculture
+C2_agrof_shade_mean_min_max,Character,"Percentage of shade provided by trees in the control system. Record the mean, minimum, and maximum shade levels using the format mean(min-max)%. If only one value is reported (e.g., mean), record the value followed by (Unspecified). If not reported, record Unspecified.",0(0-0)
+C2_agrof_canopy_height_mean_min_max,Character,"Canopy height of trees in the control agroforestry system. Record the mean, minimum, and maximum canopy height in meters using the format mean(min-max) m. If only one value is reported, record the value followed by (Unspecified). If not reported, record Unspecified.",0(0-0)
+C2_agrof_dhb_mean_min_max,Character,"Diameter at breast height (DBH) of trees in the control agroforestry system. Record the mean, minimum, and maximum DBH in centimeters using the format mean(min-max) cm. If only one value is reported, record the value followed by (Unspecified). If not reported, record Unspecified.",0(0-0)
+C3_agrof_subpractice,Character,"Description of the agroforestry subpractice implemented in the control system. Record the agroforestry system in terms of species composition, spatial arrangement, temporal arrangement, and shade management.",Monoculture
+C3_agrof_shade_mean_min_max,Character,"Percentage of shade provided by trees in the control system. Record the mean, minimum, and maximum shade levels using the format mean(min-max)%. If only one value is reported (e.g., mean), record the value followed by (Unspecified). If not reported, record Unspecified.",0(0-0)
+C3_agrof_canopy_height_mean_min_max,Character,"Canopy height of trees in the control agroforestry system. Record the mean, minimum, and maximum canopy height in meters using the format mean(min-max) m. If only one value is reported, record the value followed by (Unspecified). If not reported, record Unspecified.",0(0-0)
+C3_agrof_dhb_mean_min_max,Character,"Diameter at breast height (DBH) of trees in the control agroforestry system. Record the mean, minimum, and maximum DBH in centimeters using the format mean(min-max) cm. If only one value is reported, record the value followed by (Unspecified). If not reported, record Unspecified.",0(0-0)
+C2_fert_subpractice,Character,"Name of the nutrient management subpractice implemented in the control system. Record the type of fertilization practice used (e.g., Synthetic fertilizers, Organic fertilizers, Integrated nutrient management, No fertilization).",Synthetic fertilizers
+C2_fert_inorganic_category,Character,"Category of inorganic fertilizer used in the control system. Record the fertilizer category (e.g., Inorganic, Mineral fertilizer). If not reported, record Unspecified.",Inorganic
+C2_fert_inorganic_type,Character,"Name of the inorganic fertilizer applied. If multiple fertilizers are applied, separate them using two dots (..).",Compound D..Ammonium Nitrate
+C2_fert_inorganic_unit,Character,"Unit used to report the total amount of inorganic fertilizer applied. (e.g., kg/ha, g/m²).",kg/ha
+C2_fert_inorganic_amount,Numeric,"Total amount of inorganic fertilizer applied. Record the reported quantity using the unit specified in C2_fert_inorganic_applied_unit. If multiple fertilizers are reported separately, record values in the same order as C2_fert_inorganic_type, separated by (..)",240..200
+C2_fert_inorganicNPK_unit,Character,"Unit used to report elemental nutrient quantities (N, P, K) applied from inorganic fertilizers. Typically reported as kg/ha. If not reported, record Unspecified.",kg/ha
+C2_fert_inorganicN,Numeric,"Total elemental nitrogen applied from inorganic fertilizers (e.g., urea, ammonium nitrate, DAP). Record the value using the unit defined in C2_fert_inorganicNPK_unit.",120
+C2_fert_inorganicP,Numeric,"Total elemental phosphorus applied from inorganic fertilizers (e.g., rock phosphate or DAP). Record the value using the unit defined in C2_fert_inorganicNPK_unit.",30
+C2_fert_inorganicK,Numeric,"Total elemental potassium applied from inorganic fertilizers (e.g., potassium chloride or monopotassium phosphate). Record the value using the unit defined in C2_fert_inorganicNPK_unit.",60
+C2_fert_inorganicP2O5,Numeric,Total phosphorus applied from inorganic fertilizers reported as phosphorus pentoxide (P₂O₅). Record the value using the unit defined in C2_fert_inorganicNPK_unit.,70
+C2_fert_inorganicK2O,Numeric,Total potassium applied from inorganic fertilizers reported as potassium oxide (K₂O). Record the value using the unit defined in C2_fert_inorganicNPK_unit.,90
+C2_fert_organic_category,Character,"Category of organic fertilizer used in the control system (e.g., Organic fertilizer, Manure, Compost, Green manure).",NA
+C2_fert_organic_type,Character,"Name of the organic fertilizer applied. If multiple organic fertilizers are applied, separate them using two dots (..).",NA
+C2_fert_organic_unit,Character,"Unit used to report the total amount of organic fertilizer applied. Record the unit exactly as reported (e.g., kg/ha, t/ha).",NA
+C2_fert_organic_amount,Numeric,"Total amount of organic fertilizer applied using the unit specified in C2_fert_organic_unit. If multiple organic fertilizers are applied, record values in the same order as C2_fert_organic_type, separated by (..)",NA
+C2_fert_organicNPK_unit,Character,"Unit used to report elemental nutrient quantities (N, P, K) derived from organic fertilizers. Typically kg/ha. If not reported, record Unspecified.",NA
+C2_fert_organicN,Numeric,"Total elemental nitrogen applied from organic fertilizers (e.g., manure, compost, crop residues).",NA
+C2_fert_organicP,Numeric,Total elemental phosphorus applied from organic fertilizers.,NA
+C2_fert_organicK,Numeric,Total elemental potassium applied from organic fertilizers.,NA
+C2_fert_organic_source,Numeric,"Source of the organic fertilizer material (e.g., on-farm manure, purchased manure, compost, crop residues, biosolids). Only required for organic materials.",NA
+C3_fert_subpractice,Character,"Name of the nutrient management subpractice implemented in the control system. Record the type of fertilization practice used (e.g., Synthetic fertilizers, Organic fertilizers, Integrated nutrient management, No fertilization).",Synthetic fertilizers
+C3_fert_inorganic_category,Character,"Category of inorganic fertilizer used in the control system. Record the fertilizer category (e.g., Inorganic, Mineral fertilizer). If not reported, record Unspecified.",Inorganic
+C3_fert_inorganic_type,Character,"Name of the inorganic fertilizer applied. If multiple fertilizers are applied, separate them using two dots (..).",Compound D..Ammonium Nitrate
+C3_fert_inorganic_unit,Character,"Unit used to report the total amount of inorganic fertilizer applied. (e.g., kg/ha, g/m²).",kg/ha
+C3_fert_inorganic_amount,Numeric,"Total amount of inorganic fertilizer applied. Record the reported quantity using the unit specified in C3_fert_inorganic_applied_unit. If multiple fertilizers are reported separately, record values in the same order as C3_fert_inorganic_type, separated by (..)",240..200
+C3_fert_inorganicNPK_unit,Character,"Unit used to report elemental nutrient quantities (N, P, K) applied from inorganic fertilizers. Typically reported as kg/ha. If not reported, record Unspecified.",kg/ha
+C3_fert_inorganicN,Numeric,"Total elemental nitrogen applied from inorganic fertilizers (e.g., urea, ammonium nitrate, DAP). Record the value using the unit defined in C3_fert_inorganicNPK_unit.",120
+C3_fert_inorganicP,Numeric,"Total elemental phosphorus applied from inorganic fertilizers (e.g., rock phosphate or DAP). Record the value using the unit defined in C3_fert_inorganicNPK_unit.",30
+C3_fert_inorganicK,Numeric,"Total elemental potassium applied from inorganic fertilizers (e.g., potassium chloride or monopotassium phosphate). Record the value using the unit defined in C3_fert_inorganicNPK_unit.",60
+C3_fert_inorganicP2O5,Numeric,Total phosphorus applied from inorganic fertilizers reported as phosphorus pentoxide (P₂O₅). Record the value using the unit defined in C3_fert_inorganicNPK_unit.,70
+C3_fert_inorganicK2O,Numeric,Total potassium applied from inorganic fertilizers reported as potassium oxide (K₂O). Record the value using the unit defined in C3_fert_inorganicNPK_unit.,90
+C3_fert_organic_category,Character,"Category of organic fertilizer used in the control system (e.g., Organic fertilizer, Manure, Compost, Green manure).",NA
+C3_fert_organic_type,Character,"Name of the organic fertilizer applied. If multiple organic fertilizers are applied, separate them using two dots (..).",NA
+C3_fert_organic_unit,Character,"Unit used to report the total amount of organic fertilizer applied. Record the unit exactly as reported (e.g., kg/ha, t/ha).",NA
+C3_fert_organic_amount,Numeric,"Total amount of organic fertilizer applied using the unit specified in C3_fert_organic_unit. If multiple organic fertilizers are applied, record values in the same order as C3_fert_organic_type, separated by (..)",NA
+C3_fert_organicNPK_unit,Character,"Unit used to report elemental nutrient quantities (N, P, K) derived from organic fertilizers. Typically kg/ha. If not reported, record Unspecified.",NA
+C3_fert_organicN,Numeric,"Total elemental nitrogen applied from organic fertilizers (e.g., manure, compost, crop residues).",NA
+C3_fert_organicP,Numeric,Total elemental phosphorus applied from organic fertilizers.,NA
+C3_fert_organicK,Numeric,Total elemental potassium applied from organic fertilizers.,NA
+C3_fert_organic_source,Numeric,"Source of the organic fertilizer material (e.g., on-farm manure, purchased manure, compost, crop residues, biosolids). Only required for organic materials.",NA
+C2_weed_method,Character,"Name of the weeding subpractice implemented in the control system. Record the physical or mechanical weed control method used (e.g., Hand hoe, Mechanical weeder, Hand pulling, Mulching). If only chemical weed control was applied, record Chemical weed control and provide details in the chemical management section.",Hand Hoe
+C2_weed_frequency_unit,Character,"Frequency of the weeding practice in the control system. Record the number of weeding events and the corresponding time unit using the format value(unit) (e.g., 3(month), 2(season), 4(year)). If not reported, record Unspecified.",3(month)
+C3_weed_method,Character,"Name of the weeding subpractice implemented in the control system. Record the physical or mechanical weed control method used (e.g., Hand hoe, Mechanical weeder, Hand pulling, Mulching). If only chemical weed control was applied, record Chemical weed control and provide details in the chemical management section.",Hand Hoe
+C3_weed_frequency_unit,Character,"Frequency of the weeding practice in the control system. Record the number of weeding events and the corresponding time unit using the format value(unit) (e.g., 3(month), 2(season), 4(year)). If not reported, record Unspecified.",3(month)
+C2_chem_subpractice,Character,"Name of pest, weed, or biological management subpractices used in the control system. Separate multiple subpractices using a dash (-) following the same order across related chemical variables.",Herbicide-No Inoculation-Insecticide
+C2_chem_name_amount_unit,Character,"Active ingredient name, amount, and unit of the chemical applied for each subpractice listed in C_chem_subpractice. Record entries in the same order as the subpractices. Use the format ingredient:value(unit). Separate entries using a dash (-). If a subpractice does not involve a chemical application, record 0. If information is not reported, record Unspecified.",glyphosate:2(l/ha)-0-Unespecified
+C3_chem_subpractice,Character,"Name of pest, weed, or biological management subpractices used in the intervention system. Separate multiple subpractices using a dash (-).",Hand Hoe-No Inoculation- No Insecticide Applied
+C3_chem_name_amount_unit,Character,"Active ingredient name, amount, and unit corresponding to each subpractice listed in T_chem_subpractice. Record entries in the same order using the format ingredient:value(unit). Use 0 when no chemical was applied.",0-0-0
+C2_residues_subpractice,Character,"Name of the residues management subpractice implemented in the control system. If multiple subpractices are present, separate them using a dash (-).",No-mulch
+C2_residues_unit,Character,"Unit used to report elemental nutrient quantities (N, P, K) added from non-composted organic materials. Typically reported as kg/ha. If not reported, record Unspecified.",NA
+C2_residues_N,Numeric,Total elemental nitrogen (N) added from non-composted organic materials in the control system. Record the value using the unit defined in C_residues_unit.,NA
+C2_residues_P,Numeric,Total elemental phosphorus (P) added from non-composted organic materials in the control system. Record the value using the unit defined in C_residues_unit.,NA
+C2_residues_K,Numeric,Total elemental potassium (K) added from non-composted organic materials in the control system. Record the value using the unit defined in C_residues_unit.,NA
+C2_residues_tree,Character,"Tree or shrub species from which the residue material was derived. Only required if the applied material comes from a tree or shrub. Record the full scientific name where possible. If not applicable, leave blank.",NA
+C2_residues_material,Character,Mulch or residue material applied in the control system. Choose from the predefined list or add a new material if no suitable match exists. Do not enter details here for mulched crop residues already captured elsewhere.,NA
+C2_residues_processing,Character,"Type of processing applied to the residue material before application (e.g., Fresh, Dried, Chopped, Crushed). If not reported, record Unspecified.",NA
+C2_residues_material_source,Character,"Source of the residue material. Record as In-field (from inside the experimental field), On-farm (from outside the experimental field but within the same landholding), or Off-farm (from outside the farm). If not reported, record Unspecified.",NA
+C2_residues_material_amount_unit,Character,Amount of residue material applied in the control system. Record using the format value(unit).,0(kg/ha)
+C3_residues_subpractice,Character,"Name of the residues management subpractice implemented in the intervention system. If multiple subpractices are present, separate them using a dash (-).",Mulch (Non N fixing)
+C3_residues_unit,Character,"Unit used to report elemental nutrient quantities (N, P, K) added from non-composted organic materials. Typically reported as kg/ha. If not reported, record Unspecified.",NA
+C3_residues_N,Numeric,"Total elemental nitrogen (N) added from non-composted organic materials in the intervention system. Record the value using the unit defined in T_residues_unit. If not reported, record NA.",Unspecified
+C3_residues_P,Numeric,"Total elemental phosphorus (P) added from non-composted organic materials in the intervention system. Record the value using the unit defined in T_residues_unit. If not reported, record NA.",Unspecified
+C3_residues_K,Numeric,"Total elemental potassium (K) added from non-composted organic materials in the intervention system. Record the value using the unit defined in T_residues_unit. If not reported, record NA.",Unspecified
+C3_residues_tree,Character,"Tree or shrub species from which the residue material was derived. Only required if the applied material comes from a tree or shrub. Record the full scientific name where possible. If not applicable, leave blank.",NA
+C3_residues_material,Character,Mulch or residue material applied in the intervention system. Choose from the predefined list or add a new material if no suitable match exists. Do not enter details here for mulched crop residues already captured elsewhere.,Hyparrhenia Grass Species
+C3_residues_processing,Character,"Type of processing applied to the residue material before application (e.g., Fresh, Dried, Chopped, Crushed). If not reported, record Unspecified.",Unspecified
+C3_residues_material_source,Character,"Source of the residue material. Record as In-field, On-farm, or Off-farm. If not reported, record Unspecified.",Unspecified
+C3_residues_material_amount_unit,Character,Amount of residue material applied in the intervention system. Record using the format value(unit).,2500(kg/ha)
+C2_ph_subpractice,Character,"Name of the soil pH management subpractice implemented in the control system. Record the practice used to modify or regulate soil acidity or alkalinity (e.g., Liming, Gypsum application, No pH management). If not reported, record Unspecified.",No pH management
+C2_ph_material_applied,Character,"Material applied to influence soil pH in the control system. Record the specific material used (e.g., Lime, Agricultural lime, Dolomite, Gypsum, Wood ash). If no material was applied, record None.",Lime
+C2_ph_material_amount_unit,Character,"Total amount of pH-altering material applied in the control system. Record the value using the format value(unit) (e.g., 2000(kg/ha), 2(t/ha)). If not reported, record Unspecified.",2000(kg/ha)
+C3_ph_subpractice,Character,"Name of the soil pH management subpractice implemented in the intervention system. Record the practice used to modify or regulate soil acidity or alkalinity (e.g., Liming, Gypsum application). If not reported, record Unspecified.",Liming
+C3_ph_material_applied,Character,Material applied to influence soil pH in the intervention system. Record the specific material used.,Agricultural lime
+C3_ph_material_amount_unit,Character,Total amount of pH-altering material applied in the intervention system. Record the value using the format value(unit).,2500(kg/ha)
+C2_irrig_subpractice,Character,"Name of the irrigation subpractice implemented in the control system. Record the irrigation method used (e.g., Flood irrigation, Furrow irrigation, Drip irrigation, Sprinkler irrigation, No irrigation).",NA
+C2_irrig_date_start_end,Date,"Start and end date of the irrigation period in the control system. Record the dates using the format YYYY/MM/DD-YYYY/MM/DD. If irrigation occurs continuously during the season or dates are not reported, record Unspecified.",2018/02/01-2018/03/02
+C2_irrig_water_amount_unit,Character,Total amount of irrigation water applied in the control system. Record using the format value(unit) or value(unit/time) if the study reports a time component.,1000(l/ha/year)
+C2_irrig_water_type,Character,"Type or source of irrigation water used in the control system (e.g., Groundwater, Surface water, Rainwater harvesting, Treated wastewater). If not reported, record Unspecified.",Groundwater
+C3_irrig_subpractice,Character,"Name of the irrigation subpractice implemented in the intervention system. Record the irrigation method used (e.g., Flood irrigation, Drip irrigation, Sprinkler irrigation).",NA
+C3_irrig_date_start_end,Date,Start and end date of the irrigation period in the intervention system. Record the dates using the format YYYY/MM/DD-YYYY/MM/DD.,2018/02/01-2018/03/02
+C3_irrig_water_amount_unit,Character,Total amount of irrigation water applied in the intervention system. Record using the format value(unit) or value(unit/time) if reported in the study.,1000 l/ha/year
+C3_irrig_water_type,Character,Type or source of irrigation water used in the intervention system.,NA
+C2_watharv_subpractice,Character,"Name of the water harvesting subpractice implemented in the control system. Record the technique used to collect, store, or concentrate water for agricultural use. If multiple subpractices are present, separate them using a dash (-).",NA
+C3_watharv_subpractice,Character,"Name of the water harvesting subpractice implemented in the intervention system. Record the technique used to collect, store, or concentrate water for agricultural use. If multiple subpractices are present, separate them using a dash (-).",NA
+C2_harvest_subpractice,Character,"Name of the harvest subpractice implemented in the control system. Record the harvest method or management practice used (e.g., Manual harvest, Mechanical harvest, Selective harvest, Single harvest).",NA
+C2_harvest_date_start_end,Date,"Start and end dates of the harvest period in the control system. Record the dates using the format DD/MM/YYYY-DD/MM/YYYY. If the harvest occurs on a single date, repeat the same date twice. If not reported, record Unspecified.",2018/02/01-2018/03/02
+C2_harvest_days_after_planting,Integer,"Number of days between planting and harvest in the control system. Record the number of days as reported in the study. If not reported, record NA.",NA
+C3_harvest_subpractice,Character,Name of the harvest subpractice implemented in the intervention system. Record the harvest method or management practice used.,NA
+C3_harvest_date_start_end,Date,Start and end dates of the harvest period in the intervention system. Record the dates using the format YYYY/MM/DD-YYYY/MM/DD.,2018/02/01-2018/03/02
+C3_harvest_days_after_planting,Integer,"Number of days between planting and harvest in the intervention system. Record the number of days as reported. If not reported, record NA.",NA
+C2_postharvest_subpractice,Character,"Name of the post harvesting subpractice implemented in the control system. Record the technique used to collect, store, or concentrate water for agricultural use. If multiple subpractices are present, separate them using a dash (-).",NA
+C2_postharvest_date_start_end,Date,"Start and end dates of the postharvest storage or processing period in the control system. Record dates using the format YYYY/MM/DD-YYYY/MM/DD. If not reported, record Unspecified.",NA
+C2_postharvest_days_after_storage,Integer,"Number of days between harvest and the end of the postharvest storage or processing period in the control system. Record the number of days as reported in the study. If not reported, record NA.",NA
+C3_postharvest_subpractice,Character,"Name of the post harvesting subpractice implemented in the intervention system. Record the technique used to collect, store, or concentrate water for agricultural use. If multiple subpractices are present, separate them using a dash (-).",NA
+C3_postharvest_date_start_end,Date,"Start and end dates of the postharvest storage or processing period in the intervention system. Record dates using the format YYYY/MM/DD-YYYY/MM/DD. If not reported, record Unspecified.",NA
+C3_postharvest_days_after_storage,Integer,"Number of days between harvest and the end of the postharvest storage or processing period in the intervention system. Record the number of days as reported in the study. If not reported, record NA.",NA
+C2_subpractice,NA,List of subpractices to the control separated by (-),NA
+C3_subpractice,NA,List of subpractices to the intervention separated by (-),NA
+C2_practice,NA,List of practices unique to the control separated by (-),NA
+C3_practice,NA,List of practices unique to the intervention separated by (-),NA
+C2_product_component,Character,"The full name of the product, including aspect of the component such as grain, meat or milk",Sorghum
+C2_product_type,Character,Product type name,Plant
+C2_product_subtype,Character,Product subtype name,Cereals
+C2_product_simple,Character,"Simplified product name, excluding any aspects of component",Sorghum
+C3_product_component,Character,"The full name of the product, including aspect of the component such as grain, meat or milk",Sorghum
+C3_product_type,Character,Product type name,Plant
+C3_product_subtype,Character,Product subtype name,Cereals
+C3_product_simple,Character,"Simplified product name, excluding any aspects of component",Sorghum
+effect_size_type,Character,NA,NA
+effect_size_yi,Numeric,NA,NA
+effect_size_vi,Numeric,NA,NA
+effect_size_se,Numeric,NA,NA
+comparison_id,NA,NA,NA
+C_practice_id,NA,C_id,NA
+T_practice_id,NA,T_id,NA
+C2_practice_id,NA,C2_id,NA
+C3_practice_id,NA,C3_id,NA
+C4_practice_id,NA,C4_id,NA
+C5_practice_id,NA,C5_id,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+base.list,Character,base practices that are shared between experimental and control treatments,NA
+Theme.Base,Character,Base practice theme name,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+Plant.Start,Date,Starting of planting period (dd.mm.yyyy),01.12.2015
+Plant.End,Date,End of planting period (dd.mm.yyyy),10.12.2015
+Harvest.Start,Date,Starting of harvest period (dd.mm.yyyy),04.04.2016
+Harvest.End,Date,End of harvest period (dd.mm.yyyy),05.04.2016
+Rep,Positive Integer,"The number of replicates for the treatments. If the number varies between treatments, use the lowest number. If no number is given, leave blank.",4
+Plot.Size,Positive Integer,"The size of the smallest treatment plot unit in m2. If plot dimensions are given, calculate the area in m2. For example, if the size of the subplots is 6m x 4m, the Plot.Size is 24 (m2).",10
+CID,Character,"A unique identifier (within study) describing a set of management practices that occurred in the control which is used to identify the treatment combinations tested, to allow comparison across outcomes in a paper. A default system of T1, T2, T3, etc. can be used. CID should describe the treatment used as the control for this observation.",C0
+NA,NA,NA,C1
+NA,NA,NA,NA
+C.NI,Character,Amount of inorganic (chemical) nitrogen applied to control plots in kg/ha,20
+C.NO,Character,"Amount of nitrogen in organic materials (manures or compost, but not residues) applied to control plots, preferably in kg/ha. If no nitrogen content is provided, please list amount of organic manure applied with a ‘t’ to symbolize tonnes.",40
+NA,NA,NA,5t
+TID,Character,"A unique identifier (within study) describing a set of management practices that occurred in treatment which is used to identify the treatment combinations tested, to allow comparison across outcomes in a paper. A default system of T1, T2, T3, etc. can be used. TID should describe the treatment used as the control for this observation.",T1 
+NA,NA,NA,T2
+NA,NA,NA,NA
+T.NI,Numeric,Amount of inorganic (chemical) nitrogen (N) applied to CSA treatment in kg/ha,80
+T.NO,Numeric,"Amount of nitrogen (N) in organic materials (manures or compost) applied to CSA treatment, preferably in kg/ha. If no nitrogen content is provided, please list amount of organic manure applied with a ‘t’ to symbolize tonnes.",40
+NA,NA,NA,5t
+Diversity,Character,"Name of species in intercrop or rotations including the crop, first letter of name capitilized and the rest lowercase. Use a dash (-) for intercrops and forward slash (/) for rotation. Use common names of species, unless agroforestry species, then use scientific name. This should be used for both crop and agroforestry intercroppings.",Maize/Cotton/Bean 
+NA,NA,NA,Maize-Albizia gummifera
+Variety,Character,Commercial name of the crop or animal variety. Do not include the type of crop or animal in field (e.g. Maasai Red Goats should be Maasai Red).,G2333 
+NA,NA,NA,Katumani
+Tree,Character,"Name of tree species used in agroforestry experiments, can be both as an intercrop or as an agroforestry mulch. Please use scientific name and be careful of your spelling. Use full scientific name, do not abbreviate genus (e.g., Mangifera indica should not be abbreviated to M.indica).",Gliricidia sepium 
+NA,NA,NA,Acacia abyssinica
+EU,Character,The experimental unit (EU) for which experiment outcomes are reported. This usually a crop or animal product. For cookstove papers it may be a cookstove. The EU for soil outcomes should be the crop(s) grown on the soil unless no crops are grown at all. Letters in the code should be lowercase. If the outcome refers to multiple experimental units (e.g. soil outcomes during an intercropping experiment) select all experimental units separated by a period (see EU2 tab).,NA
+USD2010.C,Numeric,"Monetary outcomes converted to International USD 2010 using World Bank CPI, PPP and exchange rates. There are no reliable data for Zimbabwe.",100
+USD2010.T,Numeric,"Monetary outcomes converted to International USD 2010 using World Bank CPI, PPP and exchange rates. There are no reliable data for Zimbabwe.",100
+MeanFlip,Character,"Is a negative result considered better than a positive result (i.e. MeanT/MeanC <1 = good)? This is indexed in using the Outcode field in the compednium and the """"Negative Values"""" field in the OUTCOMES tab",logical (T/F)
+T.Feed.Source,Character,Where were livestock diets in the treatment practice(s) sourced from?,Purchased
+NA,NA,NA,Produced On-farm
+NA,NA,NA,Purchased & Produced On-farm
+C.Feed.Source,Character,Where were livestock diets in the control practice(s) sourced from?,Purchased
+NA,NA,NA,Produced On-farm
+NA,NA,NA,Purchased & Produced On-farm
+Species,Character,The tree species for which the experiment outcome are reported,NA
+Partial.Outcome.Name,Character,Free text to describe the partial outcome,NA
+Analysis.Function ,Character,Describes the logical process used to compare control to treatment (for developers),NA
+Version,Numeric,Year in which the ERA data entry took place. Either 2018 or 2020,NA
+Irrigation.C,Logical,Indicates the presence of irrigation in the control treatment,NA
+Irrigation.T,Logical,Indicates the presence of irrigation in the experimental treatment,NA
+Irrig.Meth.C,Character,Method of irrigation used in the control treatment. Cell will be blank if Irrigation.C is FALSE,NA
+Irrig.Meth.T,Character,Method of irrigation used in the experimental treatment. Cell will be blank if Irrigation.T is FALSE,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+ID,Numeric,Study number,NA
+obs_count,Postive Integer,Number of observations,NA
+out_count,Postive Integer,Number of outcomes reported per study,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+yi,Numeric,the natural log of the response ratio log(MeanT/MeanC),NA
+pc,Numeric,pc=proportional change.It is a measure of the ratio of experimental to control outcomes,NA
+plist,Character,"experimental ERA practices that are in the experimental, but not the control treatment",NA
+NA,NA,NA,NA
+EUlist,Character,the product code OutcomeCodes$Code for the observation using a - delim for multiple products,c13
+NA,NA,NA,NA
+PrName,Character,Experimental practice name,Inorganic Fertilizer
+Theme,Character,Experimental practice theme name,Nutrient Management
+SubPrName.Base,Character,Base practice name (note that this corresponds to the Subpractice.S field in the PracticeCodes),NA
+PrName.Base,Character,Base practice name,NA
+NA,NA,NA,NA
+NA,NA,Experimental subpractice name (note that this corresponds to the Subpractice.S field in the PracticeCodes),Inputs K-Inputs
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+C_subpractice,NA,"List of supractices in the control system (separated by -) that differ from their corresponding intervention, excluding cases where either treatment or control is missing or identical.",NA
+T_subpractice,NA,"List of supractices in the intervention system (separated by -) that differ from their corresponding control, excluding cases where either treatment or control is missing or identical.",NA
+C_practice,NA,"List of practices in the control system (separated by -) that differ from their corresponding intervention, excluding cases where either treatment or control is missing or identical.",NA
+T_practice,NA,"List of practices in the intervention system (separated by -) that differ from their corresponding control, excluding cases where either treatment or control is missing or identical.",NA
+practice_type,NA,NA,NA
+practice_subtype,NA,List practice theme names to the control separated by (-),NA
