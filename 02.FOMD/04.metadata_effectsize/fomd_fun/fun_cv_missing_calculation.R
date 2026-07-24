@@ -1,4 +1,5 @@
 library(dplyr)
+library(mice) 
 
 # ------------------------------------------------------------------------
 # Goal: some studies don't report a standard deviation (SD). We can't
@@ -23,7 +24,11 @@ library(dplyr)
 # ----------------------------------------------------------------------
 outcome_grouping_rules <- list(
   list(
-    outcomes      = c("Crop Yield", "Biomass Yield", "Gross Return"),
+    #out_indicator=="Product Yield"
+    outcomes      = c(
+      "Crop Yield", "Biomass Yield","Egg Yield","Meat Yield","Milk Yield",
+      "Other Animal Product Yield","Reproductive Yield", "Weight Gain",
+                      "Gross Return"),
     grouping_vars = c("C_product_simple","T_product_simple", "out_subindicator")
   )#,
   #list(
@@ -36,7 +41,8 @@ outcome_grouping_rules <- list(
   # )
 )
 
-cv_calculation <- function(dt, rules, outcome_col = "out_subindicator") {
+
+n_cv_calculation <- function(dt, rules, outcome_col = "out_subindicator") {
   
   # Safety check: no outcome should appear in more than one rule
   all_outcomes <- unlist(lapply(rules, `[[`, "outcomes"))
@@ -73,34 +79,52 @@ cv_calculation <- function(dt, rules, outcome_col = "out_subindicator") {
     
     if (nrow(dt_sub) == 0) return(dt_sub)
     
-  
-  # Step 1: calculate CV for every row where we have a real SD
+    # ================================================================
+    # Impute missing sample sizes (n) BEFORE n1/n2 are set below.
+    # Uses the rule's own grouping_vars as predictors, so it stays
+    # consistent with how CV is grouped for the same set of outcomes.
+    # ================================================================
+    imp_vars <- dt_sub %>%
+      select(T_out_sample_size, C_out_sample_size,
+             T_out_mean, C_out_mean,
+             all_of(grouping_vars))
+    
+    imp <- mice(imp_vars, method = "pmm", m = 20, seed = 123, printFlag = FALSE)
+    completed_list <- lapply(1:20, function(i) complete(imp, i))
+    
+    dt_sub <- dt_sub %>%
+      mutate(
+        T_out_sample_size_imputed = round(rowMeans(sapply(completed_list, `[[`, "T_out_sample_size"))),
+        C_out_sample_size_imputed = round(rowMeans(sapply(completed_list, `[[`, "C_out_sample_size")))
+      )
+    
+    # ================================================================
+    # Step 1: calculate CV for every row where we have a real SD
+    # ================================================================
   dt_sub <- dt_sub %>%
     mutate(
-      n1 = T_out_sample_size,
-      n2 = C_out_sample_size,
-      T_out_cv = T_out_sd / T_out_mean,
-      C_out_cv   = C_out_sd / C_out_mean,
-      has_sd       = !is.na(T_out_cv) & !is.na(C_out_cv)
+      n1 = coalesce(T_out_sample_size, T_out_sample_size_imputed),
+      n2 = coalesce(C_out_sample_size, C_out_sample_size_imputed),
+      T_out_cv_reported = T_out_sd / T_out_mean,
+      C_out_cv_reported   = C_out_sd / C_out_mean,
+      sd_was_reported       = !is.na(T_out_cv_reported) & !is.na(C_out_cv_reported)
     )
-  
-  # Step 2: calculate the average CV within each group, using only studies
-  # that have a real SD (weighted by replicate count of each group)
+    # ================================================================
+    # Step 2: calculate the average CV within each group, using only studies
+    # that have a real SD (weighted by replicate count of each group)
+    # ================================================================
   
   average_cv <- dt_sub %>%
-    filter(has_sd) %>%
+    filter(sd_was_reported) %>%
     group_by(across(all_of(grouping_vars))) %>%
     summarise(
-      #T_out_cv_average = sum(n1 * T_out_cv) / sum(n1),
-      #C_out_cv_average    = sum(n2 * C_out_cv) / sum(n2),
-      
       ## TO CHECK: HOW TO DEAL WITH MISSING N VALUES!
       #This makes each row with a missing n1 (or n2) simply get excluded from that specific 
       #weighted average — instead of nulling out the average for the entire group. 
       #It's a scoped fix: a row missing n1 still contributes to C_out_cv_average (via n2) 
       #if n2 is present; only the specific side missing its sample size drops out of that specific calculation.
-      T_out_cv_average = sum(n1 * T_out_cv, na.rm = TRUE) / sum(n1, na.rm = TRUE),
-      C_out_cv_average = sum(n2 * C_out_cv, na.rm = TRUE) / sum(n2, na.rm = TRUE),
+      T_out_cv_group_avg = sum(n1 * T_out_cv_reported, na.rm = TRUE) / sum(n1, na.rm = TRUE),
+      C_out_cv_group_avg = sum(n2 * C_out_cv_reported, na.rm = TRUE) / sum(n2, na.rm = TRUE),
       .groups = "drop"
     )
   
@@ -111,26 +135,26 @@ cv_calculation <- function(dt, rules, outcome_col = "out_subindicator") {
     
   # Step 4: for rows with no SD, use the group average CV instead
     mutate(
-      T_out_cv_filled = if_else(has_sd, T_out_cv, T_out_cv_average),
-      C_out_cv_filled   = if_else(has_sd, C_out_cv, C_out_cv_average),
+      T_out_cv_final = if_else(sd_was_reported, T_out_cv_reported, T_out_cv_group_avg),
+      C_out_cv_final   = if_else(sd_was_reported, C_out_cv_reported, C_out_cv_group_avg),
       
 # ------------------------------------------------------------------------
 # Now compute the effect size (lnRR) and its variance, 2 different ways.
 # n1 and n2 are kept separate throughout, as required by the formula.
 # ------------------------------------------------------------------------
-      lnRR_all_cases = log(T_out_mean  / C_out_mean) +
-        0.5 * (C_out_cv_average^2 / n2 - T_out_cv_average^2 / n1),
-      var_all_cases = (T_out_cv_average^2 / n1) + (C_out_cv_average^2 / n2) +
-        (T_out_cv_average^4 / (2 * n1^2)) + (C_out_cv_average^4 / (2 * n2^2)),
+    lnRR_cv_group_avg = log(T_out_mean  / C_out_mean) +
+     0.5 * (C_out_cv_group_avg^2 / n2 - T_out_cv_group_avg^2 / n1),
+   lnRR_var_cv_group_avg = (T_out_cv_group_avg^2 / n1) + (C_out_cv_group_avg^2 / n2) +
+       (T_out_cv_group_avg^4 / (2 * n1^2)) + (C_out_cv_group_avg^4 / (2 * n2^2)),
       
-      lnRR_missing_cases = log(T_out_mean  / C_out_mean) +
-        0.5 * (C_out_cv_filled^2 / n2 - T_out_cv_filled^2 / n1),
-      var_missing_cases = (T_out_cv_filled^2 / n1) + (C_out_cv_filled^2 / n2) +
-        (T_out_cv_filled^4 / (2 * n1^2)) + (C_out_cv_filled^4 / (2 * n2^2)),
+     lnRR_cv_final = log(T_out_mean  / C_out_mean) +
+       0.5 * (C_out_cv_final^2 / n2 - T_out_cv_final^2 / n1),
+     var_missing_cases = (T_out_cv_final^2 / n1) + (C_out_cv_final^2 / n2) +
+       (T_out_cv_final^4 / (2 * n1^2)) + (C_out_cv_final^4 / (2 * n2^2)),
       
-      grouping_used = paste(grouping_vars, collapse = " + ")  # audit trail
+      cv_grouping_method = paste(grouping_vars, collapse = " + ")  # audit trail
     )%>%
-    select(-n1,-n2)
+    select(-n1,-n2,-sd_was_reported)
   
   dt_sub
   })
@@ -144,5 +168,3 @@ cv_calculation <- function(dt, rules, outcome_col = "out_subindicator") {
 }
 
 
-
-prueba<-fomd10.mean.sd

@@ -19,6 +19,7 @@ list.files(path.metadata.effectsize)
 source(file.path(path.metadata.effectsize,"/fomd_fun/fun_comparison_practice.R"))
 source(file.path(path.metadata.effectsize,"/fomd_fun/fun_lookup_commodities.R")) 
 source(file.path(path.metadata.effectsize, "/fomd_fun/fun_analysis_practice.R"))
+source(file.path(path.metadata.effectsize, "/fomd_fun/fun_lookup_ontologies.R"))
 
 #---fomd10
 fomd10<-read_csv(file.path(path.metadata.effectsize,"/fomd10/fomd10_MD_Rosen_24_Effec_Sc.csv"), show_col_types = FALSE)
@@ -339,6 +340,28 @@ fomd10.clean <- apply_CT_commodity_group_intersection(
 
 sort(unique(fomd10.clean$CT_crop_FAO_Food_SubGroup))
 
+#==========================================================
+# Reclassifying out_subindicator as effect_size_type
+#==========================================================
+sort(unique(fomd10.clean$out_subindicator))
+source(file.path(path.metadata.effectsize, "/fomd_fun/fun_load_data_ontologies.R"))
+
+
+fomd10.clean <- apply_lookup_ontologies(
+  df        = fomd10.clean,
+  ref       = fomd01.outcomes,
+  key_col   = "subindicator",
+  value_col = "effect_size_type",
+  src_col   = "out_subindicator",
+  new_col   = "effect_size_type"
+)
+
+x<-fomd10.clean %>%
+  #select(doi,out_subindicator, out_effect_size) 
+  distinct(out_subindicator, effect_size_type)%>%
+  arrange(effect_size_type)%>%
+  filter(is.na(effect_size_type)) #93-73 out_subindicator with effect_size_type==NA
+
 # ============================================================
 # Get all unique individual crop commodity from both columns
 # ============================================================
@@ -366,8 +389,6 @@ print(unmatched_crops)
 nrow(unmatched_crops) #34 crops missing Commodity reclassification
 
 readr::write_csv(fomd10.clean, paste0(path.metadata.effectsize, "/fomd10_clean/fomd10_clean_MD_Rosen_24_Effec_Sc.csv"))
-
-
 
 
 subpractice.list<-c(

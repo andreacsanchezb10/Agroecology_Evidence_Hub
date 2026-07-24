@@ -1833,12 +1833,25 @@ sort(unique(md.era.short.clean$T_out_soil_depth_l))
 md.era.short.clean$C_out_metric <- gsub("mean", "Mean", md.era.short.clean$C_out_metric, fixed = TRUE)
 md.era.short.clean$T_out_metric <- gsub("mean", "Mean", md.era.short.clean$T_out_metric, fixed = TRUE)
 
+#There are rows with   C_out_var_metric==SE (Standard Error) & C_out_var_value<0
+#That is not possible, code to convert SE to positive values
+md.era.short.clean<-md.era.short.clean %>%
+  mutate(C_out_var_value = if_else(C_out_var_metric == "SE (Standard Error)" & C_out_var_value < 0,
+                                   C_out_var_value * -1,
+                                   C_out_var_value),
+         T_out_var_value = if_else(T_out_var_metric == "SE (Standard Error)" & T_out_var_value < 0,
+                                   T_out_var_value * -1,
+                                   T_out_var_value) )
+  
 md.era.short.clean<-md.era.short.clean%>%
   mutate(
     C_out_var_value=as.character(C_out_var_value),
     C_out_var_value=case_when(is.na(C_out_var_value)&C_out_var_metric=="Unspecified"~"Unspecified",TRUE~C_out_var_value),
     T_out_var_value=as.character(T_out_var_value),
     T_out_var_value=case_when(is.na(T_out_var_value)&T_out_var_metric=="Unspecified"~"Unspecified",TRUE~T_out_var_value))
+
+
+
 
 # Quick checks ----
 sort(unique(md.era.short.clean$C_out_metric))
@@ -1848,6 +1861,9 @@ na_empty_summary["T_out_metric", ] #0
 
 sort(unique(md.era.short.clean$C_out_value))
 sort(unique(md.era.short.clean$T_out_value))
+
+sort(unique(md.era.short.clean$C_out_var_value))
+sort(unique(md.era.short.clean$T_out_var_value))
 
 #Explanation from Lolita
 #C_out_value / T_out_value and C_out_sample_size / T_out_sample_size: 
