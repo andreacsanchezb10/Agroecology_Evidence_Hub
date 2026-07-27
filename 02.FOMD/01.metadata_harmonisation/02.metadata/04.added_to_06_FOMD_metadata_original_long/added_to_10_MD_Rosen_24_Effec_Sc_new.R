@@ -82,16 +82,24 @@ print(na_empty_summary)
 #---bibliographic----
 md.era.short.clean<-md.era.short
 
+md.era.short.clean<-md.era.short.clean%>%
+  select(-title)%>%
+  left_join(fomd04%>%
+              select(study_id_ss, title),
+            by=c("study_id"= "study_id_ss"))
+
+names(md.era.short.clean)
+
 # Quick checks
 length(unique(md.era.short.clean$study_id)) # 1811 studies
 length(unique(md.era.short.clean$effect_size_id))  #232257 rows
 length(unique(md.era.short.clean$authors))  #1353
-length(unique(md.era.short.clean$title)) #Missing
+length(unique(md.era.short.clean$title)) #958
 sort(unique(md.era.short.clean$year))  
 sort(unique(md.era.short.clean$journal))  
 sort(unique(md.era.short.clean$doi)) 
 length(unique(md.era.short.clean$doi)) #1592
-
+sort(unique(md.era.short.clean$title))
 #=============================================
 #---location----
 #=========================
@@ -443,8 +451,37 @@ unique_crops_diversity <- rbind(
             by="crop_tree_diversity")%>%
   filter(is.na(FAO.Food.Group)) 
 
-length(unique(unique_crops_diversity$crop_tree_diversity)) #70-v41: 57; v45: 34
+length(unique(unique_crops_diversity$crop_tree_diversity)) #70-v41: 57; v45: 34;v46: 27
 #readr::write_csv(unique_crops_diversity, paste0(path.era, "/v41_error_report/missing_crops_01.csv"))
+
+sort(unique(md.era.short.clean$out_subindicator))
+sort(unique(md.era.short.clean$out_subindicator[md.era.short.clean$out_indicator=="Biodiversity"]))
+
+biodiversity<-md.era.short.clean%>%
+  filter(out_indicator=="Biodiversity")%>%
+  filter(doi=="10.1016/j.agee.2010.11.021")%>%
+  select(doi,study_id,effect_size_id, C_product,T_product,
+         out_subindicator,
+         C_site_id,
+         out_subindicator_unit,
+         C_out_value,T_out_value,
+         C_out_var_value,T_out_var_value,
+         C_data_location,T_data_location,
+         C_out_soil_depth_l,	C_out_soil_depth_u,
+         T_out_soil_depth_l,	T_out_soil_depth_u
+  )
+
+sort(unique(biodiversity$C_product))
+sort(unique(biodiversity$out_subindicator))
+sort(unique(biodiversity$out_subindicator_unit))
+
+
+names(biodiversity)
+sort(unique(biodiversity$study_id))
+sort(unique(biodiversity$doi))
+sort(unique(biodiversity$title))
+sort(unique(md.era.short.clean$doi[md.era.short.clean$title=="Rangeland vegetation responses to traditional enclosure management in eastern Ethiopia"]))
+
 
 unique_crops_variety <- data.frame(
   crop_tree_diversity = unique(c(
@@ -459,6 +496,7 @@ length(unique(unique_crops_variety$crop_tree_diversity))#v45: 63, v46:41
 
 sort(unique(md.era.short.clean$C_crop_tree_density))
 sort(unique(md.era.short.clean$T_crop_tree_density))
+
 
 unique_crops_density <- data.frame(
   crop_tree_diversity = unique(c(
