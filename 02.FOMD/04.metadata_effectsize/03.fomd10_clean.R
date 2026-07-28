@@ -386,7 +386,7 @@ unmatched_crops <- bind_rows(
   arrange(crop)
 
 print(unmatched_crops)
-nrow(unmatched_crops) #34 crops missing Commodity reclassification
+nrow(unmatched_crops) #16 crops missing Commodity reclassification
 
 
 #--------- Remove irrelevant columns ------------

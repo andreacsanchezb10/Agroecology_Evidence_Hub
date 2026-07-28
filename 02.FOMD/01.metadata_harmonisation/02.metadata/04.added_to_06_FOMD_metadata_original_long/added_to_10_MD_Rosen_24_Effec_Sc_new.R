@@ -451,36 +451,8 @@ unique_crops_diversity <- rbind(
             by="crop_tree_diversity")%>%
   filter(is.na(FAO.Food.Group)) 
 
-length(unique(unique_crops_diversity$crop_tree_diversity)) #70-v41: 57; v45: 34;v46: 27
+length(unique(unique_crops_diversity$crop_tree_diversity)) #70-v41: 57; v45: 34;v46: 16
 #readr::write_csv(unique_crops_diversity, paste0(path.era, "/v41_error_report/missing_crops_01.csv"))
-
-sort(unique(md.era.short.clean$out_subindicator))
-sort(unique(md.era.short.clean$out_subindicator[md.era.short.clean$out_indicator=="Biodiversity"]))
-
-biodiversity<-md.era.short.clean%>%
-  filter(out_indicator=="Biodiversity")%>%
-  filter(doi=="10.1016/j.agee.2010.11.021")%>%
-  select(doi,study_id,effect_size_id, C_product,T_product,
-         out_subindicator,
-         C_site_id,
-         out_subindicator_unit,
-         C_out_value,T_out_value,
-         C_out_var_value,T_out_var_value,
-         C_data_location,T_data_location,
-         C_out_soil_depth_l,	C_out_soil_depth_u,
-         T_out_soil_depth_l,	T_out_soil_depth_u
-  )
-
-sort(unique(biodiversity$C_product))
-sort(unique(biodiversity$out_subindicator))
-sort(unique(biodiversity$out_subindicator_unit))
-
-
-names(biodiversity)
-sort(unique(biodiversity$study_id))
-sort(unique(biodiversity$doi))
-sort(unique(biodiversity$title))
-sort(unique(md.era.short.clean$doi[md.era.short.clean$title=="Rangeland vegetation responses to traditional enclosure management in eastern Ethiopia"]))
 
 
 unique_crops_variety <- data.frame(
@@ -2124,4 +2096,46 @@ readr::write_csv(md.era.clean, paste0(path.metadata.effectsize, "/fomd10/fomd10_
 df_subset <- md.era.clean[1:10000, ]
 
 readr::write_csv(df_subset, paste0(path.metadata.effectsize, "/fomd10/subset.fomd10_MD_Rosen_24_Effec_Sc.csv"))
+
+
+
+### biodiversity rows checking
+
+sort(unique(md.era.short.clean$out_subindicator))
+sort(unique(md.era.short.clean$out_subindicator[md.era.short.clean$out_indicator=="Biodiversity"]))
+
+biodiversity<-md.era.short.clean%>%
+  filter(out_indicator=="Biodiversity")%>%
+  filter(doi=="10.1016/j.agee.2018.11.020")%>%
+  select(doi,study_id,effect_size_id, 
+         C_product,T_product,
+         C_out_value,T_out_value,
+         bio_func_group,	bio_ground_ref,
+         out_subindicator,
+         C_out_soil_depth_l,	C_out_soil_depth_u,
+         T_out_soil_depth_l,	T_out_soil_depth_u,
+         
+         C_site_id,
+         out_subindicator_unit,
+         
+         C_out_var_value,T_out_var_value,
+         C_data_location,T_data_location,
+         practice_compared
+         
+  )
+
+readr::write_csv(biodiversity, paste0(path.era, "/v46_error_report/biodiversity_JO0120.csv"))
+
+names(md.era.short.clean)
+sort(unique(biodiversity$C_product))
+sort(unique(biodiversity$out_subindicator))
+sort(unique(biodiversity$out_subindicator_unit))
+
+
+names(biodiversity)
+sort(unique(biodiversity$study_id))
+sort(unique(biodiversity$doi))
+sort(unique(biodiversity$title))
+sort(unique(md.era.short.clean$doi[md.era.short.clean$title=="Rangeland vegetation responses to traditional enclosure management in eastern Ethiopia"]))
+
 
