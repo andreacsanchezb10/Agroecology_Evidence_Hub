@@ -118,8 +118,9 @@ the live `escalc` wrappers (`fun_effect_sizes_calculation.R`); and the unsourced
   CSV you're reading and which script produced it.
 - The intermediate CSVs are **hundreds of megabytes**; one is currently 0 bytes and needs regenerating, and
   there is a large interrupted-write artefact in `fomd10/`. See `01_status.md`.
-- Every script hardcodes **absolute OneDrive paths for one machine**, and Andrea's use a **different folder
-  name** from Lolita's. → `09_conventions.md`
+- These scripts hardcode **absolute OneDrive paths for one machine**, and Andrea's use a **different folder
+  name** from Lolita's. That is deliberate for single-user scripts, not a defect to fix.
+  → `09_conventions.md` §1
 
 ---
 

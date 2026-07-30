@@ -22,9 +22,19 @@ DOWNLOADS <- file.path(USER_HOME, "Downloads")
 itself redirected into OneDrive (`C:/Users/<you>/OneDrive - CGIAR/Documents`) — so `~` would write outputs
 **into the synced folder**, which is exactly what this rule exists to prevent. Verified 2026-07-30.
 
-`era_harmonize.R` does this correctly as of v49: `OUT_DIR`, `CACHE_DIR` and `HUB_ROOT` are all derived from
-`USERPROFILE`, and `HUB_ROOT` picks whichever of the two Hub folder spellings the machine actually has
-(§13, and the Knowledge/Evidence mismatch below). Other scripts in the project still hardcode absolute paths.
+**Scope of this rule: the guidelines and anything a second person might run.** It is a rule about *what the
+docs may state* and about shared or handed-over code — a guideline must never present one person's profile
+path as the project's path, because everyone reads the guidelines.
+
+**A single-user script may keep an absolute path.** Lolita's own working scripts — `ERA_load_snapshots.R`,
+`ERA_Data_format.R`, `ERA_bibliography_extract.R`, `era_agroecology_beta.R`, `era_agroecology_slides.R`, and
+everything in `previous/` — are run only by her, so their hardcoded paths are **deliberate and not an open
+issue.** Don't "fix" them, and don't log them as a defect.
+
+`era_harmonize.R` is the exception that is resolved per-user (`USER_HOME`, `DOWNLOADS`, `CACHE_DIR`,
+`OUT_DIR`, `HUB_ROOT` all derived from `USERPROFILE`, with `HUB_ROOT` picking whichever of the two Hub folder
+spellings the machine has) — because it is the pipeline the team's output depends on, and it is the one most
+likely to be handed to someone else.
 
 ## 2. Shared workbooks and the ontology are read-only
 
@@ -192,8 +202,9 @@ RStudio and running scripts interactively, top to bottom, reading the sanity-che
 
 ## ⚠️ Absolute paths, and two different folder names
 
-**Every script hardcodes absolute OneDrive paths for one person's machine.** Check and adjust the path block
-at the top before running anything.
+**Nearly every script hardcodes absolute OneDrive paths for one person's machine.** Check and adjust the path
+block at the top before running anything. For **single-user scripts this is deliberate** and fine — see §1;
+the exception is `era_harmonize.R`, which resolves its paths per-user.
 
 Worse, **two spellings of the root folder are in circulation**:
 - Lolita's: `…/OneDrive - CGIAR/Alliance-Agroecology **Knowledge** Hub - General/`
