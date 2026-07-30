@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "deny": [
+      "Edit(./02.FOMD/02.metadata_structure/**)",
+      "Write(./02.FOMD/02.metadata_structure/**)",
+      "Edit(./02.FOMD/03.extraction/**)",
+      "Write(./02.FOMD/03.extraction/**)",
+      "Edit(./01.SOMD/**)",
+      "Write(./01.SOMD/**)",
+      "Edit(./02.FOMD/*.xlsm)",
+      "Write(./02.FOMD/*.xlsm)",
+      "Edit(//c/Users/*/OneDrive - CGIAR/*/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure/**)",
+      "Write(//c/Users/*/OneDrive - CGIAR/*/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure/**)",
+      "Edit(//c/Users/*/*/*/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure/**)",
+      "Write(//c/Users/*/*/*/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure/**)",
+      "Edit(//c/Users/*/OneDrive - CGIAR/*/Agroecology_Evidence_Hub/02.FOMD/03.extraction/**)",
+      "Write(//c/Users/*/OneDrive - CGIAR/*/Agroecology_Evidence_Hub/02.FOMD/03.extraction/**)",
+      "Edit(//c/Users/*/*/*/Agroecology_Evidence_Hub/02.FOMD/03.extraction/**)",
+      "Write(//c/Users/*/*/*/Agroecology_Evidence_Hub/02.FOMD/03.extraction/**)",
+      "Edit(//c/Users/*/OneDrive - CGIAR/*/Agroecology_Evidence_Hub/01.SOMD/**)",
+      "Write(//c/Users/*/OneDrive - CGIAR/*/Agroecology_Evidence_Hub/01.SOMD/**)",
+      "Edit(//c/Users/*/*/*/Agroecology_Evidence_Hub/01.SOMD/**)",
+      "Write(//c/Users/*/*/*/Agroecology_Evidence_Hub/01.SOMD/**)",
+      "Edit(//c/Users/*/OneDrive - CGIAR/*/ERA/data/**)",
+      "Write(//c/Users/*/OneDrive - CGIAR/*/ERA/data/**)",
+      "Edit(//c/Users/*/*/*/ERA/data/**)",
+      "Write(//c/Users/*/*/*/ERA/data/**)",
+      "Edit(**/02.metadata_structure/**)",
+      "Write(**/02.metadata_structure/**)",
+      "Edit(**/03.extraction/**)",
+      "Write(**/03.extraction/**)",
+      "Edit(**/01.SOMD/**)",
+      "Write(**/01.SOMD/**)",
+      "Edit(**/01_FOMD_ontologies.xlsx)",
+      "Write(**/01_FOMD_ontologies.xlsx)"
+    ]
+  }
+}
