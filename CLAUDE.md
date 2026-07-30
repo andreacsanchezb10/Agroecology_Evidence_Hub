@@ -49,7 +49,11 @@ It is **one OneDrive folder replicated to every machine**, and OneDrive never me
 never whole-file rewrites**, on anything in `knowledge/`; **write only what you own**; **never run two Claude
 sessions against `knowledge/` at once**; add **one new file** to `knowledge/_meta/log/` instead of appending to
 a shared list. Rule 2 is also enforced by `deny` rules in `.claude/settings.json` — a failed write to a
-protected path is the protection working. → `knowledge/09_conventions.md` §13
+protected path is the protection working.
+
+**Git runs on ONE machine only — Lolita's.** `.git/` is inside the synced tree, so git from a second machine
+corrupts the repo. A hook identifies you at session start and **refuses git commands for anyone else**; ask
+Lolita if you need something committed. → `knowledge/09_conventions.md` §13
 
 ## Terminology — commonly got wrong
 
