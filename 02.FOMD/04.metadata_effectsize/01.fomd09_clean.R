@@ -9,28 +9,70 @@ path.metadata.effectsize<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agr
 
 list.files(path.metadata.structure)
 list.files(path.metadata.effectsize)
+#==========================================================
+# Read functions
+#==========================================================
+source(file.path(path.metadata.effectsize,"/fomd_fun/fun_fomd09_verified_combined.R"))
+source(file.path(path.metadata.effectsize,"/fomd_fun/fun_fomd09_cleaning.R"))
 
 #==========================================================
 # Read datasets
 #==========================================================
+metadata<-"MD_Paut,_24_A glo_Sc"
+
+#---Combined verfified studies from metadata subfolder
+fomd09 <- combine_09FOMD_verified(subfolder = metadata)
+
+
+#==============================================
+#---- Cleaning the dataset ----
+#==============================================
+### things to do:
+#- All unspecified across the dataset transform to "Unspecified"
+
+#---- Convert to specify class ----
+fomd09.clean <- clean_fomd09_classes(fomd09)
+
+#---- Add bibliographic information from (04_FOMD_screening) ----
+
+fomd09.clean <- add_fomd09_bibliographic(fomd09.clean, path.metadata.structure, metadata)
+
+#---- Add location information ----
+fomd09.clean <- add_fomd09_location(fomd09.clean)
+
+#--- Check experiment details ----
+for (col in c("exp_design", "exp_plot_size", "exp_field_size", "exp_duration")) {
+  cat("---", col, "---\n")
+  print(sort(unique(fomd09.clean[[col]])))
+}
+
+#--- Check experiment time details ----
+for (col in c("time_raw", "time_year_start", "time_year_end", "time_season")) {
+  cat("---", col, "---\n")
+  print(sort(unique(fomd09.clean[[col]])))
+}
+
+#--- Check subpractice details ----
+for (col in c("subpractice_description_raw", "system_type")) {
+  cat("---", col, "---\n")
+  print(sort(unique(fomd09.clean[[col]])))
+}
+
+
+
+
+
+
+
+
 #---01_FOMD_ontologies
 fomd01.countries<-read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies.xlsx"), sheet = "01_countries")
 fomd01.outcomes<-read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies.xlsx"), sheet = "01_outcomes")
 fomd01.practices<-read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies.xlsx"), sheet = "01_practices")
 sort(unique(fomd01.practices$subpractice))
 
-#---04_FOMD_screening
-fomd04<-read_xlsx(file.path(path.metadata.structure,"04_FOMD_screening.xlsx"), sheet = "04_FOMD_screening")%>%
-  filter(ss_id!="MD_Rosen_24_Effec_Sc")%>%
-  filter(status =="I")
-length(unique(fomd04$study_id))#20
 
-#---09_FOMD_metadata_extraction_long
-fomd09<-read_xlsx(file.path(path.metadata.structure,"09_FOMD_metadata_extraction_long.xlsx"), sheet = "09_FOMD_metadata_extraction_lon")%>%
-  slice(-(1))
-  #filter(row_status=="verified")
 
-length(unique(fomd09$study_id)) #18
 
 #---10_FOMD_metadata_synthesis_long
 fomd10<-read_xlsx(file.path(path.metadata.structure,"10_FOMD_metadata_synthesis_short.xlsx"), sheet = "10_FOMD_metadata_synthesis")%>%
@@ -38,53 +80,6 @@ fomd10<-read_xlsx(file.path(path.metadata.structure,"10_FOMD_metadata_synthesis_
     rename_with(~ sub("^C_", "", .x))
 
 names(fomd10)
-
-#==============================================
-#---- Convert to specify class ----
-#==============================================
-#--- Clean dates
-clean_date <- function(x) {
-  x %>%
-    na_if("Unspecified") %>%
-    as.numeric() %>%
-    as.Date(origin = "1899-12-30") %>%
-    format("%d/%m/%Y")
-}
-
-fomd09.clean <- fomd09 %>%
-  mutate(
-    across(c(
-        #--planting_practice
-        planting_date_start, planting_date_end, 
-        #--irrigation_practice
-        irrig_date_start, irrig_date_end,
-        #--harvest_practice
-        harvest_date_start, harvest_date_end,
-        #--postharvesting_practice
-        postharvest_date_start, postharvest_date_end
-      ),
-      clean_date))%>%
-  mutate(across(
-    c(starts_with("crop_density"),
-      starts_with("tree_density"),
-      starts_with("animal_density")),
-    
-      as.character))
-  
-(unique(fomd09.clean$planting_date_start))
-(unique(fomd09.clean$planting_date_end))
-
-(unique(fomd09.clean$irrig_date_start))
-(unique(fomd09.clean$irrig_date_end))
-
-(unique(fomd09.clean$harvest_date_start))
-(unique(fomd09.clean$harvest_date_end))
-
-(unique(fomd09.clean$postharvest_date_start))
-(unique(fomd09.clean$postharvest_date_end))
-class(fomd09.clean$crop_density15)
-class(fomd09.clean$tree_density15)
-class(fomd09.clean$animal_density05)
 
 #==========================================================
 # Convert multiple columns into one column
@@ -117,77 +112,11 @@ subpractice.list<-c(
 
 ###########################
 ###################
-#---bibliographic----
-fomd09.clean<-fomd09.clean%>%
-  left_join(fomd04 %>%select(authors,title,year,journal,doi,study_id),by ="study_id" )
 
-# Quick checks
-length(unique(fomd09.clean$study_id)) # 18
-length(unique(fomd09.clean$authors))  #18
-length(unique(fomd09.clean$title)) # 18
-sort(unique(fomd09.clean$year))  
-sort(unique(fomd09.clean$journal))  
-sort(unique(fomd09.clean$doi)) 
 
-#---location----
-fomd09.clean<-fomd09.clean%>% 
-  rowwise() %>%
-  mutate(
-    country = paste(unique(na.omit(c_across(starts_with("country0"))),collapse = "..")),
-    site_key= {
-      coun <- as.character(unlist(pick(all_of(paste0("country", sprintf("%02d", 1:5))))))
-      type <- as.character(unlist(pick(all_of(paste0("site_type", sprintf("%02d", 1:5))))))
-      id <- as.character(unlist(pick(all_of(paste0("site_id", sprintf("%02d", 1:5))))))
-      admin <- as.character(unlist(pick(all_of(paste0("site_admin", sprintf("%02d", 1:5))))))
-      agg <- as.character(unlist(pick(all_of(paste0("site_agg", sprintf("%02d", 1:5))))))
-      latlong_type <- as.character(unlist(pick(all_of(paste0("site_latlong_type", sprintf("%02d", 1:5))))))
-      lat  <- as.character(unlist(pick(all_of(paste0("site_latitude",  sprintf("%02d", 1:5))))))
-      long <- as.character(unlist(pick(all_of(paste0("site_longitude", sprintf("%02d", 1:5))))))
-      b    <- as.character(unlist(pick(all_of(paste0("site_buffer",    sprintf("%02d", 1:5))))))
-    vals <- ifelse(
-      is.na(coun) | coun == "",
-      NA_character_,
-      paste0(
-        "[",coun,"]",
-        "[",type,"]",
-        "[",id,"]",
-        "[",admin,"]",
-        "[",agg,"]",
-        "[",latlong_type,"]",
-        "[",lat,"]",
-        
-        ifelse(is.na(long) | long == "", "", paste0("[", long, "]")),
-        ifelse(is.na(b) | b == "", "", paste0("[", b, "]"))
-      ))
-    paste0(na.omit(vals), collapse = "..")
-  })
 
-# Quick checks
-sort(unique(fomd09.clean$country))
-sort(unique(fomd09.clean$country02))
-sort(unique(fomd09.clean$country03))
-sort(unique(fomd09.clean$country04))
-sort(unique(fomd09.clean$site_key))
 
-#---experiment_details----
-## TO CHECK: see what to do here, this can differ from T and C
-# Quick checks
-sort(unique(fomd09.clean$exp_design))
-sort(unique(fomd09.clean$exp_plot_size))
-sort(unique(fomd09.clean$exp_field_size))
-sort(unique(fomd09.clean$exp_duration))
 
-#---experiment_time----
-## TO CHECK: see what to do here, this can differ from T and C
-# Quick checks
-sort(unique(fomd09.clean$time_raw))
-sort(unique(fomd09.clean$time_year_start))
-sort(unique(fomd09.clean$time_year_end))
-sort(unique(fomd09.clean$time_season))
-
-#---practice----
-sort(unique(fomd09.clean$subpractice_description_raw))
-sort(unique(fomd09.clean$system_type))
 
 #---commodity_crop----
 fomd09.clean<-fomd09.clean%>% 

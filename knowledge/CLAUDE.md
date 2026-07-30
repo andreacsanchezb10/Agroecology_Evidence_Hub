@@ -77,6 +77,7 @@ Full detail and the reasoning: `09_conventions.md` §13.
 | `06_ontologies.md` | a controlled vocabulary is involved, or a term is missing |
 | `07_extraction.md` | you're doing or supporting manual extraction from PDFs |
 | `08_effect_sizes_and_analysis.md` | effect sizes, meta-analysis code, or the analysis layer |
+| `control_treatment_scoring.md` | how control vs treatment is defined for the agroecology-gradient question (draft, Andrea to ratify) |
 | `09_conventions.md` | you're writing or running R here |
 | `sources/ERA/*` | you're changing or debugging the ERA harmonization |
 | `_meta/MAINTENANCE.md` | you're updating these docs |
