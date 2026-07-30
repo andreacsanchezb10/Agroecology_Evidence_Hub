@@ -40,7 +40,7 @@ term, the term-specific fields, then **`Accepted` / `Reviewer` / `Notes`** for t
 vocabulary. → `07_extraction.md`
 
 **3. Write a NEW file to Downloads.** If a full workbook is genuinely more useful than a list, write a
-**new, separately-named** file into `C:/Users/mlolita/Downloads/`, e.g.
+**new, separately-named** file into **your own** `Downloads/` folder (`%USERPROFILE%/Downloads`), e.g.
 `01_FOMD_ontologies_PROPOSED_<what-changed>.xlsx`. Rules:
 - **Downloads only** — never in `02.metadata_structure/`.
 - **A new name.** Never reuse `01_FOMD_ontologies.xlsx` as a filename, even in Downloads — a same-named file

@@ -2,7 +2,9 @@
 
 In this project **the numbered folders *are* the pipeline stages**, so the workflow and the folder map are
 one document. All paths are relative to the OneDrive root:
-`C:/Users/mlolita/OneDrive - CGIAR/Alliance-Agroecology Knowledge Hub - General/` — shown as `HUB/`.
+`%USERPROFILE%/OneDrive - CGIAR/Alliance-Agroecology <Knowledge|Evidence> Hub - General/` — shown as `HUB/`.
+**The folder name differs per person** (Lolita has "Knowledge", Andrea "Evidence"), so resolve the root,
+don't hardcode it → `09_conventions.md` §1.
 Note the spaces in the folder name: **always quote paths in the shell.**
 
 ## The FOMD workflow, end to end
@@ -118,9 +120,14 @@ workbooks there, never a raw export. → `05_data_schemas.md`, `06_ontologies.md
 
 ## Working / scratch locations (outside the shared drive)
 
-- **ERA snapshots (inputs):** `C:/Users/mlolita/Downloads/era_cache/{ie,mh,sc,cc}.RData`, plus helper inputs
-  `animal_species_by_study.csv`, `po_paper_resolved.csv`, `inventory_*.csv`.
-- **Script outputs:** `C:/Users/mlolita/Downloads/` — for ERA, `ERA_crop_data_short_vNN.csv` plus companion
+Paths below are shown relative to **your own** Windows profile — `<Downloads>` means
+`%USERPROFILE%/Downloads`, which differs per person. Nothing here should be hardcoded to one user
+(`09_conventions.md` §1).
+
+- **ERA snapshots (inputs):** `<Downloads>/era_cache/{ie,mh,sc,cc}.RData`, plus helper inputs
+  `animal_species_by_study.csv`, `po_paper_resolved.csv`, `inventory_*.csv`. The script downloads the
+  snapshots into this cache on first run, so a new machine builds its own.
+- **Script outputs:** `<Downloads>/` — for ERA, `ERA_crop_data_short_vNN.csv` plus companion
   field-map, product-to-confirm and log files. A human then moves and **renames** the main CSV to
   `ERA/data/ERA_data_short_vNN.csv` (the word "crop" is dropped).
 - **Ad-hoc analysis scripts:** a scratch/temp dir, **not** `ERA/Script/`.
@@ -131,7 +138,7 @@ workbooks there, never a raw export. → `05_data_schemas.md`, `06_ontologies.md
 | Location | Write? | Note |
 |---|---|---|
 | `ERA/Script/era_harmonize.R` | ✅ edit | the pipeline; bump `VERSION_TAG` per release |
-| `C:/Users/mlolita/Downloads/` | ✅ | all script outputs + scratch |
+| **your own** `Downloads/` (`%USERPROFILE%/Downloads`) | ✅ | all script outputs + scratch. Resolve it, never hardcode a person's path |
 | `knowledge/` | ✅ | keep it current — living-doc protocol in `CLAUDE.md` |
 | `ERA/data/` | ⚠️ human-moved | scripts write to Downloads; a person moves deliverables here |
 | `02.FOMD/02.metadata_structure/**` | ⛔ **never** | the master workbooks **and the ontology**. Suggest changes; see rule 2 in `CLAUDE.md` |

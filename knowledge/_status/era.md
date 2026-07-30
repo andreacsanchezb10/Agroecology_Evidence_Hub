@@ -8,7 +8,7 @@ This is the single most confusing thing in the project. Read it before investiga
 
 | Stage | Version | Where | Rows / studies |
 |---|---|---|---|
-| **Built** (newest) | **v49** | `Downloads/ERA_crop_data_short_v49.csv` | 191,019 / 1,810 |
+| **Built** (newest) | **v49** | Lolita's `Downloads/ERA_crop_data_short_v49.csv` | 191,019 / 1,810 |
 | **Released** to Andrea | **v47** | `ERA/data/ERA_data_short_v47.csv` | 232,209 / 1,810 |
 | **Ingested** downstream | **v46** | read by `added_to_10_MD_Rosen_24_Effec_Sc_new.R` line 56 | — |
 

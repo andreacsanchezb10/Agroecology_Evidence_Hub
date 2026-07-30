@@ -27,8 +27,10 @@ ERA is one such harvested source among a target of ten or more. Full framing in 
 Full definitions, the two screening vocabularies, and the deprecated-usage table: `03_somd_and_fomd.md`.
 
 ## The five golden rules
-1. **Output flow.** Scripts write to `C:/Users/mlolita/Downloads/` first; a **human** moves deliverables
-   into a data folder (e.g. `ERA/data/`). Scripts never write into a shared data folder directly.
+1. **Output flow.** Scripts write to **the running user's own `Downloads/` folder** first
+   (`%USERPROFILE%/Downloads` — yours, not anyone else's); a **human** moves deliverables into a data folder
+   (e.g. `ERA/data/`). Scripts never write into a shared data folder directly, and never hardcode another
+   person's path.
 2. **Never modify the shared workbooks.** Not `01_FOMD_ontologies.xlsx`, not anything in
    `02.metadata_structure/`, not any extractor `.xlsm` in `03.extraction/`. Not by script, not by AI, not
    "just this once with approval". You may only **suggest** additions as a list, or write a **new,

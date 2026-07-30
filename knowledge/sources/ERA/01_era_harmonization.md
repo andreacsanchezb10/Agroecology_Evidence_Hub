@@ -29,7 +29,11 @@ filename. Then update `../../_status/era.md` and `03_era_changelog.md` — that 
 
 ## Script shape, top to bottom
 
-1. **Config:** `VERSION_TAG`, `CACHE_DIR` (Downloads/era_cache), `OUT_DIR` (Downloads), and helper functions
+1. **Config:** `VERSION_TAG`, plus **per-user paths derived from `%USERPROFILE%`** — `USER_HOME`, `DOWNLOADS`,
+   `CACHE_DIR` (`<Downloads>/era_cache`), `OUT_DIR` (`<Downloads>`) and `HUB_ROOT`, which picks whichever of
+   the two Hub folder spellings the machine has ("Knowledge" / "Evidence"). So the script runs as-is on any
+   team member's machine; **don't reintroduce a hardcoded path**, and never use `path.expand("~")` — R maps it
+   to Documents, which is redirected into OneDrive here (`../../09_conventions.md` §1). Then helper functions
    — `nn` (non-blank test), `nc` (numeric coerce), `norm_star` (separator normalizer), `coalesce_chr`,
    `samp_clean`.
 2. **Load** the 4 snapshots; build a table-join spec; harmonize per snapshot (including the cc `Herd.Out`

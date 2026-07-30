@@ -50,7 +50,8 @@ ERA is relational: each study's information is spread across many tables linked 
 time, treatment level-name), exported as four **snapshots**. The pipeline reads all four, joins what it
 needs, and pairs control against treatment.
 
-Loaded from `C:/Users/mlolita/Downloads/era_cache/{snap}.RData`; each file loads a single **list of
+Loaded from `<Downloads>/era_cache/{snap}.RData` — your own Downloads folder, resolved by the script, not a
+hardcoded person's path (`../../09_conventions.md` §1); each file loads a single **list of
 data.tables** (the object is named `data` for cc — use `get(ls(e)[1], e)` to be safe).
 
 | Snapshot | Focus | Approx. `Data.Out` rows |

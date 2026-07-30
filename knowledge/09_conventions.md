@@ -5,9 +5,26 @@ the practical detail behind them plus the R-and-shell conventions of this worksp
 
 ## 1. Output flow — never write into a shared data folder
 
-Scripts write to **`C:/Users/mlolita/Downloads/`** first. A human reviews and moves deliverables into the
-data folder (e.g. `ERA/data/`). Rationale: the data folders sit in shared OneDrive, and a bad run must never
-clobber a reviewed deliverable. Keep the Downloads filename descriptive; the human renames on move.
+Scripts write to **the running user's own `Downloads/` folder** first — *yours*, whoever you are, not a
+particular person's. A human reviews and moves deliverables into the data folder (e.g. `ERA/data/`).
+Rationale: the data folders sit in shared OneDrive, and a bad run must never clobber a reviewed deliverable.
+Keep the Downloads filename descriptive; the human renames on move.
+
+**Resolve it, don't hardcode it.** Several people run these scripts, so a literal `C:/Users/<someone>/Downloads`
+is a bug — it either fails or writes into the wrong person's profile. In R:
+
+```r
+USER_HOME <- gsub("\\\\", "/", Sys.getenv("USERPROFILE"))  # backslashes → forward
+DOWNLOADS <- file.path(USER_HOME, "Downloads")
+```
+
+⚠️ **Do not use `path.expand("~")` on Windows.** R maps `~` to *Documents*, and on this setup Documents is
+itself redirected into OneDrive (`C:/Users/<you>/OneDrive - CGIAR/Documents`) — so `~` would write outputs
+**into the synced folder**, which is exactly what this rule exists to prevent. Verified 2026-07-30.
+
+`era_harmonize.R` does this correctly as of v49: `OUT_DIR`, `CACHE_DIR` and `HUB_ROOT` are all derived from
+`USERPROFILE`, and `HUB_ROOT` picks whichever of the two Hub folder spellings the machine actually has
+(§13, and the Knowledge/Evidence mismatch below). Other scripts in the project still hardcode absolute paths.
 
 ## 2. Shared workbooks and the ontology are read-only
 
