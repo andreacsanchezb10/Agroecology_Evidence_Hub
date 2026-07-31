@@ -25,7 +25,7 @@ fomd09.clean<-read_csv(file.path(path.metadata.effectsize,"fomd09_cleanv2.csv"),
 fomd10.names<-names(read_xlsx(file.path(path.metadata.structure,"10_FOMD_metadata_synthesis_short.xlsx"), sheet = "10_FOMD_metadata_synthesis"))
 fomd10.names
 # check
-sort(unique(fomd09.clean$product_component))
+sort(unique(fomd09.clean$product))
 
 #==========================================================
 # Row id columns: Context columns
@@ -202,8 +202,8 @@ out.eco.comparison.id1.cols
 
 #-----------------------------
 # Row id1 columns: out_subpillar== "Yield" 
-# for Log Response Ratio and partial LER when product_component match
-# row id includes product_component
+# for Log Response Ratio and partial LER when product match
+# row id includes product
 #-----------------------------
 out.yield.row.id1.cols <- out.bio.row.id1.cols
 
@@ -213,12 +213,12 @@ out.yield.comparison.id1.cols
 
 #-----------------------------
 # Row id2 columns: out_subpillar== "Yield" 
-# for Log Response Ratio when product_component don't match but product_component_focal_yield does
-# row id includes product_component_focal_yield
+# for Log Response Ratio when product don't match but product_focal_yield does
+# row id includes product_focal_yield
 #-----------------------------
 out.yield.row.id2.cols <- c(
   context.row.id.cols,
-    "product_component_focal_yield")
+    "product_focal_yield")
 
 out.yield.row.id2.cols
 out.yield.comparison.id2.cols<- c("out_comparison_treatment",setdiff(out.yield.row.id2.cols, "practice_id"))
@@ -240,7 +240,7 @@ out.yield.comparison.id3.cols
 # Create row_id to match intervention (T) vs control (C)
 #-----------------------------
 head(fomd09.clean%>%
-       select(out_subpillar,product_component_focal_yield, starts_with("out_mean_product_component0")))
+       select(out_subpillar,product_focal_yield, starts_with("out_mean_product0")))
 
 fomd09.comparison<- fomd09.clean%>%
   mutate(row_id1 = case_when(
@@ -251,25 +251,25 @@ fomd09.comparison<- fomd09.clean%>%
     #---out_subpillar=="Economics"----
     out_subpillar=="Economics"~apply(select(., all_of(out.eco.row.id1.cols)), 1, paste, collapse = "/"),
     
-    #---out_subpillar=="Yield" matching product_component----
+    #---out_subpillar=="Yield" matching product----
     out_subpillar=="Yield"& 
-      is.na(product_component_focal_yield)&
-      if_all(starts_with("out_mean_product_component0"), is.na) ~
+      is.na(product_focal_yield)&
+      if_all(starts_with("out_mean_product0"), is.na) ~
       apply(select(., all_of(out.yield.row.id1.cols)), 1, paste, collapse = "/"),
     TRUE ~ NA_character_))%>%
   
   mutate(row_id2 = case_when(
-     #---out_subpillar=="Yield" matching product_component_focal_yield----
+     #---out_subpillar=="Yield" matching product_focal_yield----
     out_subpillar=="Yield" & 
-      !is.na(product_component_focal_yield)&
-      if_all(starts_with("out_mean_product_component0"), is.na)~
+      !is.na(product_focal_yield)&
+      if_all(starts_with("out_mean_product0"), is.na)~
       apply(select(., all_of(out.yield.row.id2.cols)), 1, paste, collapse = "/"),
     TRUE ~ NA_character_))%>%
   
   mutate(row_id3 = case_when(
     #---out_subpillar=="Yield" to calculate LER----
     out_subpillar=="Yield" & 
-      !if_all(starts_with("out_mean_product_component0"), is.na) ~
+      !if_all(starts_with("out_mean_product0"), is.na) ~
       apply(select(., all_of(out.yield.row.id3.cols)), 1, paste, collapse = "/"),
     TRUE ~ NA_character_))
 
@@ -313,18 +313,18 @@ fomd09.comparison.C<-fomd09.comparison.C%>%
     #---out_subpillar=="Economics"----
     out_subpillar=="Economics"~apply(select(., all_of(out.eco.comparison.id1.cols)), 1, paste, collapse = "/"),
     
-    #---out_subpillar=="Yield" matching product_component----
+    #---out_subpillar=="Yield" matching product----
     out_subpillar=="Yield"& 
-      is.na(product_component_focal_yield)&
-      if_all(starts_with("out_mean_product_component0"), is.na) ~
+      is.na(product_focal_yield)&
+      if_all(starts_with("out_mean_product0"), is.na) ~
       apply(select(., all_of(out.yield.comparison.id1.cols)), 1, paste, collapse = "/"),
     TRUE ~ NA_character_))%>%
   
   mutate(comparison_id2 = case_when(
-    #---out_subpillar=="Yield" matching product_component_focal_yield----
+    #---out_subpillar=="Yield" matching product_focal_yield----
     out_subpillar=="Yield" & 
-      !is.na(product_component_focal_yield) &
-      if_all(starts_with("out_mean_product_component0"), is.na)~
+      !is.na(product_focal_yield) &
+      if_all(starts_with("out_mean_product0"), is.na)~
     
       apply(select(., all_of(out.yield.comparison.id2.cols)), 1, paste, collapse = "/"),
     TRUE ~ NA_character_))
@@ -358,7 +358,7 @@ sort(unique(fomd09.comparison$out_mean))
 
 fomd10.1<- fomd09.comparison.C%>%
   filter(!is.na(row_id1))%>%
-  filter(is.na(product_component_focal_yield))%>%
+  filter(is.na(product_focal_yield))%>%
   select(-any_of(c("row_id1","row_id2")))%>%
   left_join(
     fomd09.comparison%>% 
@@ -422,18 +422,18 @@ fomd10.3.C <- fomd09.comparison %>%
     mutate(comparison_id3 = case_when(
     #---out_subpillar=="Yield" to calculate LER
     out_subpillar=="Yield" & 
-      is.na(product_component_focal_yield)&
-      !if_all(starts_with("out_mean_product_component0"), is.na) ~
+      is.na(product_focal_yield)&
+      !if_all(starts_with("out_mean_product0"), is.na) ~
       apply(select(., all_of(out.yield.comparison.id3.cols)), 1, paste, collapse = "/"),
     TRUE ~ NA_character_))%>%
   filter(!is.na(comparison_id3))%>%
   mutate(
     component_slot = case_when(
-      !is.na(out_mean_product_component01) ~ "C",
-      !is.na(out_mean_product_component02) ~ "C2",
-      !is.na(out_mean_product_component03) ~ "C3",
-      !is.na(out_mean_product_component04) ~ "C4",
-      !is.na(out_mean_product_component05) ~ "C5",
+      !is.na(out_mean_product01) ~ "C",
+      !is.na(out_mean_product02) ~ "C2",
+      !is.na(out_mean_product03) ~ "C3",
+      !is.na(out_mean_product04) ~ "C4",
+      !is.na(out_mean_product05) ~ "C5",
       TRUE ~ NA_character_
     ))
   
@@ -441,14 +441,14 @@ fomd10.3.C <- fomd09.comparison %>%
 sort(unique(fomd10.3.C$practice_id))
   
 sort(unique(fomd10.3.C$component_slot))
-sort(unique(fomd10.3.C$out_mean_product_component01))
-sort(unique(fomd10.3.C$out_mean_product_component02))
+sort(unique(fomd10.3.C$out_mean_product01))
+sort(unique(fomd10.3.C$out_mean_product02))
 
 # each monoculture row should usually map to only one component slot
 fomd10.3.C %>%
   mutate(
     n_non_missing_components = rowSums(
-      !is.na(select(., starts_with("out_mean_product_component0")))
+      !is.na(select(., starts_with("out_mean_product0")))
     )
   ) %>%
   count(n_non_missing_components) 
@@ -506,7 +506,7 @@ fomd10.3 <- fomd10.3.C.wide %>%
             by = c("comparison_id3" = "row_id3"#,
                    #"out_comparison_treatment" = "practice_id"
                    )) %>%
-  filter(!is.na(T_product_component)) %>%
+  filter(!is.na(T_product)) %>%
   rowwise() %>%
   mutate(
     comparison_id = paste(
@@ -522,7 +522,7 @@ fomd10.3 <- fomd10.3.C.wide %>%
   ungroup()%>%
   mutate(comparison_id=paste0(comparison_id,"-",comparison_id3))%>%
   mutate(effect_size_type="Log Total LER")%>%
-  rename(C2_out_sample_size_product_component02=C2_out_sample_size)
+  rename(C2_out_sample_size_product02=C2_out_sample_size)
 
 names(fomd10.3)
 sort(unique(fomd10.3$comparison_id3))
@@ -533,36 +533,36 @@ sort(unique(fomd10.3$comparison_id))
 #==========================================================
 # 4) Pairing: row_id4
 # Yield rows for PARTIAL LER
-# one row = monoculture crop + intercrop + one product_component
+# one row = monoculture crop + intercrop + one product
 #==========================================================
 
 fomd09.comparison.4<-fomd09.comparison %>%
   filter(out_subpillar == "Yield")%>%
-  mutate(product_component_full = product_component) %>%  # keep original
+  mutate(product_full = product) %>%  # keep original
   separate(
-    product_component_full,
-    into = paste0("product_component", sprintf("%02d", 1:5)),
+    product_full,
+    into = paste0("product", sprintf("%02d", 1:5)),
     sep = "\\.\\.|-",
     fill = "right",
     extra = "drop"
   ) %>%
-  mutate(across(starts_with("product_component"), str_trim))%>%
-  separate_rows(product_component, sep = "\\.\\.|-")%>%
+  mutate(across(starts_with("product"), str_trim))%>%
+  separate_rows(product, sep = "\\.\\.|-")%>%
   mutate(row_id4 = case_when(
     #---out_subpillar=="Yield" partial LER 
     out_subpillar=="Yield"& 
-      is.na(product_component_focal_yield)&
-      !if_all(starts_with("out_mean_product_component0"), is.na) ~
+      is.na(product_focal_yield)&
+      !if_all(starts_with("out_mean_product0"), is.na) ~
       apply(select(., all_of(out.yield.row.id1.cols)), 1, paste, collapse = "/"),
     TRUE ~ NA_character_))%>%
   filter(!is.na(row_id4))
  
-sort(unique(fomd09.comparison.4$product_component))
-sort(unique(fomd09.comparison.4$product_component01))
-sort(unique(fomd09.comparison.4$product_component02))
-sort(unique(fomd09.comparison.4$product_component03))
-sort(unique(fomd09.comparison.4$product_component04))
-sort(unique(fomd09.comparison.4$product_component05))
+sort(unique(fomd09.comparison.4$product))
+sort(unique(fomd09.comparison.4$product01))
+sort(unique(fomd09.comparison.4$product02))
+sort(unique(fomd09.comparison.4$product03))
+sort(unique(fomd09.comparison.4$product04))
+sort(unique(fomd09.comparison.4$product05))
 sort(unique(fomd09.comparison.4$study_id))
 sort(unique(fomd09.comparison.4$row_id4))
 
@@ -575,8 +575,8 @@ fomd09.comparison.4.C <- fomd09.comparison.4 %>%
   mutate(comparison_id4 = case_when(
     #---out_subpillar=="Yield" partial LER 
     out_subpillar=="Yield"& 
-      is.na(product_component_focal_yield)&
-      !if_all(starts_with("out_mean_product_component0"), is.na) ~
+      is.na(product_focal_yield)&
+      !if_all(starts_with("out_mean_product0"), is.na) ~
       apply(select(., all_of(out.yield.comparison.id1.cols)), 1, paste, collapse = "/"),
     TRUE ~ NA_character_))%>%
   filter(!is.na(comparison_id4))
@@ -586,11 +586,11 @@ fomd09.comparison.4.C <- fomd09.comparison.4 %>%
 #check
 sort(unique(fomd09.comparison.4.C$practice_id))
 sort(unique(fomd09.comparison.4.C$study_id))
-sort(unique(fomd09.comparison.4.C$out_mean_product_component01))
-sort(unique(fomd09.comparison.4.C$out_mean_product_component02))
+sort(unique(fomd09.comparison.4.C$out_mean_product01))
+sort(unique(fomd09.comparison.4.C$out_mean_product02))
 sort(unique(fomd09.comparison.4.C$out_mean))
-sort(unique(fomd09.comparison.4.C$product_component))
-sort(unique(fomd09.comparison.4$product_component))
+sort(unique(fomd09.comparison.4.C$product))
+sort(unique(fomd09.comparison.4$product))
 
 fomd10.4<- fomd09.comparison.4.C%>%
   select(-any_of(starts_with("row_id")))%>%
@@ -604,32 +604,32 @@ fomd10.4<- fomd09.comparison.4.C%>%
   filter(!is.na(T_practice_id))%>%
   mutate(comparison_id=paste0(C_practice_id,"-",comparison_id4))%>%
   mutate(T_out_mean= case_when(
-    T_product_component==T_product_component01~T_out_mean_product_component01,
-    T_product_component==T_product_component02~T_out_mean_product_component02,
-    #T_product_component==T_product_component03~T_out_mean_product_component03,
-    #T_product_component==T_product_component04~T_out_mean_product_component04,
-    #T_product_component==T_product_component05~T_out_mean_product_component05,
+    T_product==T_product01~T_out_mean_product01,
+    T_product==T_product02~T_out_mean_product02,
+    #T_product==T_product03~T_out_mean_product03,
+    #T_product==T_product04~T_out_mean_product04,
+    #T_product==T_product05~T_out_mean_product05,
     TRUE~NA))%>%
   mutate(T_out_sd= case_when(
-    T_product_component==T_product_component01~T_out_sd_product_component01,
-    T_product_component==T_product_component02~T_out_sd_product_component02,
-    #T_product_component==T_product_component03~T_out_sd_product_component03,
-    #T_product_component==T_product_component04~T_out_sd_product_component04,
-    #T_product_component==T_product_component05~T_out_sd_product_component05,
+    T_product==T_product01~T_out_sd_product01,
+    T_product==T_product02~T_out_sd_product02,
+    #T_product==T_product03~T_out_sd_product03,
+    #T_product==T_product04~T_out_sd_product04,
+    #T_product==T_product05~T_out_sd_product05,
     TRUE~NA))%>%
   mutate( C_out_mean = coalesce(
-    C_out_mean_product_component01,
-    C_out_mean_product_component02,
-    C_out_mean_product_component03,
-    C_out_mean_product_component04,
-    C_out_mean_product_component05
+    C_out_mean_product01,
+    C_out_mean_product02,
+    C_out_mean_product03,
+    C_out_mean_product04,
+    C_out_mean_product05
   ))%>%
   mutate( C_out_sd = coalesce(
-    C_out_sd_product_component01,
-    C_out_sd_product_component02,
-    C_out_sd_product_component03,
-    C_out_sd_product_component04,
-    C_out_sd_product_component05
+    C_out_sd_product01,
+    C_out_sd_product02,
+    C_out_sd_product03,
+    C_out_sd_product04,
+    C_out_sd_product05
   ))%>%
   mutate(effect_size_type="Log Partial LER")%>%
   mutate(comparison_id=paste0(C_practice_id,"-",comparison_id4))
@@ -642,7 +642,7 @@ sort(unique(fomd10.4$study_id))
 sort(unique(fomd10.4$C_out_sd))
 sort(unique(fomd10.4$C_varietal_crop_variety))
 sort(unique(fomd10.4$T_out_sd))
-sort(unique(fomd10.4$T_product_component01))
+sort(unique(fomd10.4$T_product01))
 
 #==========================================================
 # Unselect unnecessary columns
@@ -680,6 +680,118 @@ sort(unique(fomd10.clean$effect_size_type))
 readr::write_csv(fomd10.clean, paste0(path.metadata.effectsize, "/fomd10_comparison.csv"))
 
 
+
+
+
+#-----------------------------------------------
+#---- Match with 01_FOMD_ontologies ----
+#-----------------------------------------------
+library(tibble)
+library(purrr)
+
+#--- Location: Reclassifying country as ISO_3166_1_Alpha_3----
+fomd09.clean <- apply_lookup_ontologies(
+  fomd09.clean, 
+  path.metadata.structure,
+  sheet_name = "01_countries",
+  key_col = "Country",
+  value_col = "ISO_3166_1_Alpha_3",
+  src_col = "country",
+  new_col = "country_ISO",
+  sep = ".."
+)
+
+#-----------------------------------------------
+#---- Match with 01_FOMD_ontologies ----
+#-----------------------------------------------
+library(tibble)
+library(purrr)
+
+#--- Location: Reclassifying country as ISO_3166_1_Alpha_3----
+fomd09.clean <- apply_lookup_ontologies(
+  fomd09.clean, 
+  path.metadata.structure,
+  sheet_name = "01_countries",
+  key_col = "Country",
+  value_col = "ISO_3166_1_Alpha_3",
+  src_col = "country",
+  new_col = "country_ISO",
+  sep = ".."
+)
+
+#Remove duplicate country and country_ISO
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(
+    country = map_chr(str_split(str_squish(country), "\\.\\."), \(x) paste(unique(str_squish(x)), collapse = "..")),
+    country_ISO1 = map_chr(str_split(str_squish(country_ISO1), "\\.\\."), \(x) paste(unique(str_squish(x)), collapse = ".."))
+  )
+
+
+# Quick checks
+# All the studied countries are in fomd01.countries
+unique_countries <-data.frame(
+  country = md.era.short.clean %>%
+    pull(country) %>%
+    str_split("\\.\\.") %>%
+    unlist() %>%
+    str_trim())%>%
+  distinct(country) %>%
+  arrange(country)%>%
+  left_join(fomd01.countries%>%
+              filter(!is.na(Country))%>%
+              distinct(Country,ISO_3166_1_Alpha_3),
+            by=c("country"="Country"))
+#filter(is.na(Product.Type))
+
+sort(unique(md.era.short.clean$country))
+sort(unique(md.era.short.clean$country_ISO))
+
+
+
+
+#=========================
+#---outcome----
+#=========================
+#--- Reclassifying out_subindicator as out_indicator
+md.era.short.clean <- apply_lookup_ontologies(
+  df        = md.era.short.clean,
+  ref       = fomd01.outcomes,
+  key_col   = "subindicator",
+  value_col = "indicator",
+  src_col   = "out_subindicator",
+  new_col   = "out_indicator"
+)
+
+# Quick checks
+sort(unique(md.era.short.clean$out_subindicator))
+sort(unique(md.era.short.clean$out_indicator))
+
+#--- Reclassifying out_subindicator as out_subpillar
+md.era.short.clean <- apply_lookup_ontologies(
+  df        = md.era.short.clean,
+  ref       = fomd01.outcomes,
+  key_col   = "subindicator",
+  value_col = "subpillar",
+  src_col   = "out_subindicator",
+  new_col   = "out_subpillar"
+)
+
+# Quick checks
+sort(unique(md.era.short.clean$out_subindicator))
+sort(unique(md.era.short.clean$out_subpillar))
+
+sort(unique(md.era.short.clean$out_subindicator[md.era.short.clean$out_subpillar==""]))
+sort(unique(md.era.short.clean$out_subindicator[is.na(md.era.short.clean$out_subpillar)]))
+
+#--- Reclassifying out_subindicator as out_pillar
+md.era.short.clean <- apply_lookup_ontologies(
+  df        = md.era.short.clean,
+  ref       = fomd01.outcomes,
+  key_col   = "subindicator",
+  value_col = "pillar",
+  src_col   = "out_subindicator",
+  new_col   = "out_pillar"
+)
 
 
 

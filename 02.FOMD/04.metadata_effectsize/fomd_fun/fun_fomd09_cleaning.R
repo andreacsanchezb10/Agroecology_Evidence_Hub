@@ -252,9 +252,9 @@ add_fomd09_varietal <- function(fomd09.clean, prefix, variety_suffix = "variety"
   fomd09.clean
 }
 
-#==========================================================
+#--------------------------------------------------------
 #---- Collapse numbered subpractice/product columns into one ----
-#==========================================================
+#--------------------------------------------------------
 collapse_fomd09_columns <- function(fomd09.clean, prefix = NULL, cols = NULL,
                                     new_col = NULL, sep = "-", dedupe = FALSE) {
   
@@ -376,9 +376,9 @@ combine_fert_inor_type_amount_unit <- function(applied, amount_unit) {
   paste(pairs, collapse = "..")
 }
 
-#==========================================================
+#--------------------------------------------------------
 #---- Add nutrient management (inorganic fertilizer) information ----
-#==========================================================
+#--------------------------------------------------------
 # Requires fun_cleaning_09_FOMD.R sourced first (uses combine_amount_unit / combine_fert_inor_type_amount_unit)
 add_fomd09_fert_inorganic <- function(fomd09.clean) {
   
@@ -546,9 +546,43 @@ add_fomd09_residues <- function(fomd09.clean) {
   cat("--- residues_N_amount_unit ---\n");        print(sort(unique(fomd09.clean$residues_N_amount_unit)))
   cat("--- residues_P_amount_unit ---\n");        print(sort(unique(fomd09.clean$residues_P_amount_unit)))
   cat("--- residues_K_amount_unit ---\n");        print(sort(unique(fomd09.clean$residues_K_amount_unit)))
+  cat("--- residues_tree ---\n");        print(sort(unique(fomd09.clean$residues_tree)))
+  cat("--- residues_material ---\n");        print(sort(unique(fomd09.clean$residues_material)))
   cat("--- residues_material_amount_unit ---\n"); print(sort(unique(fomd09.clean$residues_material_amount_unit)))
+  cat("--- residues_material_source ---\n"); print(sort(unique(fomd09.clean$residues_material_source)))
+  cat("--- residues_processing ---\n"); print(sort(unique(fomd09.clean$residues_processing)))
   
   fomd09.clean
+}
+
+
+#--------------------------------------------------------
+#---- Add pH amendment practice information ----
+#------------------------------------------------------------------------------ 
+combine_ph_material_amount_unit <- function(applied, amount_unit) {
+  if (applied == "" || is.na(applied)) return("")
+  
+  applied_parts     <- strsplit(applied,     "\\.\\.")[[1]]
+  amount_unit_parts <- strsplit(amount_unit, "\\.\\.")[[1]]
+  
+  if (length(applied_parts) == length(amount_unit_parts)) {
+    pairs <- mapply(function(a, au) {
+      if (is.na(au) || grepl("^NA$|^NA\\(|\\(NA\\)", au)) {
+        paste0(a, "[Unspecified(Unspecified)]")
+      } else {
+        paste0(a, "[", au, "]")
+      }
+    }, applied_parts, amount_unit_parts)
+  } else {
+    au <- amount_unit_parts[1]
+    if (is.na(au) || grepl("^NA$|^NA\\(|\\(NA\\)", au)) {
+      pairs <- paste0(applied_parts, "[Unspecified(Unspecified)]")
+    } else {
+      pairs <- paste0(applied_parts, "[", au, "]")
+    }
+  }
+  
+  paste(pairs, collapse = "..")
 }
 
 ################################
@@ -785,4 +819,25 @@ find_unmatched_crops <- function(fomd09.clean, path.metadata.effectsize) {
               by = c("crop" = "crop_tree_diversity")) %>%
     filter(is.na(FAO.Food.Group)) %>%
     arrange(crop)
+}
+
+#--------------------------------------------------------
+#---- Find product names missing from the ontology ----
+#--------------------------------------------------------
+find_unmatched_products <- function(fomd09.clean, path.metadata.structure) {
+  
+  fomd01.product.new <- read_xlsx(
+    file.path(path.metadata.structure, "01_FOMD_ontologies.xlsx"),
+    sheet = "01_product_new"
+  )
+  
+  fomd09.clean %>%
+    select(product) %>%
+    mutate(product = str_split(product, "\\.\\.")) %>%
+    unnest(product) %>%
+    mutate(product = str_squish(product)) %>%
+    filter(!is.na(product), product != "NA", product != "") %>%
+    distinct(product) %>%
+    anti_join(fomd01.product.new, by = c("product" = "Product")) %>%
+    arrange(product)
 }
