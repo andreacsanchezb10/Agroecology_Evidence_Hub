@@ -65,17 +65,6 @@ combine_09FOMD_verified <- function(subfolder,
   read_fun <- function(f) {
     df <- read_excel(f, sheet = sheet_name, col_types = "text")  # header = row 1
     df <- df %>% slice(-1)  # drop first data row of THIS file
-    
-    # Harmonize column names from older versions of the extraction sheet
-    # (names = old/legacy name, values = current/canonical name)
-    legacy_renames <- c(residues_unit_K = "residues_K_unit",
-                        ler_var_value_product_component02="ler_var_value_product02" )
-    for (old_name in names(legacy_renames)) {
-      if (old_name %in% names(df)) {
-        names(df)[names(df) == old_name] <- legacy_renames[[old_name]]
-      }
-    }
-    
     df
   }
   
@@ -131,47 +120,3 @@ combine_09FOMD_verified <- function(subfolder,
   
   combined
 }
-
-#------------------------------------------------------------------------------
-# Check that every verified-paper .xlsm in a subfolder shares the same columns
-#------------------------------------------------------------------------------
-check_09FOMD_column_consistency <- function(subfolder,
-                                            verified_papers_path = "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/03.extraction/02.09_FOMD_extraction/01_verified_papers/",
-                                            sheet_name = "09_FOMD_metadata_extraction_lon",
-                                            pattern = "\\.xlsm$") {
-  
-  folder_path <- paste0(verified_papers_path, subfolder)
-  xlsm_files  <- list.files(folder_path, pattern = pattern, full.names = TRUE)
-  
-  col_names_by_file <- xlsm_files %>%
-    set_names(basename(.)) %>%
-    map(~ names(read_excel(.x, sheet = sheet_name, n_max = 0)))
-  
-  n_cols <- map_int(col_names_by_file, length)
-  cat("--- Number of columns per file ---\n")
-  print(n_cols)
-  
-  all_cols    <- Reduce(union, col_names_by_file)
-  common_cols <- Reduce(intersect, col_names_by_file)
-  
-  cat("\nTotal distinct columns across all files:", length(all_cols), "\n")
-  cat("Columns common to ALL files:            ", length(common_cols), "\n")
-  
-  if (length(common_cols) < length(all_cols)) {
-    cat("\n--- Per-file column differences ---\n")
-    for (f in names(col_names_by_file)) {
-      missing <- setdiff(all_cols, col_names_by_file[[f]])
-      extra   <- setdiff(col_names_by_file[[f]], common_cols)
-      if (length(missing) > 0 || length(extra) > 0) {
-        cat("\nFile:", f, "\n")
-        if (length(missing) > 0) cat("  Missing (present in other files, absent here):\n    ", paste(missing, collapse = ", "), "\n")
-        if (length(extra) > 0)   cat("  Extra / not shared by all files:\n    ", paste(extra, collapse = ", "), "\n")
-      }
-    }
-  } else {
-    cat("\nAll files share exactly the same columns.\n")
-  }
-  
-  invisible(list(n_cols = n_cols, all_cols = all_cols, common_cols = common_cols, col_names_by_file = col_names_by_file))
-}
-
