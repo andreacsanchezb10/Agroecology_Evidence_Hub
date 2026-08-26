@@ -4,51 +4,59 @@ library(purrr)
 library(metafor) 
 library(readxl)
 library(metafor)
+library(skimr)
 
-path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure"
-path.metadata.effectsize<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/04.metadata_effectsize"
+path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure/"
+path.metadata.effectsize<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/04.metadata_effectsize/"
 
 list.files(path.metadata.structure)
 list.files(path.metadata.effectsize)
 
-
 #==========================================================
 # Read functions
 #==========================================================
-source(file.path(path.metadata.effectsize,"/fomd_fun/fun_mean_sd_calculation.R"))
-source(file.path(path.metadata.effectsize,"/fomd_fun/fun_lookup_ontologies.R")) # TO CHECK VER COMO METER LOAD DATA ONTOLOGIES DENTRO DE ESTA EQUACION
-source(file.path(path.metadata.effectsize,"/fomd_fun/fun_cv_missing_calculation.R"))
-source(file.path(path.metadata.effectsize,"/fomd_fun/fun_effect_sizes_calculation.R"))
+source(file.path(path.metadata.effectsize,"fomd_fun/fun_mean_sd_calculation.R"))
+source(file.path(path.metadata.effectsize,"fomd_fun/fun_lookup_ontologies.R")) # TO CHECK VER COMO METER LOAD DATA ONTOLOGIES DENTRO DE ESTA EQUACION
+source(file.path(path.metadata.effectsize,"fomd_fun/fun_cv_missing_calculation.R"))
+source(file.path(path.metadata.effectsize,"fomd_fun/fun_effect_sizes_calculation.R"))
 
 #==========================================================
 # Read datasets
 #==========================================================
-#---10_FOMD_clean
-fomd10.clean<-read_csv(file.path(path.metadata.effectsize,"/fomd10_clean/fomd10_clean_MD_Rosen_24_Effec_Sc.csv"), show_col_types = FALSE)
-  
+#---10_FOMD_clean: combine every source's cleaned comparison file
+fomd10_clean_dir   <- file.path(path.metadata.effectsize, "03.fomd10_clean")
+fomd10_clean_files <- list.files(fomd10_clean_dir, pattern = "^fomd10_clean_.*\\.csv$", full.names = TRUE)
+
+fomd10.clean <- purrr::map_dfr(fomd10_clean_files, readr::read_csv, show_col_types = FALSE)
+
+# --- quick check ---
+skim(fomd10.clean)
+
+length(fomd10_clean_files) # how many source files got combined
+nrow(fomd10.clean)
+sort(unique(fomd10.clean$study_id))
+sort(unique(fomd10.clean$effect_size_id))
+
 #==========================================================
 # Calculate Mean and Standard deviation
-# From available variance values
+# From available (raw) values
 #==========================================================
-#-- Check mean metrics
-sort(unique(fomd10.clean$C_out_metric))
-sort(unique(fomd10.clean$T_out_metric))
-
-#-- Check variance metrics
-sort(unique(fomd10.clean$C_out_var_metric))
-sort(unique(fomd10.clean$T_out_var_metric))
+#-- Check mean and variance metrics
+for (col in c("C_out_value_metric", "T_out_value_metric",
+              "C_out_var_metric", "T_out_var_metric",
+              "C_out_var_value_l"
+              
+)) {
+  cat("---", col, "---\n")
+  print(sort(unique(fomd10.clean[[col]])))
+}
 
 #---- Apply equation to calculate Mean AND SD ----
 fomd10.mean.sd<-calculate_mean_sd(fomd10.clean)
 
-#---- Replace mean==0 to mean=0.0001 ----
-## To calculate LOG RESPONSE RATIO effect size -> zero values have to be replaced by 0.0001
+skim(fomd10.mean.sd)
 
-fomd10.mean.sd <- fomd10.mean.sd %>%
-  mutate(
-    T_out_mean = if_else(effect_size_type=="Log Response Ratio"&T_out_mean == 0, 0.0001, T_out_mean),
-    C_out_mean = if_else(effect_size_type=="Log Response Ratio"&C_out_mean == 0, 0.0001, C_out_mean)
-  )
+## TO CHECK: there are 9 rows with C_out_mean ==NA WHY?
 
 #==========================================================
 # Calculate CV and number of samples

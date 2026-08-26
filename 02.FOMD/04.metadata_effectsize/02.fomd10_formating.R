@@ -304,7 +304,7 @@ col_presence <- tibble::tibble(
 #==========================================================
 # Combine paired files and unselect unnecesary columns
 #==========================================================
-fomd10_formated <- dplyr::bind_rows(
+fomd10.formated <- dplyr::bind_rows(
   paired_bio_context,
   paired_context,
   paired_yield_focal,
@@ -313,9 +313,9 @@ fomd10_formated <- dplyr::bind_rows(
   mutate(effect_size_id = paste0(metadata, "_", dplyr::row_number()))  %>%
   select(any_of(fomd10.cols))
 
-skim(fomd10_formated)
+skim(fomd10.formated)
 
 readr::write_csv(
-  fomd10_formated, 
+  fomd10.formated, 
   paste0(path.metadata.effectsize, "02.fomd10_formated/fomd10_formated_",metadata,".csv"))
 

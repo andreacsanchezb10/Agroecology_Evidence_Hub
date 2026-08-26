@@ -350,12 +350,7 @@ readr::write_csv(fomd09.clean, paste0(path.metadata.effectsize, "01.fomd09_clean
 # Equations to calculate the SD from SE, IC and IQR
 #-----------------------------
 
-##Equation to calculate the SD from SE (Higgins & Green 2011)(a= out_variance_value; b= out_sample_size)
-##http://handbook-5-1.cochrane.org/chapter_7/7_7_3_2_obtaining_standard_deviations_from_standard_errors_and.htm
-SE_SD <- function (out_variance_value, out_sample_size) {  
-  result<- out_variance_value * sqrt(out_sample_size)
-  return(result)
-}
+
 
 ##Equation to calculate the SD from M_IQR (Hozo et al., 2005) 
 ##(a= N_samples; b=B_error_range; c=B_error_value; d= B_error_range.1)
@@ -372,93 +367,6 @@ CI_SD<- function (a, b) {
 }
 
 
-
-#-----------------------------
-# Calculate Mean
-#-----------------------------
-sort(unique(fomd09.clean$out_value_metric))
-sort(unique(fomd09.clean$out_value))
-
-fomd09.clean<-fomd09.clean%>%
-  mutate(across(
-    c(out_value,
-      out_var_value,
-      outc_var_value_l,
-      outc_var_value_u,
-      out_sample_size,
-      out_value_product_component01,
-      out_var_value_product_component01,
-      out_value_product_component02,
-      out_var_value_product_component02,
-      out_value_product_component03,
-      out_var_value_product_component03,
-      out_value_product_component04,
-      out_var_value_product_component04,
-      out_value_product_component05,
-      out_var_value_product_component05
-    ),
-    as.numeric))%>%
-  mutate(out_mean=case_when(
-    out_value_metric=="Mean"~out_value,
-    TRUE ~ NA))%>%
-  
-  mutate(out_mean_product_component01=case_when(
-    out_value_metric=="Mean"~out_value_product_component01,
-    TRUE ~ NA))%>%
-  mutate(out_mean_product_component02=case_when(
-    out_value_metric=="Mean"~out_value_product_component02,
-    TRUE ~ NA))%>%
-  mutate(out_mean_product_component03=case_when(
-    out_value_metric=="Mean"~out_value_product_component03,
-    TRUE ~ NA))%>%
-  mutate(out_mean_product_component04=case_when(
-    out_value_metric=="Mean"~out_value_product_component04,
-    TRUE ~ NA))%>%
-  mutate(out_mean_product_component05=case_when(
-    out_value_metric=="Mean"~out_value_product_component05,
-    TRUE ~ NA))
-
-
-
-sort(unique(fomd09.clean$out_mean))
-sort(unique(fomd09.clean$out_value_product_component02))
-sort(unique(fomd09.clean$out_value_product_component03))
-sort(unique(fomd09.clean$out_value_product_component04))
-sort(unique(fomd09.clean$out_value_product_component05))
-
-#-----------------------------
-# Calculate Standard Deviation (SD)
-#-----------------------------
-sort(unique(fomd09.clean$out_var_metric))
-sort(unique(fomd09.clean$out_var_value))
-sort(unique(fomd09.clean$outc_var_value_l))
-sort(unique(fomd09.clean$outc_var_value_u))
-
-fomd09.clean<-fomd09.clean%>%
-  mutate(out_sd=case_when(
-    out_var_metric=="SE (Standard Error)"~SE_SD(out_var_value, out_sample_size),
-    #out_var_metric==
-    TRUE ~ NA))%>%
-  mutate(out_sd_product_component01=case_when(
-    out_var_metric=="SE (Standard Error)"~SE_SD(out_var_value_product_component01, out_sample_size),
-    #out_var_metric==
-    TRUE ~ NA))%>%
-  mutate(out_sd_product_component02=case_when(
-    out_var_metric=="SE (Standard Error)"~SE_SD(out_var_value_product_component02, out_sample_size),
-    #out_var_metric==
-    TRUE ~ NA))%>%
-  mutate(out_sd_product_component03=case_when(
-    out_var_metric=="SE (Standard Error)"~SE_SD(out_var_value_product_component03, out_sample_size),
-    #out_var_metric==
-    TRUE ~ NA))%>%
-  mutate(out_sd_product_component04=case_when(
-    out_var_metric=="SE (Standard Error)"~SE_SD(out_var_value_product_component04, out_sample_size),
-    #out_var_metric==
-    TRUE ~ NA))%>%
-  mutate(out_sd_product_component05=case_when(
-    out_var_metric=="SE (Standard Error)"~SE_SD(out_var_value_product_component05, out_sample_size),
-    #out_var_metric==
-    TRUE ~ NA))
 
 
 

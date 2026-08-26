@@ -1,22 +1,39 @@
 #==========================================================
 # Function: Calculate Mean & Standard deviation (SD)
 #==========================================================
+
+
 #sort(unique(fomd10.clean$C_out_var_metric))
 #[1] "CV (Co-efficient of Variation)"                          
 #[2] "Grouped SD (Standard Deviation)"                         
 #[3] "Grouped SE (Standard Error)"                             
 #[4] "Grouped SED (Standard Error of Difference Between Means)"
-#[5] "Grouped SEM (Standard Error of Mean)"                    
-#[6] "Mean Squared Error"                                      
-#[7] "SD (Standard Deviation)"                                 
-#[8] "SE (Standard Error)"                                     
-#[9] "SEM (Standard Error of Mean)"                            
-#[10] "Unspecified"
+#[5] "Grouped SEM (Standard Error of Mean)"   
+#[6]"IQR (interquartile)"
+#[7] "Mean Squared Error"                                      
+#[8] "SD (Standard Deviation)"                                 
+#[9] "SE (Standard Error)"                                     
+#[10] "SEM (Standard Error of Mean)"                            
+#[11] "Unspecified"
+
 
 
 calculate_mean_sd <- function(data,
                               prefix_c = "C",
                               prefix_t = "T") {
+  
+# ---------------------------------------------------------------------------
+# --- Helper functions to calculate "Mean" ---
+# ---------------------------------------------------------------------------
+
+#--- Median + IQR → Mean: Mean = (Q1 + Median + Q3) / 3 ----
+# REFERENCE: Wan, et al. (2014). # https://doi.org/10.1186/1471-2288-14-135  (Scenario 2)
+metrics.iqr_mean <- c("IQR (interquartile)")
+  
+iqr_mean <- function(q1, median, q3) {
+    result <- (q1 + median + q3) / 3
+    return(result)
+  }
   
 # ---------------------------------------------------------------------------
 # --- Helper functions to calculate "SD (Standard Deviation)" ---
@@ -58,7 +75,7 @@ cv_sd <- function(var_value, out_mean) {
   return(result)
 }
 
-# MSE → SD (Hedges et al. 1999): SD = √MSE
+#---  MSE → SD (Hedges et al. 1999): SD = √MSE
 # REFERENCE:
 
 metrics.mse_sd     <- c("Mean Squared Error")
@@ -68,7 +85,16 @@ mse_sd <- function(var_value) {
   return(result)
 }
 
-# Unspecified → SD: SD = NA
+#--- IQR → SD: SD = (Q3 - Q1) / (2 × Φ⁻¹((0.75n - 0.125)/(n + 0.25))) ----
+# REFERENCE: Wan et al. (2014). https://doi.org/10.1186/1471-2288-14-135 (Scenario 2)
+metrics.iqr_sd <- c("IQR (interquartile)")
+
+iqr_sd <- function(q1, q3, sample_size) {
+  result <- (q3 - q1) / (2 * qnorm((0.75 * sample_size - 0.125) / (sample_size + 0.25)))
+  return(result)
+}
+
+#---  Unspecified → SD: SD = NA
 metrics.na         <- c("Unspecified")
 
 # ---------------------------------------------------------------------------
@@ -77,13 +103,15 @@ metrics.na         <- c("Unspecified")
 
 compute <- function(data, prefix) {
   
-  out_metric      <- paste0(prefix, "_out_metric")
+  out_value_metric      <- paste0(prefix, "_out_value_metric")
   out_value       <- paste0(prefix, "_out_value")
   out_var_metric  <- paste0(prefix, "_out_var_metric")
   out_var_value   <- paste0(prefix, "_out_var_value")
   out_sample_size <- paste0(prefix, "_out_sample_size")
   out_mean        <- paste0(prefix, "_out_mean")
   out_sd          <- paste0(prefix, "_out_sd")
+  out_var_value_l <- paste0(prefix, "_out_var_value_l")
+  out_var_value_u <- paste0(prefix, "_out_var_value_u")
   
   
   # --- Convert to numeric before calculations ---
@@ -91,16 +119,25 @@ compute <- function(data, prefix) {
     mutate(
       !!out_value       := as.numeric(.data[[out_value]]),
       !!out_var_value   := as.numeric(.data[[out_var_value]]),
-      !!out_sample_size := as.numeric(.data[[out_sample_size]])
+      !!out_sample_size := as.numeric(.data[[out_sample_size]]),
+      !!out_var_value_l := as.numeric(.data[[out_var_value_l]]),
+      !!out_var_value_u := as.numeric(.data[[out_var_value_u]])
     )
-  
   
   data <- data %>%
     mutate(
       
       # --- Mean ---
       !!out_mean := case_when(
-        .data[[out_metric]] == "Mean" ~ .data[[out_value]]
+        .data[[out_value_metric]] == "Mean" ~ .data[[out_value]],
+        
+        # Median + IQR → Mean
+        # (per your mapping: Q3 = out_var_value_l, Q1 = out_var_value_u)
+        .data[[out_value_metric]] == "Median" &
+          .data[[out_var_metric]] %in% metrics.iqr_mean
+        ~ iqr_mean(q1     = .data[[out_var_value_u]],
+                   median = .data[[out_value]],
+                   q3     = .data[[out_var_value_l]])
       ),
       
       # --- SD ---
@@ -129,6 +166,12 @@ compute <- function(data, prefix) {
         .data[[out_var_metric]] %in% metrics.mse_sd
         ~ mse_sd(var_value = .data[[out_var_value]]),
         
+        # IQR → SD (per your mapping: Q3 = out_var_value_l, Q1 = out_var_value_u)
+        .data[[out_var_metric]] %in% metrics.iqr_sd
+        ~ iqr_sd(q1          = .data[[out_var_value_u]],
+                 q3          = .data[[out_var_value_l]],
+                 sample_size = .data[[out_sample_size]]),
+        
         # Unresolvable — set to NA
         .data[[out_var_metric]] %in% metrics.na
         ~ NA_real_
@@ -145,6 +188,18 @@ compute <- function(data, prefix) {
 
 data <- compute(data, prefix_c)
 data <- compute(data, prefix_t)
+
+# ---------------------------------------------------------------------------
+# --- Replace mean == 0 with 0.0001 for Log Response Ratio ---
+# ---------------------------------------------------------------------------
+# To calculate LOG RESPONSE RATIO effect size -> zero values have to be
+# replaced by 0.0001 (log(0) is undefined)
+data <- data %>%
+  mutate(
+    T_out_mean = if_else(out_effect_size_type == "Log Response Ratio" & T_out_mean == 0, 0.0001, T_out_mean),
+    C_out_mean = if_else(out_effect_size_type == "Log Response Ratio" & C_out_mean == 0, 0.0001, C_out_mean)
+  )
+
 
 return(data)
 

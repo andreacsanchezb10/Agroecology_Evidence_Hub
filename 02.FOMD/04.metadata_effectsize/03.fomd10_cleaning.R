@@ -30,20 +30,20 @@ source(file.path(path.metadata.effectsize, "fomd_fun/fun_lookup_ontologies.R"))
 #metadata<-"MD_Rosen_24_Effec_Sc" #Rosenstock et al. 2024. Effects of changing farming practices in African agriculture. 10.1038/s41597-024-03805-z 
 metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
 
-#---fomd10_formated
-fomd10_formated <- read_csv(
+#---fomd10.formated
+fomd10.formated <- read_csv(
   file.path(path.metadata.effectsize, "02.fomd10_formated", paste0("fomd10_formated_", metadata, ".csv")),
   show_col_types = FALSE)
   #select(study_id,C_exp_plot_size)
 
-skim(fomd10_formated)
+skim(fomd10.formated)
 
 
 #==========================================================
 # Put C_vs_T subpractices in one column for each practice type
 # NOTE: There are rows that has the same subpractice for control and treatment
 #==========================================================
-fomd10.clean <- apply_CT_subpractie(fomd10_formated)
+fomd10.clean <- apply_CT_subpractie(fomd10.formated)
 
 fomd10.clean <- apply_CT_renames_subpractice(fomd10.clean)
 
