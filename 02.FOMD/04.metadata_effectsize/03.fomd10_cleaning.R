@@ -229,11 +229,8 @@ sort(unique(fomd10.clean$C_planting_method))
   #filter(!is.na(diversification_temporal_subpractice))%>%
   #filter(is.na(diversification_temporal_practice))
 
-
-
-  
 #==========================================================
-# Reclassify C and T crops and trees as FAO commodity 
+#---- Match with 01_FOMD_ontologies ----
 #==========================================================
 #--- Reclassifying C_crop_tree_diversity as C_crop_tree_FAO_Food_Group
 fomd10.clean <- apply_lookup_commodity_group(
@@ -299,9 +296,6 @@ fomd10.clean <- apply_CT_commodity_group_intersection(
 
 sort(unique(fomd10.clean$CT_crop_tree_FAO_Food_SubGroup))
 
-#==========================================================
-#---- Match with 01_FOMD_ontologies ----
-#==========================================================
 #--- Reclassifying out_subindicator as effect_size_type
 fomd10.clean <- apply_lookup_ontologies(
   df        = fomd10.clean,
@@ -319,9 +313,42 @@ unmatched_effect_size_type<-fomd10.clean %>%
   arrange(out_effect_size_type)%>%
   filter(is.na(out_effect_size_type))
 
-  
-  
-  
+#--- Reclassifying country as country_ISO
+fomd10.clean <- apply_lookup_ontologies(
+  df        = fomd10.clean,
+  path.metadata.structure = path.metadata.structure,
+  sheet_name= "01_countries",
+  key_col   = "Country",
+  value_col = "ISO_3166_1_Alpha_3",
+  src_col   = "C_country",
+  new_col   = "country_ISO"
+)
+
+# Remove duplicates in country and country_ISO
+fomd10.clean <- fomd10.clean %>%
+  mutate(
+    country = map_chr(str_split(str_squish(C_country), "\\.\\."), \(x) paste(unique(str_squish(x)), collapse = "..")),
+    country_ISO = map_chr(str_split(str_squish(country_ISO), "\\.\\."), \(x) paste(unique(str_squish(x)), collapse = ".."))
+  )
+
+# Quick checks if All the studied countries are in fomd01.countries
+unique_countries <-data.frame(
+  country = fomd10.clean %>%
+    pull(country) %>%
+    str_split("\\.\\.") %>%
+    unlist() %>%
+    str_trim())%>%
+  distinct(country) %>%
+  arrange(country)%>%
+  left_join(
+    read_xlsx(file.path(path.metadata.structure, "01_FOMD_ontologies.xlsx"), sheet = "01_countries")%>%
+              filter(!is.na(Country))%>%
+              distinct(Country,ISO_3166_1_Alpha_3),
+            by=c("country"="Country"))
+
+sort(unique(fomd10.clean$country))
+sort(unique(fomd10.clean$country_ISO))
+
 # ============================================================
 # Get all unique individual crop commodity from both columns
 # ============================================================
@@ -345,8 +372,6 @@ unmatched_crops <- bind_rows(
   filter(is.na(FAO.Food.Group)) %>%
   arrange(crop)
 
-print(unmatched_crops)
-nrow(unmatched_crops) #16 crops missing Commodity reclassification
 
 # ============================================================
 #--------- Remove irrelevant columns ------------
@@ -355,13 +380,28 @@ practices <- c("tillage", "planting", "varietal_crop", "varietal_animal",
                "intercrop", "crop_seq", "agrof", "fert", "chem",
                "residues", "ph", "irrig", "watharv", "postharvest", "harvest")
 
-pattern <- paste0("^CT_(", paste(practices, collapse = "|"), ")_(subpractice|practice|practicetheme)$")
+pattern <- paste0("^CT_(", paste(practices, collapse = "|"), 
+                  ")_(subpractice|practice|practicetheme)$")
 
 
 fomd10.clean<-fomd10.clean%>%
   select(-matches(pattern),
          -"n_focal_groups",-"is_bundled" ,                         
          -"has_variety_bg"  ,-"is_vet_chem" )
+
+#==========================================================
+#--------- Check for missing columns
+#==========================================================
+fomd10.cols<-read_xlsx(
+  file.path(path.metadata.structure,"10_FOMD_metadata_synthesis_short.xlsx"),
+  sheet = "10_FOMD_metadata_synthesis")
+fomd10.cols<-names(fomd10.cols)
+
+list(
+  fomd10_clean = setdiff(names(fomd10.clean), fomd10.cols),   # produced by a branch, but not in the 10_ schema — will get silently dropped by select(any_of(fomd10.cols))
+  only_in_fomd10_schema   = setdiff(fomd10.cols, names(fomd10.clean))    # expected by the schema, but no branch currently produces it — will end up entirely missing/empty in the final output
+)
+
 
 
 readr::write_csv(fomd10.clean, paste0(path.metadata.effectsize, "/fomd10_clean/fomd10_clean_MD_Rosen_24_Effec_Sc.csv"))
