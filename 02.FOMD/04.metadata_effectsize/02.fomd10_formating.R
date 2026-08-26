@@ -13,6 +13,9 @@ list.files(path.metadata.effectsize)
 #==========================================================
 # Read datasets
 #==========================================================
+metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
+
+
 #---01_FOMD_ontologies
 fomd01.outcomes<- read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies.xlsx"), sheet = "01_outcomes")
 

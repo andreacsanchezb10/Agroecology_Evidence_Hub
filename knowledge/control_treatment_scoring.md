@@ -130,9 +130,14 @@ which is why a principle count is richer than a family count:
 | P6 Synergy | intercropping; agroforestry/alley cropping; legume in rotation or green manure; crop-livestock integration; push-pull |
 | P7 Economic diversification | agroforestry products; integrated/multi-product systems (partly on-farm, seldom recorded at plot level) |
 
-**Neutral (off-transition) factors** correspond to no field-scale principle and do not themselves
-move an arm along the transition (irrigation, liming/pH, planting date, harvest and post-harvest
-timing). They never set depth or breadth but are kept as covariates and confounder flags. **Livestock**
+**Off-transition factors** are scored where the recorded method is itself agroecological, else kept
+neutral. **Water and soil conservation** (bunds, terraces, contour/tied ridges, zai pits, planting
+basins, microcatchments, grass strips, stone rows) scores L2 (soil health P3); **water-efficient
+irrigation** (drip, deficit, AWD, reduced water use, SRI) scores L1 (SRI L2; input reduction P2), and
+every irrigation contrast carries an `irrigation_confound` flag because water supply can drive the
+outcome for non-agroecological reasons. The rest stay **neutral** and never set depth or breadth:
+liming/pH, plain full/sprinkler/supplemental irrigation, planting date, harvest and post-harvest
+timing (kept as covariates and confounder flags). **Livestock**
 breed/diet are scored by the same logic (on-farm/local feed and reduced purchased concentrate reach
 levels 1 and 2; local breeds and crop-livestock integration reach level 3); a livestock annex is
 still to be written, since the source datasets carry no livestock practice taxonomy beyond breed and

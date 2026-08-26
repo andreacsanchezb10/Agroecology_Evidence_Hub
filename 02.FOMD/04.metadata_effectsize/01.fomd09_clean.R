@@ -20,22 +20,19 @@ source(file.path(path.metadata.effectsize,"/fomd_fun/fun_lookup_ontologies.R"))
 #==========================================================
 # Read datasets
 #==========================================================
-#metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
-metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
+metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
+#metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
 
 #--- Check that every verified-paper .xlsm in a subfolder shares the same columns
 check_09FOMD_column_consistency(subfolder = metadata)
 
 
-#---Combined verfified studies from metadata subfolder
+#---Combined verified studies from metadata sub folder
 fomd09 <- combine_09FOMD_verified(subfolder = metadata)
 
 #==============================================
 #---- Cleaning the dataset ----
 #==============================================
-### things to do:
-#- ler_var_value_product_component02 OLD NAME NEED TO BE FIX
-
 #---- Convert to specify class ----
 fomd09.clean <- clean_fomd09_classes(fomd09)
 
@@ -133,18 +130,19 @@ fomd09.clean <- add_fomd09_mean_min_max(fomd09.clean, prefix = "agrof_dhb")
 #--- Add nutrient management practice (inorganic) information ----
 fomd09.clean <- add_fomd09_fert_inorganic(fomd09.clean)
 
-#sort(unique(fomd09.clean$study_id[fomd09.clean$fert_inorganicP_amount_unit     =="Unspecified(Unspecified)"]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$fert_inorganic_type_amount_unit     =="Urea[20(kg/ha)]..Super phosphate[40(kg/ha)]..muriate of potash[40(kg/ha)]"]))
 
 #--- Add nutrient management practice (organic) information ----
 fomd09.clean <- add_fomd09_fert_organic(fomd09.clean)
 
-#sort(unique(fomd09.clean1$study_id[fomd09.clean1$fert_organic_type  =="Cow Manure..Grow More..MO STD" ]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$fert_organic_type_amount_unit  =="Unspecified Manure[0(t/ha)]" ]))
 
 #---Add weeding management moderator information----
 fomd09.clean <- add_fomd09_weed(fomd09.clean)
 
 #---Add chemical management practice information ----
 fomd09.clean <- add_fomd09_chem(fomd09.clean)
+#sort(unique(fomd09.clean$study_id[fomd09.clean$chem_name_amount_unit   =="NA[0(NA)]" ]))
 
 #---Add residues management practice information ----
 sort(unique(fomd09.clean$residues_subpractice_raw))
@@ -284,7 +282,6 @@ for (col in c("data_location", "out_agg_stat",
   cat("---", col, "---\n")
   print(sort(unique(fomd09.clean[[col]])))
 }
-
 
 readr::write_csv(fomd09.clean, paste0(path.metadata.effectsize, "fomd09_clean/",metadata,".csv"))
 
