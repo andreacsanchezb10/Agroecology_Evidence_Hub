@@ -54,19 +54,17 @@ for (col in c("C_out_value_metric", "T_out_value_metric",
 #---- Apply equation to calculate Mean AND SD ----
 fomd10.mean.sd<-calculate_mean_sd(fomd10.clean)
 
-skim(fomd10.mean.sd)
-
-## TO CHECK: there are 9 rows with C_out_mean ==NA WHY?
-
 #==========================================================
 # Calculate CV and number of samples
 # From observations that don't provide variance values or number of samples
 #==========================================================
-nrow(fomd10.mean.sd[fomd10.mean.sd$C_out_sd == "", ]) #183744
-nrow(fomd10.mean.sd[fomd10.mean.sd$T_out_sd == "", ]) #183434
+## TO CHECK: there are 9 rows with C_out_mean ==NA WHY?
+# --- quick check ---
+skim(fomd10.mean.sd$C_out_mean)
+skim(fomd10.mean.sd$T_out_mean)
 
-nrow(fomd10.mean.sd[which(is.na(fomd10.mean.sd$C_out_sd)), ]) #183744
-nrow(fomd10.mean.sd[which(is.na(fomd10.mean.sd$T_out_sd)), ]) #183434
+skim(fomd10.mean.sd$C_out_sd)
+skim(fomd10.mean.sd$T_out_sd)
 
 sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_indicator == "Product Yield" ])) #9
 
