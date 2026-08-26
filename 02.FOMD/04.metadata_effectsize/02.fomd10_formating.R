@@ -315,75 +315,7 @@ fomd10_formated <- dplyr::bind_rows(
 
 skim(fomd10_formated)
 
-readr::write_csv(fomd10_formated, 
-                 paste0(path.metadata.effectsize, "02.fomd10_formated/fomd10_formated_",metadata,".csv"))
-
-
-
-
-
-#-----------------------------------------------
-#---- Match with 01_FOMD_ontologies ----
-#-----------------------------------------------
-library(tibble)
-library(purrr)
-
-#--- Location: Reclassifying country as ISO_3166_1_Alpha_3----
-fomd09.clean <- apply_lookup_ontologies(
-  fomd09.clean, 
-  path.metadata.structure,
-  sheet_name = "01_countries",
-  key_col = "Country",
-  value_col = "ISO_3166_1_Alpha_3",
-  src_col = "country",
-  new_col = "country_ISO",
-  sep = ".."
-)
-
-#-----------------------------------------------
-#---- Match with 01_FOMD_ontologies ----
-#-----------------------------------------------
-library(tibble)
-library(purrr)
-
-#--- Location: Reclassifying country as ISO_3166_1_Alpha_3----
-fomd09.clean <- apply_lookup_ontologies(
-  fomd09.clean, 
-  path.metadata.structure,
-  sheet_name = "01_countries",
-  key_col = "Country",
-  value_col = "ISO_3166_1_Alpha_3",
-  src_col = "country",
-  new_col = "country_ISO",
-  sep = ".."
-)
-
-#Remove duplicate country and country_ISO
-md.era.short.clean <- md.era.short.clean %>%
-  mutate(
-    country = map_chr(str_split(str_squish(country), "\\.\\."), \(x) paste(unique(str_squish(x)), collapse = "..")),
-    country_ISO1 = map_chr(str_split(str_squish(country_ISO1), "\\.\\."), \(x) paste(unique(str_squish(x)), collapse = ".."))
-  )
-
-
-# Quick checks
-# All the studied countries are in fomd01.countries
-unique_countries <-data.frame(
-  country = md.era.short.clean %>%
-    pull(country) %>%
-    str_split("\\.\\.") %>%
-    unlist() %>%
-    str_trim())%>%
-  distinct(country) %>%
-  arrange(country)%>%
-  left_join(fomd01.countries%>%
-              filter(!is.na(Country))%>%
-              distinct(Country,ISO_3166_1_Alpha_3),
-            by=c("country"="Country"))
-#filter(is.na(Product.Type))
-
-sort(unique(md.era.short.clean$country))
-sort(unique(md.era.short.clean$country_ISO))
-
-
+readr::write_csv(
+  fomd10_formated, 
+  paste0(path.metadata.effectsize, "02.fomd10_formated/fomd10_formated_",metadata,".csv"))
 

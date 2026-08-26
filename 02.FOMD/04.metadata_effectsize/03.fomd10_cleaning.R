@@ -402,12 +402,4 @@ list(
   only_in_fomd10_schema   = setdiff(fomd10.cols, names(fomd10.clean))    # expected by the schema, but no branch currently produces it — will end up entirely missing/empty in the final output
 )
 
-
-
 readr::write_csv(fomd10.clean, paste0(path.metadata.effectsize, "/fomd10_clean/fomd10_clean_MD_Rosen_24_Effec_Sc.csv"))
-
-
-
-
-
-
