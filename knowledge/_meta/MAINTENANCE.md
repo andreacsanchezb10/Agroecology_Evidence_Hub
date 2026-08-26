@@ -131,8 +131,8 @@ a new file in `log/`. If you're not sure which doc, put it in the log and let th
   machine only. `git log --oneline -1 -- knowledge/` should return a commit. → `../09_conventions.md` §13
 - **Do the three `.claude/settings.json` files still exist** (Hub root, `Agroecology_Evidence_Hub/`,
   `ERA/Script/`), still list the protected paths, and still carry both hooks — the `SessionStart` identity
-  banner and the `PreToolUse` git guard? They are what makes rules 2 and 5 enforced rather than merely
-  written. Each must still name the designated git machine (`$owner='mlolita'`).
+  banner and the `PreToolUse` git reminder? They are what makes rule 2 enforced and rule 5 remembered.
+  (Since 2026-08-26 the git hook reminds instead of refusing — any team member may run git, one at a time.)
   → `../09_conventions.md` §13
 - **Is the log still one-file-per-entry?** A reappeared single appended list in `UPDATE_LOG.md` means the
   collision is back.

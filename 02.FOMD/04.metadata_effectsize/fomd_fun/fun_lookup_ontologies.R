@@ -15,7 +15,7 @@
 #' @param sep         Separator used to split compound tokens (default: "..")
 #'
 #' @return The mutated data frame with `new_col` added/updated.
-apply_lookup_ontologies <- function(fomd09.clean, path.metadata.structure,
+apply_lookup_ontologies <- function(df, path.metadata.structure,
                                     sheet_name, key_col, value_col,
                                     src_col, new_col, sep = "-") {
   
@@ -29,7 +29,7 @@ apply_lookup_ontologies <- function(fomd09.clean, path.metadata.structure,
     distinct() %>%
     deframe()
   
-  fomd09.clean <- fomd09.clean %>%
+  df <- df %>%
     mutate("{new_col}" := map_chr(str_split(str_squish(.data[[src_col]]), fixed(sep)), \(x) {
       out <- unname(lookup[str_squish(x)])
       out[is.na(out)] <- str_squish(x)[is.na(out)]
@@ -37,12 +37,12 @@ apply_lookup_ontologies <- function(fomd09.clean, path.metadata.structure,
     }))
   
   #--- Quick checks
-  cat("---", src_col, "(n distinct) ---\n"); print(length(unique(fomd09.clean[[src_col]])))
-  cat("---", src_col, "---\n");              print(sort(unique(fomd09.clean[[src_col]])))
-  cat("---", new_col, "(n distinct) ---\n"); print(length(unique(fomd09.clean[[new_col]])))
-  cat("---", new_col, "---\n");              print(sort(unique(fomd09.clean[[new_col]])))
+  cat("---", src_col, "(n distinct) ---\n"); print(length(unique(df[[src_col]])))
+  cat("---", src_col, "---\n");              print(sort(unique(df[[src_col]])))
+  cat("---", new_col, "(n distinct) ---\n"); print(length(unique(df[[new_col]])))
+  cat("---", new_col, "---\n");              print(sort(unique(df[[new_col]])))
   
-  fomd09.clean
+  df
 }
 
 

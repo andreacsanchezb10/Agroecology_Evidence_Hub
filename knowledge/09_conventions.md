@@ -132,13 +132,15 @@ folder is **history and recovery**, never coordination. Coordinate by owning dif
 3. **Never run two Claude sessions against `knowledge/` at once.**
 4. **Check OneDrive shows synced** before editing a shared doc, and let it settle afterwards. If a count
    looks wrong, confirm you're synced *before* investigating.
-5. **Only ONE machine runs git commands in this folder — Lolita's (`mlolita`).** `.git/` sits *inside* the
-   synced tree, so OneDrive replicates `index`, `refs/` and `objects/`. Two people running git around the
-   same time means OneDrive copying git internals mid-write, which corrupts the repo — phantom uncommitted
-   changes, "index file corrupt", detached HEAD. Symptoms look like data loss and are hard to unwind.
-   **This is now enforced, not just agreed** (below), so nobody has to remember it. If you need something
-   committed, ask Lolita. (The structurally clean fix is a working copy outside OneDrive, but that collides
-   with the hardcoded absolute paths above — so the designation is the practical rule.)
+5. **Any team member may run git here — but only ONE person at a time** (policy changed 2026-08-26; before
+   that it was Lolita's machine only, hook-enforced). `.git/` sits *inside* the synced tree, so OneDrive
+   replicates `index`, `refs/` and `objects/`. Two people running git around the same time means OneDrive
+   copying git internals mid-write, which corrupts the repo — phantom uncommitted changes, "index file
+   corrupt", detached HEAD. Symptoms look like data loss and are hard to unwind. So: say in the team chat
+   that you're using git, and check OneDrive shows synced before you start and after you finish. A
+   `PreToolUse` hook now prints this reminder on every git command instead of refusing (below). (The
+   structurally clean fix is a working copy outside OneDrive, but that collides with the hardcoded absolute
+   paths above — so take-turns discipline is the practical rule.)
 
 ### What was changed on 2026-07-30 to make collisions structurally rare
 
@@ -156,18 +158,16 @@ folder is **history and recovery**, never coordination. Coordinate by owning dif
 - **`knowledge/` is now committed to git**, so a clobbered doc is recoverable.
 - **Each session identifies who you are, and the git rule enforces itself.** Two hooks in the same three
   settings files:
-  - a **`SessionStart`** hook reads `%USERNAME%` and states, at the top of every session, who you are, whether
-    you are the git machine, and the shared-folder rules — and passes the same text to Claude as context, so
+  - a **`SessionStart`** hook reads `%USERNAME%` and states, at the top of every session, who you are and the
+    shared-folder rules (including the git one-person-at-a-time rule) — and passes the same text to Claude as context, so
     the assistant knows the constraints before it does anything. **Detected, not asked:** a question can be
     answered wrongly, skipped, or simply not asked, whereas the username is unambiguous
     (`mlolita` vs `andreasanchez`).
-  - a **`PreToolUse`** hook on `Bash|PowerShell` **refuses any git command when `%USERNAME%` is not
-    `mlolita`**, with an explanation pointing here. So a teammate's Claude cannot corrupt the repo even if it
-    never read this file. **Verified 2026-07-30:** the guard denies `git status`, `git -C x log`, chained
-    `… && git push` and bare `git` for a non-owner, allows them for `mlolita`, and does not false-positive on
-    `digital`, `legit`, `cat repo/.git/config` or `Rscript`; a sentinel confirmed the hook actually fires.
-  - **To change the designated machine**, edit `$owner='mlolita'` in the `hooks` block of all three
-    `.claude/settings.json` files. It is deliberately one literal, not a lookup, so it is greppable.
+  - a **`PreToolUse`** hook on `Bash|PowerShell` **prints the one-person-at-a-time reminder on every git
+    command** — since 2026-08-26 it no longer blocks anyone. (Before that it refused git for anyone but
+    `mlolita`; that guard and its `$owner='mlolita'` literal were removed when the team moved to taking
+    turns.) **Verified 2026-08-26:** the reminder fires on git commands and is injected into Claude's
+    context, and stays silent on non-git commands (`ls`, `legit`).
 
 **What this does NOT cover.** The deny rules stop *Claude's own* edits, not an R script's `saveWorkbook()` —
 the incident behind rule 2 was a script, so rule 2 still binds every script you write. And nothing above

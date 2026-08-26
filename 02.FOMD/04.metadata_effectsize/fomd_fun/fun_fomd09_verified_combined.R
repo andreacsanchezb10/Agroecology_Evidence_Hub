@@ -69,7 +69,18 @@ combine_09FOMD_verified <- function(subfolder,
     # Harmonize column names from older versions of the extraction sheet
     # (names = old/legacy name, values = current/canonical name)
     legacy_renames <- c(residues_unit_K = "residues_K_unit",
-                        ler_var_value_product_component02="ler_var_value_product02" )
+                        ler_var_value_product_component02="ler_var_value_product02" ,
+                        outc_var_value_l= "out_var_value_l",
+                        outc_var_value_u= "out_var_value_u",
+                        ler_value_product01="pler_value_product01",
+                        ler_var_value_product01="pler_var_value_product01",
+                        ler_value_product02="pler_value_product02",
+                        ler_var_value_product02="pler_var_value_product02",
+                        ler_value_product03="pler_value_product03",
+                        ler_var_value_product03="pler_var_value_product03",
+                        ler_var_total="ler_var_value_total"
+                        
+                        )
     for (old_name in names(legacy_renames)) {
       if (old_name %in% names(df)) {
         names(df)[names(df) == old_name] <- legacy_renames[[old_name]]

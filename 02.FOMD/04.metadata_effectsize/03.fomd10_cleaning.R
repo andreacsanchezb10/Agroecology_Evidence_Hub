@@ -7,6 +7,8 @@ library(metafor)
 library(readr)
 library(purrr)
 
+# NOTE: There are rows that has the same practice for control and treatment
+
 path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure"
 path.metadata.effectsize<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/04.metadata_effectsize"
 
@@ -21,21 +23,32 @@ source(file.path(path.metadata.effectsize,"/fomd_fun/fun_lookup_commodities.R"))
 source(file.path(path.metadata.effectsize, "/fomd_fun/fun_analysis_practice.R"))
 source(file.path(path.metadata.effectsize, "/fomd_fun/fun_lookup_ontologies.R"))
 
-#---fomd10
-fomd10<-read_csv(file.path(path.metadata.effectsize,"/fomd10/fomd10_MD_Rosen_24_Effec_Sc.csv"), show_col_types = FALSE)
+#==========================================================
+# Read datasets
+#==========================================================
+#metadata<-"MD_Rosen_24_Effec_Sc" #Rosenstock et al. 2024. Effects of changing farming practices in African agriculture. 10.1038/s41597-024-03805-z 
+metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
+
+#---fomd10_formated
+fomd10_formated <- read_csv(
+  file.path(path.metadata.effectsize, "02.fomd10_formated", paste0("fomd10_formated_", metadata, ".csv")),
+  show_col_types = FALSE)
+  #select(study_id,C_exp_plot_size)
+
+skim(fomd10_formated)
+
 
 #==========================================================
 # Put C_vs_T subpractices in one column for each practice type
 # NOTE: There are rows that has the same subpractice for control and treatment
 #==========================================================
-fomd10.clean <- apply_CT_subpractie(fomd10)
+fomd10.clean <- apply_CT_subpractie(fomd10_formated)
 
 fomd10.clean <- apply_CT_renames_subpractice(fomd10.clean)
 
-
 summarise_CT_subpractice(fomd10.clean)
 
-# Quick checks
+#--- Quick checks ----
 ct_subpractice_cols <- grep("^CT_.*_subpractice$", names(fomd10.clean), value = TRUE)
 
 comparison_subpractice_list<-purrr::map(ct_subpractice_cols, \(col) {
@@ -44,20 +57,6 @@ comparison_subpractice_list<-purrr::map(ct_subpractice_cols, \(col) {
     dplyr::count(column = col, value = .data[[col]], name = "n")
 }) %>%
   dplyr::bind_rows()
-
-
-# Diversitication (spatial and temporal)
-sort(unique(fomd10.clean$CT_intercrop_subpractice))
-sort(unique(fomd10.clean$CT_intercrop_subpractice))
-
-sort(unique(fomd10.clean$CT_agrof_subpractice))
-sort(unique(fomd10.clean$CT_crop_seq_subpractice))
-
-sort(unique(fomd10.clean$CT_fert_subpractice))
-sort(unique(fomd10.clean$CT_chem_subpractice))
-sort(unique(fomd10.clean$CT_residues_subpractice))
-sort(unique(fomd10.clean$CT_ph_subpractice))
-sort(unique(fomd10.clean$CT_irrig_subpractice))
 
 #==========================================================
 # Reclassify C_vs_T subpractices as C_vs_T practice 
@@ -74,24 +73,15 @@ comparison_practice_list<-purrr::map(ct_practice_cols, \(col) {
 }) %>%
   dplyr::bind_rows()
 
-#nrow(comparison_practice_list) #199
-
 #readr::write_csv(comparison_practice_list, paste0(path.metadata.effectsize, "/era_comparison_practice_list.csv"))
 
 fomd10.clean <- apply_CT_renames_practice(fomd10.clean)
-
-#nrow(comparison_practice_list) #15-
 
 #==========================================================
 # Reclassify C_vs_T subpractices as C_vs_T practice theme 
 # NOTE: There are rows that has the same practice for control and treatment
 #==========================================================
 fomd10.clean <- apply_CT_practice_theme(fomd10.clean)
-
-sort(unique(fomd10.clean$CT_intercrop_practicetheme)) #17 with the new code
-
-sort(unique(fomd10.clean$CT_agrof_practicetheme))
-sort(unique(fomd10.clean$CT_intercrop_practicetheme))
 
 ct_theme_cols <- grep("_practicetheme$", names(fomd10.clean), value = TRUE)
 
@@ -106,69 +96,42 @@ comparison_practicetheme_list<-purrr::map(ct_theme_cols, \(col) {
 # Reclassify C_vs_T subpractices as C_vs_T practice domain 
 #==========================================================
 fomd10.clean <- build_analytical_columns(fomd10.clean)
- names(fomd10.clean)
-### REPORT
-#Building analytical columns ...
-#variety_management_subpractice            136,699 non-NA rows
-#variety_management_practice               136,699 non-NA rows ##READY
-#variety_management_theme                  136,699 non-NA rows ##READY
 
-#breed_animal_subpractice                  22,827 non-NA rows ## READY
-#breed_animal_practice                     22,827 non-NA rows ## READY
-#breed_animal_theme                        0 non-NA rows
- 
-#planting_management_subpractice           5,578 non-NA rows
-#planting_management_practice              5,578 non-NA rows ## READY
-#planting_management_theme                 0 non-NA rows
- 
-#diversification_spatial_subpractice       11,060 non-NA rows
-#diversification_spatial_practice          11,055 non-NA rows  ## TO CHECK: NEED TO FIX C_agrof_subpractice=="Open Communal Grazing Land
-#diversification_spatial_theme             11,055 non-NA rows ## TO CHECK: NEED TO FIX C_agrof_subpractice=="Open Communal Grazing Land
-
-#diversification_temporal_subpractice      24,576 non-NA rows
-#diversification_temporal_practice         24,576 non-NA rows ## READY
-#diversification_temporal_theme            24,576 non-NA rows ## READY
-
-#soil_management_subpractice               33,997 non-NA rows 
-#soil_management_practice                  33,997 non-NA rows # READY
-#soil_management_theme                     33,997 non-NA rows # READY
-
-#nutrient_management_subpractice           80,038 non-NA rows 
-#nutrient_management_practice              80,038 non-NA rows # READY
-#nutrient_management_theme                 80,038 non-NA rows # READY
-
-#pest_management_subpractice               32,113 non-NA rows
-#pest_management_practice                  30,374 non-NA rows ## TO CHECK: NEED TO FIX "Other"
-#pest_management_theme                     16,887 non-NA rows
-
-#water_management_subpractice              47,291 non-NA rows 
-#water_management_practice                 47,291 non-NA rows # READY
-#water_management_theme                    47,291 non-NA rows # READY
-
-#biomass_management_subpractice            44,163 non-NA rows
-#biomass_management_practice               44,163 non-NA rows # READY
-#biomass_management_theme                  5,662 non-NA rows
- 
-#postharvest_subpractice                   16,300 non-NA rows
-#postharvest_practice                      16,300 non-NA rows # READY
-#postharvest_theme                         16,300 non-NA rows # READY
- 
-#harvest_subpractice                       297 non-NA rows
-#harvest_practice                          297 non-NA rows  # READY
-#harvest_theme                             0 non-NA rows
-
-sort(unique(fomd10.clean$diversification_spatial_theme))
-sort(unique(fomd10.clean$diversification_temporal_theme))
+#--- Check outcome value information ----
+for (col in c("variety_management_subpractice","variety_management_practice","variety_management_theme",                 
+              "breed_animal_subpractice","breed_animal_practice","breed_animal_theme" ,                       
+              "planting_management_subpractice","planting_management_practice" ,"planting_management_theme",                 
+              "diversification_spatial_subpractice", "diversification_spatial_practice","diversification_spatial_theme",             
+              "diversification_temporal_subpractice","diversification_temporal_practice","diversification_temporal_theme",            
+              "soil_management_subpractice","soil_management_practice","soil_management_theme" ,                    
+              "nutrient_management_subpractice" ,"nutrient_management_practice","nutrient_management_theme" ,               
+              "pest_management_subpractice","pest_management_practice","pest_management_theme",                     
+              "water_management_subpractice","water_management_practice","water_management_theme",
+              "biomass_management_subpractice","biomass_management_practice","biomass_management_theme",                  
+              "postharvest_subpractice","postharvest_practice" ,"postharvest_theme",                         
+              "harvest_subpractice", "harvest_practice","harvest_theme"
+              )) {
+  cat("---", col, "---\n")
+  print(sort(unique(fomd10.clean[[col]])))
+}
 
 prueba<-fomd10.clean%>%
   #Pest management-----
-select(doi, C_chem_subpractice,T_chem_subpractice,
+select(doi,study_id, C_chem_subpractice,T_chem_subpractice,
        CT_chem_subpractice,
        pest_management_subpractice,pest_management_practice ,pest_management_theme,
-       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
+      # "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n"
+      )%>%
   filter(!is.na(pest_management_subpractice))%>%
   filter(is.na(pest_management_practice))
 sort(unique(prueba$CT_chem_subpractice))
+
+  #Soil management-----
+select(doi, soil_management_subpractice,soil_management_practice ,soil_management_theme)%>%
+      # "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
+  filter(!is.na(soil_management_subpractice))%>%
+  filter(is.na(soil_management_practice))
+
 
   # variety crop ----
   select(doi, C_varietal_crop_subpractice,T_varietal_crop_subpractice,
@@ -235,11 +198,7 @@ sort(unique(fomd10.clean$C_planting_method))
 
 
 
-#Soil management-----
-select(doi, soil_management_subpractice,soil_management_practice ,soil_management_theme,
-       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
-  filter(!is.na(soil_management_subpractice))%>%
-  filter(is.na(soil_management_practice))
+
 #diversification spatial-----
   select(doi,study_id,country,
          C_crop_tree_diversity,T_crop_tree_diversity,
@@ -274,9 +233,8 @@ select(doi, soil_management_subpractice,soil_management_practice ,soil_managemen
   
 #==========================================================
 # Reclassify C and T crops and trees as FAO commodity 
-# NOTE: There are rows that has the same practice for control and treatment
 #==========================================================
-#--- Reclassifying C_crop_diversity as C_crop_FAO_Food_Group
+#--- Reclassifying C_crop_tree_diversity as C_crop_tree_FAO_Food_Group
 fomd10.clean <- apply_lookup_commodity_group(
   df        = fomd10.clean,
   ref       = fomd01.crops.trees,
@@ -296,7 +254,7 @@ fomd10.clean <- apply_lookup_commodity_group(
   src_col   = "T_crop_tree_diversity",
   new_col   = "T_crop_tree_FAO_Food_Group"
 )
-sort(unique(fomd10.clean$T_crop_FAO_Food_Group))
+sort(unique(fomd10.clean$T_crop_tree_FAO_Food_Group))
 
 #--- Get the FAO_Food_Groups that are common in the C and T practices
 fomd10.clean <- apply_CT_commodity_group_intersection(
@@ -317,7 +275,7 @@ fomd10.clean <- apply_lookup_commodity_group(
   src_col   = "C_crop_tree_diversity",
   new_col   = "C_crop_tree_FAO_Food_SubGroup"
 )
-sort(unique(fomd10.clean$C_crop_FAO_Food_SubGroup))
+sort(unique(fomd10.clean$C_crop_tree_FAO_Food_SubGroup))
 
 #--- Reclassifying T_crop_diversity as T_crop_FAO_Food_SubGroup
 fomd10.clean <- apply_lookup_commodity_group(
@@ -328,7 +286,7 @@ fomd10.clean <- apply_lookup_commodity_group(
   src_col   = "T_crop_tree_diversity",
   new_col   = "T_crop_tree_FAO_Food_SubGroup"
 )
-sort(unique(fomd10.clean$T_crop_FAO_Food_SubGroup))
+sort(unique(fomd10.clean$T_crop_tree_FAO_Food_SubGroup))
 
 #--- Get the CT_crop_FAO_Food_SubGroup that are common in the C and T practices
 fomd10.clean <- apply_CT_commodity_group_intersection(
@@ -338,30 +296,31 @@ fomd10.clean <- apply_CT_commodity_group_intersection(
   new_col = "CT_crop_tree_FAO_Food_SubGroup"
 )
 
-sort(unique(fomd10.clean$CT_crop_FAO_Food_SubGroup))
+sort(unique(fomd10.clean$CT_crop_tree_FAO_Food_SubGroup))
 
 #==========================================================
-# Reclassifying out_subindicator as effect_size_type
+#---- Match with 01_FOMD_ontologies ----
 #==========================================================
-sort(unique(fomd10.clean$out_subindicator))
-source(file.path(path.metadata.effectsize, "/fomd_fun/fun_load_data_ontologies.R"))
-
-
+#--- Reclassifying out_subindicator as effect_size_type
 fomd10.clean <- apply_lookup_ontologies(
   df        = fomd10.clean,
-  ref       = fomd01.outcomes,
+  path.metadata.structure = path.metadata.structure,
+  sheet_name       = "01_outcomes",
   key_col   = "subindicator",
   value_col = "effect_size_type",
   src_col   = "out_subindicator",
-  new_col   = "effect_size_type"
+  new_col   = "out_effect_size_type"
 )
 
 x<-fomd10.clean %>%
   #select(doi,out_subindicator, out_effect_size) 
-  distinct(out_subindicator, effect_size_type)%>%
-  arrange(effect_size_type)%>%
-  filter(is.na(effect_size_type)) #93-73 out_subindicator with effect_size_type==NA
+  distinct(out_subindicator, out_effect_size_type)%>%
+  arrange(out_effect_size_type)
+  filter(is.na(out_effect_size_type)) #93-73 out_subindicator with effect_size_type==NA
 
+  
+  
+  
 # ============================================================
 # Get all unique individual crop commodity from both columns
 # ============================================================
@@ -388,8 +347,9 @@ unmatched_crops <- bind_rows(
 print(unmatched_crops)
 nrow(unmatched_crops) #16 crops missing Commodity reclassification
 
-
+# ============================================================
 #--------- Remove irrelevant columns ------------
+# ============================================================
 practices <- c("tillage", "planting", "varietal_crop", "varietal_animal",
                "intercrop", "crop_seq", "agrof", "fert", "chem",
                "residues", "ph", "irrig", "watharv", "postharvest", "harvest")
@@ -405,25 +365,6 @@ fomd10.clean<-fomd10.clean%>%
 
 readr::write_csv(fomd10.clean, paste0(path.metadata.effectsize, "/fomd10_clean/fomd10_clean_MD_Rosen_24_Effec_Sc.csv"))
 
-
-subpractice.list<-c(
-  "tillage_subpractice", #soil_management_practice READY
-  "planting_subpractice", #planting_practice
-  "varietal_crop_subpractice", #improved crop varieties: practice
-  "varietal_animal_subpractice", #improved breeds: practice
-  "intercrop_subpractice", #intercropping: practice
-  "crop_seq_subpractice", #crop_sequence_practice
-  "agrof_subpractice", #agroforestry_practice
-  "fert_subpractice", #nutrient management: practice
-  "chem_subpractice", #chemical_management_practice
-  "residues_subpractice", #residues_practice
-  "ph_subpractice", #pH_amendment_practice
-  "irrig_subpractice", #irrigation_practice
-  "watharv_subpractice", #water_harvesting_practice
-  "harvest_subpractice", #harvest_practice
-  "postharvest_subpractice" #postharvesting_practice
-  
-)
 
 
 

@@ -43,7 +43,7 @@
             "type": "command",
             "shell": "powershell",
             "statusMessage": "Identifying you for the shared Hub folder...",
-            "command": "$owner='mlolita'; $me=$env:USERNAME; if($me -eq $owner){$role='the DESIGNATED GIT MACHINE - git commands are allowed here.'}else{$role='NOT the git machine - do not run git in this folder, ask Lolita.'}; $m='Shared Hub folder (one OneDrive folder, several machines). You are ' + $me + ' - ' + $role + '  Rules: surgical edits only in knowledge/ (never whole-file rewrites); write only what you own; one Claude session on knowledge/ at a time; one NEW file per log entry in knowledge/_meta/log/; numbers live in knowledge/_status/ read via 01_status.md. Writes to the ontology, master workbooks, 03.extraction/, 01.SOMD/, ERA/data/, protocol/ and partners/ are denied by design - do not route around a refusal. Detail: knowledge/09_conventions.md section 13.'; Write-Output (@{systemMessage=$m;hookSpecificOutput=@{hookEventName='SessionStart';additionalContext=$m}}|ConvertTo-Json -Depth 5 -Compress)"
+            "command": "$me=$env:USERNAME; $m='Shared Hub folder (one OneDrive folder, several machines). You are ' + $me + '. Git is allowed for ALL team members, but only ONE person at a time - coordinate in the team chat and check OneDrive shows synced before and after (.git/ is inside the synced tree). Rules: surgical edits only in knowledge/ (never whole-file rewrites); write only what you own; one Claude session on knowledge/ at a time; one NEW file per log entry in knowledge/_meta/log/; numbers live in knowledge/_status/ read via 01_status.md. Writes to the ontology, master workbooks, 03.extraction/, 01.SOMD/, ERA/data/, protocol/ and partners/ are denied by design - do not route around a refusal. Detail: knowledge/09_conventions.md section 13.'; Write-Output (@{systemMessage=$m;hookSpecificOutput=@{hookEventName='SessionStart';additionalContext=$m}}|ConvertTo-Json -Depth 5 -Compress)"
           }
         ]
       }
@@ -55,7 +55,7 @@
           {
             "type": "command",
             "shell": "powershell",
-            "command": "$in=[Console]::In.ReadToEnd(); $owner='mlolita'; if($in -match '(?i)\"command\"\\s*:\\s*\"(?:[^\"]*[^a-zA-Z0-9_])?git(\\.exe)?[\\s\\\\\"]'){ if($env:USERNAME -ne $owner){ $r='This folder has ONE designated git machine: ' + $owner + ' (Lolita). .git/ sits inside the synced OneDrive tree, so git run from a second machine replicates git internals mid-write and corrupts the repo - phantom changes, index corruption, detached HEAD. Ask Lolita to run git here. See knowledge/09_conventions.md section 13.'; Write-Output (@{hookSpecificOutput=@{hookEventName='PreToolUse';permissionDecision='deny';permissionDecisionReason=$r}}|ConvertTo-Json -Depth 5 -Compress) } }"
+            "command": "$in=[Console]::In.ReadToEnd(); if($in -match '(?i)\"command\"\\s*:\\s*\"(?:[^\"]*[^a-zA-Z0-9_])?git(\\.exe)?[\\s\\\\\"]'){ $r='Git reminder: all team members may run git here, but only ONE person at a time - .git/ is inside the synced OneDrive tree, so confirm nobody else is running git right now and OneDrive shows synced before and after. See knowledge/09_conventions.md section 13.'; Write-Output (@{hookSpecificOutput=@{hookEventName='PreToolUse';additionalContext=$r}}|ConvertTo-Json -Depth 5 -Compress) }"
           }
         ]
       }

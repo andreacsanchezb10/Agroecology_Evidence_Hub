@@ -10,6 +10,9 @@ path.metadata.effectsize<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agr
 list.files(path.metadata.structure)
 list.files(path.metadata.effectsize)
 
+
+## TO DO: quitar de environment las funciones irrelevantes para este codigo
+
 #==========================================================
 # Read functions
 #==========================================================
@@ -29,7 +32,7 @@ check_09FOMD_column_consistency(subfolder = metadata)
 
 #---Combined verified studies from metadata sub folder
 fomd09 <- combine_09FOMD_verified(subfolder = metadata)
-
+names(fomd09)
 #==============================================
 #---- Cleaning the dataset ----
 #==============================================
@@ -76,6 +79,8 @@ for (col in c("tillage_subpractice_raw", "tillage_subpractice","tillage_method",
   print(sort(unique(fomd09.clean[[col]])))
 }
 
+sort(unique(fomd09.clean$study_id[fomd09.clean$tillage_subpractice  =="Reduced or Minimum Tillage..Conventional tillage"]))
+
 #--- Check planting practice----
 for (col in c("planting_subpractice_raw", "planting_subpractice","planting_method",
               "planting_date_start","planting_date_end"
@@ -102,9 +107,13 @@ for (col in c("intercrop_subpractice_raw", "intercrop_subpractice","intercrop_de
 #sort(unique(fomd09.clean$study_id[fomd09.clean$intercrop_residues_fate =="unspecified"]))
 
 #--- Add crop sequence practice information ----
-fomd09.clean <- collapse_fomd09_columns(fomd09.clean,  prefix = "crop_seq_subpractice0")
+fomd09.clean <- collapse_fomd09_columns(
+  fomd09.clean,
+  prefix = "crop_seq_subpractice0",
+  sep = "..",
+  dedupe = TRUE)
 
-for (col in c("crop_seq_subpractice_raw", "crop_seq_start_year","crop_seq_start_season",
+for (col in c("crop_seq_subpractice_raw","crop_seq_start_year","crop_seq_start_season",
               "crop_seq_residues_fate"
 )) {
   cat("---", col, "---\n")
@@ -117,7 +126,7 @@ fomd09.clean <- collapse_fomd09_columns(
   fomd09.clean,
   cols = c("agrof_spatial_arrangement_subpractice", "agrof_components_subpractice", "agrof_shade_subpractice"),
   new_col = "agrof_subpractice",
-  sep = "-",
+  sep = "..",
   dedupe = TRUE
 )
 
@@ -241,6 +250,8 @@ for (col in c("out_subindicator", "out_subindicator_unit",
   print(sort(unique(fomd09.clean[[col]])))
 }
 
+sort(unique(fomd09.clean$study_id[fomd09.clean$out_subindicator   =="Total cost" ]))
+
 #--- Check outcome value information ----
 for (col in c("out_value_metric", "out_value",
               "out_var_metric", "out_var_value",
@@ -283,9 +294,51 @@ for (col in c("data_location", "out_agg_stat",
   print(sort(unique(fomd09.clean[[col]])))
 }
 
-readr::write_csv(fomd09.clean, paste0(path.metadata.effectsize, "fomd09_clean/",metadata,".csv"))
+#==========================================================
+#---- Match with 01_FOMD_ontologies ----
+#==========================================================
+library(tibble)
+library(purrr)
 
+source(file.path(path.metadata.effectsize,"/fomd_fun/fun_lookup_ontologies.R"))
 
+#--- Reclassifying out_subindicator as out_indicator
+fomd09.clean <- apply_lookup_ontologies(
+  df        = fomd09.clean,
+  path.metadata.structure = path.metadata.structure,
+  sheet_name = "01_outcomes",
+  key_col   = "subindicator",
+  value_col = "indicator",
+  src_col   = "out_subindicator",
+  new_col   = "out_indicator"
+)
+
+#--- Reclassifying out_subindicator as out_subpillar
+fomd09.clean <- apply_lookup_ontologies(
+  fomd09.clean,
+  path.metadata.structure,
+  sheet_name = "01_outcomes",
+  key_col   = "subindicator",
+  value_col = "subpillar",
+  src_col   = "out_subindicator",
+  new_col   = "out_subpillar"
+)
+
+sort(unique(fomd09.clean$out_subindicator[fomd09.clean$out_subpillar==""]))
+sort(unique(fomd09.clean$out_subindicator[is.na(fomd09.clean$out_subpillar)]))
+
+#--- Reclassifying out_subindicator as out_pillar
+fomd09.clean <- apply_lookup_ontologies(
+  fomd09.clean,
+  path.metadata.structure,
+  sheet_name = "01_outcomes",
+  key_col   = "subindicator",
+  value_col = "pillar",
+  src_col   = "out_subindicator",
+  new_col   = "out_pillar"
+)
+
+readr::write_csv(fomd09.clean, paste0(path.metadata.effectsize, "01.fomd09_clean/fomd09_clean_",metadata,".csv"))
 
 
 
