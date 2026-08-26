@@ -10,8 +10,8 @@ library(skimr)
 
 # NOTE: There are rows that has the same practice for control and treatment
 
-path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure"
-path.metadata.effectsize<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/04.metadata_effectsize"
+path.metadata.structure<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/02.metadata_structure/"
+path.metadata.effectsize<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology Evidence Hub - General/Agroecology_Evidence_Hub/02.FOMD/04.metadata_effectsize/"
 
 list.files(path.metadata.structure)
 list.files(path.metadata.effectsize)
@@ -19,10 +19,10 @@ list.files(path.metadata.effectsize)
 #==========================================================
 # Read functions
 #==========================================================
-source(file.path(path.metadata.effectsize,"/fomd_fun/fun_comparison_practice.R"))
-source(file.path(path.metadata.effectsize,"/fomd_fun/fun_lookup_commodities.R")) 
-source(file.path(path.metadata.effectsize, "/fomd_fun/fun_analysis_practice.R"))
-source(file.path(path.metadata.effectsize, "/fomd_fun/fun_lookup_ontologies.R"))
+source(file.path(path.metadata.effectsize,"fomd_fun/fun_comparison_practice.R"))
+source(file.path(path.metadata.effectsize,"fomd_fun/fun_lookup_commodities.R")) 
+source(file.path(path.metadata.effectsize, "fomd_fun/fun_analysis_practice.R"))
+source(file.path(path.metadata.effectsize, "fomd_fun/fun_lookup_ontologies.R"))
 
 #==========================================================
 # Read datasets
@@ -402,4 +402,6 @@ list(
   only_in_fomd10_schema   = setdiff(fomd10.cols, names(fomd10.clean))    # expected by the schema, but no branch currently produces it — will end up entirely missing/empty in the final output
 )
 
-readr::write_csv(fomd10.clean, paste0(path.metadata.effectsize, "/fomd10_clean/fomd10_clean_MD_Rosen_24_Effec_Sc.csv"))
+readr::write_csv(
+  fomd10.clean, 
+  paste0(path.metadata.effectsize, "03.fomd10_clean/fomd10_clean_",metadata,".csv"))
