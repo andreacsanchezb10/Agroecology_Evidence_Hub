@@ -18,17 +18,19 @@ list.files(path.metadata.effectsize)
 #==========================================================
 source(file.path(path.metadata.effectsize,"/fomd_fun/fun_fomd09_verified_combined.R"))
 source(file.path(path.metadata.effectsize,"/fomd_fun/fun_fomd09_cleaning.R"))
-source(file.path(path.metadata.effectsize,"/fomd_fun/fun_lookup_ontologies.R"))
 
 #==========================================================
 # Read datasets
 #==========================================================
 metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
+<<<<<<< HEAD:02.FOMD/04.metadata_effectsize/01.fomd09_cleaning.R
 #metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
 
 #--- Check that every verified-paper .xlsm in a subfolder shares the same columns
 check_09FOMD_column_consistency(subfolder = metadata)
 
+=======
+>>>>>>> origin/main:02.FOMD/04.metadata_effectsize/01.fomd09_clean.R
 
 #---Combined verified studies from metadata sub folder
 fomd09 <- combine_09FOMD_verified(subfolder = metadata)
@@ -36,6 +38,12 @@ names(fomd09)
 #==============================================
 #---- Cleaning the dataset ----
 #==============================================
+<<<<<<< HEAD:02.FOMD/04.metadata_effectsize/01.fomd09_cleaning.R
+=======
+### things to do:
+#- All "unspecified" across the dataset transform to "Unspecified"
+
+>>>>>>> origin/main:02.FOMD/04.metadata_effectsize/01.fomd09_clean.R
 #---- Convert to specify class ----
 fomd09.clean <- clean_fomd09_classes(fomd09)
 
@@ -153,25 +161,37 @@ fomd09.clean <- add_fomd09_weed(fomd09.clean)
 fomd09.clean <- add_fomd09_chem(fomd09.clean)
 #sort(unique(fomd09.clean$study_id[fomd09.clean$chem_name_amount_unit   =="NA[0(NA)]" ]))
 
+
 #---Add residues management practice information ----
-sort(unique(fomd09.clean$residues_subpractice_raw))
-fomd09.clean <- collapse_fomd09_columns(fomd09.clean,  prefix = "residues_subpractice0")
+fomd09.clean1 <- collapse_fomd09_columns(fomd09.clean,  prefix = "residues_subpractice0")
 
-fomd09.clean <- add_fomd09_residues(fomd09.clean)
 
-#--- Add pH amendment practice information ----
-fomd09.clean <- fomd09.clean %>%
-  mutate(
-    ph_amount_unit         = combine_amount_unit(ph_material_amount, ph_material_unit),
-    ph_material_amount_unit = purrr::map2_chr(ph_material_applied, ph_amount_unit, combine_ph_material_amount_unit)
-  )
 
-for (col in c("ph_subpractice_raw", "ph_subpractice","ph_material_amount_unit"
-)) {
-  cat("---", col, "---\n")
-  print(sort(unique(fomd09.clean[[col]])))
+
+
+#---01_FOMD_ontologies
+fomd01.countries<-read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies.xlsx"), sheet = "01_countries")
+fomd01.outcomes<-read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies.xlsx"), sheet = "01_outcomes")
+fomd01.practices<-read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies.xlsx"), sheet = "01_practices")
+sort(unique(fomd01.practices$subpractice))
+
+
+#---10_FOMD_metadata_synthesis_long
+fomd10<-read_xlsx(file.path(path.metadata.structure,"10_FOMD_metadata_synthesis_short.xlsx"), sheet = "10_FOMD_metadata_synthesis")%>%
+    select(-starts_with("T_"))%>%
+    rename_with(~ sub("^C_", "", .x))
+
+names(fomd10)
+
+#==========================================================
+# Convert multiple columns into one column
+#==========================================================
+collapse_clean <- function(x, sep = "-") {
+  x <- x[x != "" & !is.na(x)]
+  if (length(x) == 0) NA_character_ else paste(x, collapse = sep)
 }
 
+<<<<<<< HEAD:02.FOMD/04.metadata_effectsize/01.fomd09_cleaning.R
 #--- Add irrigation practice information ----
 fomd09.clean <- fomd09.clean %>%
   mutate(
@@ -342,10 +362,158 @@ readr::write_csv(fomd09.clean, paste0(path.metadata.effectsize, "01.fomd09_clean
 
 
 
+=======
+subpractice.list<-c(
+  "tillage_subpractice", #soil_management_practice
+  "planting_subpractice", #planting_practice
+  "varietal_crop_subpractice", #improved crop varieties: practice
+  "varietal_animal_subpractice", #improved breeds: practice
+  "intercrop_subpractice", #intercropping: practice
+  "crop_seq_subpractice", #crop_sequence_practice
+  "agrof_subpractice", #agroforestry_practice
+  "fert_subpractice", #nutrient management: practice
+  "chem_subpractice", #chemical_management_practice
+  "residues_subpractice", #residues_practice
+  "ph_subpractice", #pH_amendment_practice
+  "irrig_subpractice", #irrigation_practice
+  "watharv_subpractice", #water_harvesting_practice
+  "harvest_subpractice", #harvest_practice
+  "postharvest_subpractice" #postharvesting_practice
+  
+)
+>>>>>>> origin/main:02.FOMD/04.metadata_effectsize/01.fomd09_clean.R
 
+#MISSING: a medida que se vayan agregando mas countries, crops, animals, cambiar el numero de 01:0x
 
 ###########################
 ###################
+
+
+### HASTA ACA!
+
+
+fomd09.clean1<-fomd09.clean%>% 
+  rowwise() 
+  mutate(  
+  #---residues_practice
+  residues_subpractice= paste(na.omit(c_across(starts_with("residues_subpractice0"))),collapse = "-"),
+  
+  #---residues_moderator
+  residues_material_amount_unit= ifelse(
+    is.na(residues_material_amount) & is.na(residues_material_unit),  "",
+    paste0(residues_material_amount, "(", residues_material_unit,  ")")),
+  
+  #---pH_amendment_moderator
+  ph_material_amount_unit= ifelse(
+    is.na(ph_material_amount) & is.na(ph_material_unit),  "",
+    paste0(ph_material_amount, "(", ph_material_unit,  ")")),
+  
+  #---irrigation_moderator
+  irrig_date_start_end= paste0(na.omit(c(irrig_date_start,irrig_date_end)),collapse = "-"),
+  
+  irrig_water_amount_unit= ifelse(
+    is.na(irrig_water_amount) & is.na(irrig_water_unit),  "",
+    paste0(irrig_water_amount, "(", irrig_water_unit,  ")")),
+  
+  #---water_harvesting_practice
+  watharv_subpractice= paste(na.omit(c_across(starts_with("watharv_subpractice0"))),collapse = "-"),
+  
+  #---harvest_moderator
+  harvest_date_start_end= paste0(na.omit(c(harvest_date_start,harvest_date_end)),collapse = "-"),
+  
+  #---postharvesting_practice
+  postharvest_subpractice= paste(na.omit(c_across(starts_with("postharv_subpractice0"))),collapse = "-"),
+  
+  #---postharvesting_moderator
+  postharvest_date_start_end= paste0(na.omit(c(harvest_date_start,harvest_date_end)),collapse = "-"),
+  
+  #---practice
+  subpractice = collapse_clean(c_across(all_of(subpractice.list))))
+  
+#---product_outcome
+fomd09.clean<-fomd09.clean%>% 
+    rowwise() %>%
+    mutate(product= paste(na.omit(c_across(starts_with("product0"))),collapse = "-")) %>%
+  ungroup()
+
+# Quick checks
+sort(unique(fomd09.clean$product))
+
+#---outcome
+fomd09.clean<-fomd09.clean%>%
+  left_join(fomd01.outcomes %>%select(pillar,subpillar, indicator, subindicator,effect_size_type),by = c("out_subindicator"="subindicator"))%>%
+  rename("out_pillar"="pillar",
+         "out_subpillar"="subpillar",
+         "out_indicator"="indicator",
+         "effect_size_type"="effect_size_type")
+
+# Quick checks
+sort(unique(fomd09.clean$out_subindicator))  
+sort(unique(fomd09.clean$out_indicator))  
+sort(unique(fomd09.clean$out_subpillar))  
+sort(unique(fomd09.clean$out_pillar))  
+sort(unique(fomd09.clean$out_subindicator_unit))  
+sort(unique(fomd09.clean$effect_size_type)) 
+
+
+
+#---residues_practice
+sort(unique(fomd09.clean$residues_subpractice))
+#---residues_moderator
+sort(unique(fomd09.clean$residues_material_amount_unit))
+#---pH_amendment_moderator
+sort(unique(fomd09.clean$ph_material_amount_unit))
+#---irrigation_moderator
+sort(unique(fomd09.clean$irrig_date_start_end))
+#---water_harvesting_practice
+sort(unique(fomd09.clean$watharv_subpractice))
+#---harvest_moderator
+sort(unique(fomd09.clean$harvest_date_start_end))
+#---postharvesting_practice
+sort(unique(fomd09.clean$postharvest_subpractice))
+#---postharvesting_moderator
+sort(unique(fomd09.clean$postharvest_date_start_end))
+#---practice
+sort(unique(fomd09.clean$subpractice))
+#---product_outcome
+sort(unique(fomd09.clean$product_component))
+
+#-----------------------------------------------
+#---- Match with 01_FOMD_ontologies ----
+#-----------------------------------------------
+library(tibble)
+library(purrr)
+
+## MISSING: #For products components classify by type, subtype
+
+#--- lookup vector: names = country, values = ISO_3166_1_Alpha_3
+lookup.country.iso <- fomd01.countries %>%
+  transmute(
+    country = str_squish(Country),
+    country.iso    = str_squish(ISO_3166_1_Alpha_3)
+  ) %>%
+  distinct() %>%
+  deframe()
+
+
+fomd09.clean <- fomd09.clean %>%
+  #---location
+  mutate(country_ISO = map_chr(str_split(str_squish(country), "-"), \(x) {
+    out <- unname(lookup.country.iso[str_squish(x)])
+    # if something didn't match, keep the original token (change to NA if you prefer)
+    out[is.na(out)] <- str_squish(x)[is.na(out)]
+    paste(out, collapse = "-")
+    }))
+  
+  
+#Quick check
+length(unique(fomd09.clean$country))
+sort(unique(fomd09.clean$country))
+length(unique(fomd09.clean$country_ISO))
+sort(unique(fomd09.clean$country_ISO))
+
+
+
 #-----------------------------
 # Equations to calculate the SD from SE, IC and IQR
 #-----------------------------
@@ -504,6 +672,8 @@ sort(unique(fomd09.clean$subpractice))
  # select(study_id,practice_theme,practice_type,practice, subpractice)%>%
   #filter(practice_theme=="Crop Management-Agroforestry-Inorganic Fertilizer-Pest management")
 
+readr::write_csv(fomd09.clean, paste0(path.metadata.effectsize, "/fomd09_cleanv2.csv"))
 
+#readr::write_csv(fomd09.clean, paste0(path.metadata.effectsize, "/fomd09_clean.csv"))
 
 

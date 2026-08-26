@@ -6,6 +6,7 @@ library(tidyr)
 library(metafor)
 library(readr)
 library(purrr)
+library(skimr)
 
 # NOTE: There are rows that has the same practice for control and treatment
 
@@ -184,7 +185,7 @@ select(doi, C_residues_subpractice_raw,T_residues_subpractice_raw,
 sort(unique(prueba$practice_compared))
 x<-prueba[grepl("Inorganic fertilizer", prueba$practice_compared, ignore.case = TRUE), ]
 
-#Water management-----
+  #Water management-----
 select(doi, C_irrig_subpractice,
        water_management_subpractice,water_management_practice ,water_management_theme,
        "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
@@ -199,7 +200,7 @@ sort(unique(fomd10.clean$C_planting_method))
 
 
 
-#diversification spatial-----
+  #diversification spatial-----
   select(doi,study_id,country,
          C_crop_tree_diversity,T_crop_tree_diversity,
          diversification_spatial_subpractice,
@@ -312,7 +313,7 @@ fomd10.clean <- apply_lookup_ontologies(
   new_col   = "out_effect_size_type"
 )
 
-x<-fomd10.clean %>%
+unmatched_effect_size_type<-fomd10.clean %>%
   #select(doi,out_subindicator, out_effect_size) 
   distinct(out_subindicator, out_effect_size_type)%>%
   arrange(out_effect_size_type)

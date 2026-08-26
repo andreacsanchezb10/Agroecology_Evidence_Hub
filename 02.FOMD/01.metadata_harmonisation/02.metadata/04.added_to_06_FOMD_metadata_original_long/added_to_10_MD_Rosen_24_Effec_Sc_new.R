@@ -1860,6 +1860,9 @@ md.era.short.clean<-md.era.short.clean%>%
     T_out_var_value=as.character(T_out_var_value),
     T_out_var_value=case_when(is.na(T_out_var_value)&T_out_var_metric=="Unspecified"~"Unspecified",TRUE~T_out_var_value))
 
+
+
+
 # Quick checks ----
 sort(unique(md.era.short.clean$C_out_metric))
 sort(unique(md.era.short.clean$T_out_metric))
