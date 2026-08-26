@@ -316,8 +316,8 @@ fomd10.clean <- apply_lookup_ontologies(
 unmatched_effect_size_type<-fomd10.clean %>%
   #select(doi,out_subindicator, out_effect_size) 
   distinct(out_subindicator, out_effect_size_type)%>%
-  arrange(out_effect_size_type)
-  filter(is.na(out_effect_size_type)) #93-73 out_subindicator with effect_size_type==NA
+  arrange(out_effect_size_type)%>%
+  filter(is.na(out_effect_size_type))
 
   
   

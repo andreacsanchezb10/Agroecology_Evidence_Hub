@@ -32,7 +32,7 @@ apply_lookup_ontologies <- function(df, path.metadata.structure,
   df <- df %>%
     mutate("{new_col}" := map_chr(str_split(str_squish(.data[[src_col]]), fixed(sep)), \(x) {
       out <- unname(lookup[str_squish(x)])
-      out[is.na(out)] <- str_squish(x)[is.na(out)]
+      if (any(is.na(out))) return(NA_character_)
       paste(out, collapse = sep)
     }))
   
