@@ -95,10 +95,6 @@ paired_yield_focal<-fun_pair_yield_focal(fomd09.clean)
 paired_yield_pler<-fun_pair_yield_partial_ler(fomd09.clean)
 
 
-
-sort(unique(paired_yield_pler$ler_comparison_id))
-sort(unique(pair_yield_pler$T_intercrop_subpractice))
-
 #-------------------------------------------------------------------------------------
 #--- Yield to cal partial and total ler function -----
 #-------------------------------------------------------------------------------------

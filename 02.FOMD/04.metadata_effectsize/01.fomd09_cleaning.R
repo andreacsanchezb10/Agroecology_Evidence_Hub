@@ -315,7 +315,7 @@ fomd09.clean <- apply_lookup_ontologies(
 
 #--- Reclassifying out_subindicator as out_subpillar
 fomd09.clean <- apply_lookup_ontologies(
-  fomd09.clean,
+  df= fomd09.clean,
   path.metadata.structure,
   sheet_name = "01_outcomes",
   key_col   = "subindicator",
@@ -329,7 +329,7 @@ sort(unique(fomd09.clean$out_subindicator[is.na(fomd09.clean$out_subpillar)]))
 
 #--- Reclassifying out_subindicator as out_pillar
 fomd09.clean <- apply_lookup_ontologies(
-  fomd09.clean,
+  df= fomd09.clean,
   path.metadata.structure,
   sheet_name = "01_outcomes",
   key_col   = "subindicator",
@@ -459,50 +459,6 @@ fomd09.clean<-fomd09.clean%>%
     out_var_metric=="SE (Standard Error)"~SE_SD(out_var_value_product_component05, out_sample_size),
     #out_var_metric==
     TRUE ~ NA))
-
-
-sort(unique(fomd09.clean$out_sd))
-sort(unique(fomd09.clean$out_sd_product_component02))
-sort(unique(fomd09.clean$out_sd_product_component03))
-sort(unique(fomd09.clean$out_sd_product_component04))
-sort(unique(fomd09.clean$out_sd_product_component05))
-
-
-#-----------------------------
-# Unselect unnecessary columns
-#-----------------------------
-names(fomd10)
-names(fomd09.clean)
-common_cols <- intersect(names(fomd10), names(fomd09.clean))
-
-fomd09.clean <- fomd09.clean[, unique(
-  c("practice_id",
-    "out_comparison_treatment",
-    "out_mean_product_component01",
-    "out_sd_product_component01",
-    "out_mean_product_component02",
-    "out_sd_product_component02",
-    "out_mean_product_component03",
-    "out_sd_product_component03",
-    "out_mean_product_component04",
-    "out_sd_product_component04",
-    "out_mean_product_component05",
-    "out_sd_product_component05",
-    common_cols))]
-
-names(fomd09.clean)
-
-list(
-  only_in_fomd10 = setdiff(names(fomd10), names(fomd09.clean)),
-  only_in_fomd09 = setdiff(names(fomd09.clean), names(fomd10))
-)
-fomd09.clean$out_mean_product_component02
-sort(unique(fomd09.clean$subpractice))
-
-
-#fomd09.cleanx<-fomd09.clean%>%
-# select(study_id,practice_theme,practice_type,practice, subpractice)%>%
-#filter(practice_theme=="Crop Management-Agroforestry-Inorganic Fertilizer-Pest management")
 
 
 
