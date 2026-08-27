@@ -132,12 +132,12 @@ compute <- function(data, prefix) {
         .data[[out_value_metric]] == "Mean" ~ .data[[out_value]],
         
         # Median + IQR → Mean
-        # (per your mapping: Q3 = out_var_value_l, Q1 = out_var_value_u)
+        # (per your mapping: Q3 = out_var_value_u, Q1 = out_var_value_l)
         .data[[out_value_metric]] == "Median" &
           .data[[out_var_metric]] %in% metrics.iqr_mean
-        ~ iqr_mean(q1     = .data[[out_var_value_u]],
+        ~ iqr_mean(q1     = .data[[out_var_value_l]],
                    median = .data[[out_value]],
-                   q3     = .data[[out_var_value_l]])
+                   q3     = .data[[out_var_value_u]])
       ),
       
       # --- SD ---
@@ -166,10 +166,10 @@ compute <- function(data, prefix) {
         .data[[out_var_metric]] %in% metrics.mse_sd
         ~ mse_sd(var_value = .data[[out_var_value]]),
         
-        # IQR → SD (per your mapping: Q3 = out_var_value_l, Q1 = out_var_value_u)
+        # IQR → SD (per your mapping: Q3 = out_var_value_u, Q1 = out_var_value_l)
         .data[[out_var_metric]] %in% metrics.iqr_sd
-        ~ iqr_sd(q1          = .data[[out_var_value_u]],
-                 q3          = .data[[out_var_value_l]],
+        ~ iqr_sd(q1          = .data[[out_var_value_l]],
+                 q3          = .data[[out_var_value_u]],
                  sample_size = .data[[out_sample_size]]),
         
         # Unresolvable — set to NA

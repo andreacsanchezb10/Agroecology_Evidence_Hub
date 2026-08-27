@@ -17,7 +17,7 @@
 #' @return The mutated data frame with `new_col` added/updated.
 apply_lookup_ontologies <- function(df, path.metadata.structure,
                                     sheet_name, key_col, value_col,
-                                    src_col, new_col, sep = "-") {
+                                    src_col, new_col, sep ) {
   
   ref <- read_xlsx(file.path(path.metadata.structure, "01_FOMD_ontologies.xlsx"), sheet = sheet_name)
   

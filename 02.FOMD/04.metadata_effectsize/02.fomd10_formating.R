@@ -87,21 +87,80 @@ paired_yield_focal<-fun_pair_yield_focal(fomd09.clean)
 # these are for cases when yield is provided for the system in Treatment (eg. yield of maize monoculture vs.
 #yield of maize+cowpea (together) intercropping)
 #-------------------------------------------------------------------------------------
-
+x<-paired_yield_focal%>%
+  #filter(study_id=="JA_Kabir_17_A Stu_In",
+    
+  #     out_subindicator=="Crop Yield")%>%
+  select(      study_id,
+         out_subindicator,
+         C_out_value_metric,
+         C_out_value,
+         C_out_var_metric,
+         C_out_var_value,
+         C_out_var_value_l,
+         C_out_var_value_u,
+         C_out_sample_size,
+         T_out_value_metric,
+         T_out_value,
+         T_out_var_metric,
+         T_out_var_value,
+         T_out_var_value_l,
+         T_out_var_value_u,
+         T_out_sample_size,
+         T_ler_value_total,	T_ler_var_value_total,
+         
+                  C_product,
+         T_product,
+         T_crop_tree_diversity)
+  
 
 #-------------------------------------------------------------------------------------
 #--- Pairing yield partial ler function -----
 #-------------------------------------------------------------------------------------
 paired_yield_pler<-fun_pair_yield_partial_ler(fomd09.clean)
 
+sort(unique(paired_yield_pler$ler_comparison_id))
+
+y<-paired_yield_pler%>%
+  #filter(study_id=="JA_Kabir_17_A Stu_In"
+         #,
+         #out_subindicator=="Crop Yield"
+  #)%>%
+  select(      study_id,
+               out_subindicator,
+               C_out_value_metric,
+               C_out_value,
+               C_out_var_metric,
+               C_out_var_value,
+               C_out_var_value_l,
+               C_out_var_value_u,
+               C_out_sample_size,
+               T_out_value_metric,
+               T_out_value,
+               T_out_var_metric,
+               T_out_var_value,
+               T_out_var_value_l,
+               T_out_var_value_u,
+               T_out_sample_size,
+               ler_comparison_id,
+               ler_value_total,	ler_var_value_total,
+               C_product,
+               T_product,
+               T_crop_tree_diversity)
 
 #-------------------------------------------------------------------------------------
 #--- Yield to cal partial and total ler function -----
 #-------------------------------------------------------------------------------------
+paired_yield_ler<-fun_pair_yield_total_ler(fomd09.clean)
+
+
 # studies providing partial and total ler
+
+
+
 JA_Phiri_24_Compa_Ag
 JA_Kidan_17_Maize_Op
-JA_Banti_15_Deter_Ho
+JA_Banti_15_Deter_Ho #no se que paso con este articulo
 
 #==========================================================
 # Code for checking if all specified pairings were done
@@ -258,11 +317,11 @@ nrow(missing_yield_pler)
 missing_yield_pler
 
 rows <- exploded_all %>%
-  filter(study_id == "JA_Dua, _17_Effec_LR", practice_id %in% c("C8", "T6")) %>%
+  filter(study_id == "JA_Banti_15_Deter_Ho", practice_id %in% c("C1", "T1")) %>%
   select(practice_id, all_of(id_cols))
 
-c <- rows %>% filter(practice_id == "C8") %>% select(-practice_id) %>% slice(1) %>% unlist()
-t <- rows %>% filter(practice_id == "T6") %>% select(-practice_id) %>% slice(1) %>% unlist()
+c <- rows %>% filter(practice_id == "C1") %>% select(-practice_id) %>% slice(1) %>% unlist()
+t <- rows %>% filter(practice_id == "T1") %>% select(-practice_id) %>% slice(1) %>% unlist()
 
 tibble(column = names(c), C = c, T = t) %>%
   filter(C != T | is.na(C) != is.na(T))
@@ -290,6 +349,12 @@ list(
   only_in_fomd10_schema   = setdiff(fomd10.cols, names(paired_yield_pler))    # expected by the schema, but no branch currently produces it — will end up entirely missing/empty in the final output
 )
 
+
+list(
+  only_in_pairing_outputs = setdiff(names(paired_yield_ler), fomd10.cols),   # produced by a branch, but not in the 10_ schema — will get silently dropped by select(any_of(fomd10.cols))
+  only_in_fomd10_schema   = setdiff(fomd10.cols, names(paired_yield_ler))    # expected by the schema, but no branch currently produces it — will end up entirely missing/empty in the final output
+)
+
 all_pairing_cols <- union(union(names(paired_context), names(paired_yield_focal)), names(paired_yield_pler))
 
 col_presence <- tibble::tibble(
@@ -308,7 +373,8 @@ fomd10.formated <- dplyr::bind_rows(
   paired_bio_context,
   paired_context,
   paired_yield_focal,
-  paired_yield_pler
+  paired_yield_pler,
+  paired_yield_ler
 ) %>%
   mutate(effect_size_id = paste0(metadata, "_", dplyr::row_number()))  %>%
   select(any_of(fomd10.cols))

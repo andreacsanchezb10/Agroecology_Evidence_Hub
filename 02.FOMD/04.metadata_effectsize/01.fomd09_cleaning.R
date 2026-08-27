@@ -310,7 +310,8 @@ fomd09.clean <- apply_lookup_ontologies(
   key_col   = "subindicator",
   value_col = "indicator",
   src_col   = "out_subindicator",
-  new_col   = "out_indicator"
+  new_col   = "out_indicator",
+  sep=".."
 )
 
 #--- Reclassifying out_subindicator as out_subpillar
@@ -321,7 +322,8 @@ fomd09.clean <- apply_lookup_ontologies(
   key_col   = "subindicator",
   value_col = "subpillar",
   src_col   = "out_subindicator",
-  new_col   = "out_subpillar"
+  new_col   = "out_subpillar",
+  sep=".."
 )
 
 sort(unique(fomd09.clean$out_subindicator[fomd09.clean$out_subpillar==""]))
@@ -335,7 +337,8 @@ fomd09.clean <- apply_lookup_ontologies(
   key_col   = "subindicator",
   value_col = "pillar",
   src_col   = "out_subindicator",
-  new_col   = "out_pillar"
+  new_col   = "out_pillar",
+  sep=".."
 )
 
 readr::write_csv(fomd09.clean, paste0(path.metadata.effectsize, "01.fomd09_clean/fomd09_clean_",metadata,".csv"))
@@ -348,9 +351,6 @@ readr::write_csv(fomd09.clean, paste0(path.metadata.effectsize, "01.fomd09_clean
 #-----------------------------
 # Equations to calculate the SD from SE, IC and IQR
 #-----------------------------
-
-
-
 ##Equation to calculate the SD from M_IQR (Hozo et al., 2005) 
 ##(a= N_samples; b=B_error_range; c=B_error_value; d= B_error_range.1)
 M_IQR_SD<- function (a, b,c,d) {  
@@ -364,3 +364,4 @@ CI_SD<- function (a, b) {
   result<- (sqrt(a) * (b/((qt((1-(0.05/2)), (a - 1)))*2)))
   return(result)
 }
+

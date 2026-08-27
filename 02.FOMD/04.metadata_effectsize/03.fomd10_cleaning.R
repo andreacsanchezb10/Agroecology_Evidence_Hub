@@ -179,9 +179,6 @@ select(doi, C_residues_subpractice_raw,T_residues_subpractice_raw,
   filter(!is.na(biomass_management_subpractice))%>%
   filter(is.na(biomass_management_practice))
 
-
-
-
 sort(unique(prueba$practice_compared))
 x<-prueba[grepl("Inorganic fertilizer", prueba$practice_compared, ignore.case = TRUE), ]
 
@@ -300,7 +297,8 @@ fomd10.clean <- apply_lookup_ontologies(
   key_col   = "subindicator",
   value_col = "effect_size_type",
   src_col   = "out_subindicator",
-  new_col   = "out_effect_size_type"
+  new_col   = "out_effect_size_type",
+  sep = ".."
 )
 
 unmatched_effect_size_type<-fomd10.clean %>%
@@ -317,7 +315,8 @@ fomd10.clean <- apply_lookup_ontologies(
   key_col   = "Product",
   value_col = "Product.Simple",
   src_col   = "C_product",
-  new_col   = "C_product_simple"
+  new_col   = "C_product_simple",
+  sep=".."
 )
 
 #--- Reclassifying T_product as T_product_simple
@@ -328,9 +327,9 @@ fomd10.clean <- apply_lookup_ontologies(
   key_col   = "Product",
   value_col = "Product.Simple",
   src_col   = "T_product",
-  new_col   = "T_product_simple"
+  new_col   = "T_product_simple",
+  sep=".."
 )
-
 
 #--- Reclassifying country as country_ISO
 fomd10.clean <- apply_lookup_ontologies(
@@ -340,7 +339,8 @@ fomd10.clean <- apply_lookup_ontologies(
   key_col   = "Country",
   value_col = "ISO_3166_1_Alpha_3",
   src_col   = "C_country",
-  new_col   = "country_ISO"
+  new_col   = "country_ISO",
+  sep=".."
 )
 
 # Remove duplicates in country and country_ISO
@@ -424,3 +424,4 @@ list(
 readr::write_csv(
   fomd10.clean, 
   paste0(path.metadata.effectsize, "03.fomd10_clean/fomd10_clean_",metadata,".csv"))
+

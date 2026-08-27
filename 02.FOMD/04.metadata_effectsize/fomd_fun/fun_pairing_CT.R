@@ -131,8 +131,17 @@ pairing_spec_cols <- tribble(
     #---product_outcome----
     "product"
   )),
-  
-  "Yield",        "total_ler",    list(character(0))
+  #--------------------------------------
+  #--- out_subpillar =="Yield"----
+  #--- For Pairing total ler yield ----
+  #--------------------------------------
+  "Yield",        "total_ler",        list(c(
+    #--- location
+    "site_type","site_id","site_admin", "site_agg" ,"site_latlong_type",                    
+    "site_latitude","site_longitude","site_buffer","site_key",
+    #---outcome----
+    "out_subindicator_unit"
+  ))
 )
 
 #==========================================================
@@ -283,6 +292,7 @@ all_na_across <- function(data, prefix) {
 
 is_focal_row <- function(data) {
   data$out_subpillar == "Yield" &
+    !is.na(data$out_value)&
     all_na_across(data, "out_value_product0") &
     all_na_across(data, "pler_value_product0") &
     is.na(data$ler_value_total)
@@ -324,6 +334,7 @@ fun_pair_yield_focal <- function(df) {
     dplyr::rename_with(~ paste0("C_", sub("\\.C$", "", .)), dplyr::ends_with(".C")) %>%
     dplyr::filter(!is.na(T_practice_id)) %>%
     dplyr::mutate(out_comparison_id = paste0(C_practice_id, "-", out_comparison_id))
+    
 }
 
 #==========================================================
@@ -341,6 +352,7 @@ explode_ler_components <- function(df) {
     dplyr::filter(out_subpillar == "Yield", !is_focal_row(df))
   
   slot_cols <- names(ler_eligible)
+
   
   exploded <- purrr::map_dfr(1:5, function(n) {
     suffix     <- sprintf("0%d", n)
@@ -374,7 +386,6 @@ explode_ler_components <- function(df) {
   exploded %>%
     dplyr::mutate(dplyr::across(c(out_value, var_value, pler_value, pler_var_value), as.numeric))
 }
-
 #==========================================================
 #--- Pairing partial LER function ---
 ## Used for out_subpillar == "Yield", the LER-eligible rows (excluded from
@@ -418,7 +429,16 @@ fun_pair_yield_partial_ler <- function(df) {
     dplyr::mutate(out_comparison_id = paste0(C_practice_id, "-", out_comparison_id))
   
   result$ler_comparison_id <- build_row_id(
-    result, c("T_practice_id",setdiff(id_cols, c("practice_id", "product")))
+    result, c("T_practice_id","C_country","C_site_type",
+              "C_site_id",
+              "C_site_admin",
+              "C_site_agg",
+              "C_site_latlong_type",
+              "C_site_latitude",
+              "C_site_longitude",
+              "C_site_buffer",
+              "C_site_key",
+              setdiff(id_cols, c("practice_id", "product")))
   )
   
   result %>%
@@ -427,7 +447,60 @@ fun_pair_yield_partial_ler <- function(df) {
       pler_var_value = T_pler_var_value,
       ler_value_total = T_ler_value_total,
       ler_var_value_total = T_ler_var_value_total
-    )
+    )%>%
+    filter(out_subindicator!="Land Equivalent Ratio")
 }
 
-
+#==========================================================
+#--- Pairing total LER function ---
+## Used for out_subpillar == "Yield", out_subindicator == "Land Equivalent
+## Ratio" — studies that report Total LER directly, no raw per-crop yields
+## or partial LERs to explode. Same 1:1 join as fun_pair_yield_focal(), but
+## "product" is NOT part of the matching key, so the whole intercrop's
+## product listing (its full ".."-joined string) can match its one
+## monoculture control regardless of which crop that control is.
+#==========================================================
+fun_pair_yield_total_ler <- function(df) {
+  
+  spec    <- pairing_spec_cols %>% dplyr::filter(subpillar == "Yield", branch == "total_ler")
+  extra   <- unlist(spec$extra_cols)
+  id_cols <- c(pairing_base_cols, extra)
+  
+  is_total_ler_row <- function(data) {
+    data$out_subpillar == "Yield" & data$out_subindicator == "Land Equivalent Ratio"
+  }
+  
+  df$row_id <- ifelse(is_total_ler_row(df), build_row_id(df, id_cols), NA_character_)
+  
+  df.C <- df %>%
+    dplyr::filter(grepl("C", practice_id)) %>%
+    split_ct()
+  
+  df.C$out_comparison_id <- ifelse(
+    is_total_ler_row(df.C),
+    build_row_id(df.C, c("out_comparison_treatment", setdiff(id_cols, "practice_id"))),
+    NA_character_
+  )
+  
+  df.C %>%
+    dplyr::filter(!is.na(row_id)) %>%
+    dplyr::select(-row_id) %>%
+    dplyr::left_join(
+      df %>% dplyr::select(-dplyr::any_of(setdiff(id_cols, c(
+        "practice_id",
+        "country", "site_type","site_id","site_admin",
+        "site_agg","site_latlong_type","site_latitude",
+        "site_longitude","site_buffer", "site_key" ,
+        "out_subindicator_unit")))),
+      by = c("out_comparison_id" = "row_id"),
+      suffix = c(".C", ".T")
+    ) %>%
+    dplyr::rename_with(~ paste0("T_", sub("\\.T$", "", .)), dplyr::ends_with(".T")) %>%
+    dplyr::rename_with(~ paste0("C_", sub("\\.C$", "", .)), dplyr::ends_with(".C")) %>%
+    dplyr::filter(!is.na(T_practice_id)) %>%
+    dplyr::mutate(out_comparison_id = paste0(C_practice_id, "-", out_comparison_id)) %>%
+    dplyr::rename(
+      ler_value_total = T_ler_value_total,
+      ler_var_value_total = T_ler_var_value_total
+    )
+}
