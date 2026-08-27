@@ -112,7 +112,8 @@ ler_prueba<- fomd10.mean.sd%>%
           # "T1/India/Researcher Managed & Research Facility/CPRI Experimental Farm, Shimla (H.P)/City/No/Unespecified/31.0963984301031/77.171695085733/800/77.171695085733006 31.0963984301031 B800/MD_Paut,_24_A glo_Sc/JA_Dua, _17_Effec_LR/Dua, V. K. and Kumar, Sushil and Jatav, M. K./Effect of nitrogen application to intercrops on yield, competition, nutrient use efficiency and economics in potato (Solanum Tuberosum L.) plus French bean (Phaseolus Vulgaris L.) system in north-western hills of India/2017/LR/10.18805/lr.v0i0.7841/The experiment was conducted in randomized block design with four replications in 2007 and 2009 and three replications in 2008./3/The experiment was conducted in randomized block design with four replications in 2007 and 2009 and three replications in 2008. The potato cultivar ‘Kufri Jyoti’ and French bean cultivar ‘Selection-9’ were planted in the first fortnight of April. french bean was harvested during end June to end July in 3-4 pickings, whereas potato was harvested during second fortnight of September during all the years./2007/2009/April to June or September/NA/NA/Crop Yield/Product Yield/Yield/Productivity/NA/NA/NA/NA/NA/NA/NA/NA/2007/NA/NA/June/NA"                                                                                          
          )
 sort(unique(ler_prueba$study_id))
-## TO DO: I NEED TO ENTER THE VALUES FROM FIGURE 2B IN RANJA
+## TO CHECK: HOW TO RESOLVE THE PROBLEM WITH DUA..
+## HOW TO GET var LER values need to be calculated
 
 
 crop_check <- fomd10.mean.sd %>%
