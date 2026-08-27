@@ -27,8 +27,7 @@ outcome_grouping_rules <- list(
     #out_indicator=="Product Yield"
     outcomes      = c(
       "Crop Yield", "Biomass Yield","Egg Yield","Meat Yield","Milk Yield",
-      "Other Animal Product Yield","Reproductive Yield", "Weight Gain",
-                      "Gross Return"),
+      "Other Animal Product Yield","Reproductive Yield", "Weight Gain"),
     grouping_vars = c("C_product_simple","T_product_simple", "out_subindicator")
   )#,
   #list(

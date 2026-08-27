@@ -42,9 +42,12 @@ sort(unique(fomd10.clean$effect_size_id))
 # From available (raw) values
 #==========================================================
 #-- Check mean and variance metrics
-for (col in c("C_out_value_metric", "T_out_value_metric",
+for (col in c("C_out_value_metric", "C_out_value",
+              "T_out_value_metric","T_out_value",
               "C_out_var_metric", "T_out_var_metric",
-              "C_out_var_value_l"
+              
+              "C_out_var_value_l","C_out_var_value_u",
+              "T_out_var_value_l","T_out_var_value_u"
               
 )) {
   cat("---", col, "---\n")
@@ -65,16 +68,15 @@ skim(fomd10.mean.sd$T_out_mean)
 skim(fomd10.mean.sd$C_out_sd)
 skim(fomd10.mean.sd$T_out_sd)
 
-# check if there is any product mismatches for out_indicator == "Product Yield"
-# if there are, it is a mistake or need to be check?
 sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_indicator == "Product Yield" ])) #9
 
 product.mismatches<- fomd10.mean.sd %>%
   filter(out_subindicator%in%c(
     "Crop Yield", "Biomass Yield","Egg Yield","Meat Yield",
-    "Milk Yield","Other Animal Product Yield","Reproductive Yield", "Weight Gain"))%>%
-  select(study_id,out_subindicator,C_product,T_product)%>%
-  filter(C_product != T_product)
+    "Milk Yield","Other Animal Product Yield","Reproductive Yield", "Weight Gain",
+                               "Gross Return"                        ))%>%
+  filter(C_product_simple != T_product_simple)%>%
+  select(study_id,out_subindicator,C_product_simple,T_product_simple)
 
 fomd10.n.cv <- n_cv_calculation(
   dt               = fomd10.mean.sd,                       
@@ -106,8 +108,8 @@ imp_vars %>% count(out_subindicator)
 names(fomd10.n.cv)
 
 prueba<-fomd10.n.cv%>%
-  select(study_id,"C_product","T_product",T_product_simple,C_product_simple, 
-         out_subindicator,C_out_sample_size,T_out_sample_size,340:361)
+  select(doi,"C_product","T_product",T_product_simple,C_product_simple, 
+         out_subindicator,C_out_sample_size,T_out_sample_size,382:397)
   filter(out_subindicator%in%c("Crop Yield", "Biomass Yield", "Gross Return"))%>%
   filter(C_product_simple==T_product_simple)%>%
   filter(T_product_simple=="Maize")

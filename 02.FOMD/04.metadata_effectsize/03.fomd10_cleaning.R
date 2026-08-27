@@ -196,10 +196,6 @@ distinct(water_management_subpractice)
 sort(unique(fomd10.clean$C_planting_subpractice))
 sort(unique(fomd10.clean$C_planting_method))
   
-
-
-
-
   #diversification spatial-----
   select(doi,study_id,country,
          C_crop_tree_diversity,T_crop_tree_diversity,
@@ -312,6 +308,29 @@ unmatched_effect_size_type<-fomd10.clean %>%
   distinct(out_subindicator, out_effect_size_type)%>%
   arrange(out_effect_size_type)%>%
   filter(is.na(out_effect_size_type))
+
+#--- Reclassifying C_product as C_product_simple
+fomd10.clean <- apply_lookup_ontologies(
+  df        = fomd10.clean,
+  path.metadata.structure = path.metadata.structure,
+  sheet_name= "01_product_new",
+  key_col   = "Product",
+  value_col = "Product.Simple",
+  src_col   = "C_product",
+  new_col   = "C_product_simple"
+)
+
+#--- Reclassifying T_product as T_product_simple
+fomd10.clean <- apply_lookup_ontologies(
+  df        = fomd10.clean,
+  path.metadata.structure = path.metadata.structure,
+  sheet_name= "01_product_new",
+  key_col   = "Product",
+  value_col = "Product.Simple",
+  src_col   = "T_product",
+  new_col   = "T_product_simple"
+)
+
 
 #--- Reclassifying country as country_ISO
 fomd10.clean <- apply_lookup_ontologies(

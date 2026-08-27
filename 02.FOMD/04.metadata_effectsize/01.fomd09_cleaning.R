@@ -345,7 +345,6 @@ readr::write_csv(fomd09.clean, paste0(path.metadata.effectsize, "01.fomd09_clean
 
 
 ###########################
-###################
 #-----------------------------
 # Equations to calculate the SD from SE, IC and IQR
 #-----------------------------
@@ -365,9 +364,3 @@ CI_SD<- function (a, b) {
   result<- (sqrt(a) * (b/((qt((1-(0.05/2)), (a - 1)))*2)))
   return(result)
 }
-
-
-
-
-
-
