@@ -23,8 +23,8 @@ source(file.path(path.metadata.effectsize,"/fomd_fun/fun_lookup_ontologies.R"))
 #==========================================================
 # Read datasets
 #==========================================================
-metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
-#metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
+#metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
+metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
 
 #--- Check that every verified-paper .xlsm in a subfolder shares the same columns
 check_09FOMD_column_consistency(subfolder = metadata)
@@ -40,7 +40,6 @@ names(fomd09)
 fomd09.clean <- clean_fomd09_classes(fomd09)
 
 #---- Add bibliographic information from (04_FOMD_screening) ----
-
 fomd09.clean <- add_fomd09_bibliographic(fomd09.clean, path.metadata.structure, metadata)
 
 #---- Add location information ----
@@ -57,6 +56,7 @@ for (col in c("time_raw", "time_year_start", "time_year_end", "time_season")) {
   cat("---", col, "---\n")
   print(sort(unique(fomd09.clean[[col]])))
 }
+#sort(unique(fomd09.clean$study_id[fomd09.clean$system_type==      "natural/seminatural"                                  ]))
 
 #--- Check subpractice details ----
 for (col in c("subpractice_description_raw", "system_type")) {
@@ -69,7 +69,51 @@ fomd09.clean <- add_fomd09_commodity(fomd09.clean)
 
 unmatched_crops <- find_unmatched_crops(fomd09.clean, path.metadata.effectsize)
 
-#sort(unique(fomd09.clean$study_id[fomd09.clean$crop_tree02=="Beet"]))
+sort(unique(fomd09.clean$practice_id[fomd09.clean$crop_tree_variety  =="Pineapple(Unspecified)-Inga edulis(NA)"]))
+sort(unique(fomd09.clean$practice_id[fomd09.clean$crop_tree_variety  =="Maize(Unspecified)/"]))
+
+library(stringdist)
+
+fomd01.crops.trees <- local({
+  source(file.path(path.metadata.effectsize, "fomd_fun/fun_load_data_ontologies.R"), local = environment())
+  
+  rbind(
+    fomd01.product.new %>%
+      filter(!is.na(Product.Simple)) %>%
+      distinct(Product.Simple, SPAM.Food.Group, FAO.Food.SubGroup, FAO.Food.Group) %>%
+      rename("crop_tree_diversity" = "Product.Simple") %>%
+      filter(!is.na(FAO.Food.Group), !is.na(crop_tree_diversity)),
+    
+    fomd01.vars.crops %>%
+      distinct(V.Product, SPAM.Food.Group, FAO.Food.SubGroup, FAO.Food.Group) %>%
+      rename("crop_tree_diversity" = "V.Product") %>%
+      filter(!is.na(FAO.Food.Group)),
+    
+    fomd01.trees %>%
+      select(tree.latin.name, Tree.Nfix, Tree.Legume) %>%
+      rename("crop_tree_diversity" = "tree.latin.name",
+             "FAO.Food.SubGroup" = "Tree.Legume",
+             "FAO.Food.Group" = "Tree.Nfix") %>%
+      mutate(FAO.Food.SubGroup = case_when(FAO.Food.SubGroup == "Yes" ~ "Legume Tree", TRUE ~ "No Legume Tree"),
+             FAO.Food.Group = case_when(FAO.Food.Group == "Yes" ~ "N Fix Tree", TRUE ~ "No N Fix Tree"),
+             SPAM.Food.Group = "Trees") %>%
+      distinct(crop_tree_diversity, FAO.Food.SubGroup, FAO.Food.Group, SPAM.Food.Group)
+  ) %>%
+    distinct(crop_tree_diversity, SPAM.Food.Group, FAO.Food.SubGroup, FAO.Food.Group) %>%
+    arrange(crop_tree_diversity)
+})
+
+ontology_crops <- fomd01.crops.trees$crop_tree_diversity
+
+unmatched_crops %>%
+  rowwise() %>%
+  mutate(
+    closest_match = ontology_crops[amatch(crop, ontology_crops, maxDist = Inf)],
+    edit_distance = stringdist(crop, closest_match, method = "dl")
+  ) %>%
+  ungroup() %>%
+  arrange(edit_distance)
+
 
 #--- Check tillage practice---- 
 for (col in c("tillage_subpractice_raw", "tillage_subpractice","tillage_method",

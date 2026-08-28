@@ -88,14 +88,14 @@ add_fomd09_location <- function(fomd09.clean) {
     rowwise() %>%
     mutate(
       country           = paste(unique(na.omit(c_across(starts_with("country0"))),collapse = "..")),
-      site_type         = paste(unique(na.omit(c_across(starts_with("site_type0"))),collapse = "..")),
-      site_id           = paste(unique(na.omit(c_across(starts_with("site_id0"))),collapse = "..")),
-      site_admin        = paste(unique(na.omit(c_across(starts_with("site_admin0"))),collapse = "..")),
-      site_agg          = paste(unique(na.omit(c_across(starts_with("site_agg0"))),collapse = "..")),
-      site_latlong_type = paste(unique(na.omit(c_across(starts_with("site_latlong_type0"))),collapse = "..")),
-      site_latitude     = paste(unique(na.omit(c_across(starts_with("site_latitude0"))),collapse = "..")),
-      site_longitude    = paste(unique(na.omit(c_across(starts_with("site_longitude0"))),collapse = "..")),
-      site_buffer       = paste(unique(na.omit(c_across(starts_with("site_buffer0"))),collapse = "..")),
+      site_id           = paste(na.omit(c_across(starts_with("site_id0"))), collapse = ".."),
+      site_type         = paste(na.omit(c_across(starts_with("site_type0"))), collapse = ".."),#unique(na.omit(c_across(starts_with("site_type0"))),collapse = "..")),
+      site_admin        = paste(na.omit(c_across(starts_with("site_admin0"))), collapse = ".."),
+      site_agg          = paste(na.omit(c_across(starts_with("site_agg0"))), collapse = ".."),
+      site_latlong_type = paste(na.omit(c_across(starts_with("site_latlong_type0"))), collapse = ".."),
+      site_latitude     = paste(na.omit(c_across(starts_with("site_latitude0"))), collapse = ".."),
+      site_longitude    = paste(na.omit(c_across(starts_with("site_longitude0"))), collapse = ".."),
+      site_buffer       = paste(na.omit(c_across(starts_with("site_buffer0"))), collapse = ".."),
       
       #---location----
       site_key = {
