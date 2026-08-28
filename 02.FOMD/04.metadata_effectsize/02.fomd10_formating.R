@@ -19,7 +19,8 @@ source(file.path(path.metadata.effectsize, "fomd_fun/fun_pairing_CT.R"))
 #==========================================================
 # Read datasets
 #==========================================================
-metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
+#metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
+metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
 
 #---09_FOMD_clean
 fomd09.clean <- read_csv(
@@ -47,7 +48,11 @@ sort(unique(fomd09.clean$out_subindicator[fomd09.clean$out_subpillar =="Yield"])
 
 sort(unique(fomd09.clean$study_id[fomd09.clean$out_subpillar =="Physical" ]))
 sort(unique(fomd09.clean$system_type[fomd09.clean$out_subpillar =="Physical"]))
-#sort(unique(fomd09.clean$out_subindicator[is.na(fomd09.clean$out_subpillar)]))
+sort(unique(fomd09.clean$out_subindicator[is.na(fomd09.clean$out_subpillar)]))
+
+#sort(unique(fomd09.clean$study_id[is.na(fomd09.clean$country )]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$country =="South_Africa"]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$out_subindicator =="Berger-Parker dominance (d)"]))
 
 #==========================================================
 # Apply pair functions
@@ -156,8 +161,6 @@ paired_yield_ler<-fun_pair_yield_total_ler(fomd09.clean)
 
 # studies providing partial and total ler
 
-
-
 JA_Phiri_24_Compa_Ag
 JA_Kidan_17_Maize_Op
 JA_Banti_15_Deter_Ho #no se que paso con este articulo
@@ -192,13 +195,13 @@ missing_bio_context <- expected %>%
 
 missing_bio_context
 
-eco_cols_to_check <- c(pairing_base_cols, "out_npv_discount_rate", "out_npv_econ_period")
+bio_cols_to_check <- c(pairing_base_cols, unlist(spec$extra_cols))
 
 rows <- fomd09.clean %>%
-  filter(study_id == "JA_ADHIK_91_STUDI_J",
-         out_subindicator == "Soil Organic Carbon",
+  filter(study_id == "JA_Armbr_07_Testi_En",
+         out_subindicator == "Abundance",
          practice_id %in% c("C1", "T1")) %>%
-  select(practice_id, all_of(eco_cols_to_check))
+  select(practice_id, all_of(bio_cols_to_check))
 
 c <- rows %>% filter(practice_id == "C1") %>% select(-practice_id) %>% unlist()
 t <- rows %>% filter(practice_id == "T1") %>% select(-practice_id) %>% unlist()

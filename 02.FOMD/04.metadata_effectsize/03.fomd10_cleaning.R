@@ -28,7 +28,9 @@ source(file.path(path.metadata.effectsize, "fomd_fun/fun_lookup_ontologies.R"))
 # Read datasets
 #==========================================================
 #metadata<-"MD_Rosen_24_Effec_Sc" #Rosenstock et al. 2024. Effects of changing farming practices in African agriculture. 10.1038/s41597-024-03805-z 
-metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
+#metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
+metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
+
 
 #---fomd10.formated
 fomd10.formated <- read_csv(
@@ -38,6 +40,7 @@ fomd10.formated <- read_csv(
 
 skim(fomd10.formated)
 
+## TO DO: I NEED TO INCLUDE NATURAL HABITATS IN THE apply_CT_subpractice 
 
 #==========================================================
 # Put C_vs_T subpractices in one column for each practice type
@@ -118,14 +121,33 @@ for (col in c("variety_management_subpractice","variety_management_practice","va
 
 prueba<-fomd10.clean%>%
   #Pest management-----
-select(doi,study_id, C_chem_subpractice,T_chem_subpractice,
+select(study_id, C_chem_subpractice,T_chem_subpractice,
        CT_chem_subpractice,
        pest_management_subpractice,pest_management_practice ,pest_management_theme,
-      # "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n"
-      )%>%
+       # "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n"
+)%>%
   filter(!is.na(pest_management_subpractice))%>%
-  filter(is.na(pest_management_practice))
+  filter(is.na(pest_management_theme))
+
 sort(unique(prueba$CT_chem_subpractice))
+  #diversification spatial-----
+select(doi,study_id,
+       diversification_spatial_subpractice,
+       C_subpractice_description_raw,T_subpractice_description_raw,
+       
+       diversification_spatial_practice ,diversification_spatial_theme
+       )%>%
+  filter(!is.na(diversification_spatial_subpractice))%>%
+  filter(is.na(diversification_spatial_practice))
+
+
+distinct(diversification_spatial_practice,diversification_spatial_theme)
+sort(unique(prueba$diversification_spatial_subpractice))
+sort(unique(prueba$doi))
+
+
+  
+  
 
   #Soil management-----
 select(doi, soil_management_subpractice,soil_management_practice ,soil_management_theme)%>%
@@ -193,29 +215,7 @@ distinct(water_management_subpractice)
 sort(unique(fomd10.clean$C_planting_subpractice))
 sort(unique(fomd10.clean$C_planting_method))
   
-  #diversification spatial-----
-  select(doi,study_id,country,
-         C_crop_tree_diversity,T_crop_tree_diversity,
-         diversification_spatial_subpractice,
-         out_subindicator,C_subpractice_description_raw,T_subpractice_description_raw,C_out_value,T_out_value,
-         C_data_location       ,T_data_location,
-         
-         diversification_spatial_practice ,diversification_spatial_theme,
-         "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
-  filter(study_id=="AC0157")
-
-  filter(doi=="10.1007/s10457-018-0304-9")
-  
-  filter(!is.na(diversification_spatial_subpractice))%>%
-  filter(grepl("T: Monoculture",diversification_spatial_practice, ignore.case = TRUE))%>%
-  filter(country=="Ethiopia")
-
-  filter(is.na(diversification_spatial_practice))
-  distinct(diversification_spatial_practice,diversification_spatial_theme)
-  sort(unique(prueba$diversification_spatial_subpractice))
-  sort(unique(prueba$doi))
-  
-  
+ 
 #diversification temporal-----
   #select(doi, diversification_temporal_subpractice,diversification_temporal_practice ,diversification_temporal_theme,
   #      "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
@@ -303,7 +303,7 @@ fomd10.clean <- apply_lookup_ontologies(
 
 unmatched_effect_size_type<-fomd10.clean %>%
   #select(doi,out_subindicator, out_effect_size) 
-  distinct(out_subindicator, out_effect_size_type)%>%
+  distinct(study_id,out_subindicator, out_effect_size_type)%>%
   arrange(out_effect_size_type)%>%
   filter(is.na(out_effect_size_type))
 
