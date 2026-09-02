@@ -369,7 +369,7 @@ explode_ler_components <- function(df) {
     # slots is what breaks bind_rows() below
     out$product      <- if (prod_col   %in% slot_cols) as.character(out[[prod_col]])   else NA_character_
     out$out_value     <- if (val_col    %in% slot_cols) as.character(out[[val_col]])    else NA_character_
-    out$var_value     <- if (var_col    %in% slot_cols) as.character(out[[var_col]])    else NA_character_
+    out$out_var_value     <- if (var_col    %in% slot_cols) as.character(out[[var_col]])    else NA_character_
     out$pler_value     <- if (ler_col    %in% slot_cols) as.character(out[[ler_col]])    else NA_character_
     out$pler_var_value <- if (lervar_col %in% slot_cols) as.character(out[[lervar_col]]) else NA_character_
     
@@ -384,7 +384,8 @@ explode_ler_components <- function(df) {
   # now that every slot combined safely as character, convert the
   # numeric-ish ones back to numeric in one pass
   exploded %>%
-    dplyr::mutate(dplyr::across(c(out_value, var_value, pler_value, pler_var_value), as.numeric))
+    dplyr::mutate(dplyr::across(c(out_value, #out_var_value, 
+                                  pler_value, pler_var_value), as.numeric))
 }
 #==========================================================
 #--- Pairing partial LER function ---
@@ -482,7 +483,7 @@ fun_pair_yield_total_ler <- function(df) {
     NA_character_
   )
   
-  df.C %>%
+  result <- df.C %>%
     dplyr::filter(!is.na(row_id)) %>%
     dplyr::select(-row_id) %>%
     dplyr::left_join(
@@ -503,4 +504,17 @@ fun_pair_yield_total_ler <- function(df) {
       ler_value_total = T_ler_value_total,
       ler_var_value_total = T_ler_var_value_total
     )
+  result$ler_comparison_id <- build_row_id(
+    result, c("T_practice_id","C_country","C_site_type",
+              "C_site_id",
+              "C_site_admin",
+              "C_site_agg",
+              "C_site_latlong_type",
+              "C_site_latitude",
+              "C_site_longitude",
+              "C_site_buffer",
+              "C_site_key",
+              id_cols))
+  result
+  
 }

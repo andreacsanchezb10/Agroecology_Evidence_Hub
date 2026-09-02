@@ -45,6 +45,8 @@ fomd09.clean <- add_fomd09_bibliographic(fomd09.clean, path.metadata.structure, 
 #---- Add location information ----
 fomd09.clean <- add_fomd09_location(fomd09.clean)
 
+#sort(unique(fomd09.clean$study_id[fomd09.clean$site_latlong_type =="Unespecified"]))
+
 #--- Check experiment details ----
 for (col in c("exp_design", "exp_plot_size", "exp_field_size", "exp_duration")) {
   cat("---", col, "---\n")
@@ -114,7 +116,7 @@ reason_unmatched_crops<-unmatched_crops %>%
   arrange(edit_distance)
 
 fomd09.clean %>%
-  filter(if_any(matches("^crop_tree0[0-9]+$"), ~ .x == "Pouteria adolfi friderici")) %>%
+  filter(if_any(matches("^crop_tree0[0-9]+$"), ~ .x == "Green gram")) %>%
   distinct(study_id, practice_id)
 
 #--- Check tillage practice---- 
@@ -322,7 +324,7 @@ for (col in c("out_value_product01", "out_var_value_product01",
               "pler_value_product01", "pler_var_value_product01",
               "pler_value_product02",	"pler_var_value_product02",
               "pler_value_product03","pler_var_value_product03",
-              "ler_value_total","ler_var_total"
+              "ler_value_total","ler_var_value_total"
 )) {
   cat("---", col, "---\n")
   print(sort(unique(fomd09.clean[[col]])))

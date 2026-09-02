@@ -1,7 +1,29 @@
 #==========================================================
+# Function: To harmonize columns type from 03.fomd10_clean
+#==========================================================
+harmonize_col_types <- function(files) {
+  specs <- lapply(files, function(f) readr::spec_csv(f, show_col_types = FALSE)$cols)
+  all_names <- unique(unlist(lapply(specs, names)))
+  
+  col_types <- setNames(vector("list", length(all_names)), all_names)
+  for (nm in all_names) {
+    types <- unique(vapply(specs, function(s) {
+      if (nm %in% names(s)) class(s[[nm]])[1] else NA_character_
+    }, character(1)))
+    types <- types[!is.na(types)]
+    # disagreement across files -> force character (the safe superset, never fails to parse)
+    col_types[[nm]] <- if (length(types) > 1) readr::col_character() else readr::col_guess()
+  }
+  do.call(readr::cols, col_types)
+}
+
+#==========================================================
 # Function: Calculate Mean & Standard deviation (SD)
 #==========================================================
-
+#sort(unique(fomd10.clean$C_out_value_metric ))
+#[1] "Mean"
+#[2] "Median" 
+#[3] "Total"
 
 #sort(unique(fomd10.clean$C_out_var_metric))
 #[1] "CV (Co-efficient of Variation)"                          
@@ -15,7 +37,7 @@
 #[9] "SE (Standard Error)"                                     
 #[10] "SEM (Standard Error of Mean)"                            
 #[11] "Unspecified"
-
+#[12]"95% Confidence Intervals"
 
 
 calculate_mean_sd <- function(data,
@@ -94,6 +116,15 @@ iqr_sd <- function(q1, q3, sample_size) {
   return(result)
 }
 
+#---  95% CI → SD: SD = √n × (upper limit − lower limit) / 3.92 ----
+# REFERENCE: Cochrane Handbook 6.3.1 https://www.cochrane.org/authors/handbooks-and-manuals/handbook/archive/v6.4
+metrics.ci95_sd <- c("95% Confidence Intervals")
+
+ci95_sd <- function(lower, upper, sample_size) {
+  result <- sqrt(sample_size) * ((upper - lower) / 3.92)
+  return(result)
+}
+
 #---  Unspecified → SD: SD = NA
 metrics.na         <- c("Unspecified")
 
@@ -129,7 +160,7 @@ compute <- function(data, prefix) {
       
       # --- Mean ---
       !!out_mean := case_when(
-        .data[[out_value_metric]] == "Mean" ~ .data[[out_value]],
+        .data[[out_value_metric]] %in% c("Mean","Total") ~ .data[[out_value]],
         
         # Median + IQR → Mean
         # (per your mapping: Q3 = out_var_value_u, Q1 = out_var_value_l)
@@ -171,6 +202,12 @@ compute <- function(data, prefix) {
         ~ iqr_sd(q1          = .data[[out_var_value_l]],
                  q3          = .data[[out_var_value_u]],
                  sample_size = .data[[out_sample_size]]),
+        
+        # 95 CI → SD (per your mapping: upper = out_var_value_u, lower = out_var_value_l)
+        .data[[out_var_metric]] %in% metrics.ci95_sd
+        ~ ci95_sd(lower       = .data[[out_var_value_l]],
+                upper       = .data[[out_var_value_u]],
+                sample_size = .data[[out_sample_size]]),
         
         # Unresolvable — set to NA
         .data[[out_var_metric]] %in% metrics.na

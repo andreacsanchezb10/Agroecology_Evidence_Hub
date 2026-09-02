@@ -19,6 +19,7 @@ source(file.path(path.metadata.effectsize,"fomd_fun/fun_mean_sd_calculation.R"))
 source(file.path(path.metadata.effectsize,"fomd_fun/fun_lookup_ontologies.R")) # TO CHECK VER COMO METER LOAD DATA ONTOLOGIES DENTRO DE ESTA EQUACION
 source(file.path(path.metadata.effectsize,"fomd_fun/fun_cv_missing_calculation.R"))
 source(file.path(path.metadata.effectsize,"fomd_fun/fun_effect_sizes_calculation.R"))
+source(file.path(path.metadata.effectsize,"fomd_fun/fun_pler_ler_calculation.R"))
 
 #==========================================================
 # Read datasets
@@ -90,6 +91,9 @@ sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_subpillar=="Biodi
 
 
 #---- Apply equation to calculate sample size AND SD ----
+## TO CHECK TOMORROW: WHY I'M CALCULATING EFFECT SIZES HERE IF METAFOR escalc(measure = "ROM" 
+## CALCULATE VI AND YI USING THE SAME FORMULA???
+
 fomd10.n.cv <- n_cv_calculation(
   dt               = fomd10.mean.sd,                       
   rules            = outcome_grouping_rules,
@@ -145,29 +149,23 @@ data.frame(
   n_na    = colSums(is.na(fomd10.n.cv[, cols])),
   pct_na  = colMeans(is.na(fomd10.n.cv[, cols])) * 100)
 
-
-sort(unique(fomd10.n.cv$ler_comparison_id))
-length(unique(fomd10.n.cv$ler_comparison_id))
-
-## there is a problem with JA_Dua, _17_Effec_LR ler since there are multiple controls
-
-ler_prueba<- fomd10.n.cv%>%
+#==========================================================
+# Calculate pLER and LER
+#==========================================================
+fomd10.ler<- fun_calculate_ler(fomd10.n.cv)
   select(study_id,
          out_subindicator,
          C_out_value_metric,
          C_out_value,
          C_out_var_metric,
          C_out_var_value,
-         C_out_var_value_l,
-         C_out_var_value_u,
          C_out_sample_size,
          T_out_value_metric,
          T_out_value,
          T_out_var_metric,
          T_out_var_value,
-         T_out_var_value_l,
-         T_out_var_value_u,
          T_out_sample_size,
+         
          pler_value,
          pler_var_value,
          ler_value_total,
@@ -175,34 +173,25 @@ ler_prueba<- fomd10.n.cv%>%
          ler_comparison_id,
          C_product,
          T_product,
+         C_product_simple,
+         T_product_simple,
          T_crop_tree_diversity,
          
          C_out_mean,
          T_out_mean,
          C_out_sd,
          T_out_sd,
-  )%>%
-  #filter(!is.na(ler_comparison_id))%>%
-  mutate(
-    pler_calc=case_when(!is.na(ler_comparison_id)~T_out_mean/C_out_mean,TRUE~NA)
-  )%>%
-  mutate(pler_calc=case_when(out_subindicator=="Land Equivalent Ratio"~NA_real_,TRUE~pler_calc))%>%
-
-  group_by(ler_comparison_id)%>%
-  mutate(ler_calc_n_rows=  n()  ,
-         ler_calc = sum(pler_calc, na.rm = TRUE)) %>%
-  ungroup()%>%
-  mutate(ler_calc = case_when(
-    is.na(pler_calc)&!is.na(ler_value_total)~ler_value_total,
-    is.na(ler_comparison_id)&is.na(ler_value_total)~NA_real_,
-    TRUE~ler_calc))%>%
-  mutate(
-    ler_calc_n_rows = if_else(is.na(ler_comparison_id), NA_real_, ler_calc_n_rows))
-filter(ler_comparison_id==
-         "T1/India/Researcher Managed & Research Facility/Agricultural Experimental Farm of Indian Statistical Institute at Giridih/State/No/Middle point/24.1912233822818/86.3053822105897/5000/86.305382210589698 24.191223382281802 B5000/MD_Paut,_24_A glo_Sc/JA_ADHIK_91_STUDI_J/ADHIKARY, S and BAGCHI, DK and GHOSAL, P and BANERJEE, RN and CHATTERJEE, BN/STUDIES ON MAIZE-LEGUME INTERCROPPING AND THEIR RESIDUAL EFFECTS ON SOIL FERTILITY STATUS AND SUCCEEDING CROP IN UPLAND SITUATION/1991/J Agronomy Crop Science/10.1111/j.1439-037X.1991.tb00959.x/one upland plot of Agricultural Experimental Farm of Indian Statistical Institute at Giridih, situated in the south eastern part of Chotanagpur plateau in Bihar state of India. Treatments were laid out m R.B. design with plot sizes of 24 m- (8 m X 3 m) in sole. Treatments were laid out m R.B. design with plot sizes of 36 m' (8 m X 4.5 m) In intercropped plots to accommodate reasonable plant populations of both species in association./2/Kharif season of 1987 and 1988/1987/1988/Kharif/NA/NA/Crop Yield/Product Yield/Yield/Productivity/NA/NA/NA/NA/NA/NA/NA/NA/1987/NA/NA/1/NA"
-       # "T1/India/Researcher Managed & Research Facility/CPRI Experimental Farm, Shimla (H.P)/City/No/Unespecified/31.0963984301031/77.171695085733/800/77.171695085733006 31.0963984301031 B800/MD_Paut,_24_A glo_Sc/JA_Dua, _17_Effec_LR/Dua, V. K. and Kumar, Sushil and Jatav, M. K./Effect of nitrogen application to intercrops on yield, competition, nutrient use efficiency and economics in potato (Solanum Tuberosum L.) plus French bean (Phaseolus Vulgaris L.) system in north-western hills of India/2017/LR/10.18805/lr.v0i0.7841/The experiment was conducted in randomized block design with four replications in 2007 and 2009 and three replications in 2008./3/The experiment was conducted in randomized block design with four replications in 2007 and 2009 and three replications in 2008. The potato cultivar ‘Kufri Jyoti’ and French bean cultivar ‘Selection-9’ were planted in the first fortnight of April. french bean was harvested during end June to end July in 3-4 pickings, whereas potato was harvested during second fortnight of September during all the years./2007/2009/April to June or September/NA/NA/Crop Yield/Product Yield/Yield/Productivity/NA/NA/NA/NA/NA/NA/NA/NA/2007/NA/NA/June/NA"                                                                                          
-)
-sort(unique(ler_prueba$study_id))
+         C_out_cv_final,
+         T_out_cv_final,
+         "C_out_sample_size_imputed","T_out_sample_size_imputed",
+         "pler_value_calc" ,"pler_var_calc",  
+         "ler_calc_n_rows"  ,                   
+         "ler_value_calc" ,                      "ler_sd_calc"  ,
+         ler_product ,
+         ler_effect_size_type,ler_effect_size_yi,ler_effect_size_vi
+         
+  )
+## there is a problem with JA_Dua, _17_Effec_LR ler since there are multiple controls
 ## TO CHECK: HOW TO RESOLVE THE PROBLEM WITH DUA..
 ## HOW TO GET var LER values need to be calculated
 crop_check <- fomd10.mean.sd %>%

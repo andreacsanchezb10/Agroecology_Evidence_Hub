@@ -246,8 +246,8 @@ cols_to_check <- c(pairing_base_cols, context_extra)
 cols_to_check
 
 rows <- fomd09.clean %>%
-  filter(study_id == "JA_ADHIK_91_STUDI_J",
-         out_subindicator == "Soil Organic Carbon",
+  filter(study_id == "JA_Rao, _90_Produ_Fi",
+         out_subindicator == "Net Return",
          practice_id %in% c("C1", "T1")) %>%
   select(practice_id, all_of(cols_to_check))
 
