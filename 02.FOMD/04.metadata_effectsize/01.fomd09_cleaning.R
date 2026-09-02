@@ -23,8 +23,8 @@ source(file.path(path.metadata.effectsize,"/fomd_fun/fun_lookup_ontologies.R"))
 #==========================================================
 # Read datasets
 #==========================================================
-#metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
-metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
+metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
+#metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
 
 #--- Check that every verified-paper .xlsm in a subfolder shares the same columns
 check_09FOMD_column_consistency(subfolder = metadata)
@@ -389,26 +389,4 @@ fomd09.clean <- apply_lookup_ontologies(
 )
 
 readr::write_csv(fomd09.clean, paste0(path.metadata.effectsize, "01.fomd09_clean/fomd09_clean_",metadata,".csv"))
-
-
-
-
-
-###########################
-#-----------------------------
-# Equations to calculate the SD from SE, IC and IQR
-#-----------------------------
-##Equation to calculate the SD from M_IQR (Hozo et al., 2005) 
-##(a= N_samples; b=B_error_range; c=B_error_value; d= B_error_range.1)
-M_IQR_SD<- function (a, b,c,d) {  
-  result<- sqrt(((a + 1)/(48 * a*((a-1)^2))) * (((a^2) + 3) * ((b - (2*c) + d)^2) + (4* (a^2)) * ((d - b)^2)))
-  return(result)
-}
-
-##Equation to calculate the SD from CI (Higgins & Green 2011) (a= N_samples; b= B_error_value)
-##http://handbook-5-1.cochrane.org/chapter_7/7_7_3_2_obtaining_standard_deviations_from_standard_errors_and.htm
-CI_SD<- function (a, b) {  
-  result<- (sqrt(a) * (b/((qt((1-(0.05/2)), (a - 1)))*2)))
-  return(result)
-}
 

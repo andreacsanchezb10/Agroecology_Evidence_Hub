@@ -19,8 +19,8 @@ source(file.path(path.metadata.effectsize, "fomd_fun/fun_pairing_CT.R"))
 #==========================================================
 # Read datasets
 #==========================================================
-#metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
-metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
+metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
+#metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
 
 #---09_FOMD_clean
 fomd09.clean <- read_csv(
@@ -157,7 +157,8 @@ y<-paired_yield_pler%>%
 #--- Yield to cal partial and total ler function -----
 #-------------------------------------------------------------------------------------
 paired_yield_ler<-fun_pair_yield_total_ler(fomd09.clean)
-
+names()
+sort(unique(paired_yield_ler$ler_comparison_id))
 
 # studies providing partial and total ler
 

@@ -27,7 +27,11 @@ source(file.path(path.metadata.effectsize,"fomd_fun/fun_effect_sizes_calculation
 fomd10_clean_dir   <- file.path(path.metadata.effectsize, "03.fomd10_clean")
 fomd10_clean_files <- list.files(fomd10_clean_dir, pattern = "^fomd10_clean_.*\\.csv$", full.names = TRUE)
 
-fomd10.clean <- purrr::map_dfr(fomd10_clean_files, readr::read_csv, show_col_types = FALSE)
+fomd10.clean <- purrr::map_dfr(
+  fomd10_clean_files, readr::read_csv,
+  show_col_types = FALSE,
+  col_types = harmonize_col_types(fomd10_clean_files)
+)
 
 # --- quick check ---
 skim(fomd10.clean)
@@ -35,6 +39,8 @@ skim(fomd10.clean)
 length(fomd10_clean_files) # how many source files got combined
 nrow(fomd10.clean)
 sort(unique(fomd10.clean$study_id))
+#sort(unique(fomd10.clean$study_id[is.na(fomd10.clean$C_out_value )]))
+#sort(unique(fomd10.clean$study_id[fomd10.clean$C_out_var_metric =="95% Confidence Intervals"]))
 
 #==========================================================
 # Calculate Mean and Standard deviation
@@ -62,75 +68,6 @@ skim(fomd10.clean$T_out_sample_size)
 #---- Apply equation to calculate Mean AND SD from raw data ----
 fomd10.mean.sd<-calculate_mean_sd(fomd10.clean)
 
-sort(unique(fomd10.mean.sd$ler_comparison_id))
-## there is a problem with JA_Dua, _17_Effec_LR ler since there are multiple controls
-
-
-ler_prueba<- fomd10.mean.sd%>%
-  select(study_id,
-         out_subindicator,
-         C_out_value_metric,
-         C_out_value,
-         C_out_var_metric,
-         C_out_var_value,
-         C_out_var_value_l,
-         C_out_var_value_u,
-         C_out_sample_size,
-         T_out_value_metric,
-         T_out_value,
-         T_out_var_metric,
-         T_out_var_value,
-         T_out_var_value_l,
-         T_out_var_value_u,
-         T_out_sample_size,
-         pler_value,
-         pler_var_value,
-         ler_value_total,
-         ler_var_value_total,
-         ler_comparison_id,
-         C_product,
-         T_product,
-         T_crop_tree_diversity,
-
-         C_out_mean,
-         T_out_mean,
-         C_out_sd,
-         T_out_sd,
-  )%>%
-  #filter(!is.na(ler_comparison_id))%>%
-  mutate(
-    pler_calc=case_when(!is.na(ler_comparison_id)~T_out_mean/C_out_mean,TRUE~NA)
-  )%>%
-  group_by(ler_comparison_id)%>%
-  mutate(#ler_calc_n_rows=    ,
-         ler_calc = sum(pler_calc, na.rm = TRUE)) %>%
-  ungroup()%>%
-  mutate(ler_calc = if_else(is.na(ler_comparison_id), NA_real_, ler_calc))
-  filter(study_id=="JA_Kabir_17_A Stu_In")
-  filter(ler_comparison_id==
-           "T1/India/Researcher Managed & Research Facility/Agricultural Experimental Farm of Indian Statistical Institute at Giridih/State/No/Middle point/24.1912233822818/86.3053822105897/5000/86.305382210589698 24.191223382281802 B5000/MD_Paut,_24_A glo_Sc/JA_ADHIK_91_STUDI_J/ADHIKARY, S and BAGCHI, DK and GHOSAL, P and BANERJEE, RN and CHATTERJEE, BN/STUDIES ON MAIZE-LEGUME INTERCROPPING AND THEIR RESIDUAL EFFECTS ON SOIL FERTILITY STATUS AND SUCCEEDING CROP IN UPLAND SITUATION/1991/J Agronomy Crop Science/10.1111/j.1439-037X.1991.tb00959.x/one upland plot of Agricultural Experimental Farm of Indian Statistical Institute at Giridih, situated in the south eastern part of Chotanagpur plateau in Bihar state of India. Treatments were laid out m R.B. design with plot sizes of 24 m- (8 m X 3 m) in sole. Treatments were laid out m R.B. design with plot sizes of 36 m' (8 m X 4.5 m) In intercropped plots to accommodate reasonable plant populations of both species in association./2/Kharif season of 1987 and 1988/1987/1988/Kharif/NA/NA/Crop Yield/Product Yield/Yield/Productivity/NA/NA/NA/NA/NA/NA/NA/NA/1987/NA/NA/1/NA"
-          # "T1/India/Researcher Managed & Research Facility/CPRI Experimental Farm, Shimla (H.P)/City/No/Unespecified/31.0963984301031/77.171695085733/800/77.171695085733006 31.0963984301031 B800/MD_Paut,_24_A glo_Sc/JA_Dua, _17_Effec_LR/Dua, V. K. and Kumar, Sushil and Jatav, M. K./Effect of nitrogen application to intercrops on yield, competition, nutrient use efficiency and economics in potato (Solanum Tuberosum L.) plus French bean (Phaseolus Vulgaris L.) system in north-western hills of India/2017/LR/10.18805/lr.v0i0.7841/The experiment was conducted in randomized block design with four replications in 2007 and 2009 and three replications in 2008./3/The experiment was conducted in randomized block design with four replications in 2007 and 2009 and three replications in 2008. The potato cultivar ‘Kufri Jyoti’ and French bean cultivar ‘Selection-9’ were planted in the first fortnight of April. french bean was harvested during end June to end July in 3-4 pickings, whereas potato was harvested during second fortnight of September during all the years./2007/2009/April to June or September/NA/NA/Crop Yield/Product Yield/Yield/Productivity/NA/NA/NA/NA/NA/NA/NA/NA/2007/NA/NA/June/NA"                                                                                          
-         )
-sort(unique(ler_prueba$study_id))
-## TO CHECK: HOW TO RESOLVE THE PROBLEM WITH DUA..
-## HOW TO GET var LER values need to be calculated
-
-
-crop_check <- fomd10.mean.sd %>%
-  filter(!is.na(ler_comparison_id)) %>%
-  mutate(n_crops_expected = lengths(strsplit(T_crop_tree_diversity, "-"))) %>%
-  group_by(ler_comparison_id) %>%
-  mutate(n_rows_actual = n()) %>%
-  ungroup() %>%
-  distinct(study_id,ler_comparison_id, T_crop_tree_diversity, T_product, n_crops_expected, n_rows_actual) %>%
-  filter(n_rows_actual != n_crops_expected)
-
-nrow(crop_check)
-crop_check
-
-
-
-
 #==========================================================
 # Calculate CV and number of samples
 # From observations that don't provide variance values or number of samples
@@ -138,27 +75,19 @@ crop_check
 # --- quick checks ---
 skim(fomd10.mean.sd$C_out_mean)
 skim(fomd10.mean.sd$T_out_mean)
+sort(unique(fomd10.mean.sd$study_id[is.na(fomd10.mean.sd$C_out_mean)]))
 
 skim(fomd10.mean.sd$C_out_sd)
 skim(fomd10.mean.sd$T_out_sd)
 
-# check if there is any product mismatches for out_indicator == "Product Yield"
-# if there are, it is a mistake or need to be check?
-sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_indicator == "Product Yield" ])) #9
-sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_subpillar == "Biodiversity" ])) #9
-sort(unique(fomd10.mean.sd$out_subindicator))
-product.mismatches<- fomd10.mean.sd %>%
-  filter(out_subindicator%in%c(
-    #Product Yield
-    "Crop Yield", "Biomass Yield","Egg Yield","Meat Yield",
-    "Milk Yield","Other Animal Product Yield","Reproductive Yield", "Weight Gain",
-    # Biodiversity
-    "Abundance",         "Microbial biomass", "Simpson Index"
-    
-    ))%>%
-  select(study_id,out_subindicator,C_product,T_product,
-         C_product_simple,T_product_simple,C_out_sd,T_out_sd)%>%
-  filter(C_product != T_product)
+skim(fomd10.mean.sd$C_out_sample_size)
+skim(fomd10.mean.sd$T_out_sample_size)
+
+sort(unique(fomd10.mean.sd$out_subpillar))
+
+sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_subpillar=="Yield"]))
+sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_subpillar=="Biodiversity"]))
+
 
 #---- Apply equation to calculate sample size AND SD ----
 fomd10.n.cv <- n_cv_calculation(
@@ -182,7 +111,11 @@ skim(fomd10.n.cv$T_out_sample_size)
 skim(fomd10.n.cv$T_out_sample_size_imputed)
 
 prueba<-fomd10.n.cv%>%
-  filter(is.na(C_out_sample_size))%>%
+  filter(out_subindicator=="Crop Yield",
+         C_product_simple=="Wheat"
+         )%>%
+  
+  #filter(is.na(C_out_sample_size))%>%
   select(study_id,
          out_subindicator,
          C_product,T_product,
@@ -212,12 +145,84 @@ data.frame(
   n_na    = colSums(is.na(fomd10.n.cv[, cols])),
   pct_na  = colMeans(is.na(fomd10.n.cv[, cols])) * 100)
 
+
+sort(unique(fomd10.n.cv$ler_comparison_id))
+length(unique(fomd10.n.cv$ler_comparison_id))
+
+## there is a problem with JA_Dua, _17_Effec_LR ler since there are multiple controls
+
+ler_prueba<- fomd10.n.cv%>%
+  select(study_id,
+         out_subindicator,
+         C_out_value_metric,
+         C_out_value,
+         C_out_var_metric,
+         C_out_var_value,
+         C_out_var_value_l,
+         C_out_var_value_u,
+         C_out_sample_size,
+         T_out_value_metric,
+         T_out_value,
+         T_out_var_metric,
+         T_out_var_value,
+         T_out_var_value_l,
+         T_out_var_value_u,
+         T_out_sample_size,
+         pler_value,
+         pler_var_value,
+         ler_value_total,
+         ler_var_value_total,
+         ler_comparison_id,
+         C_product,
+         T_product,
+         T_crop_tree_diversity,
+         
+         C_out_mean,
+         T_out_mean,
+         C_out_sd,
+         T_out_sd,
+  )%>%
+  #filter(!is.na(ler_comparison_id))%>%
+  mutate(
+    pler_calc=case_when(!is.na(ler_comparison_id)~T_out_mean/C_out_mean,TRUE~NA)
+  )%>%
+  mutate(pler_calc=case_when(out_subindicator=="Land Equivalent Ratio"~NA_real_,TRUE~pler_calc))%>%
+
+  group_by(ler_comparison_id)%>%
+  mutate(ler_calc_n_rows=  n()  ,
+         ler_calc = sum(pler_calc, na.rm = TRUE)) %>%
+  ungroup()%>%
+  mutate(ler_calc = case_when(
+    is.na(pler_calc)&!is.na(ler_value_total)~ler_value_total,
+    is.na(ler_comparison_id)&is.na(ler_value_total)~NA_real_,
+    TRUE~ler_calc))%>%
+  mutate(
+    ler_calc_n_rows = if_else(is.na(ler_comparison_id), NA_real_, ler_calc_n_rows))
+filter(ler_comparison_id==
+         "T1/India/Researcher Managed & Research Facility/Agricultural Experimental Farm of Indian Statistical Institute at Giridih/State/No/Middle point/24.1912233822818/86.3053822105897/5000/86.305382210589698 24.191223382281802 B5000/MD_Paut,_24_A glo_Sc/JA_ADHIK_91_STUDI_J/ADHIKARY, S and BAGCHI, DK and GHOSAL, P and BANERJEE, RN and CHATTERJEE, BN/STUDIES ON MAIZE-LEGUME INTERCROPPING AND THEIR RESIDUAL EFFECTS ON SOIL FERTILITY STATUS AND SUCCEEDING CROP IN UPLAND SITUATION/1991/J Agronomy Crop Science/10.1111/j.1439-037X.1991.tb00959.x/one upland plot of Agricultural Experimental Farm of Indian Statistical Institute at Giridih, situated in the south eastern part of Chotanagpur plateau in Bihar state of India. Treatments were laid out m R.B. design with plot sizes of 24 m- (8 m X 3 m) in sole. Treatments were laid out m R.B. design with plot sizes of 36 m' (8 m X 4.5 m) In intercropped plots to accommodate reasonable plant populations of both species in association./2/Kharif season of 1987 and 1988/1987/1988/Kharif/NA/NA/Crop Yield/Product Yield/Yield/Productivity/NA/NA/NA/NA/NA/NA/NA/NA/1987/NA/NA/1/NA"
+       # "T1/India/Researcher Managed & Research Facility/CPRI Experimental Farm, Shimla (H.P)/City/No/Unespecified/31.0963984301031/77.171695085733/800/77.171695085733006 31.0963984301031 B800/MD_Paut,_24_A glo_Sc/JA_Dua, _17_Effec_LR/Dua, V. K. and Kumar, Sushil and Jatav, M. K./Effect of nitrogen application to intercrops on yield, competition, nutrient use efficiency and economics in potato (Solanum Tuberosum L.) plus French bean (Phaseolus Vulgaris L.) system in north-western hills of India/2017/LR/10.18805/lr.v0i0.7841/The experiment was conducted in randomized block design with four replications in 2007 and 2009 and three replications in 2008./3/The experiment was conducted in randomized block design with four replications in 2007 and 2009 and three replications in 2008. The potato cultivar ‘Kufri Jyoti’ and French bean cultivar ‘Selection-9’ were planted in the first fortnight of April. french bean was harvested during end June to end July in 3-4 pickings, whereas potato was harvested during second fortnight of September during all the years./2007/2009/April to June or September/NA/NA/Crop Yield/Product Yield/Yield/Productivity/NA/NA/NA/NA/NA/NA/NA/NA/2007/NA/NA/June/NA"                                                                                          
+)
+sort(unique(ler_prueba$study_id))
+## TO CHECK: HOW TO RESOLVE THE PROBLEM WITH DUA..
+## HOW TO GET var LER values need to be calculated
+crop_check <- fomd10.mean.sd %>%
+  filter(!is.na(ler_comparison_id)) %>%
+  mutate(n_crops_expected = lengths(strsplit(T_crop_tree_diversity, "-"))) %>%
+  group_by(ler_comparison_id) %>%
+  mutate(n_rows_actual = n()) %>%
+  ungroup() %>%
+  distinct(study_id,ler_comparison_id, T_crop_tree_diversity, T_product, n_crops_expected, n_rows_actual) %>%
+  filter(n_rows_actual != n_crops_expected)
+
+nrow(crop_check)
+crop_check
+
 #==========================================================
 # Checking out_subindicators with effect_size_type
 #==========================================================
-sort(unique(fomd10.n.cv$out_subindicator))#121
-sort(unique(fomd10.n.cv$out_indicator))#16
-sort(unique(fomd10.n.cv$out_effect_size_type))
+sort(unique(fomd10.n.cv$out_subindicator))#37
+sort(unique(fomd10.n.cv$out_indicator))#13
+sort(unique(fomd10.n.cv$out_effect_size_type))#2
 
 sort(unique(fomd10.n.cv$out_subindicator[is.na(fomd10.n.cv$out_effect_size_type )]))
 sort(unique(fomd10.n.cv$out_subindicator[fomd10.n.cv$out_effect_size_type == "Log Response Ratio" ]))

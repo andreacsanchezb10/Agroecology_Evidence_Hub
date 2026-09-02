@@ -35,7 +35,12 @@ outcome_grouping_rules <- list(
   ),
   #---- out_subpillar=="Biodiverstiy" ----
   list(
-    outcomes        = c("Abundance", "Microbial biomass", "Simpson Index"),
+    outcomes        = c("Abundance","Activity-density","Berger-Parker dominance (d)",
+                        "Chao1 Index","Colonisation percent","Fisher Alpha",               
+                        "Jack-knife Species Richness","Microbial biomass",
+                        "Rarefied Species Richness", "Relative activity","Shannon-Wiener Index",
+                        "Shannon Evenness Index","Shannon Index","Simpson Index",
+                        "Species Evenness","Species Richness"),
     grouping_vars_t = c("T_system_type", "C_product_simple", "T_product_simple", "out_subindicator"),
     grouping_vars_c = c("C_system_type", "C_product_simple", "T_product_simple", "out_subindicator")
   )#,
