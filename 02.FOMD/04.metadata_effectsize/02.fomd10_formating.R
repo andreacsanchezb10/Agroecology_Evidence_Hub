@@ -286,11 +286,11 @@ nrow(missing_yield_focal)   # how many never found their Treatment
 missing_yield_focal
 
 rows <- fomd09_focal %>%
-  filter(study_id == "JA_ADHIK_91_STUDI_J", practice_id %in% c("C6", "T5")) %>%
+  filter(study_id == "JA_Kabir_17_A Stu_In", practice_id %in% c("C1", "T6")) %>%
   select(practice_id, all_of(id_cols))
 
-c <- rows %>% filter(practice_id == "C6") %>% select(-practice_id) %>% slice(1) %>% unlist()
-t <- rows %>% filter(practice_id == "T5") %>% select(-practice_id) %>% slice(1) %>% unlist()
+c <- rows %>% filter(practice_id == "C1") %>% select(-practice_id) %>% slice(1) %>% unlist()
+t <- rows %>% filter(practice_id == "T6") %>% select(-practice_id) %>% slice(1) %>% unlist()
 
 tibble(column = names(c), C = c, T = t) %>%
   filter(C != T | is.na(C) != is.na(T))

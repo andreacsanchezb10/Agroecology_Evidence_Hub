@@ -41,13 +41,17 @@ outcome_grouping_rules <- list(
                         "Rarefied Species Richness", "Relative activity","Shannon-Wiener Index",
                         "Shannon Evenness Index","Shannon Index","Simpson Index",
                         "Species Evenness","Species Richness"),
-    grouping_vars_t = c("T_system_type", "C_product_simple", "T_product_simple", "out_subindicator"),
-    grouping_vars_c = c("C_system_type", "C_product_simple", "T_product_simple", "out_subindicator")
+    grouping_vars_t = c("T_system_type", "C_product_simple", "T_product_simple","bio_func_group","bio_ground_ref", "out_subindicator"),
+    grouping_vars_c = c("C_system_type", "C_product_simple", "T_product_simple","bio_func_group","bio_ground_ref", "out_subindicator")
   )#,
+  #---- out_subpillar=="Economics" ----
+  
   #list(
-  # outcomes      = c("Water Use Efficiency"),
-  # grouping_vars_t = c("out_subindicator"),
-  # grouping_vars_c = c("out_subindicator")
+  # outcomes      = c("Benefit Cost Ratio (GRTC)",        "Benefit Cost Ratio (NRTC)",
+  #"Benefit Cost Ratio (Unspecified)", "Gross Return","Marginal Rate of Return" ,
+  #"Net Present Value", "Net Return","Total Cost" ),
+  # grouping_vars_t = c("country","T_system_type", "out_subindicator"),
+  # grouping_vars_c = c("country","C_system_type", "out_subindicator")
   # )
 )
 

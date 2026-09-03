@@ -116,7 +116,11 @@ reason_unmatched_crops<-unmatched_crops %>%
   arrange(edit_distance)
 
 fomd09.clean %>%
-  filter(if_any(matches("^crop_tree0[0-9]+$"), ~ .x == "Green gram")) %>%
+  filter(if_any(matches("^crop_tree0[0-9]+$"), ~ .x == "Musa sp.")) %>%
+  distinct(study_id, practice_id)
+
+fomd09.clean %>%
+  filter(if_any(matches("^product0[0-9]+$"), ~ .x == "Native legumes")) %>%
   distinct(study_id, practice_id)
 
 #--- Check tillage practice---- 

@@ -86,14 +86,12 @@ skim(fomd10.mean.sd$T_out_sample_size)
 
 sort(unique(fomd10.mean.sd$out_subpillar))
 
-sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_subpillar=="Yield"]))
 sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_subpillar=="Biodiversity"]))
+sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_subpillar=="Economics"]))
 
+sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_subpillar=="Yield"]))
 
 #---- Apply equation to calculate sample size AND SD ----
-## TO CHECK TOMORROW: WHY I'M CALCULATING EFFECT SIZES HERE IF METAFOR escalc(measure = "ROM" 
-## CALCULATE VI AND YI USING THE SAME FORMULA???
-
 fomd10.n.cv <- n_cv_calculation(
   dt               = fomd10.mean.sd,                       
   rules            = outcome_grouping_rules,
@@ -209,51 +207,31 @@ crop_check
 #==========================================================
 # Checking out_subindicators with effect_size_type
 #==========================================================
-sort(unique(fomd10.n.cv$out_subindicator))#37
-sort(unique(fomd10.n.cv$out_indicator))#13
-sort(unique(fomd10.n.cv$out_effect_size_type))#2
+sort(unique(fomd10.ler$out_subindicator))#37
+sort(unique(fomd10.ler$out_indicator))#14
+sort(unique(fomd10.ler$out_effect_size_type))#2
 
-sort(unique(fomd10.n.cv$out_subindicator[is.na(fomd10.n.cv$out_effect_size_type )]))
-sort(unique(fomd10.n.cv$out_subindicator[fomd10.n.cv$out_effect_size_type == "Log Response Ratio" ]))
-sort(unique(fomd10.n.cv$out_subindicator[fomd10.n.cv$out_effect_size_type == "Standardized Mean Difference" ]))
-
+sort(unique(fomd10.ler$out_subindicator[is.na(fomd10.n.cv$out_effect_size_type )]))
+sort(unique(fomd10.ler$out_subindicator[fomd10.n.cv$out_effect_size_type == "Log Response Ratio" ]))
+sort(unique(fomd10.ler$out_subindicator[fomd10.n.cv$out_effect_size_type == "Standardized Mean Difference" ]))
+names(fomd10.ler)
 #==========================================================
 # Calculate Effect sizes 
 #==========================================================
 ### THINGS TO DO: I NEED TO CALCULATE SMD USING THE CALCULATED SD, ASK DAMIEN HOW TO DO IT.
-
-sort(unique(fomd10.n.cv$T_out_sample_size_imputed))
-sort(unique(fomd10.n.cv$C_out_sample_size_imputed))
-
-x<-fomd10.n.cv %>%
-  select(study_id,
-         out_subindicator,
-    C_out_mean,
-         T_out_mean,
-         C_out_sd,
-         T_out_sd,
-         C_out_sample_size_imputed,
-         T_out_sample_size_imputed,
-         C_out_cv_group_avg,
-         T_out_cv_group_avg,
-         C_out_cv_final,
-         T_out_cv_final
-         #out_cv_grouping_method,
-         #out_effect_size_type,
-    #out_effect_size_yi,
-    #out_effect_size_vi
-  )
-
+sort(unique(fomd10.ler$T_out_sample_size_imputed))
+sort(unique(fomd10.ler$C_out_sample_size_imputed))
+sort(unique(fomd10.ler$lnRR_cv_group_avg))
+sort(unique(fomd10.ler$lnRR_cv_final))
 
 
 fomd10.effectsize <- fomd10.n.cv %>%
   calc_lnRR_effectsize(T_out_mean, C_out_mean,
                       T_out_sd, C_out_sd,
-                      T_out_sample_size_imputed, C_out_sample_size_imputed)%>%
+                      T_out_sample_size, C_out_sample_size)%>%
   calc_SMD_effectsize(T_out_mean, C_out_mean,
                        T_out_sd, C_out_sd,
-                       T_out_sample_size_imputed, C_out_sample_size_imputed)%>%
-  
+                       T_out_sample_size, C_out_sample_size)%>%
   mutate(
     out_effect_size_yi=case_when(
       out_effect_size_type=="Log Response Ratio"& !is.na(lnRR_cv_final)~lnRR_cv_final,
@@ -265,30 +243,38 @@ fomd10.effectsize <- fomd10.n.cv %>%
       out_effect_size_type=="Log Response Ratio"& !is.na(lnRR_var_cv_final)~lnRR_var_cv_final,
       out_effect_size_type=="Log Response Ratio"& is.na(lnRR_var_cv_final)~lnRR_var,
       out_effect_size_type=="Standardized Mean Difference"~SMD_var,
-      
       TRUE~NA)
     )
 
-  names(fomd10.effectsize)
+names(fomd10.effectsize)
   
-  x<-fomd10.effectsize%>%
-    
+x<-fomd10.effectsize %>%
   select(study_id,
-                out_subindicator,
+         out_subindicator,
+         C_out_mean,
+         T_out_mean,
+         C_out_sd,
+         T_out_sd,
+         C_out_sample_size,
+         T_out_sample_size,
+         C_out_sample_size_imputed,
+         T_out_sample_size_imputed,
+         C_out_cv_group_avg,
+         T_out_cv_group_avg,
+         C_out_cv_final,
+         T_out_cv_final,
+         #out_cv_grouping_method,
          out_effect_size_type,
-                C_out_mean,
-                T_out_mean,
-                C_out_sd,
-                T_out_sd,
-                C_out_sample_size_imputed,
-                T_out_sample_size_imputed,
-                C_out_cv_group_avg,
-                T_out_cv_group_avg,
-                C_out_cv_final,
-                T_out_cv_final,
-         lnRR_cv_group_avg,
-         lnRR_cv_final,effect_size_yi,
-         effect_size_vi)
+         out_subpillar,
+         lnRR,SMD,
+         out_effect_size_yi,
+         out_effect_size_vi
+  )%>%
+  filter(out_effect_size_type=="Standardized Mean Difference")
+
+  filter(out_subpillar=="Efficiency")
+sort(unique(x$out_subpillar))
+
 
 #==========================================================
 #--------- Check for missing columns
