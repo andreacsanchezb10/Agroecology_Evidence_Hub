@@ -174,7 +174,6 @@ fomd10.ler<- fun_calculate_ler(fomd10.n.cv)
          C_product_simple,
          T_product_simple,
          T_crop_tree_diversity,
-         
          C_out_mean,
          T_out_mean,
          C_out_sd,
@@ -189,6 +188,9 @@ fomd10.ler<- fun_calculate_ler(fomd10.n.cv)
          ler_effect_size_type,ler_effect_size_yi,ler_effect_size_vi
          
   )
+sort(unique(fomd10.ler$study_id))
+
+
 ## there is a problem with JA_Dua, _17_Effec_LR ler since there are multiple controls
 ## TO CHECK: HOW TO RESOLVE THE PROBLEM WITH DUA..
 ## HOW TO GET var LER values need to be calculated
@@ -225,7 +227,7 @@ sort(unique(fomd10.ler$lnRR_cv_group_avg))
 sort(unique(fomd10.ler$lnRR_cv_final))
 
 
-fomd10.effectsize <- fomd10.n.cv %>%
+fomd10.effectsize <- fomd10.ler %>%
   calc_lnRR_effectsize(T_out_mean, C_out_mean,
                       T_out_sd, C_out_sd,
                       T_out_sample_size, C_out_sample_size)%>%
@@ -300,17 +302,16 @@ irrelevant_cols<- c(
 
 fomd10.effectsize<-fomd10.effectsize%>%
   select(-irrelevant_cols)
-  
 
-write_csv(fomd10.effectsize, paste0(path.metadata.effectsize, "/fomd10_effect_size.csv"))
+write_csv(fomd10.effectsize, paste0(path.metadata.effectsize, "04.fomd10_effect_size/fomd10_effect_size.csv"))
 
 
 #==========================================================
 # #Subset the Ethiopia data to send to the Modelling team
 #==========================================================
-fomd10.effectsize.eth<-fomd10.effectsize%>%
-  filter(str_detect(country, "Ethiopia"))
-write_csv(fomd10.effectsize.eth, paste0(path.metadata.effectsize, "/fomd10_subset_modelling_teams/ETH.fomd10_effect_size.v1.csv"))
+fomd10.effectsize.eth<-fomd10.effectsize#%>%
+  #filter(str_detect(country, "Ethiopia"))
+write_csv(fomd10.effectsize.eth, paste0(path.metadata.effectsize, "/fomd10_subset_modelling_teams/nonERA.fomd10_effect_size.v1.csv"))
 
 #---10_FOMD_metadata_dictionary
 fomd10.dictionary<-read_xlsx(file.path(path.metadata.structure,"10_FOMD_metadata_synthesis_short.xlsx"), sheet = "10_FOMD_readme")%>%
@@ -327,3 +328,11 @@ ontologies_01practices<-read_xlsx(file.path(path.metadata.structure,"01_FOMD_ont
          -"note_for_lolita")
 names(ontologies_01practices)
 write_csv(ontologies_01practices, paste0(path.metadata.effectsize, "/fomd10_subset_modelling_teams/ontologies_01practices.csv"))
+
+
+ontologies_01outcomes<-read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies.xlsx"), sheet = "01_outcomes")%>%
+  select(-"code.ERA",
+         -"pillar.code.ERA",-"subpillar.Code.ERA",-"indicator.code.ERA",
+         -"subindicator.code.ERA")
+names(ontologies_01outcomes)
+write_csv(ontologies_01outcomes, paste0(path.metadata.effectsize, "/fomd10_subset_modelling_teams/ontologies_01outcomes.csv"))

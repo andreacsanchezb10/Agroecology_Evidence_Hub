@@ -9,13 +9,13 @@ doi,Character,DOI (or url if no DOI available) of article. DOI = Digital Object 
 country,Character,"Country Name. When study was performed in multiple countries, country names are separated by .. (e.g., Kenya..Ghana)",Kenya
 country_ISO,Character,"Standardized country name using ISO.3166-1.alpha-3. This field should be auto filled using the country selected and data in the Levels Tab. When study was performed in multiple countries, country iso names are separated by .. (e.g., KEN..GHA)",KEN
 C_country,Character,"Country Name. When study was performed in multiple countries, country names are separated by .. (e.g., Kenya..Ghana)",NA
+C_site_id,Character,"Free text name to identify the site. Include institution/station name and location or village/town in county/district, but not the country. When study was performed in multiple countries, site_id names are separated by .. (e.g., Chitedze ARS, Lilongwe..Murehua)",NA
 C_site_type,Character,"One of the following: Farm, Station, Greenhouse, Survey, or Lab. When study was performed in multiple countries, site_type names are separated by .. (e.g., Farm..Station)
 Farm research is conducted in a farmer’s field and can be managed by the farmer or researcher. 
 Station research is conducted in a controlled setting of research station, university or school. 
 Survey research is conducted via interviews that yields quantitative data based on testimonial. 
 Greenhouse is conducted in a greenhouse and is only relevant for studies of greenhouse gas emissions data. 
 Lab studies can include fisheries feeding trials conducted at a small scale in university research labs. ",NA
-C_site_id,Character,"Free text name to identify the site. Include institution/station name and location or village/town in county/district, but not the country. When study was performed in multiple countries, site_id names are separated by .. (e.g., Chitedze ARS, Lilongwe..Murehua)",NA
 C_site_admin,Character,"A qualitative measure of how accurate you think the location reporting is. If the study is at a research station, but we only know the location of the city where the station is,  we record ""City"". If we know the exact location of the station record ""Facility"". When study was performed in multiple countries, site_admin are separated by .. (e.g., District..County)",NA
 C_site_agg,Character,"Does the location contain sub-locations?. State yes if a paper reports a general location which contains sub-locations that you do not know the co-ordinates of. For example a paper might state ""we repeated the experiment on 10 farms in 5 villages in Busia county, Kenya"" so we have a county location and know there are 5 village sub-locations in this county, we don't know where these villages are and results are reported averaged across all the farms and villages. If we know the location or names of the villages (e.g. results are reported per village) then we create one site per village and state ""no"" in this field. When study was performed in multiple countries, site_agg are separated by .. (e.g., No..Yes)",NA
 C_site_latlong_type,Character,"Source and derivation type of the geographic coordinates associated with the study site. Indicates whether coordinates were directly reported in the publication or derived during data extraction. When study was performed in multiple countries, site_latlong_type are separated by .. (e.g., Original..Middle point)",NA
@@ -24,13 +24,13 @@ C_site_longitude,Numeric,"Longitude of study location in degrees or decimal degr
 C_site_buffer,Character,"Manual estimation (e.g. from measuring on google earth) in m of the spatial uncertainty for a point location. The site should within an X m radius (the buffer.manual amount) of the point location specified. Unit is meters. When study was performed in multiple countries, site_buffer are separated by ..",NA
 C_site_key,Character,"Longitude, latitude and buffer for the site",NA
 T_country,Character,"Country Name. When study was performed in multiple countries, country names are separated by .. (e.g., Kenya..Ghana)",NA
+T_site_id,Character,"Free text name to identify the site. Include institution/station name and location or village/town in county/district, but not the country. When study was performed in multiple countries, site_id names are separated by .. (e.g., Chitedze ARS, Lilongwe..Murehua)",NA
 T_site_type,Character,"One of the following: Farm, Station, Greenhouse, Survey, or Lab. When study was performed in multiple countries, site_type names are separated by .. (e.g., Farm..Station)
 Farm research is conducted in a farmer’s field and can be managed by the farmer or researcher. 
 Station research is conducted in a controlled setting of research station, university or school. 
 Survey research is conducted via interviews that yields quantitative data based on testimonial. 
 Greenhouse is conducted in a greenhouse and is only relevant for studies of greenhouse gas emissions data. 
 Lab studies can include fisheries feeding trials conducted at a small scale in university research labs. ",NA
-T_site_id,Character,"Free text name to identify the site. Include institution/station name and location or village/town in county/district, but not the country. When study was performed in multiple countries, site_id names are separated by .. (e.g., Chitedze ARS, Lilongwe..Murehua)",NA
 T_site_admin,Character,"A qualitative measure of how accurate you think the location reporting is. If the study is at a research station, but we only know the location of the city where the station is,  we record ""City"". If we know the exact location of the station record ""Facility"". When study was performed in multiple countries, site_admin are separated by .. (e.g., District..County)",NA
 T_site_agg,Character,"Does the location contain sub-locations?. State yes if a paper reports a general location which contains sub-locations that you do not know the co-ordinates of. For example a paper might state ""we repeated the experiment on 10 farms in 5 villages in Busia county, Kenya"" so we have a county location and know there are 5 village sub-locations in this county, we don't know where these villages are and results are reported averaged across all the farms and villages. If we know the location or names of the villages (e.g. results are reported per village) then we create one site per village and state ""no"" in this field. When study was performed in multiple countries, site_agg are separated by .. (e.g., No..Yes)",NA
 T_site_latlong_type,Character,"Source and derivation type of the geographic coordinates associated with the study site. Indicates whether coordinates were directly reported in the publication or derived during data extraction. When study was performed in multiple countries, site_latlong_type are separated by .. (e.g., Original..Middle point)",NA
@@ -96,12 +96,15 @@ T_varietal_crop_variety,Character,"Name of the crop variety or cultivar used in 
 T_varietal_crop_subpractice,Character,"Breeding category of the crop variety used in the intervention system. Indicate whether the variety is Improved, Hybrid, Unimproved, or another category reported in the study. If multiple crops are present, record values in the same crop order and using the same separators as T_crop_diversity. If not reported, record NA.",NA
 T_varietal_crop_type,Character,"Type or origin of the crop variety used in the intervention system, describing whether the variety is local, traditional, or improved (e.g., Local variety, Landrace, Improved variety). If multiple crops are present, record entries in the same crop order and using the same separators as T_crop_diversity. If not reported, record NA.",Local variety
 T_varietal_crop_trait,Character,"Specific agronomic, physiological, or genetic traits of the crop variety used in the intervention system, if reported in the study (e.g., drought tolerant, pest resistant, early maturing, high yielding). Record traits exactly as described in the study. When multiple traits are reported for the same variety, separate traits using two dots (..). If no trait information is reported, record NA.",NA
+C_varietal_animal_subpractice_raw,Character,NA,NA
 C_varietal_animal_breed,Character,"Name of the animal breed used in the control system. Record the commonly reported breed name as described in the study (e.g., Holstein, Jersey, Boer, Rhode Island Red). If the breed name is not reported, record NA.",Holstein
 C_varietal_animal_subpractice,Character,"Breeding category of the animal breed used in the control system. Indicate whether the breed is Improved, Hybrid, Crossbred, Unimproved, or another category reported in the study. This variable captures the animal breeding practice being compared in the experiment. If not reported, record NA.",Improved
 C_varietal_animal_type,Character,"Origin or classification of the animal breed used in the control system, describing whether the breed is Local, Indigenous, Exotic, or another category reported in the study. If not reported, record NA.",Exotic breed
+T_varietal_animal_subpractice_raw,Character,NA,NA
 T_varietal_animal_breed,Character,"Name of the animal breed used in the intervention (agroecological) system. Record the commonly reported breed name as described in the study (e.g., Nguni, Red Maasai, Indigenous chicken). If the breed name is not reported, record NA.",Nguni
 T_varietal_animal_subpractice,Character,"Breeding category of the animal breed used in the intervention system. Indicate whether the breed is Improved, Hybrid, Crossbred, Unimproved, or another category reported in the study. If not reported, record NA.",Unimproved
 T_varietal_animal_type,Character,"Origin or classification of the animal breed used in the intervention system, describing whether the breed is Local, Indigenous, Exotic, or another category reported in the study. If not reported, record NA.",Local breed
+T_varietal_animal_trait,NA,NA,NA
 C_intercrop_subpractice_raw,Character,NA,NA
 C_intercrop_subpractice,Character,Name of the intercropping subpractice implemented in the control system. Record the specific intercropping practice described in the study,Monoculture
 C_intercrop_design,Character,"Intercropping design used in the control system, describing how component species were combined in relation to their sole-crop densities. Record the design reported in the study, such as Replacement or Additive. If not reported, record NA.",NA
@@ -234,11 +237,15 @@ T_harvest_subpractice,Character,Name of the harvest subpractice implemented in t
 T_harvest_date_start,Date,Start dates of the harvest period in the intervention system. Record the dates using the format YYYY/MM/DD-YYYY/MM/DD.,2018/02/01-2018/03/02
 T_harvest_date_end,Date,End dates of the harvest period in the intervention system. Record the dates using the format YYYY/MM/DD-YYYY/MM/DD.,NA
 T_harvest_days_after_planting,Integer,"Number of days between planting and harvest in the intervention system. Record the number of days as reported. If not reported, record NA.",NA
+C_postharvest_subpractice_raw,Character,NA,NA
 C_postharvest_subpractice,Character,"Name of the post harvesting subpractice implemented in the control system. Record the technique used to collect, store, or concentrate water for agricultural use. If multiple subpractices are present, separate them using a dash (-).",NA
-C_postharvest_date_start_end,Date,"Start and end dates of the postharvest storage or processing period in the control system. Record dates using the format YYYY/MM/DD-YYYY/MM/DD. If not reported, record Unspecified.",NA
+C_postharvest_date_start,Date,"Start and end dates of the postharvest storage or processing period in the control system. Record dates using the format YYYY/MM/DD-YYYY/MM/DD. If not reported, record Unspecified.",NA
+C_postharvest_date_end,Date,NA,NA
 C_postharvest_days_after_storage,Integer,"Number of days between harvest and the end of the postharvest storage or processing period in the control system. Record the number of days as reported in the study. If not reported, record NA.",NA
+T_postharvest_subpractice_raw,NA,NA,NA
 T_postharvest_subpractice,Character,"Name of the post harvesting subpractice implemented in the intervention system. Record the technique used to collect, store, or concentrate water for agricultural use. If multiple subpractices are present, separate them using a dash (-).",NA
-T_postharvest_date_start_end,Date,"Start and end dates of the postharvest storage or processing period in the intervention system. Record dates using the format YYYY/MM/DD-YYYY/MM/DD. If not reported, record Unspecified.",NA
+T_postharvest_date_start,Date,"Start and end dates of the postharvest storage or processing period in the intervention system. Record dates using the format YYYY/MM/DD-YYYY/MM/DD. If not reported, record Unspecified.",NA
+T_postharvest_date_end,NA,NA,NA
 T_postharvest_days_after_storage,Integer,"Number of days between harvest and the end of the postharvest storage or processing period in the intervention system. Record the number of days as reported in the study. If not reported, record NA.",NA
 C_land_structure_subpractice_raw,NA,NA,NA
 C_land_structure_subpractice,NA,NA,NA
@@ -250,8 +257,10 @@ T_land_structure_subpractice,NA,NA,NA
 T_land_structure_function,NA,NA,NA
 T_land_structure_origin,NA,NA,NA
 T_land_structure_manage,NA,NA,NA
-out_exp_design,Character,"Experimental design used for the measurement of a specific outcome. Record the sampling/measurement unit on which the outcome was assessed (e.g., plot-level measurement, plant subsampling within plots, quadrats within plots, repeated measurements over time). This may differ from the treatment experimental unit.",NA
-out_exp_plot_size,NA,"Size of the area (m2) from which a specific outcome was measured or sampled. Record the dimensions or area actually used for outcome assessment (e.g., harvest area, central sampling area, quadrat, subplot). This may be equal or smaller than the full treatment plot.",NA
+C_out_exp_design,Character,"Experimental design used for the measurement of a specific outcome. Record the sampling/measurement unit on which the outcome was assessed (e.g., plot-level measurement, plant subsampling within plots, quadrats within plots, repeated measurements over time). This may differ from the treatment experimental unit.",NA
+C_out_exp_plot_size,NA,"Size of the area (m2) from which a specific outcome was measured or sampled. Record the dimensions or area actually used for outcome assessment (e.g., harvest area, central sampling area, quadrat, subplot). This may be equal or smaller than the full treatment plot.",NA
+T_out_exp_design,NA,NA,NA
+T_out_exp_plot_size,NA,NA,NA
 C_product,Character,"The full name of the product, including aspect of the component such as grain, meat or milk",Sorghum
 C_product_type,Character,Product type name,Plant
 C_product_subtype,Character,Product subtype name,Cereals
@@ -268,33 +277,42 @@ out_subindicator,Character,"Harmonised sub-outcome category assigned to the repo
 out_indicator,Character,Outcome indicator name,Product Yield
 out_subpillar,NA,NA,NA
 out_pillar,Character,Outcome pillar name,Productivity
-out_subindicator_unit,Character,Unit of measurement for the outcome (please use SI units),kg/ha
-C_out_soil_depth_u,Numeric,"The depth for which the MeanC and MeanT correspond for soil properties in cm (lowest depth value = upper, so if you have a depth of 0-20 cm the lowest value = 20).",0
-T_out_soil_depth_u,NA,NA,NA
-C_out_soil_depth_l,Numeric,"The depth for which the MeanC and MeanT correspond for soil properties in cm (highest depth value = lower, so if you have a depth of 0-20 cm the highest value = 0).",10
-T_out_soil_depth_l,NA,NA,NA
-C_out_metric,Character,NA,NA
+C_out_subindicator_unit,NA,NA,NA
+T_out_subindicator_unit,Character,Unit of measurement for the outcome (please use SI units),kg/ha
+out_soil_depth_u,Numeric,"The depth for which the MeanC and MeanT correspond for soil properties in cm (lowest depth value = upper, so if you have a depth of 0-20 cm the lowest value = 20).",0
+out_soil_depth_l,Numeric,"The depth for which the MeanC and MeanT correspond for soil properties in cm (highest depth value = lower, so if you have a depth of 0-20 cm the highest value = 0).",10
+out_npv_discount_rate,NA,NA,NA
+out_npv_econ_period,NA,NA,NA
+out_wg_start,NA,NA,NA
+out_wg_start_unit,NA,NA,NA
+out_wg_days,NA,NA,NA
+C_out_value_metric,Character,NA,NA
 C_out_value,Numeric,"The value that corresponds to the control treatment and outcome. Please standard yields to t/ha where appropropriate, keeping as many decimal places as there is data for.",1.5
 C_out_var_metric,Character,NA,NA
 C_out_var_value,Numeric,NA,NA
+C_out_var_value_l,Numeric,NA,NA
+C_out_var_value_u,Numeric,NA,NA
 C_out_sample_size,Numeric,NA,NA
 C_data_location,Character,"The location in the paper where the data can be found. This should be three letters (fig, tab, or txt) in lowercase and a number (for figures and tables) to signify figure, table or text, respectively.",Fig. 1 Table 2
-T_out_metric,Character,NA,NA
+T_out_value_metric,Character,NA,NA
 T_out_value,Numeric,"The value that corresponds to the CSA treatment and outcome. Please standard yields to kg/ha where appropropriate, keeping as many decimal places as there is data for.",3.7
-T_out_var_metric,NA,NA,NA
+T_out_var_metric,Character,NA,NA
 T_out_var_value,Numeric,NA,NA
+T_out_var_value_l,Numeric,NA,NA
+T_out_var_value_u,Numeric,NA,NA
 T_out_sample_size,Numeric,NA,NA
 T_data_location,Character,"The location in the paper where the data can be found. This should be three letters (fig, tab, or txt) in lowercase and a number (for figures and tables) to signify figure, table or text, respectively.",Fig. 1 Table 2
-C_out_agg_stat,Character,Statistics if outcome temporally aggregatted,NA
-T_out_agg_stat,NA,NA,NA
-C_out_year,Character,The calendar year the measurement was taken. Seasons in multi-season systems are identified by decimals ‘.1’ or ‘.2’ for the first and second season respectively. When the measurements are average values for more than one year create a decimal for the years covered.,1999 2002.2 19992
-T_out_year,NA,NA,NA
-C_out_year_start,Postive Integer,First year the measurement was taken (YYYY). For yield or similar outcomes this should relate to the harvest year (rather than the planting year). Where data are aggregated across years also complete the Measurement End Year Field.,NA
-T_out_year_start,NA,NA,NA
-C_out_year_end,Postive Integer,"This only required for temporally aggregated observations (e.g. a result that has been averaged from crop yields reported from 2000,2001 and 2002). Here report the last year of the period over for which observations were aggregated (in the previous example this would be 2002).",NA
-T_out_year_end,NA,NA,NA
-C_out_season_start,Postive Integer,"This only required in areas where there are mutiple growing seasons in a year (e.g., areas with bimodal rainfall or irrigated cropping in dry seasons of a unimodal system). Leave blank where there is only one growing season per year or no seasonal information is presented with the data. Code the season in order 1,2,etc. Determine the season sequence by harvest year. If there are two cropping seasons, with crops harvested in Feb and Sept, Feb = season 1 and Sept = season 2.",NA
-T_out_season_start,NA,NA,NA
+out_comparison_id,NA,NA,NA
+pler_value,Numeric,Raw parial ler provided by the study for the treatment system,NA
+pler_var_value,Numeric,Raw partial ler variance provided by the study for the treatment system,NA
+ler_value_total,Numeric,Raw total ler provided by the study for the treatment system,NA
+ler_var_value_total,Numeric,Raw total ler variance provided by the study for the treatment system,NA
+ler_comparison_id,Character,row id used to calculate parial and total ler across studies,NA
+out_agg_stat,Character,Statistics if outcome temporally aggregatted,NA
+out_year,Character,The calendar year the measurement was taken. Seasons in multi-season systems are identified by decimals ‘.1’ or ‘.2’ for the first and second season respectively. When the measurements are average values for more than one year create a decimal for the years covered.,1999 2002.2 19992
+out_year_start,Postive Integer,First year the measurement was taken (YYYY). For yield or similar outcomes this should relate to the harvest year (rather than the planting year). Where data are aggregated across years also complete the Measurement End Year Field.,NA
+out_year_end,Postive Integer,"This only required for temporally aggregated observations (e.g. a result that has been averaged from crop yields reported from 2000,2001 and 2002). Here report the last year of the period over for which observations were aggregated (in the previous example this would be 2002).",NA
+out_season_start,Postive Integer,"This only required in areas where there are mutiple growing seasons in a year (e.g., areas with bimodal rainfall or irrigated cropping in dry seasons of a unimodal system). Leave blank where there is only one growing season per year or no seasonal information is presented with the data. Code the season in order 1,2,etc. Determine the season sequence by harvest year. If there are two cropping seasons, with crops harvested in Feb and Sept, Feb = season 1 and Sept = season 2.",NA
 out_season_end,Postive Integer,"This only required for temporally aggregated observations in areas with more than one growing season (e.g. a result that has been averaged from crop yields reported from 2000 season 1,2001 season 1 and 2002 season 1). Here report the last season of the period over for which observations were aggregated (in the previous example this would be 1).",NA
 C_out_mean,NA,Calculated mean from reported values for the control system,NA
 T_out_mean,NA,Calculated mean from reported values for the treatment system,NA
@@ -306,44 +324,62 @@ C_out_cv_group_avg,NA,"The group's average CV, used to fill in missing variance 
 T_out_cv_group_avg,NA,"The group's average CV, used to fill in missing variance values",NA
 C_out_cv_final,NA,"The CV actually used downstream — reported if available, otherwise the group average for the control",NA
 T_out_cv_final,NA,"The CV actually used downstream — reported if available, otherwise the group average for the treatment",NA
-cv_grouping_method,NA,"Audit trail: which variables defined the ""group"" for averaging cv",NA
-effect_size_type,NA,Effect size type: Log Response Ratio or Standardized mean difference,NA
-effect_size_yi,NA,NA,NA
-effect_size_vi,NA,NA,NA
+out_cv_grouping_method,NA,"Audit trail: which variables defined the ""group"" for averaging cv",NA
+out_effect_size_type,NA,Effect size type: Log Response Ratio or Standardized mean difference,NA
+out_effect_size_yi,NA,NA,NA
+out_effect_size_vi,NA,NA,NA
+pler_value_calc,Numeric,NA,NA
+pler_var_calc,Numeric,NA,NA
+ler_value_calc,Numeric,NA,NA
+ler_sd_calc,Numeric,NA,NA
+ler_product,Character,NA,NA
+ler_effect_size_type,Character,NA,NA
+ler_effect_size_yi,Numeric,NA,NA
+ler_effect_size_vi,Numeric,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
 NA,NA,NA,NA
 NA,NA,NA,NA
 NA,NA,NA,NA
 NA,NA,NA,NA
 "##### from here is only for ler, it is not related to ERA","##### from here is only for ler, it is not related to ERA",NA,NA
+C_product01,Character,NA,NA
+C_value_product01,Numeric,NA,NA
+C_var_value_product01,Numeric,NA,NA
+C_product02,Character,NA,NA
+C_value_product02,Numeric,NA,NA
+C_var_value_product02,Numeric,NA,NA
+C_product03,Character,NA,NA
+C_value_product03,Numeric,NA,NA
+C_var_value_product03,Numeric,NA,NA
+C_product04,NA,NA,NA
+C_value_product04,Numeric,NA,NA
+C_var_value_product04,Numeric,NA,NA
+C_value_product05,Numeric,NA,NA
+C_var_value_product05,Numeric,NA,NA
+T_value_product01,Numeric,NA,NA
+T_var_value_product01,Numeric,NA,NA
+T_value_product02,Numeric,NA,NA
+T_var_value_product02,Numeric,NA,NA
+T_value_product03,Numeric,NA,NA
+T_var_value_product03,Numeric,NA,NA
+T_value_product04,Numeric,NA,NA
+T_var_value_product04,Numeric,NA,NA
+T_value_product05,Numeric,NA,NA
+T_var_value_product05,Numeric,NA,NA
 NA,NA,NA,NA
-C_out_mean_product_component01,Numeric,NA,NA
-C_out_sd_product_component01,Numeric,NA,NA
-C2_out_mean_product_component02,Numeric,NA,NA
-C2_out_sd_product_component02,Numeric,NA,NA
-C2_out_sample_size_product_component02,Numeric,NA,NA
-C3_out_mean_product_component03,Numeric,NA,NA
-C3_out_sd_product_component03,Numeric,NA,NA
-C3_out_sample_size_product_component03,NA,NA,NA
-C4_out_mean_product_component04,Numeric,NA,NA
-C4_out_sd_product_component04,Numeric,NA,NA
-C5_out_mean_product_component05,Numeric,NA,NA
-C5_out_sd_product_component05,Numeric,NA,NA
-T_out_mean_product_component01,Numeric,NA,NA
-T_out_sd_product_component01,Numeric,NA,NA
-T_out_mean_product_component02,Numeric,NA,NA
-T_out_sd_product_component02,Numeric,NA,NA
-T_out_mean_product_component03,Numeric,NA,NA
-T_out_sd_product_component03,Numeric,NA,NA
-T_out_mean_product_component04,Numeric,NA,NA
-T_out_sd_product_component04,Numeric,NA,NA
-T_out_mean_product_component05,Numeric,NA,NA
-T_out_sd_product_component05,Numeric,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
+NA,NA,NA,NA
 C2_subpractice_description_raw,Character,Free text description of the control practice practice. Use sufficient detail to easily identify the practices.,NA
 C3_subpractice_description_raw,Character,Free text description of the control practice practice. Use sufficient detail to easily identify the practices.,NA
 C4_subpractice_description_raw,Character,Free text description of the control practice practice. Use sufficient detail to easily identify the practices.,NA
 C5_subpractice_description_raw,Character,Free text description of the control practice practice. Use sufficient detail to easily identify the practices.,NA
-C2_crop_diversity,Character,"Name of crop species present in the control system. Record crop names using common names with the first letter capitalized and the remaining letters in lowercase. When multiple crops are present, separate species using a dash (-) for intercrops and a forward slash (/) for rotations. Maintain the order in which crops occur within the system.",NA
-C2_crop_variety,Character,"Commercial or local name of the crop variety associated with each crop listed in C_crop_diversity (e.g., Katumani, G2333, Maasai Red). When multiple varieties of the same crop are present, separate varieties using an asterisk (*). When multiple crops are present, record varieties in the same crop order and using the same separators as C_crop_diversity, where - denotes intercrops and / denotes rotations.",NA
+C2_crop_tree_diversity,Character,"Name of crop species present in the control system. Record crop names using common names with the first letter capitalized and the remaining letters in lowercase. When multiple crops are present, separate species using a dash (-) for intercrops and a forward slash (/) for rotations. Maintain the order in which crops occur within the system.",NA
+C2_crop_tree_variety,Character,"Commercial or local name of the crop variety associated with each crop listed in C_crop_diversity (e.g., Katumani, G2333, Maasai Red). When multiple varieties of the same crop are present, separate varieties using an asterisk (*). When multiple crops are present, record varieties in the same crop order and using the same separators as C_crop_diversity, where - denotes intercrops and / denotes rotations.",NA
 C2_crop_density,Character,"Planting density for each crop listed in C_crop_diversity. Density values must follow the same crop order and separator structure as C_crop_diversity, where - denotes intercrops and / denotes rotations. Record each entry using the format value(unit). If planting density is not reported for a crop, record NA.",NA
 C3_crop_diversity,Character,"Name of crop species present in the control system. Record crop names using common names with the first letter capitalized and the remaining letters in lowercase. When multiple crops are present, separate species using a dash (-) for intercrops and a forward slash (/) for rotations. Maintain the order in which crops occur within the system.",NA
 C3_crop_variety,Character,"Commercial or local name of the crop variety associated with each crop listed in C_crop_diversity (e.g., Katumani, G2333, Maasai Red). When multiple varieties of the same crop are present, separate varieties using an asterisk (*). When multiple crops are present, record varieties in the same crop order and using the same separators as C_crop_diversity, where - denotes intercrops and / denotes rotations.",NA

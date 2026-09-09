@@ -27,6 +27,8 @@ fun_calculate_ler <- function(dt) {
       C_out_cv_final               = as.numeric(C_out_cv_final),
       T_out_sample_size_imputed    = as.numeric(T_out_sample_size_imputed),
       C_out_sample_size_imputed    = as.numeric(C_out_sample_size_imputed),
+      pler_value                    = as.numeric(pler_value),
+      pler_var_value                = as.numeric(pler_var_value),
       ler_value_total               = as.numeric(ler_value_total),
       ler_var_value_total           = as.numeric(ler_var_value_total)
     )
@@ -38,6 +40,7 @@ fun_calculate_ler <- function(dt) {
       # Only for rows that belong to an LER comparison (ler_comparison_id not NA) Ratio",
       #which are studies that reported Total LER directly instead).
       pler_value_calc = case_when(
+        !is.na(ler_comparison_id) & out_subindicator == "Partial Land Equivalent Ratio" ~ pler_value,
         !is.na(ler_comparison_id) & out_subindicator != "Land Equivalent Ratio" ~ T_out_mean / C_out_mean,
         TRUE ~ NA_real_
       ),
@@ -48,11 +51,15 @@ fun_calculate_ler <- function(dt) {
       # already gap-filled by n_cv_calculation() for studies that didn't
       # report their own SD — using raw SD here would leave those rows NA.
       pler_var_calc = case_when(
+        !is.na(ler_comparison_id) & out_subindicator == "Partial Land Equivalent Ratio" ~ pler_var_value,
+        
         !is.na(ler_comparison_id) & out_subindicator != "Land Equivalent Ratio" ~
           pler_value_calc^2 * (
             (T_out_cv_final^2 / T_out_sample_size_imputed) +
               (C_out_cv_final^2 / C_out_sample_size_imputed)
           ),
+        
+        
         TRUE ~ NA_real_
       )
     ) %>%

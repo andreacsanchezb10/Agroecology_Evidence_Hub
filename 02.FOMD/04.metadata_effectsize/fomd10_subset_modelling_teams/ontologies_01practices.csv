@@ -189,22 +189,22 @@ Landscape management,Landscape structure,NA,NA,NA,Buffer strips,"A strip of livi
 Landscape management,Landscape structure,NA,NA,NA,Field margins,NA,NA,NA,NA
 Landscape management,Landscape structure,NA,NA,NA,Flower strips,Flower strips are semi-natural habitats made up of mixtures of native or exotic herbaceous species.,NA,NA,NA
 Landscape management,Landscape structure,NA,NA,NA,Within field strip,NA,NA,NA,NA
-Natural/seminatural habitats management,NA,NA,Forest,Primary forest,Forest (pristine/primary/unmanaged),Forests maintained as reserves for wildlife or other conservation purposes (Perfecto et al 2003 ref 132),NA,BIOFincas,NA
-Natural/seminatural habitats management,NA,NA,Forest,Primary forest,Tropical deciduous forest,NA,NA,BIOFincas,NA
-Natural/seminatural habitats management,NA,NA,Forest,Secondary forest,Secondary Forest,NA,NA,BIOFincas,NA
-Natural/seminatural habitats management,NA,NA,NA,NA,Abandoned cropland,"Abandoned cropland left to rewild, with no mention of any intention to refarm the land",NA,BIOFincas,NA
+Natural/seminatural habitats management,NA,Natural habitat,Forest,Primary forest,Forest (pristine/primary/unmanaged),Forests maintained as reserves for wildlife or other conservation purposes (Perfecto et al 2003 ref 132),NA,BIOFincas,NA
+Natural/seminatural habitats management,NA,Natural habitat,Forest,Primary forest,Tropical deciduous forest,NA,NA,BIOFincas,NA
+Natural/seminatural habitats management,NA,Natural habitat,Forest,Secondary forest,Secondary Forest,NA,NA,BIOFincas,NA
+Natural/seminatural habitats management,NA,Semi-natural habitat,Secondary Succesional Habitat,Abandoned productive land,Abandoned cropland,"Abandoned cropland left to rewild, with no mention of any intention to refarm the land",NA,BIOFincas,NA
 Natural/seminatural habitats management,NA,NA,Forest,NA,Forest (condition/management unspecified),"Vegetation made up of four growth forms known as restoids (reed-like plants), ericoids (heath-like shrubs), geophytes (bulbous herbs) and sclerophyllous proteiods (tall shrubs with large leaves) (Cowling and Richardson, 1995).",NA,BIOFincas,NA
-Natural/seminatural habitats management,NA,NA,Forest,NA,Forest (disturbed/managed),"Unmanaged forests, which can include primary or secondary tree growth",NA,BIOFincas,NA
+Natural/seminatural habitats management,NA,NA,Forest,Secondary forest,Forest (disturbed/managed),"Unmanaged forests, which can include primary or secondary tree growth",NA,BIOFincas,NA
 Natural/seminatural habitats management,NA,NA,NA,NA,Fynbos,NA,NA,BIOFincas,NA
-Natural/seminatural habitats management,NA,NA,Grassland,NA,Grassland (natural),NA,NA,BIOFincas,NA
-Natural/seminatural habitats management,NA,NA,Grassland,NA,Grassland (semi natural),NA,NA,BIOFincas,NA
+Natural/seminatural habitats management,NA,Natural habitat,Grassland,NA,Grassland (natural),NA,NA,BIOFincas,NA
+Natural/seminatural habitats management,NA,Semi-natural habitat,Grassland,NA,Grassland (semi natural),NA,NA,BIOFincas,NA
 Natural/seminatural habitats management,NA,NA,Grassland,NA,Grassland (unknown if natural/semi-natural),NA,NA,BIOFincas,NA
 Natural/seminatural habitats management,NA,NA,NA,NA,Remnant,Land with natural vegetation on or off-farm set aside (not used for farming) for biodiversity or other environmental purposes (it could be also that is inaccessible or inappropriate for ag).,NA,BIOFincas,NA
-Natural/seminatural habitats management,NA,NA,NA,NA,Secondary Succesional Habitat,NA,NA,BIOFincas,NA
-Natural/seminatural habitats management,NA,NA,Forest,NA,Semi natural forest,Forest of native or wild tree species mixed with some non-native or planted species,NA,BIOFincas,NA
-Natural/seminatural habitats management,NA,NA,NA,NA,Shrubland,NA,NA,BIOFincas,NA
-Natural/seminatural habitats management,NA,NA,NA,NA,Wetlands,NA,NA,BIOFincas,NA
-Natural/seminatural habitats management,NA,NA,NA,NA,Woodland,NA,NA,BIOFincas,NA
+Natural/seminatural habitats management,NA,NA,Secondary Succesional Habitat,Secondary Succesional Habitat,Secondary Succesional Habitat,NA,NA,BIOFincas,NA
+Natural/seminatural habitats management,NA,Semi-natural habitat,Forest,Semi-natural forest,Semi natural forest,Forest of native or wild tree species mixed with some non-native or planted species,NA,BIOFincas,NA
+Natural/seminatural habitats management,NA,NA,NA,Shrubland,Shrubland,NA,NA,BIOFincas,NA
+Natural/seminatural habitats management,NA,NA,NA,Wetlands,Wetlands,NA,NA,BIOFincas,NA
+Natural/seminatural habitats management,NA,NA,NA,Woodland,Woodland,NA,NA,BIOFincas,NA
 Nutrient management,Fertilization,External input dependency,Inorganic management,Inorganic and Organic Fertilizers,Inorganic and Organic Fertilizers,NA,NA,AS,2_input_reduction
 Nutrient management,Fertilization,External input dependency,Inorganic management,Inorganic Fertilizer,Inorganic Fertilizer,Synthetic fertilizers added,NA,AS,2_input_reduction
 Nutrient management,Fertilization,External input dependency,Inorganic management,Inorganic Fertilizer,Inorganic K Inputs,"The addition of potassium (K) inorganic inputs to fields, typically to test application timing or amount.",NA,ERA,2_input_reduction
@@ -241,6 +241,7 @@ Pest management,Pest management in plants,Inoculants,Inoculation,Inoculation,See
 Pest management,Pest management in plants,Inoculants,Inoculation,Inoculation,Soil inoculation,NA,NA,AS based on ERA 01_chemicals$C.Type,2_input_reduction
 Pest management,Pest management in plants,Inoculants,No Chemical Applied,No Chemical Applied,No Inoculation Applied,NA,NA,NA,2_input_reduction
 Pest management,Pest management in plants,Insects control,No Chemical Applied,No Chemical Applied,No Insecticide Applied,NA,NA,NA,2_input_reduction
+Pest management,Pest management in plants,Insects control,Mechanical control,Mechanical method,Mechanical (physical action insecticide),NA,NA,NA,NA
 Pest management,Pest management in plants,Insects control,Biochemical control,Non-synthetic pesticide,Bioinsecticide,NA,NA,AS based on ERA 01_chemicals$C.Type,2_input_reduction
 Pest management,Pest management in plants,Insects control,Chemical control,Synthetic pesticide,Insecticide,NA,NA,AS based on ERA 01_chemicals$C.Type,2_input_reduction
 Pest management,Pest management in plants,Nematodes control,No Chemical Applied,No Chemical Applied,No Nematicide Applied,NA,NA,NA,2_input_reduction
@@ -263,7 +264,7 @@ Pest management,Pest management in plants,Weed control,Mechanical control,Mechan
 Pest management,Pest management in plants,Weed control,No Chemical Applied,No Chemical Applied,No Herbicide Applied,No inputs of inorganic or organic herbicides.,NA,AS based on ERA lookuplevels$W.Type,2_input_reduction
 Pest management,Pest management in plants,Weed control,No Chemical Applied,No Chemical Applied,No Weeding Applied,weeds were allowed to grow naturally within the plots without any removal or control,NA,NA,2_input_reduction
 Pest management,Pest management in plants,Weed control,Chemical control,Synthetic pesticide,Chemical weed control,Weeds are controlled through an applied substance that causes physiological damage. Complete details of the weeding practice in Chemicals section,NA,NA,2_input_reduction
-Pest management,Pest management in plants,NA,NA,Unspecified,Unspecified (if pesticide org or inorg was applied),Unspecified if pesticide (organic or inorganic) was applied,NA,NA,NA
+Pest management,Pest management in plants,Unspecified,Unspecified,Unspecified,Unspecified (if pesticide org or inorg was applied),Unspecified if pesticide (organic or inorganic) was applied,NA,NA,NA
 Pest management,Pest management in plants,Weed control,Chemical control,Synthetic pesticide,Herbicide,Suppression of weed growth or killing weeds using chemicals,NA,AS based on ERA 01_chemicals$C.Type,2_input_reduction
 Pest management,Pest management in animals,NA,NA,Acaricide,Animal (Acaricide),NA,NA,AS based on ERA 01_chemicals$C.Type,NA
 Pest management,Pest management in animals,No Chemical Applied,NA,No Chemical Applied,No Acaricide Applied,NA,NA,NA,NA

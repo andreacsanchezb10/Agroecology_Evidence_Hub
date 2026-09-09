@@ -125,7 +125,7 @@ x<-paired_yield_focal%>%
 paired_yield_pler<-fun_pair_yield_partial_ler(fomd09.clean)
 
 sort(unique(paired_yield_pler$ler_comparison_id))
-
+names(paired_yield_pler)
 y<-paired_yield_pler%>%
   #filter(study_id=="JA_Kabir_17_A Stu_In"
          #,
@@ -147,6 +147,10 @@ y<-paired_yield_pler%>%
                T_out_var_value_l,
                T_out_var_value_u,
                T_out_sample_size,
+               pler_value,
+               pler_var_value,
+               
+               
                ler_comparison_id,
                ler_value_total,	ler_var_value_total,
                C_product,
@@ -246,13 +250,13 @@ cols_to_check <- c(pairing_base_cols, context_extra)
 cols_to_check
 
 rows <- fomd09.clean %>%
-  filter(study_id == "JA_Rao, _90_Produ_Fi",
-         out_subindicator == "Net Return",
-         practice_id %in% c("C1", "T1")) %>%
+  filter(study_id == "JA_Gebru_15_﻿Eval_Jo",
+         out_subindicator == "Gross Return",
+         practice_id %in% c("C1", "T2")) %>%
   select(practice_id, all_of(cols_to_check))
 
 c <- rows %>% filter(practice_id == "C1") %>% select(-practice_id) %>% unlist()
-t <- rows %>% filter(practice_id == "T1") %>% select(-practice_id) %>% unlist()
+t <- rows %>% filter(practice_id == "T2") %>% select(-practice_id) %>% unlist()
 
 tibble(column = names(c), C1 = c, T3 = t) %>%
   filter(C1 != T3 | is.na(C1) != is.na(T3))
@@ -321,9 +325,9 @@ nrow(missing_yield_pler)
 missing_yield_pler
 
 rows <- exploded_all %>%
-  filter(study_id == "JA_Banti_15_Deter_Ho", practice_id %in% c("C1", "T1")) %>%
-  select(practice_id, all_of(id_cols))
-
+  filter(study_id == "JA_Gebru_15_﻿Eval_Jo", practice_id %in% c("C1", "T1")) %>%
+  #select(practice_id, all_of(id_cols))
+  select(practice_id, product, out_value, pler_value)
 c <- rows %>% filter(practice_id == "C1") %>% select(-practice_id) %>% slice(1) %>% unlist()
 t <- rows %>% filter(practice_id == "T1") %>% select(-practice_id) %>% slice(1) %>% unlist()
 

@@ -28,8 +28,8 @@ source(file.path(path.metadata.effectsize, "fomd_fun/fun_lookup_ontologies.R"))
 # Read datasets
 #==========================================================
 #metadata<-"MD_Rosen_24_Effec_Sc" #Rosenstock et al. 2024. Effects of changing farming practices in African agriculture. 10.1038/s41597-024-03805-z 
-#metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
-metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
+metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
+#metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
 
 
 #---fomd10.formated
@@ -120,6 +120,22 @@ for (col in c("variety_management_subpractice","variety_management_practice","va
 }
 
 prueba<-fomd10.clean%>%
+  #diversification spatial-----
+select(doi,study_id,
+       diversification_spatial_subpractice,
+       C_subpractice_description_raw,T_subpractice_description_raw,
+       
+       diversification_spatial_practice ,diversification_spatial_theme
+)%>%
+  filter(!is.na(diversification_spatial_subpractice))%>%
+  filter(is.na(diversification_spatial_practice))
+
+
+distinct(diversification_spatial_practice,diversification_spatial_theme)
+sort(unique(prueba$diversification_spatial_subpractice))
+sort(unique(prueba$doi))
+
+
   #Pest management-----
 select(study_id, C_chem_subpractice,T_chem_subpractice,
        CT_chem_subpractice,
@@ -130,25 +146,6 @@ select(study_id, C_chem_subpractice,T_chem_subpractice,
   filter(is.na(pest_management_theme))
 
 sort(unique(prueba$CT_chem_subpractice))
-  #diversification spatial-----
-select(doi,study_id,
-       diversification_spatial_subpractice,
-       C_subpractice_description_raw,T_subpractice_description_raw,
-       
-       diversification_spatial_practice ,diversification_spatial_theme
-       )%>%
-  filter(!is.na(diversification_spatial_subpractice))%>%
-  filter(is.na(diversification_spatial_practice))
-
-
-distinct(diversification_spatial_practice,diversification_spatial_theme)
-sort(unique(prueba$diversification_spatial_subpractice))
-sort(unique(prueba$doi))
-
-
-  
-  
-
   #Soil management-----
 select(doi, soil_management_subpractice,soil_management_practice ,soil_management_theme)%>%
       # "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
