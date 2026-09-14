@@ -39,7 +39,7 @@ skim(fomd10.clean)
 
 length(fomd10_clean_files) # how many source files got combined
 nrow(fomd10.clean)
-sort(unique(fomd10.clean$study_id))
+length(unique(fomd10.clean$study_id)) #36
 #sort(unique(fomd10.clean$study_id[is.na(fomd10.clean$C_out_value )]))
 #sort(unique(fomd10.clean$study_id[fomd10.clean$C_out_var_metric =="95% Confidence Intervals"]))
 
@@ -88,7 +88,8 @@ sort(unique(fomd10.mean.sd$out_subpillar))
 
 sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_subpillar=="Biodiversity"]))
 sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_subpillar=="Economics"]))
-
+sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_subpillar=="Efficiency"]))
+sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_subpillar=="Physical"]))
 sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_subpillar=="Yield"]))
 
 #---- Apply equation to calculate sample size AND SD ----
@@ -150,7 +151,7 @@ data.frame(
 #==========================================================
 # Calculate pLER and LER
 #==========================================================
-fomd10.ler<- fun_calculate_ler(fomd10.n.cv)
+fomd10.ler<- fun_calculate_ler(fomd10.n.cv)%>%
   select(study_id,
          out_subindicator,
          C_out_value_metric,
