@@ -93,31 +93,29 @@ md.era.short.clean<-md.era.short.clean%>%
   left_join(fomd04%>%
               select(study_id_ss, title),
             by=c("study_id"= "study_id_ss"))%>%
-  mutate(effect_size_id = paste0("MD_Rosen_24_Effec_Sc_", dplyr::row_number()))
-
-names(md.era.short.clean)
+  mutate(effect_size_id = paste0("MD_Rosen_24_Effec_Sc_", dplyr::row_number()))%>%
+  mutate(year = case_when(
+    study_id == "EO0027" ~ 2014L,
+    study_id == "NJ0032" ~ 2018L,
+    TRUE ~ year))%>%
+  mutate(
+    journal = case_when(
+      study_id == "EO0057" ~ "Agriculture and Natural Resources",
+      TRUE ~ journal),
+    doi = case_when(
+      study_id == "EO0057" ~ "agris.fao.org/agris-search/search.do?recordID=TH2016003270",
+      TRUE ~ doi))
 
 # Quick checks
+md.era.short.clean %>%
+  select(study_id, effect_size_id, authors, title, year, journal, doi) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads", "md_era_short_clean.csv"))
+
 length(unique(md.era.short.clean$study_id)) # 1810 studies
 length(unique(md.era.short.clean$effect_size_id))  #232209 rows
 length(unique(md.era.short.clean$authors))  #1352
 length(unique(md.era.short.clean$title)) #959
 length(unique(md.era.short.clean$doi)) #1592
-
-for (col in c("study_id", "effect_size_id")) {
-  cat("---", col, "---\n")
-  print(sort(unique(md.era.short.clean[[col]])))
-}
-
-for (col in c("authors", "title",
-              "year","journal")) {
-  cat("---", col, "---\n")
-  print(sort(unique(md.era.short.clean[[col]])))
-}
-for (col in c("doi")) {
-  cat("---", col, "---\n")
-  print(sort(unique(md.era.short.clean[[col]])))
-}
 
 #----------------------------------------------
 #---location----
@@ -184,6 +182,15 @@ sort(unique(md.era.short.clean$site_id[is.na(md.era.short.clean$site_buffer)]))
 sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_type==""]))
 sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_agg==""]))
 sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_latitude==""]))
+
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(
+    site_buffer = case_when(
+      (site_buffer == "" | is.na(site_buffer)) & grepl("B[0-9]+", site_key) ~
+        str_extract(site_key, "(?<=B)[0-9]+"),
+      TRUE ~ site_buffer
+    )
+  )
 
 md.era.short.clean <- md.era.short.clean%>%
   mutate(site_type = case_when(
@@ -295,7 +302,37 @@ md.era.short.clean <- md.era.short.clean %>%
   mutate(across(all_of(site_cols), ~ .x, .names = "T_{.col}")) %>%
   mutate(across(all_of(site_cols), ~ .x, .names = "C_{.col}"))
 
+fill_buffer_by_group <- function(df, group_cols, col) {
+  df %>%
+    group_by(across(all_of(group_cols))) %>%
+    mutate(
+      "{col}" := {
+        vals <- .data[[col]]
+        is_placeholder <- grepl("^(Unspecified)(\\.\\.Unspecified)*$", vals)
+        real_vals <- unique(vals[!is_placeholder])
+        if (length(real_vals) == 1) {
+          ifelse(is_placeholder, real_vals, vals)
+        } else {
+          vals
+        }
+      }
+    ) %>%
+    ungroup()
+}
+
+md.era.short.clean <- md.era.short.clean %>%
+  fill_buffer_by_group(c("study_id", "C_site_latitude", "C_site_longitude"), "C_site_buffer") %>%
+  fill_buffer_by_group(c("study_id", "T_site_latitude", "T_site_longitude"), "T_site_buffer")
+
+
 # Quick checks----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, C_country,C_site_id,C_site_type,C_site_admin,C_site_agg,C_site_latlong_type,
+         C_site_latitude,C_site_longitude,C_site_buffer,C_site_key,T_country,T_site_id,
+         T_site_type,T_site_admin,T_site_agg,T_site_latlong_type,T_site_latitude,
+         T_site_longitude,T_site_buffer,T_site_key) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads", "md_era_short_clean.csv"))
+
 length(unique(md.era.short.clean$T_site_key))  #1889
 length(unique(md.era.short.clean$C_site_key))  #1889
 sort(unique(md.era.short.clean$country)) #61
@@ -325,6 +362,12 @@ md.era.short.clean <- md.era.short.clean%>%
   mutate(across(all_of(experiment_cols), ~ .x, .names = "C_{.col}"))
 
 # Quick checks
+md.era.short.clean %>%
+  select(study_id, effect_size_id, exp_design,
+         C_exp_plot_size,T_exp_plot_size,C_exp_field_size,
+         T_exp_field_size,exp_duration) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads", "md_era_short_clean.csv"))
+
 sort(unique(md.era.short.clean$exp_design))
 sort(unique(md.era.short.clean$T_exp_plot_size))
 sort(unique(md.era.short.clean$exp_field_size)) #does not exist in ERA
@@ -337,6 +380,11 @@ sort(unique(md.era.short.clean$exp_duration))
 md.era.short.clean$time_year_start <- gsub("...", "..", md.era.short.clean$time_year_start, fixed = TRUE)
 
 # Quick checks
+md.era.short.clean %>%
+  select(study_id, effect_size_id, time_raw,
+         time_year_start,time_year_end,time_season) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads", "md_era_short_clean.csv"))
+
 sort(unique(md.era.short.clean$time_raw)) #does not exist in ERA
 sort(unique(md.era.short.clean$time_year_start))
 sort(unique(md.era.short.clean$time_year_end))
