@@ -57,7 +57,7 @@ length(unique(fomd04$study_id_ss))#1811
 md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v47.csv"))
 
 
-length(unique(md.era.short$study_id)) #1811 studies
+length(unique(md.era.short$study_id)) #1810 studies
 length(unique(md.era.short$doi)) #1592
 sort(unique(md.era.short$country))
 
@@ -79,31 +79,49 @@ na_empty_summary <- data.frame(
 )
 
 print(na_empty_summary)
+#==============================================
+#---- Cleaning the dataset ----
+#==============================================
+md.era.short.clean<-md.era.short%>%
+  mutate(across(where(is.character), trimws))
 
-#---bibliographic----
-md.era.short.clean<-md.era.short
-
+#----------------------------------------------
+#---bibliographic information----
+#----------------------------------------------
 md.era.short.clean<-md.era.short.clean%>%
   select(-title)%>%
   left_join(fomd04%>%
               select(study_id_ss, title),
-            by=c("study_id"= "study_id_ss"))
+            by=c("study_id"= "study_id_ss"))%>%
+  mutate(effect_size_id = paste0("MD_Rosen_24_Effec_Sc_", dplyr::row_number()))
 
 names(md.era.short.clean)
 
 # Quick checks
-length(unique(md.era.short.clean$study_id)) # 1811 studies
-length(unique(md.era.short.clean$effect_size_id))  #232257 rows
-length(unique(md.era.short.clean$authors))  #1353
-length(unique(md.era.short.clean$title)) #958
-sort(unique(md.era.short.clean$year))  
-sort(unique(md.era.short.clean$journal))  
-sort(unique(md.era.short.clean$doi)) 
+length(unique(md.era.short.clean$study_id)) # 1810 studies
+length(unique(md.era.short.clean$effect_size_id))  #232209 rows
+length(unique(md.era.short.clean$authors))  #1352
+length(unique(md.era.short.clean$title)) #959
 length(unique(md.era.short.clean$doi)) #1592
-sort(unique(md.era.short.clean$title))
-#=============================================
+
+for (col in c("study_id", "effect_size_id")) {
+  cat("---", col, "---\n")
+  print(sort(unique(md.era.short.clean[[col]])))
+}
+
+for (col in c("authors", "title",
+              "year","journal")) {
+  cat("---", col, "---\n")
+  print(sort(unique(md.era.short.clean[[col]])))
+}
+for (col in c("doi")) {
+  cat("---", col, "---\n")
+  print(sort(unique(md.era.short.clean[[col]])))
+}
+
+#----------------------------------------------
 #---location----
-#=========================
+#----------------------------------------------
 # Fix site_id
 sort(unique(md.era.short.clean$site_id[md.era.short.clean$country==""])) #"Cedara Research Station"
 sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_type==""])) #10
@@ -278,9 +296,9 @@ md.era.short.clean <- md.era.short.clean %>%
   mutate(across(all_of(site_cols), ~ .x, .names = "C_{.col}"))
 
 # Quick checks----
-length(unique(md.era.short.clean$T_site_key))  #1891
-length(unique(md.era.short.clean$C_site_key))  #1891
-sort(unique(md.era.short.clean$country))
+length(unique(md.era.short.clean$T_site_key))  #1889
+length(unique(md.era.short.clean$C_site_key))  #1889
+sort(unique(md.era.short.clean$country)) #61
 sort(unique(md.era.short.clean$site_type))
 sort(unique(md.era.short.clean$site_id))
 sort(unique(md.era.short.clean$site_admin))
@@ -291,10 +309,14 @@ sort(unique(md.era.short.clean$site_longitude))
 sort(unique(md.era.short.clean$site_buffer))
 sort(unique(md.era.short.clean$site_key))
 
-#=============================================
+#----------------------------------------------
 #---experiment_details----
-#=========================
+#----------------------------------------------
 ## TO CHECK: see what to do here, this can differ from T and C
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,cols = c("exp_design"),
+  pattern = c("unspecified","Unspecifified","Unspesified"),replacement =  "")
+
 experiment_cols <- c("exp_plot_size",  "exp_field_size")
 
 # Create T_ and C_ versions, keeping originals
@@ -308,9 +330,9 @@ sort(unique(md.era.short.clean$T_exp_plot_size))
 sort(unique(md.era.short.clean$exp_field_size)) #does not exist in ERA
 sort(unique(md.era.short.clean$exp_duration))
 
-#=============================================
+#----------------------------------------------
 #---experiment_time----
-#=========================
+#----------------------------------------------
 ## TO CHECK: see what to do here, this can differ from T and C
 md.era.short.clean$time_year_start <- gsub("...", "..", md.era.short.clean$time_year_start, fixed = TRUE)
 
@@ -1964,45 +1986,6 @@ sort(unique(md.era.short.clean$T_out_season_end))
 #-----------------------------------------------
 library(tibble)
 library(purrr)
-
-#=========================
-#---location----
-#=========================
-#--- Reclassifying country as ISO_3166_1_Alpha_3
-md.era.short.clean <- apply_lookup_ontologies(
-  df        = md.era.short.clean,
-  ref       = fomd01.countries,
-  key_col   = "Country",
-  value_col = "ISO_3166_1_Alpha_3",
-  src_col   = "country",
-  new_col   = "country_ISO1"
-)
-
-#Remove duplicate country and country_ISO
-md.era.short.clean <- md.era.short.clean %>%
-  mutate(
-    country = map_chr(str_split(str_squish(country), "\\.\\."), \(x) paste(unique(str_squish(x)), collapse = "..")),
-    country_ISO1 = map_chr(str_split(str_squish(country_ISO1), "\\.\\."), \(x) paste(unique(str_squish(x)), collapse = ".."))
-  )
-
-# Quick checks
-# All the studied countries are in fomd01.countries
-unique_countries <-data.frame(
-  country = md.era.short.clean %>%
-               pull(country) %>%
-               str_split("\\.\\.") %>%
-               unlist() %>%
-               str_trim())%>%
-  distinct(country) %>%
-  arrange(country)%>%
-  left_join(fomd01.countries%>%
-              filter(!is.na(Country))%>%
-              distinct(Country,ISO_3166_1_Alpha_3),
-            by=c("country"="Country"))
-  #filter(is.na(Product.Type))
-
-sort(unique(md.era.short.clean$country))
-sort(unique(md.era.short.clean$country_ISO))
 
 #=========================
 #---outcome----

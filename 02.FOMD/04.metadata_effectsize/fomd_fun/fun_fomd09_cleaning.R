@@ -87,7 +87,7 @@ add_fomd09_location <- function(fomd09.clean) {
   fomd09.clean <- fomd09.clean %>%
     rowwise() %>%
     mutate(
-      country           = paste(unique(na.omit(c_across(starts_with("country0"))),collapse = "..")),
+      country           = paste(na.omit(c_across(starts_with("country0"))),collapse = ".."),
       site_id           = paste(na.omit(c_across(starts_with("site_id0"))), collapse = ".."),
       site_type         = paste(na.omit(c_across(starts_with("site_type0"))), collapse = ".."),#unique(na.omit(c_across(starts_with("site_type0"))),collapse = "..")),
       site_admin        = paste(na.omit(c_across(starts_with("site_admin0"))), collapse = ".."),
