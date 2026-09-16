@@ -109,7 +109,7 @@ md.era.short.clean<-md.era.short.clean%>%
 # Quick checks
 md.era.short.clean %>%
   select(study_id, effect_size_id, authors, title, year, journal, doi) %>%
-  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads", "md_era_short_clean.csv"))
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_bibliographic.csv"))
 
 length(unique(md.era.short.clean$study_id)) # 1810 studies
 length(unique(md.era.short.clean$effect_size_id))  #232209 rows
@@ -302,6 +302,64 @@ md.era.short.clean <- md.era.short.clean %>%
   mutate(across(all_of(site_cols), ~ .x, .names = "T_{.col}")) %>%
   mutate(across(all_of(site_cols), ~ .x, .names = "C_{.col}"))
 
+site_lookup_type <- c(
+  "KNUST, Kumasi" = "Researcher Managed & Research Facility",
+  "Yawkwei" = "Farmer Managed",
+  "Juaso" = "Farmer Managed",
+  "Nkwanta" = "Farmer Managed"
+)
+site_lookup_admin <- c(
+  "KNUST, Kumasi" = "Facility",
+  "Yawkwei" = "Village",
+  "Juaso" = "Village",
+  "Nkwanta" = "Village"
+)
+site_lookup_buffer <- c(
+  "KNUST, Kumasi" = "1000",
+  "Yawkwei" = "3000",
+  "Juaso" = "3000",
+  "Nkwanta" = "3000"
+)
+
+fix_js0309_field <- function(site_id_str, lookup) {
+  sites <- str_split(site_id_str, fixed(".."))[[1]]
+  paste(lookup[sites], collapse = "..")
+}
+
+md.era.short.clean <- md.era.short.clean %>%
+  rowwise() %>%
+  mutate(
+    C_site_type   = if_else(study_id == "JS0309", fix_js0309_field(C_site_id, site_lookup_type), C_site_type),
+    C_site_admin  = if_else(study_id == "JS0309", fix_js0309_field(C_site_id, site_lookup_admin), C_site_admin),
+    C_site_buffer = if_else(study_id == "JS0309", fix_js0309_field(C_site_id, site_lookup_buffer), C_site_buffer),
+    T_site_type   = if_else(study_id == "JS0309", fix_js0309_field(T_site_id, site_lookup_type), T_site_type),
+    T_site_admin  = if_else(study_id == "JS0309", fix_js0309_field(T_site_id, site_lookup_admin), T_site_admin),
+    T_site_buffer = if_else(study_id == "JS0309", fix_js0309_field(T_site_id, site_lookup_buffer), T_site_buffer)
+  ) %>%
+  ungroup()
+
+repeat_to_match_site_id <- function(df, prefix) {
+  site_id_col <- paste0(prefix, "_site_id")
+  cols_to_fix <- paste0(prefix, c("_country", "_site_type", "_site_admin", "_site_agg",
+                                  "_site_latlong_type", "_site_latitude", "_site_longitude", "_site_buffer"))
+  df %>%
+    rowwise() %>%
+    mutate(across(all_of(cols_to_fix), function(val) {
+      n_sites <- length(str_split(.data[[site_id_col]], fixed(".."))[[1]])
+      n_val   <- length(str_split(val, fixed(".."))[[1]])
+      if (n_val == 1 && n_sites > 1) {
+        paste(rep(val, n_sites), collapse = "..")
+      } else {
+        val
+      }
+    })) %>%
+    ungroup()
+}
+
+md.era.short.clean <- md.era.short.clean %>%
+  repeat_to_match_site_id("C") %>%
+  repeat_to_match_site_id("T")
+
 fill_buffer_by_group <- function(df, group_cols, col) {
   df %>%
     group_by(across(all_of(group_cols))) %>%
@@ -324,14 +382,13 @@ md.era.short.clean <- md.era.short.clean %>%
   fill_buffer_by_group(c("study_id", "C_site_latitude", "C_site_longitude"), "C_site_buffer") %>%
   fill_buffer_by_group(c("study_id", "T_site_latitude", "T_site_longitude"), "T_site_buffer")
 
-
 # Quick checks----
 md.era.short.clean %>%
   select(study_id, effect_size_id, C_country,C_site_id,C_site_type,C_site_admin,C_site_agg,C_site_latlong_type,
          C_site_latitude,C_site_longitude,C_site_buffer,C_site_key,T_country,T_site_id,
          T_site_type,T_site_admin,T_site_agg,T_site_latlong_type,T_site_latitude,
          T_site_longitude,T_site_buffer,T_site_key) %>%
-  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads", "md_era_short_clean.csv"))
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_location.csv"))
 
 length(unique(md.era.short.clean$T_site_key))  #1889
 length(unique(md.era.short.clean$C_site_key))  #1889
@@ -350,9 +407,9 @@ sort(unique(md.era.short.clean$site_key))
 #---experiment_details----
 #----------------------------------------------
 ## TO CHECK: see what to do here, this can differ from T and C
-md.era.short.clean <- apply_replace_in_cols(
-  md.era.short.clean,cols = c("exp_design"),
-  pattern = c("unspecified","Unspecifified","Unspesified"),replacement =  "")
+md.era.short.clean <- apply_replace_in_cols( 
+  md.era.short.clean, cols = c("exp_design"),
+  pattern = "Unspecifified|Unspesified", replacement = "Unspecified", fixed = FALSE)
 
 experiment_cols <- c("exp_plot_size",  "exp_field_size")
 
@@ -366,7 +423,7 @@ md.era.short.clean %>%
   select(study_id, effect_size_id, exp_design,
          C_exp_plot_size,T_exp_plot_size,C_exp_field_size,
          T_exp_field_size,exp_duration) %>%
-  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads", "md_era_short_clean.csv"))
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_experiment_details.csv"))
 
 sort(unique(md.era.short.clean$exp_design))
 sort(unique(md.era.short.clean$T_exp_plot_size))
@@ -378,31 +435,53 @@ sort(unique(md.era.short.clean$exp_duration))
 #----------------------------------------------
 ## TO CHECK: see what to do here, this can differ from T and C
 md.era.short.clean$time_year_start <- gsub("...", "..", md.era.short.clean$time_year_start, fixed = TRUE)
+md.era.short.clean$time_season <- gsub("...", "..", md.era.short.clean$time_season, fixed = TRUE)
+md.era.short.clean <- apply_replace_in_cols(md.era.short.clean, cols = c("time_season"),pattern = ",", replacement = "..")
+
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(
+    time_year_end = if_else(
+      is.na(time_year_end) | as.character(time_year_end) == "NA",
+      "Unspecified",
+      as.character(time_year_end)
+    ),
+    time_year_start = if_else(
+      (time_year_start == "" | is.na(time_year_start)) & time_year_end == "Unspecified",
+      "Unspecified",
+      as.character(time_year_start)
+    )
+  )
 
 # Quick checks
 md.era.short.clean %>%
-  select(study_id, effect_size_id, time_raw,
-         time_year_start,time_year_end,time_season) %>%
-  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads", "md_era_short_clean.csv"))
+  select(study_id, effect_size_id,
+         time_raw,time_year_start,time_year_end,time_season) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_experiment_time.csv"))
 
 sort(unique(md.era.short.clean$time_raw)) #does not exist in ERA
 sort(unique(md.era.short.clean$time_year_start))
 sort(unique(md.era.short.clean$time_year_end))
 sort(unique(md.era.short.clean$time_season))
 
-#=============================================
+#----------------------------------------------
 #---practice----
-#=========================
+#----------------------------------------------
 ## TO CHECK:NEED TO INFER T_system_type and C_system_type
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_subpractice_description_raw,T_subpractice_description_raw,
+         C_system_type,T_system_type) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_practice.csv"))
+
 sort(unique(md.era.short.clean$C_subpractice_description_raw))
 sort(unique(md.era.short.clean$T_subpractice_description_raw))
 
 sort(unique(md.era.short.clean$C_system_type))
 sort(unique(md.era.short.clean$T_system_type))
 
-#=============================================
+#----------------------------------------------
 #---commodity_crop_tree ----
-#=========================
+#----------------------------------------------
 ## TO CHECK: 31 Missing crops/trees from the ontologies
 
 # --- Rename crop_tree columns
@@ -458,6 +537,43 @@ md.era.short.clean <- md.era.short.clean%>%
     T_crop_tree_density= case_when(T_crop_tree_diversity!=""&T_crop_tree_density==""~ "Unspecified(Unspecified)",TRUE~T_crop_tree_density)
   )
 
+add_unspecified_variety <- function(diversity_str) {
+  if (is.na(diversity_str) || diversity_str == "") return(diversity_str)
+  
+  chars <- strsplit(diversity_str, "")[[1]]
+  depth <- 0
+  result <- character(0)
+  buffer <- ""
+  
+  for (ch in chars) {
+    if (ch == "(") depth <- depth + 1
+    if (ch == ")") depth <- depth - 1
+    
+    if (ch %in% c("-", "/") && depth == 0) {
+      result <- c(result, paste0(buffer, "(Unspecified)"), ch)
+      buffer <- ""
+    } else {
+      buffer <- paste0(buffer, ch)
+    }
+  }
+  result <- c(result, paste0(buffer, "(Unspecified)"))
+  paste0(result, collapse = "")
+}
+
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(
+    C_crop_tree_variety = if_else(
+      C_crop_tree_variety == "" & C_crop_tree_diversity != "",
+      sapply(C_crop_tree_diversity, add_unspecified_variety),
+      C_crop_tree_variety
+    ),
+    T_crop_tree_variety = if_else(
+      T_crop_tree_variety == "" & T_crop_tree_diversity != "",
+      sapply(T_crop_tree_diversity, add_unspecified_variety),
+      T_crop_tree_variety
+    )
+  )
+
 
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
@@ -498,6 +614,13 @@ md.era.short.clean <- md.era.short.clean%>%
 
 
 ## Quick checks----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_crop_tree_diversity,C_crop_tree_variety,C_crop_tree_density,
+         T_crop_tree_diversity,T_crop_tree_variety,T_crop_tree_density
+  ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_commodity_crop_tree.csv"))
+
 sort(unique(md.era.short.clean$C_crop_tree_diversity))
 sort(unique(md.era.short.clean$T_crop_tree_diversity))
 
@@ -522,7 +645,7 @@ unique_crops_diversity <- rbind(
             by="crop_tree_diversity")%>%
   filter(is.na(FAO.Food.Group)) 
 
-length(unique(unique_crops_diversity$crop_tree_diversity)) #70-v41: 57; v45: 34;v46: 16
+length(unique(unique_crops_diversity$crop_tree_diversity)) #70-v41: 57; v45: 34;v46: 16; V47:7
 #readr::write_csv(unique_crops_diversity, paste0(path.era, "/v41_error_report/missing_crops_01.csv"))
 
 
