@@ -645,8 +645,8 @@ unique_crops_diversity <- rbind(
             by="crop_tree_diversity")%>%
   filter(is.na(FAO.Food.Group)) 
 
-length(unique(unique_crops_diversity$crop_tree_diversity)) #70-v41: 57; v45: 34;v46: 16; V47:7
-#readr::write_csv(unique_crops_diversity, paste0(path.era, "/v41_error_report/missing_crops_01.csv"))
+length(unique(unique_crops_diversity$crop_tree_diversity)) #70-v41: 57; v45: 34;v46: 16; V47:5
+readr::write_csv(unique_crops_diversity, paste0(path.era, "/v47_error_report/missing_crops_01.csv"))
 
 
 unique_crops_variety <- data.frame(
@@ -658,7 +658,8 @@ unique_crops_variety <- data.frame(
   left_join(fomd01.crops.trees,
             by="crop_tree_diversity")%>%
   filter(is.na(FAO.Food.Group)) 
-length(unique(unique_crops_variety$crop_tree_diversity))#v45: 63, v46:41
+length(unique(unique_crops_variety$crop_tree_diversity))#v45: 63, v46:41, V47: 16
+readr::write_csv(unique_crops_variety, paste0(path.era, "/v47_error_report/missing_var_01.csv"))
 
 sort(unique(md.era.short.clean$C_crop_tree_density))
 sort(unique(md.era.short.clean$T_crop_tree_density))
@@ -672,7 +673,7 @@ unique_crops_density <- data.frame(
   left_join(fomd01.crops.trees,
             by="crop_tree_diversity")%>%
   filter(is.na(FAO.Food.Group)) 
-length(unique(unique_crops_density$crop_tree_diversity)) #v45: 36; v46:22
+length(unique(unique_crops_density$crop_tree_diversity)) #v45: 36; v46:22; v47: 5
 
 
 #=============================================
