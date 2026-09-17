@@ -27,7 +27,7 @@ source(file.path(path.functions,"/fun_load_data_ontologies.R"))
 source(file.path(path.functions,"/fun_cleaning.R"))
 source(file.path(path.functions,"/fun_cleaning_09_FOMD.R"))
 source(file.path(path.functions,"/fun_lookup_commodities.R"))
-
+source(file.path(path.functions, "/fun_fomd09_cleaning.R"))
 
 #==========================================================
 # Read datasets
@@ -54,7 +54,8 @@ length(unique(fomd04$study_id_ss))#1811
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v41.csv"))
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v45.csv"))
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v46.csv"))
-md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v47.csv"))
+#md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v47.csv"))
+md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v50.csv"))
 
 
 length(unique(md.era.short$study_id)) #1810 studies
@@ -93,7 +94,7 @@ md.era.short.clean<-md.era.short.clean%>%
   left_join(fomd04%>%
               select(study_id_ss, title),
             by=c("study_id"= "study_id_ss"))%>%
-  mutate(effect_size_id = paste0("MD_Rosen_24_Effec_Sc_", dplyr::row_number()))%>%
+  #mutate(effect_size_id = paste0("MD_Rosen_24_Effec_Sc_", dplyr::row_number()))%>%
   mutate(year = case_when(
     study_id == "EO0027" ~ 2014L,
     study_id == "NJ0032" ~ 2018L,
@@ -466,7 +467,6 @@ sort(unique(md.era.short.clean$time_season))
 #----------------------------------------------
 #---practice----
 #----------------------------------------------
-## TO CHECK:NEED TO INFER T_system_type and C_system_type
 md.era.short.clean %>%
   select(study_id, effect_size_id, 
          C_subpractice_description_raw,T_subpractice_description_raw,
@@ -482,8 +482,6 @@ sort(unique(md.era.short.clean$T_system_type))
 #----------------------------------------------
 #---commodity_crop_tree ----
 #----------------------------------------------
-## TO CHECK: 31 Missing crops/trees from the ontologies
-
 # --- Rename crop_tree columns
 names(md.era.short.clean) <- gsub("^C_plant_", "C_crop_tree_", names(md.era.short.clean))
 names(md.era.short.clean) <- gsub("^T_plant_", "T_crop_tree_", names(md.era.short.clean))
@@ -574,7 +572,6 @@ md.era.short.clean <- md.era.short.clean %>%
     )
   )
 
-
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
   cols = c("C_crop_tree_variety","T_crop_tree_variety"),
@@ -605,13 +602,64 @@ md.era.short.clean <- apply_replace_in_cols(
   cols = c("C_crop_tree_diversity","T_crop_tree_diversity"),
   pattern = "Robusta",replacement =  "Coffee robusta")
 
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean, cols = crop_tree_cols,
+  pattern = "Gliricida sepium", replacement = "Gliricidia sepium")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean, cols = crop_tree_cols,
+  pattern = "Glyricidia sepium", replacement = "Gliricidia sepium")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean, cols = crop_tree_cols,
+  pattern = "Gliricidia sp", replacement = "Gliricidia sp.")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean, cols = crop_tree_cols,
+  pattern = "Gliricidia sp..", replacement = "Gliricidia sp.")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean, cols = crop_tree_cols,
+  pattern = "Tarenna sp", replacement = "Tarenna sp.")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean, cols = crop_tree_cols,
+  pattern = "Tarenna sp..", replacement = "Tarenna sp.")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean, cols = crop_tree_cols,
+  pattern = "Patula Pine", replacement = "Pinus patula")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean, cols = crop_tree_cols,
+  pattern = "Ruzigrass", replacement = "Ruzi grass")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean, cols = crop_tree_cols,
+  pattern = "Ryegrass sp", replacement = "Ryegrass sp.")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean, cols = crop_tree_cols,
+  pattern = "Ryegrass Sp.", replacement = "Ryegrass sp.")
+
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean, cols = crop_tree_cols,
+  pattern = "Shea Nut", replacement = "Sheanut")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_crop_tree_variety", "T_crop_tree_variety"),
+  pattern = "“Quincho” [(974 × 196)-HT′-387 (RIL355)]",
+  replacement = "Quincho (974 x 196) HT 387 (RIL355)")
+
+
 #Combine crop_tree_diversity + crop_tree_density columns separated by "/" or "-"
 md.era.short.clean <- md.era.short.clean%>%
   mutate(
     C_crop_tree_density=mapply(create_density_crop,C_crop_tree_diversity,C_crop_tree_density),
     T_crop_tree_density=mapply(create_density_crop,T_crop_tree_diversity,T_crop_tree_density)
   )
-
 
 ## Quick checks----
 md.era.short.clean %>%
@@ -658,12 +706,11 @@ unique_crops_variety <- data.frame(
   left_join(fomd01.crops.trees,
             by="crop_tree_diversity")%>%
   filter(is.na(FAO.Food.Group)) 
-length(unique(unique_crops_variety$crop_tree_diversity))#v45: 63, v46:41, V47: 16
+length(unique(unique_crops_variety$crop_tree_diversity))#v45: 63, v46:41, V47: 5
 readr::write_csv(unique_crops_variety, paste0(path.era, "/v47_error_report/missing_var_01.csv"))
 
 sort(unique(md.era.short.clean$C_crop_tree_density))
 sort(unique(md.era.short.clean$T_crop_tree_density))
-
 
 unique_crops_density <- data.frame(
   crop_tree_diversity = unique(c(
@@ -673,12 +720,11 @@ unique_crops_density <- data.frame(
   left_join(fomd01.crops.trees,
             by="crop_tree_diversity")%>%
   filter(is.na(FAO.Food.Group)) 
-length(unique(unique_crops_density$crop_tree_diversity)) #v45: 36; v46:22; v47: 5
+length(unique(unique_crops_density$crop_tree_diversity)) #v45: 36; v46:22; v47: 4
 
-
-#=============================================
+#----------------------------------------------
 #---commodity_animal----
-#=========================
+#----------------------------------------------
 md.era.short.clean <- md.era.short.clean%>%
   mutate(
     C_animal_diversity = gsub("\\*+", "-", C_animal_diversity),
@@ -722,19 +768,93 @@ md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,cols = c("C_animal_breed","T_animal_breed"),
   pattern = "Jute mallow(Sao Jose)",replacement =  "")
 
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_animal_breed", "T_animal_breed"),
+  pattern = "NA(Large White)",
+  replacement = "Pig(Large White)")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_animal_breed", "T_animal_breed"),
+  pattern = "NA(West African Dwarf)",
+  replacement = "Goat(West African Dwarf)")
+
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(
+    C_animal_diversity = case_when(
+      C_animal_diversity == "" & C_animal_breed == "Pig(Large White)" ~ "Pig",
+      C_animal_diversity == "" & C_animal_breed == "Goat(West African Dwarf)" ~ "Goat",
+      TRUE ~ C_animal_diversity
+    ),
+    T_animal_diversity = case_when(
+      T_animal_diversity == "" & T_animal_breed == "Pig(Large White)" ~ "Pig",
+      T_animal_diversity == "" & T_animal_breed == "Goat(West African Dwarf)" ~ "Goat",
+      TRUE ~ T_animal_diversity
+    )
+  )
+
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(
+    C_animal_breed = if_else(
+      C_animal_breed == "" & C_animal_diversity != "",
+      sapply(C_animal_diversity, add_unspecified_variety),
+      C_animal_breed
+    ),
+    T_animal_breed = if_else(
+      T_animal_breed == "" & T_animal_diversity != "",
+      sapply(T_animal_diversity, add_unspecified_variety),
+      T_animal_breed
+    )
+  )
+
 # Quick checks-----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_animal_diversity,C_animal_breed,C_animal_density,
+         T_animal_diversity,T_animal_breed,T_animal_density) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_commodity_animal.csv"))
+
 sort(unique(md.era.short.clean$C_animal_diversity))
 sort(unique(md.era.short.clean$T_animal_diversity))
 
 sort(unique(md.era.short.clean$C_animal_breed))
 sort(unique(md.era.short.clean$T_animal_breed))
 
-sort(unique(md.era.short.clean$C_animal_density)) # TO CHECK: Missing
-sort(unique(md.era.short.clean$T_animal_density)) # TO CHECK: Missing
+sort(unique(md.era.short.clean$C_animal_density)) # TO CHECK: Missing from ERA
+sort(unique(md.era.short.clean$T_animal_density)) # TO CHECK: Missing from ERA
 
-#==================================================
+#----------------------------------------------
+#---practice2----
+#----------------------------------------------
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(
+    C_system_type = case_when(
+      C_animal_diversity != "" & C_crop_tree_diversity == "" ~ "Grassland",
+      C_crop_tree_diversity != "" ~ "Cropland",
+      TRUE ~ "NA"
+    ),
+    T_system_type = case_when(
+      T_animal_diversity != "" & T_crop_tree_diversity == "" ~ "Grassland",
+      T_crop_tree_diversity != "" ~ "Cropland",
+      TRUE ~ "NA"
+    )
+  )
+
+# Quick checks-----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_subpractice_description_raw,T_subpractice_description_raw,
+         C_system_type,T_system_type,
+         C_crop_tree_diversity,C_animal_diversity,
+         T_crop_tree_diversity,T_animal_diversity,
+         C_product_simple,	C_econ_inputs,	T_product_component,	T_product
+         ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_practice.csv"))
+
+#----------------------------------------------
 #---improved_crop_varieties_practice---- 
-#==================================================
+#----------------------------------------------
 ## TO CHECK:  CHECK WHEN C SHOULD BE T ---------------
 md.era.short.clean <- md.era.short.clean%>%
   mutate(
@@ -759,7 +879,6 @@ md.era.short.clean <- md.era.short.clean%>%
     T_varietal_crop_trait = gsub("\\$+", "..", T_varietal_crop_trait)
   )
 
-
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
   cols = c("C_varietal_crop_subpractice","T_varietal_crop_subpractice"),
@@ -775,7 +894,18 @@ md.era.short.clean <- apply_replace_in_cols(
   cols = c("C_varietal_crop_subpractice","T_varietal_crop_subpractice"),
   pattern = "Unspecified Variety Variety",replacement =  "Unspecified Variety") 
 
-# Quick checks ----
+# Quick checks-----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_varietal_crop_subpractice_raw,C_varietal_crop_variety,
+         C_varietal_crop_subpractice,C_varietal_crop_type,C_varietal_crop_trait,
+         T_varietal_crop_subpractice_raw,T_varietal_crop_variety,
+         T_varietal_crop_subpractice,T_varietal_crop_type,T_varietal_crop_trait,
+         C_crop_tree_diversity, T_crop_tree_diversity,
+         C_product_simple,	C_econ_inputs,	T_product_component,	T_product
+  ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_crop_varietal_practice.csv"))
+
 sort(unique(md.era.short.clean$C_varietal_crop_subpractice_raw))
 sort(unique(md.era.short.clean$T_varietal_crop_subpractice_raw))
 
@@ -794,6 +924,7 @@ sort(unique(md.era.short.clean$T_varietal_crop_trait))
 #==================================================
 #---improved_animal_breed_practice---- 
 #==================================================
+## TO CHECK:  CHECK WHEN C SHOULD BE T ---------------
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,cols = c("C_varietal_animal_breed","T_varietal_animal_breed"),
   pattern = "*",replacement =  "**")
@@ -808,7 +939,24 @@ md.era.short.clean <- apply_replace_in_cols(
                               "C_varietal_animal_type","T_varietal_animal_type"),
   pattern = "Unspecified",replacement =  "Unspecified Breed")
 
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_varietal_animal_subpractice", "T_varietal_animal_subpractice"),
+  pattern = "Unspecified",
+  replacement = "Unspecified Breed")
+
 # Quick checks ----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_varietal_animal_subpractice_raw,C_varietal_animal_breed,
+         C_varietal_animal_subpractice,C_varietal_animal_type,## TO CHECK: THIS COLUMN IS MISSING C_varietal_animal_trait,
+         T_varietal_animal_subpractice_raw,T_varietal_animal_breed,
+         T_varietal_animal_subpractice,T_varietal_animal_type, ## TO CHECK: THIS COLUMN IS MISSINGT_varietal_animal_trait,
+         C_animal_diversity,T_animal_diversity,
+         C_product_simple,	C_econ_inputs,	T_product_component,	T_product
+  ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_animal_varietal_practice.csv"))
+
 sort(unique(md.era.short.clean$C_varietal_animal_subpractice_raw))
 sort(unique(md.era.short.clean$T_varietal_animal_subpractice_raw))
 
@@ -821,9 +969,12 @@ sort(unique(md.era.short.clean$T_varietal_animal_subpractice))
 sort(unique(md.era.short.clean$C_varietal_animal_type))
 sort(unique(md.era.short.clean$T_varietal_animal_type))
 
-#=============================================
+sort(unique(md.era.short.clean$C_varietal_animal_trait)) ## TO CHECK: COLUMN MISSING
+sort(unique(md.era.short.clean$T_varietal_animal_trait)) ## TO CHECK: COLUMN MISSING
+
+#----------------------------------------------
 #---soil_management_practice---- 
-#=========================
+#----------------------------------------------
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
   cols = c("C_tillage_subpractice", "T_tillage_subpractice"),
@@ -842,6 +993,17 @@ md.era.short.clean <- apply_replace_in_cols(
   pattern = " ..",replacement =  "..") 
 
 # Quick checks ----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_tillage_subpractice_raw,C_tillage_subpractice,
+         C_tillage_method,C_tillage_method_other,
+         C_tillage_depth,C_tillage_frequency,
+         T_tillage_subpractice_raw,T_tillage_subpractice,
+         T_tillage_method,T_tillage_method_other,
+         T_tillage_depth,T_tillage_frequency
+  ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_soil_management_practice.csv"))
+
 sort(unique(md.era.short.clean$C_tillage_subpractice_raw))
 sort(unique(md.era.short.clean$T_tillage_subpractice_raw))
 
@@ -860,9 +1022,9 @@ sort(unique(md.era.short.clean$T_tillage_depth))
 sort(unique(md.era.short.clean$C_tillage_frequency))
 sort(unique(md.era.short.clean$T_tillage_frequency))
 
-#=============================================
+#----------------------------------------------
 #---planting_practice----
-#=========================
+#----------------------------------------------
 # TO CHECK: #Poner methods en methods, y subpractices en subpractices-----------------
 # TO CHECK: WHICH SHOULD BE T OR C-----------------------
 md.era.short.clean <- apply_replace_in_cols(md.era.short.clean,
@@ -878,7 +1040,22 @@ md.era.short.clean <- apply_replace_in_cols(
   cols = c("C_planting_subpractice", "T_planting_subpractice"),
   pattern = "NA",replacement = "Unspecified") 
 
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_planting_method", "T_planting_method"),
+  pattern = "...", replacement = "..")
+
 # Quick checks ----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_planting_subpractice_raw,C_planting_subpractice,
+         C_planting_method,C_planting_date_start,C_planting_date_end,
+         T_planting_subpractice_raw,T_planting_subpractice,
+         T_planting_method,T_planting_date_start,T_planting_date_end
+         
+  ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_planting_practice.csv"))
+
 sort(unique(md.era.short.clean$C_planting_subpractice_raw))
 sort(unique(md.era.short.clean$T_planting_subpractice_raw))
 
@@ -894,16 +1071,27 @@ sort(unique(md.era.short.clean$T_planting_date_start))
 sort(unique(md.era.short.clean$C_planting_date_end))
 sort(unique(md.era.short.clean$T_planting_date_end))
 
-#=============================================
+#----------------------------------------------
 #---intercropping_practice----
-#=========================
+#----------------------------------------------
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
   cols = c("C_intercrop_subpractice", "T_intercrop_subpractice"),
   pattern = "&",replacement = "and") # Apply "&" -> "and" substitution
 
-
 # Quick checks ----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_intercrop_subpractice_raw,C_intercrop_subpractice,
+         C_intercrop_design,C_intercrop_pattern,
+         C_intercrop_start_year,C_intercrop_start_season,
+         C_intercrop_residues_fate,T_intercrop_subpractice_raw,
+         T_intercrop_subpractice,T_intercrop_design,
+         T_intercrop_pattern,T_intercrop_start_year,
+         T_intercrop_start_season,T_intercrop_residues_fate
+  ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_intercropping_practice.csv"))
+
 sort(unique(md.era.short.clean$C_intercrop_subpractice_raw))
 sort(unique(md.era.short.clean$T_intercrop_subpractice_raw))
 
@@ -922,9 +1110,9 @@ sort(unique(md.era.short.clean$T_intercrop_start_season))
 sort(unique(md.era.short.clean$C_intercrop_residues_fate))
 sort(unique(md.era.short.clean$T_intercrop_residues_fate))
 
-#=============================================
+#----------------------------------------------
 #---crop_sequence_practice----
-#=========================
+#----------------------------------------------
 md.era.short.clean <- apply_replace_in_cols(md.era.short.clean,
   cols = c("C_crop_seq_residues_fate", "T_crop_seq_residues_fate"),
   pattern = "; ",replacement = "..")
@@ -934,6 +1122,15 @@ md.era.short.clean <- apply_replace_in_cols(md.era.short.clean,
   pattern = "NA",replacement = "Unspecified")
 
 # Quick checks ----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_crop_seq_subpractice_raw,C_crop_seq_subpractice,
+         C_crop_seq_start_year,C_crop_seq_start_season,C_crop_seq_residues_fate,
+         T_crop_seq_subpractice_raw,T_crop_seq_subpractice,T_crop_seq_start_year,
+         T_crop_seq_start_season,T_crop_seq_residues_fate
+  ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_crop_sequence_practice.csv"))
+
 sort(unique(md.era.short.clean$C_crop_seq_subpractice_raw))
 sort(unique(md.era.short.clean$T_crop_seq_subpractice_raw))
 
@@ -949,13 +1146,11 @@ sort(unique(md.era.short.clean$T_crop_seq_start_season))
 sort(unique(md.era.short.clean$C_crop_seq_residues_fate))
 sort(unique(md.era.short.clean$T_crop_seq_residues_fate))
 
-#=============================================
+#----------------------------------------------
 #---agroforestry_practice----
-#=========================
+#----------------------------------------------
 ## TO CHECK: NEED TO FIX C_agrof_subpractice=="Open Communal Grazing Land"----------------
-## TO CHECK: THERE ARE AGROFORESTRY PRACTICES IN CROP ROTATION--------------
 ## TO CHECK : verify later if it is better to keep track of spatial, component, shade..-----------
-
 md.era.short.clean<-md.era.short.clean%>% 
   mutate(
     C_agrof_subpractice= case_when(
@@ -966,6 +1161,17 @@ md.era.short.clean<-md.era.short.clean%>%
   )
 
 # Quick checks ----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_agrof_subpractice_raw,C_agrof_subpractice,
+         C_agrof_shade_mean_min_max,C_agrof_canopy_height_mean_min_max,
+         C_agrof_dhb_mean_min_max,
+         T_agrof_subpractice_raw,T_agrof_subpractice,T_agrof_shade_mean_min_max,
+         T_agrof_canopy_height_mean_min_max,T_agrof_dhb_mean_min_max
+         
+  ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_agroforestry_practice.csv"))
+
 sort(unique(md.era.short.clean$C_agrof_subpractice_raw))
 sort(unique(md.era.short.clean$T_agrof_subpractice_raw))
 
@@ -981,9 +1187,9 @@ sort(unique(md.era.short.clean$agrof_shade_mean_min_max)) #Missing from ERA
 sort(unique(md.era.short.clean$agrof_canopy_height_mean_min_max)) #Missing from ERA
 sort(unique(md.era.short.clean$agrof_dhb_mean_min_max))#Missing from ERA
 
-#==================================================
+#----------------------------------------------
 #---nutrient_management_practice (inorganic)----
-#==================================================
+#----------------------------------------------
 # Apply "No Fertilizer Application" -> "No Fertilizers Applied" substitution
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
@@ -1099,11 +1305,7 @@ md.era.short.clean <- md.era.short.clean%>%
          T_fert_inorganicK2O_amount_unit= combine_amount_unit(amount = T_fert_inorganicK2O,unit   = T_fert_inorganicNPK_unit)
   )
 
-md.era.short.clean <- md.era.short.clean%>%
-  rename("C_fert_inorganic_type_amount_unit"="C_fert_inorganic_combined",
-         "T_fert_inorganic_type_amount_unit"="T_fert_inorganic_combined")
 
-  
 # Quick checks ----
 sort(unique(md.era.short.clean$C_fert_subpractice_raw))
 sort(unique(md.era.short.clean$T_fert_subpractice_raw))
@@ -1111,8 +1313,8 @@ sort(unique(md.era.short.clean$T_fert_subpractice_raw))
 sort(unique(md.era.short.clean$C_fert_subpractice)) 
 sort(unique(md.era.short.clean$T_fert_subpractice)) 
 
-sort(unique(md.era.short.clean$C_fert_inorganic_type_amount_unit)) #TO CHECK: Need to combine type with amount and unit
-sort(unique(md.era.short.clean$T_fert_inorganic_type_amount_unit)) #TO CHECK: Need to combine type with amount and unit
+sort(unique(md.era.short.clean$C_fert_inorganic_type_amount_unit)) 
+sort(unique(md.era.short.clean$T_fert_inorganic_type_amount_unit))
 
 ## Code to check mismatches for any amount/unit pair: This is ready, nothing to check
 mismatch_report <- do.call(rbind, lapply(inorganicNPK_fert_pairs, function(p)
@@ -1169,9 +1371,9 @@ sort(unique(md.era.short.clean$T_fert_inorganicK_amount_unit))
 sort(unique(md.era.short.clean$T_fert_inorganicP2O5_amount_unit)) 
 sort(unique(md.era.short.clean$T_fert_inorganicK2O_amount_unit)) 
 
-#==================================================
+#----------------------------------------------
 #---nutrient_management_practice (organic)----
-#==================================================
+#----------------------------------------------
 # Apply  "; -> ".." substitution
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
@@ -1215,6 +1417,28 @@ md.era.short.clean <- md.era.short.clean%>%
          "T_fert_organic_type_amount_unit"="T_fert_organic_combined")
 
 # Quick checks ----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_fert_subpractice_raw,
+         C_fert_subpractice,C_fert_inorganic_category,
+         C_fert_inorganic_type_amount_unit,C_fert_inorganicN_amount_unit,
+         C_fert_inorganicP_amount_unit,C_fert_inorganicK_amount_unit,
+         C_fert_inorganicP2O5_amount_unit,C_fert_inorganicK2O_amount_unit,
+         T_fert_subpractice_raw,T_fert_subpractice,
+         T_fert_inorganic_category,T_fert_inorganic_type_amount_unit,
+         T_fert_inorganicN_amount_unit,T_fert_inorganicP_amount_unit,
+         T_fert_inorganicK_amount_unit,T_fert_inorganicP2O5_amount_unit,
+         T_fert_inorganicK2O_amount_unit,
+         C_fert_organic_category,C_fert_organic_type_amount_unit,
+         C_fert_organicN_amount_unit,C_fert_organicP_amount_unit,
+         C_fert_organicK_amount_unit,C_fert_organic_source,
+         T_fert_organic_category,T_fert_organic_type_amount_unit,
+         T_fert_organicN_amount_unit,T_fert_organicP_amount_unit,
+         T_fert_organicK_amount_unit,T_fert_organic_source
+         
+  ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_chem_org_fert_practice.csv"))
+
 sort(unique(md.era.short.clean$C_fert_organic_category))  
 sort(unique(md.era.short.clean$T_fert_organic_category))  
 
