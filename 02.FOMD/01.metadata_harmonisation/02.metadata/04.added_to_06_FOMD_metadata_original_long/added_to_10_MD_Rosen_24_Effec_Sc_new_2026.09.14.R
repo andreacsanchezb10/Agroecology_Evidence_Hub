@@ -921,9 +921,9 @@ sort(unique(md.era.short.clean$T_varietal_crop_type))
 sort(unique(md.era.short.clean$C_varietal_crop_trait))
 sort(unique(md.era.short.clean$T_varietal_crop_trait))
 
-#==================================================
+#----------------------------------------------
 #---improved_animal_breed_practice---- 
-#==================================================
+#----------------------------------------------
 ## TO CHECK:  CHECK WHEN C SHOULD BE T ---------------
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,cols = c("C_varietal_animal_breed","T_varietal_animal_breed"),
@@ -1416,6 +1416,12 @@ md.era.short.clean <- md.era.short.clean%>%
   rename("C_fert_organic_type_amount_unit"="C_fert_organic_combined",
          "T_fert_organic_type_amount_unit"="T_fert_organic_combined")
 
+md.era.short.clean <- md.era.short.clean %>%
+  rename(
+    C_fert_inorganic_type_amount_unit = C_fert_inorganic_combined,
+    T_fert_inorganic_type_amount_unit = T_fert_inorganic_combined
+  )
+
 # Quick checks ----
 md.era.short.clean %>%
   select(study_id, effect_size_id, 
@@ -1489,9 +1495,9 @@ sort(unique(md.era.short.clean$T_fert_organicN_amount_unit))
 sort(unique(md.era.short.clean$T_fert_organicP_amount_unit))
 sort(unique(md.era.short.clean$T_fert_organicK_amount_unit))
 
-#=============================================
+#----------------------------------------------
 #---weeding_management_moderator----
-#=============================================
+#----------------------------------------------
 # Apply "..." -> ".." substitution
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
@@ -1518,8 +1524,22 @@ md.era.short.clean <- md.era.short.clean%>%
   mutate(T_weed_frequency_unit1= combine_amount_unit(amount = T_weed_frequency,unit   = T_weed_frequency_unit))%>%
   mutate(C_weed_frequency_unit=C_weed_frequency_unit1,
          T_weed_frequency_unit=T_weed_frequency_unit1)
-         
+       
+md.era.short.clean <- md.era.short.clean %>%
+  apply_replace_in_cols(
+    cols = c("T_weed_frequency_unit"),
+    pattern = "\\(\\.",
+    replacement = "(",
+    fixed = FALSE
+  )  
 # Quick checks ----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_weed_method_raw,C_weed_method,C_weed_frequency_unit,
+         T_weed_method_raw,T_weed_method,T_weed_frequency_unit
+  ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_weeding_practice.csv"))
+
 sort(unique(md.era.short.clean$C_weed_method_raw))
 sort(unique(md.era.short.clean$T_weed_method_raw))
 
@@ -1542,10 +1562,10 @@ sort(unique(md.era.short.clean$T_weed_frequency[is.na(md.era.short.clean$T_weed_
 sort(unique(md.era.short.clean$T_weed_frequency[md.era.short.clean$T_weed_frequency_unit==""]))
 #[1] "" 
 
-#=========================
+#----------------------------------------------
 #---chemical_management_practice----
-#=========================
-## TO CHECK  C_chem_subpractice,T_chem_subpractice --------------------------
+#----------------------------------------------
+## TO CHECK:  C_chem_subpractice,T_chem_subpractice --------------------------
 
 # Apply "..." -> ".." substitution
 md.era.short.clean <- apply_replace_in_cols(
@@ -1590,7 +1610,7 @@ replacements <- c(
   "Antiprotozoal"="Animal (Antiprotozoal)",
   "Growth Promotor"= "Animal (Growth Promoter)",
   "Growth promoter"="Animal (Growth Promoter)",
-  
+  "Growth Promoter"="Animal (Growth Promoter)",
   "Unspecified"= "Unspecified (if pesticide org or inorg was applied)",
   "Mechanical"= "Mechanical (Unspecified)",
   "Mechanical (Unspecified) (Unspecified (if pesticide org or inorg was applied))"="Mechanical (Unspecified)",
@@ -1611,7 +1631,26 @@ md.era.short.clean <- md.era.short.clean%>%
   rename("C_chem_name_amount_unit"="C_chem_combined",
          "T_chem_name_amount_unit"="T_chem_combined")
 
+
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(
+    C_chem_subpractice = case_when(
+      study_id == "CJ0131" & C_chem_subpractice == "NA...Manual" ~ "Manual",
+      TRUE ~ C_chem_subpractice
+    )
+  )
+
 # Quick checks----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_crop_tree_diversity,T_crop_tree_diversity,
+         C_animal_diversity,T_animal_diversity,
+         C_chem_subpractice_raw,C_chem_subpractice,C_chem_name_amount_unit,
+         T_chem_subpractice_raw,T_chem_subpractice,T_chem_name_amount_unit,
+         
+  ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_chem_practice.csv"))
+
 sort(unique(md.era.short.clean$C_chem_subpractice_raw))
 sort(unique(md.era.short.clean$T_chem_subpractice_raw))
 
@@ -1627,9 +1666,9 @@ sort(unique(md.era.short.clean$T_chem_amount_unit))
 sort(unique(md.era.short.clean$C_chem_name_amount_unit)) 
 sort(unique(md.era.short.clean$T_chem_name_amount_unit))
 
-#=========================
+#----------------------------------------------
 #---residues_practice----
-#=========================
+#----------------------------------------------
 # Columns where "; " should become ".."
 res_semicolon_cols <- c(
   "C_residues_OC_unit","T_residues_OC_unit",
@@ -1680,8 +1719,6 @@ replacements <- c(
   "Incorp. - Tree N-fixing"="Tree Prunings Incorporated (N fixing)",
   "Incorp. - Tree Non-N-fixing"="Tree Prunings Incorporated (Non N fixing)",
   "Incorp. - Tree Unspecified"="Tree Prunings Incorporated (Unspecified)"
-  
-
   
 )
 
@@ -1842,8 +1879,57 @@ md.era.short.clean <- md.era.short.clean%>%
     T_residues_material_amount_unit= combine_amount_unit(amount = T_residues_material_amount,unit = T_residues_material_unit)
   )
 
+md.era.short.clean <- md.era.short.clean %>%
+  apply_replace_in_cols(
+    cols = c("C_residues_P_amount_unit", "T_residues_P_amount_unit"),
+    pattern = ";\\(",
+    replacement = "(",
+    fixed = FALSE
+  )
+
+md.era.short.clean <- md.era.short.clean %>%
+  apply_replace_in_cols(
+    cols = c("T_residues_material_amount_unit"),
+    pattern = ";",
+    replacement = "",
+    fixed = TRUE
+  )
+
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(
+    T_residues_material = case_when(
+      study_id == "DK0069" ~ str_replace_all(T_residues_material, ", ", ".."),
+      TRUE ~ T_residues_material
+    )
+  )
+
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(
+    T_residues_material = case_when(
+      study_id == "DK0069" ~ str_replace_all(T_residues_material, ",\\s*", ".."),
+      TRUE ~ T_residues_material
+    )
+  )
 
 # Quick checks ----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_residues_subpractice_raw,C_residues_subpractice,
+         C_residues_OC_amount_unit,C_residues_N_amount_unit,
+         C_residues_P_amount_unit,C_residues_K_amount_unit,
+         C_residues_tree,C_residues_material,
+         C_residues_material_amount_unit,C_residues_material_source,
+         C_residues_processing,
+         T_residues_subpractice_raw,T_residues_subpractice,
+         T_residues_OC_amount_unit,T_residues_N_amount_unit,
+         T_residues_P_amount_unit,T_residues_K_amount_unit,
+         T_residues_tree,T_residues_material,
+         T_residues_material_amount_unit,T_residues_material_source,
+         T_residues_processing
+         
+  ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_residues_practice.csv"))
+
 sort(unique(md.era.short.clean$C_residues_subpractice_raw))
 sort(unique(md.era.short.clean$T_residues_subpractice_raw))
 
@@ -1942,9 +2028,9 @@ sort(unique(md.era.short.clean$T_residues_material_amount_unit))
 sort(unique(md.era.short.clean$C_residues_material_source))
 sort(unique(md.era.short.clean$T_residues_material_source))
 
-#=========================
+#----------------------------------------------
 #---pH_amendment_practice----
-#=========================
+#----------------------------------------------
 # Apply "; " -> ".." substitution
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
@@ -1980,7 +2066,18 @@ md.era.short.clean <- md.era.short.clean%>%
          T_ph_material_amount_unit= mapply(combine_ph_material_amount_unit,T_ph_material_applied,T_ph_material_amount_unit1)
   )
 
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(
+    T_ph_material_amount_unit = str_replace_all(T_ph_material_amount_unit, "kg/ha; kg/ha", "kg/ha")
+  )
 # Quick checks ----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_ph_subpractice_raw,C_ph_subpractice,C_ph_material_amount_unit,
+         T_ph_subpractice_raw,T_ph_subpractice, T_ph_material_amount_unit,
+  ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_ph_practice.csv"))
+
 sort(unique(md.era.short.clean$C_ph_subpractice_raw))
 sort(unique(md.era.short.clean$T_ph_subpractice_raw))
 
@@ -1999,9 +2096,9 @@ sort(unique(md.era.short.clean$T_ph_material_amount)) # Merged
 sort(unique(md.era.short.clean$C_ph_material_amount_unit))
 sort(unique(md.era.short.clean$T_ph_material_amount_unit))
 
-#=========================
+#----------------------------------------------
 #---irrigation_practice----
-#=========================
+#----------------------------------------------
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
   cols = c("C_irrig_subpractice", "T_irrig_subpractice"),
@@ -2068,7 +2165,50 @@ md.era.short.clean <- md.era.short.clean%>%
          T_irrig_water_amount_unit= combine_amount_unit(amount = T_irrig_water_amount,unit   = T_irrig_water_unit)
   )
 
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(
+    C_irrig_method = case_when(
+      C_irrig_method == "Drip" ~ "Drip Irrigation",
+      C_irrig_method == "Sprinkler" ~ "Sprinkler Irrigation",
+      C_irrig_method == "Other" ~ "Irrigation (Other)",
+      TRUE ~ C_irrig_method
+    ),
+    T_irrig_method = case_when(
+      T_irrig_method == "Drip" ~ "Drip Irrigation",
+      T_irrig_method == "Sprinkler" ~ "Sprinkler Irrigation",
+      T_irrig_method == "Other" ~ "Irrigation (Other)",
+      TRUE ~ T_irrig_method
+    )
+  )
+
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(
+    C_irrig_water_type = case_when(
+      C_irrig_water_type == "Ground water" ~ "Ground",
+      C_irrig_water_type == "River water" ~ "River",
+      TRUE ~ C_irrig_water_type
+    ),
+    T_irrig_water_type = case_when(
+      T_irrig_water_type == "Ground water" ~ "Ground",
+      T_irrig_water_type == "River water" ~ "River",
+      TRUE ~ T_irrig_water_type
+    )
+  )
+
 # Quick checks ----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_irrig_subpractice_raw,C_irrig_subpractice,
+         C_irrig_method,C_irrig_date_start,
+         C_irrig_date_end,C_irrig_water_amount_unit,
+         C_irrig_water_type,T_irrig_subpractice_raw,
+         T_irrig_subpractice,T_irrig_method,
+         T_irrig_date_start,T_irrig_date_end,
+         T_irrig_water_amount_unit,T_irrig_water_type
+         
+  ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_irrigation_practice.csv"))
+
 sort(unique(md.era.short.clean$C_irrig_subpractice_raw))
 sort(unique(md.era.short.clean$T_irrig_subpractice_raw))
 
@@ -2099,25 +2239,54 @@ sort(unique(md.era.short.clean$T_irrig_water_amount_unit))
 sort(unique(md.era.short.clean$C_irrig_water_type))
 sort(unique(md.era.short.clean$T_irrig_water_type))
 
-#=========================
+#----------------------------------------------
 #---water_harvesting_practice----
-#=========================
+#----------------------------------------------
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
   cols = c("C_watharv_subpractice", "T_watharv_subpractice"),
   pattern = "; ",replacement = "..") 
 
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_watharv_subpractice", "T_watharv_subpractice"),
+  pattern = ", ",replacement = "..") 
+
 # Quick checks ----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_watharv_subpractice_raw,C_watharv_subpractice,
+         T_watharv_subpractice_raw,T_watharv_subpractice
+  ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_waterharv_practice.csv"))
+
 sort(unique(md.era.short.clean$C_watharv_subpractice_raw))
 sort(unique(md.era.short.clean$T_watharv_subpractice_raw))
 
 sort(unique(md.era.short.clean$C_watharv_subpractice))
 sort(unique(md.era.short.clean$T_watharv_subpractice))
 
-#=========================
+#----------------------------------------------
 #---harvesting_practice----
-#=========================
+#----------------------------------------------
 # Quick checks ----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_harvest_subpractice_raw,
+         C_harvest_subpractice,
+         C_harvest_date_start,
+         C_harvest_date_end,
+         C_harvest_days_after_planting,
+         T_harvest_subpractice_raw,
+         T_harvest_subpractice,
+         T_harvest_date_start,
+         T_harvest_date_end,
+         T_harvest_days_after_planting
+         
+  ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_harvest_practice.csv"))
+
+
 sort(unique(md.era.short.clean$C_harvest_subpractice_raw))
 sort(unique(md.era.short.clean$T_harvest_subpractice_raw))
 
@@ -2133,15 +2302,26 @@ sort(unique(md.era.short.clean$T_harvest_date_end))
 sort(unique(md.era.short.clean$C_harvest_days_after_planting))
 sort(unique(md.era.short.clean$T_harvest_days_after_planting))
 
-#=========================
+#----------------------------------------------
 #---postharvesting_practice----
-#=========================
+#----------------------------------------------
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
   cols = c("C_postharvest_subpractice", "T_postharvest_subpractice"),
   pattern = "; ",replacement = "..") 
 
 # Quick checks ----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_postharvest_subpractice_raw,C_postharvest_subpractice,
+         #C_postharvest_date_start,C_postharvest_date_end,
+         C_postharvest_days_after_storage,
+         T_postharvest_subpractice_raw,T_postharvest_subpractice,
+         #T_postharvest_date_start,T_postharvest_date_end,
+         T_postharvest_days_after_storage
+) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_Postharvest_practice.csv"))
+
 sort(unique(md.era.short.clean$C_postharvest_subpractice_raw)) 
 sort(unique(md.era.short.clean$T_postharvest_subpractice_raw)) 
 
@@ -2160,13 +2340,28 @@ sort(unique(md.era.short.clean$T_postharvest_date_end)) #MISSING
 sort(unique(md.era.short.clean$C_postharvest_days_after_storage)) #MISSING
 sort(unique(md.era.short.clean$T_postharvest_days_after_storage)) #MISSING
 
-#=========================
+#----------------------------------------------
 #---outcome_experimental_design----
-#=========================
-## TO CHECK: check what to do here separate by T and C or leave it like this
+#----------------------------------------------
+md.era.short.clean<-md.era.short.clean%>%
+  mutate(C_out_exp_design=out_exp_design,
+         C_out_exp_plot_size=out_exp_plot_size,
+         T_out_exp_design=out_exp_design,
+         T_out_exp_plot_size=out_exp_plot_size,
+  )
 # Quick checks
-sort(unique(md.era.short.clean$out_exp_design))
-sort(unique(md.era.short.clean$out_exp_plot_size))
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_out_exp_design,
+         C_out_exp_plot_size,
+         T_out_exp_design,
+         T_out_exp_plot_size
+         
+  ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_out_exp_design_practice.csv"))
+
+sort(unique(md.era.short.clean$C_out_exp_design))
+sort(unique(md.era.short.clean$C_out_exp_plot_size))
 
 #=========================
 #---product_outcome----
@@ -2231,10 +2426,33 @@ sort(unique(md.era.short.clean$bio_ground_ref)) #TO FIX from ERA need to complet
 #=========================
 #---outcome----
 #=========================
+# TO CHECK: out_subindicator- Abundance-Bioversity-Evenness-Pest & Pathogen (Losses)-Pest & Pathogen (Numbers)
+#"Shannon-Wiener Index"-"Taxonomic Richness"
 md.era.short.clean$out_subindicator <- gsub("Labor Cost" , "Labour Cost" , md.era.short.clean$out_subindicator, fixed = TRUE)
 
 # Quick checks -----
-sort(unique(md.era.short.clean$out_subindicator))
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         out_subindicator,
+         out_indicator,
+         out_subpillar,
+         out_pillar,
+         out_subindicator_unit
+         #T_out_subindicator_unit,
+         #out_soil_depth_u,
+         #out_soil_depth_l,
+         #out_npv_discount_rate,
+         #out_npv_econ_period,
+         #out_wg_start,
+         #out_wg_start_unit,
+         #out_wg_days
+         
+  ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_outcome.csv"))
+
+sort(unique(md.era.short.clean$out_subpillar))
+
+sort(unique(md.era.short.clean$out_subindicator[md.era.short.clean$out_subpillar=="Physical"]))
 
 #Explanation from Lolita:
 #Only 15 rows. I opened the source papers: 7 of them I could fill with confidence 
