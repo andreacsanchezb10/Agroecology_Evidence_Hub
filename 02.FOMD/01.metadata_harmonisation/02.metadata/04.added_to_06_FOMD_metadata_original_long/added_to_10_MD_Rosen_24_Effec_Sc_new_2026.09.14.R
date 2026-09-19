@@ -2370,10 +2370,7 @@ sort(unique(md.era.short.clean$C_out_exp_plot_size))
 md.era.short.clean$C_product <- gsub("\\*", "..", md.era.short.clean$C_product, fixed = TRUE)
 md.era.short.clean$T_product <- gsub("\\*", "..", md.era.short.clean$T_product, fixed = TRUE)
 
-md.era.short.clean <- apply_replace_in_cols(
-  md.era.short.clean,
-  cols = c("C_product", "T_product"),
-  pattern="-", replacement = "..")
+
 
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
