@@ -2373,6 +2373,11 @@ md.era.short.clean$T_product <- gsub("\\*", "..", md.era.short.clean$T_product, 
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
   cols = c("C_product", "T_product"),
+  pattern="-", replacement = "..")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_product", "T_product"),
   pattern=" & ", replacement = "..")
 
 md.era.short.clean <- apply_replace_in_cols(
@@ -2401,7 +2406,75 @@ md.era.short.clean <- apply_replace_in_cols(
 md.era.short.clean$C_econ_inputs <- sapply(md.era.short.clean$C_econ_inputs, sort_econ_inputs)
 md.era.short.clean$T_econ_inputs <- sapply(md.era.short.clean$T_econ_inputs, sort_econ_inputs)
 
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(bio_func_group = case_when(
+    grepl("Social Wasp", C_product, fixed = TRUE) ~ "Social Wasp",
+    C_product=="Omnivorous and carnivorous nematodes"~ "Omnivorous..Carnivorous",
+    C_product=="non parasitic nematodes"~"Non-parasitic",
+    C_product=="parasitic nematodes"~"Parasitic",
+    TRUE ~ bio_func_group))
+
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(out_subindicator = case_when(
+    grepl("Berger-Parker Index", C_product, fixed = TRUE) ~ "Berger-Parker dominance (d)",
+    C_product=="Social Wasp - Richness"~"Species Richness",
+    C_product=="Shannon diversity index"~"Shannon Index",
+    C_product=="Shannon Weiner Diversity index"~"Shannon-Wiener Index",
+
+    TRUE ~ out_subindicator))
+
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(out_subindicator = case_when(
+    grepl("Berger-Parker Index", C_product, fixed = TRUE) ~ "Berger-Parker dominance (d)",
+    C_product=="Social Wasp - Richness"~"Species Richness",
+    C_product=="Shannon diversity index"~"Shannon Index",
+    C_product=="Shannon Weiner Diversity index"~"Shannon-Wiener Index",
+    C_product=="Spider-Eveness Index"~"Species Evenness",
+    
+    TRUE ~ out_subindicator))
+
+
+replacements <- c(
+  "Earthworm"= "Earthworms",
+  "non parasitic nematodes"="Nematodes",
+  "Omnivorous and carnivorous nematodes"="Nematodes",
+  "parasitic nematodes"="Nematodes",
+  "Paratylenchus thornei"="Pratylenchus thornei",
+  
+  "Social Wasp - Berger-Parker Index"="Wasps",
+  "Social Wasp - Richness"="Wasps",
+  "Social Wasp - Shannon-Wiener Index"="Wasps",
+  "Social Wasp - Total Individuals"="Wasps",
+  "Spider-Eveness Index"="Spiders",
+  "Termite" = "Termites"
+  
+)
+
+for (pat in names(replacements)) {
+  md.era.short.clean <- apply_replace_in_cols(
+    md.era.short.clean,
+    cols        = c("C_product", "T_product"),
+    pattern     = pat,
+    replacement = replacements[[pat]]
+  )
+}
+
 # Quick checks ----
+md.era.short.clean %>%
+  select(study_id, effect_size_id, 
+         C_product,C_product_type,C_product_subtype,C_product_simple,C_econ_inputs,
+         T_product,T_product_type,T_product_subtype,T_product_simple,T_econ_inputs,
+         bio_func_group,
+         bio_ground_ref,
+         out_subindicator,
+         out_subindicator_unit
+         
+  ) %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_out_product.csv"))
+
+sort(unique(md.era.short.clean$C_product[md.era.short.clean$out_subindicator=="Abundance"])) #MAKE A LIST OF MISSING PRODUCTS FROM 01_product_new
+sort(unique(md.era.short.clean$C_product[md.era.short.clean$out_subindicator=="Biodiversity"])) 
+
 sort(unique(md.era.short.clean$C_product)) #MAKE A LIST OF MISSING PRODUCTS FROM 01_product_new
 sort(unique(md.era.short.clean$T_product)) #MAKE A LIST OF MISSING PRODUCTS FROM 01_product_new
 na_empty_summary["C_product", ] #in v6 17064 missing values; in v24 3150 empty values; in v32 1646; in v46 0
