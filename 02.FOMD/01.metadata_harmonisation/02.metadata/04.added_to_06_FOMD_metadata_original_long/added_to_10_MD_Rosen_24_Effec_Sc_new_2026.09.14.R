@@ -36,6 +36,10 @@ source(file.path(path.functions, "/fun_fomd09_cleaning.R"))
 fomd01.outcomes<-fomd01.outcomes%>%
   filter(!is.na(subindicator) )
 
+fomd01.product.new<-
+  read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies - Copy.xlsx"), sheet = "01_product_new")
+
+
 #---04_FOMD_screening 
 ## TO CHECK: NEED TO UPDATE THE LIST OF PAPERS FROM ERA IN SCREENING AND IN IDENTIFIED DATASETS!!
 fomd04<-read_xlsx(file.path(path.metadata.structure,"04_FOMD_screening.xlsx"), sheet = "04_FOMD_screening")%>%
@@ -2370,8 +2374,6 @@ sort(unique(md.era.short.clean$C_out_exp_plot_size))
 md.era.short.clean$C_product <- gsub("\\*", "..", md.era.short.clean$C_product, fixed = TRUE)
 md.era.short.clean$T_product <- gsub("\\*", "..", md.era.short.clean$T_product, fixed = TRUE)
 
-
-
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
   cols = c("C_product", "T_product"),
@@ -2407,44 +2409,240 @@ md.era.short.clean <- md.era.short.clean %>%
   mutate(bio_func_group = case_when(
     grepl("Social Wasp", C_product, fixed = TRUE) ~ "Social Wasp",
     C_product=="Omnivorous and carnivorous nematodes"~ "Omnivorous..Carnivorous",
-    C_product=="non parasitic nematodes"~"Non-parasitic",
-    C_product=="parasitic nematodes"~"Parasitic",
+    C_product=="Pratylenchus thornei"~"Plant-parasitic",
+    C_product=="non parasitic nematodes"~"Non-parasitic nematodes",
+    C_product=="parasitic nematodes"~"Parasitic nematodes",
+    
+    C_product=="Bacterial-feeder nematodes"~"Bacterial-feeder",
+    C_product== "Fungal-feeder nematodes"~"Fungal-feeder",
+    C_product=="Omnivorous and carnivorous nematodes"~ "Omnivorous..Carnivorous",
+    C_product== "Detritivorous micro-arthropods"~"Detritivorous micro-arthropods",
+    C_product=="Predatory micro-arthropods"~"Predatory micro-arthropods",
+    C_product=="ammonia oxidizing bacteria from bulk soil"~"ammonia oxidizing bacteria from bulk soil",
+    C_product=="ammonia oxidizing bacteria from rhizosphere soil"~"ammonia oxidizing bacteria from rhizosphere soil",
+    study_id=="AG0089"& out_subindicator_unit%in%c("nodules/plant","mg/plant")~"symbiotic nitrogen-fixing bacteria",
+    
+    study_id=="NJ0060"& out_subindicator=="Beneficial Organisms"~"Non-parasitic nematodes",
+    study_id=="AN0032" & out_subindicator_unit== "log(ammonia oxidizing Bacteria copies/g)"~"Ammonia oxidizers",
+    study_id=="AN0032" & out_subindicator_unit== "log(ammonia oxidizing Archaea copies/g)"~"Ammonia oxidizers",
+    
+    study_id=="AN0032" & out_subindicator_unit== "log(nxra copies/g)"~"Nitrite oxidizers",
+    study_id=="AN0032" & out_subindicator_unit== "log(16S copies/g)"~"Nitrite oxidizers",
+    
+    study_id=="AG0092"& out_subindicator=="Beneficial Organisms"~"symbiotic nitrogen-fixing bacteria",
+    study_id=="AG0091"& out_subindicator=="Beneficial Organisms"~"symbiotic nitrogen-fixing bacteria",
+    
+    study_id=="AC0021"& out_subindicator=="Taxonomic Richness"~"Predators",
+    C_product=="Rhizobial Diversity" ~"symbiotic nitrogen-fixing bacteria",
+    study_id=="NJ0030"& out_subindicator=="Shannon-Wiener Index"~"symbiotic nitrogen-fixing bacteria",
+  
+    
     TRUE ~ bio_func_group))
 
 md.era.short.clean <- md.era.short.clean %>%
   mutate(out_subindicator = case_when(
+    
+    study_id== "AC0082"& out_subindicator==  "Biodiversity"~"Abundance",
+    study_id=="AC0105"&C_product %in%c("Bacterial-feeder nematodes","Fungal-feeder nematodes","Omnivorous and carnivorous nematodes")~"Abundance",
+    study_id=="SP0016"&C_product=="Total Bacteria"~"Abundance",
+    study_id=="SP0016"&C_product=="Total Fungi"~"Abundance",
+    study_id=="AC0110" & C_product%in%c("ammonia oxidizing bacteria from bulk soil",
+                                        "ammonia oxidizing bacteria from rhizosphere soil")~"Abundance",
+    study_id=="AG0089"& out_subindicator_unit=="nodules/plant"~"Abundance",
+    study_id=="NJ0069"&out_subindicator== "Beneficial Organisms"~"Abundance",
+    study_id=="NJ0060"& out_subindicator=="Beneficial Organisms"~"Abundance",
+    study_id=="AN0032" & out_subindicator_unit== "log(ammonia oxidizing Bacteria copies/g)"~"Abundance",
+    study_id=="AN0032" & out_subindicator_unit== "log(ammonia oxidizing Archaea copies/g)"~"Abundance",
+    
+    
+    study_id=="AN0032" & out_subindicator_unit== "log(nxra copies/g)"~"Abundance",
+    study_id=="AN0032" & out_subindicator_unit== "log(16S copies/g)"~"Abundance",
+    study_id=="AG0092"& out_subindicator=="Beneficial Organisms"~"Abundance",
+    study_id=="AG0091"& out_subindicator=="Beneficial Organisms"~"Abundance",
+    study_id=="AG0089"& out_subindicator_unit=="mg/plant"~"Nodule biomass",
+    
     grepl("Berger-Parker Index", C_product, fixed = TRUE) ~ "Berger-Parker dominance (d)",
     C_product=="Social Wasp - Richness"~"Species Richness",
+    C_product=="Spider-Richness Index"~"Species Richness",
+    study_id=="EO0130"& out_subindicator==  "Biodiversity"~"Species Richness",
+    study_id=="JO0035" &C_product=="Richness"~"Species Richness",
+    study_id==  "AG0054"&C_product=="Richness"~"Species Richness",
+    
     C_product=="Shannon diversity index"~"Shannon Index",
     C_product=="Shannon Weiner Diversity index"~"Shannon-Wiener Index",
-
-    TRUE ~ out_subindicator))
-
-md.era.short.clean <- md.era.short.clean %>%
-  mutate(out_subindicator = case_when(
-    grepl("Berger-Parker Index", C_product, fixed = TRUE) ~ "Berger-Parker dominance (d)",
-    C_product=="Social Wasp - Richness"~"Species Richness",
-    C_product=="Shannon diversity index"~"Shannon Index",
-    C_product=="Shannon Weiner Diversity index"~"Shannon-Wiener Index",
+    C_product=="Social Wasp - Shannon-Wiener Index"~"Shannon-Wiener Index",
+    study_id=="JO0035" &C_product=="Diversity"~"Shannon-Wiener Index",
+    study_id== "NN0545"&out_subindicator=="Beneficial Organisms"~"Shannon-Wiener Index",
+      
     C_product=="Spider-Eveness Index"~"Species Evenness",
+    study_id=="JO0053" & out_subindicator==   "Evenness"  ~ "Pielou Index",
+    study_id=="JO0070"& out_subindicator==  "Evenness"~"Pielou Index",
+    study_id=="JO0035" &C_product=="Evenness"~"Pielou Index",
+    
+    study_id=="EO0130"& out_subindicator==  "Evenness"~"Shannon Evenness Index",
+    
+    study_id=="JO0070"& out_subindicator==  "Biodiversity"~"Margalef Index",
+    study_id=="EO0019"&out_subindicator== "Beneficial Organisms"~"Relative activity",
     
     TRUE ~ out_subindicator))
 
 
+
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(
+    C_product = case_when(
+      study_id == "JO0053" & out_subindicator %in% c("Abundance", "Pielou Index", "Shannon-Wiener Index") ~ "Arthropods..Gastropoda..Haplotaxida",
+      study_id=="EO0130"& out_subindicator%in%  c("Shannon Evenness Index","Shannon-Wiener Index","Species Richness")~"Vascular plants",
+      study_id=="JO0070"& out_subindicator%in% c("Margalef Index","Pielou Index","Shannon Index")~"Striga hermonthica",
+      study_id=="JO0035" &out_subindicator%in% c("Species Richness","Shannon-Wiener Index","Pielou Index")~"Lumbricus terrestris..Coptotermes formosanus..Scarabaeus viettei..Lithobius forficatus",
+      study_id==  "AG0054"&out_subindicator%in% c("Species Richness","Shannon-Wiener Index")~"Plants (herbaceous)",
+      study_id=="AC0105"&C_product %in%c("Bacterial-feeder nematodes","Fungal-feeder nematodes","Omnivorous and carnivorous nematodes")~"Nematodes",
+      study_id=="EO0135"&C_product=="Cattle (Meat)"~"Poaceae",
+      study_id=="AG0089"& out_subindicator_unit%in%c("nodules/plant","mg/plant")~"Bradyrhizobia",
+      study_id== "NN0545"&C_product=="Plantains and Cooking Banana"~"Gammaproteobacteria",
+      study_id=="NJ0069"&out_subindicator%in%c("Abundance","Shannon-Wiener Index")~"Oribatida",
+      study_id=="NJ0060"& out_subindicator=="Abundance"~"Nematodes",
+      study_id=="AN0032" & out_subindicator_unit== "log(ammonia oxidizing Bacteria copies/g)"~"Bacteria",
+      study_id=="AN0032" & out_subindicator_unit== "log(ammonia oxidizing Archaea copies/g)"~"Archaea",
+      
+      study_id=="AN0032" & out_subindicator_unit== "log(nxra copies/g)"~"Nitrobacter",
+      study_id=="AN0032" & out_subindicator_unit== "log(16S copies/g)"~"Nitrospira",
+      study_id=="AG0092"& out_subindicator=="Abundance"~"Rhizobiales",
+      study_id=="AG0091"& out_subindicator=="Abundance"~"Bradyrhizobia",
+      study_id=="JO0192"& out_subindicator=="Shannon-Wiener Index"~"Arthropods..Annelida..Mollusca",
+      study_id=="EO0019"&out_subindicator== "Relative activity"~"Earthworm",
+      study_id=="NJ0030"& out_subindicator=="Shannon-Wiener Index"~"Rhizobiales",
+      study_id=="JS0374"& out_subindicator=="Shannon-Wiener Index"~"Plants (herbaceous)",
+      study_id=="AC0021"& out_subindicator=="Taxonomic Richness"~"Arthropods",
+      TRUE ~ C_product))%>%
+  mutate(
+    T_product = case_when(
+      study_id == "JO0053" & out_subindicator %in% c("Abundance", "Pielou Index", "Shannon-Wiener Index") ~ "Arthropods..Gastropoda..Haplotaxida",
+      study_id=="EO0130"& out_subindicator%in%  c("Shannon Evenness Index","Shannon-Wiener Index","Species Richness")~"Vascular plants",
+      study_id=="JO0070"& out_subindicator%in% c("Margalef Index","Pielou Index","Shannon Index")~"Striga hermonthica",
+      study_id=="JO0035" &out_subindicator%in% c("Species Richness","Shannon-Wiener Index","Pielou Index")~"Lumbricus terrestris..Coptotermes formosanus..Scarabaeus viettei..Lithobius forficatus",
+      study_id==  "AG0054"&out_subindicator%in% c("Species Richness","Shannon-Wiener Index")~"Plants (herbaceous)",
+
+      study_id=="AC0105"&T_product %in%c("Bacterial-feeder nematodes","Fungal-feeder nematodes","Omnivorous and carnivorous nematodes")~"Nematodes",
+      study_id=="EO0135"&T_product=="Cattle (Meat)"~"Poaceae",
+      study_id=="AG0089"& out_subindicator_unit%in%c("nodules/plant","mg/plant")~"Bradyrhizobia",
+      study_id== "NN0545"&T_product=="Plantains and Cooking Banana"~"Gammaproteobacteria",
+      study_id=="NJ0069"&out_subindicator%in%c("Abundance","Shannon-Wiener Index")~"Oribatida",
+      study_id=="NJ0060"& out_subindicator=="Abundance"~"Nematodes",
+      study_id=="AN0032" & out_subindicator_unit== "log(ammonia oxidizing Bacteria copies/g)"~"Bacteria",
+      study_id=="AN0032" & out_subindicator_unit== "log(ammonia oxidizing Archaea copies/g)"~"Archaea",
+      
+      study_id=="AN0032" & out_subindicator_unit== "log(nxra copies/g)"~"Nitrobacter",
+      study_id=="AN0032" & out_subindicator_unit== "log(16S copies/g)"~"Nitrospira",
+      study_id=="AG0092"& out_subindicator=="Abundance"~"Rhizobiales",
+      study_id=="AG0091"& out_subindicator=="Abundance"~"Bradyrhizobia",
+      study_id=="JO0192"& out_subindicator=="Shannon-Wiener Index"~"Arthropods..Annelida..Mollusca",
+      study_id=="EO0019"&out_subindicator== "Relative activity"~"Earthworm",
+      study_id=="NJ0030"& out_subindicator=="Shannon-Wiener Index"~"Rhizobiales",
+      study_id=="JS0374"& out_subindicator=="Shannon-Wiener Index"~"Plants (herbaceous)",
+      study_id=="AC0021"& out_subindicator=="Taxonomic Richness"~"Arthropods",
+      
+      
+      TRUE ~ T_product))
+
+
 replacements <- c(
+  "ammonia oxidizing bacteria from bulk soil"="Bacteria",
+  "ammonia oxidizing bacteria from rhizosphere soil"="Bacteria",
+  "bacterial (16S rDNA DGGE)"="Bacteria",
+  "Detritivorous micro-arthropods"="Collembola..Oribatida",
+  "fungal (ITS DGGE)"="Fungi",
   "Earthworm"= "Earthworms",
+  "Herbs"="Plants (herbaceous)",
   "non parasitic nematodes"="Nematodes",
   "Omnivorous and carnivorous nematodes"="Nematodes",
   "parasitic nematodes"="Nematodes",
   "Paratylenchus thornei"="Pratylenchus thornei",
-  
+  "Predatory micro-arthropods"="Gamasina",
   "Social Wasp - Berger-Parker Index"="Wasps",
   "Social Wasp - Richness"="Wasps",
   "Social Wasp - Shannon-Wiener Index"="Wasps",
   "Social Wasp - Total Individuals"="Wasps",
   "Spider-Eveness Index"="Spiders",
-  "Termite" = "Termites"
+  "Shannon-Wiener-Exp 'H'-(Spider)"="Spiders",
+  "Spider-Richness Index"="Spiders",
+  "Termite" = "Termites",
+  "Total Bacteria"="Bacteria",
+  "Total Fungi"="Fungi",
+  "weeds" ="Weed",
+  "Woody"="Woody plants",
   
+  "Acacia sp"="Acacia sp.",
+  "Amaranth (Grain)"="Amaranth Grain",
+  "Black oats"="Black Oats",
+  "Black Oat"="Black Oats",
+  "Cassava or Yuca"="Cassava",
+  "Castor Seed"="Castor Seeds",
+  "Cattle-Camel-Small Ruminants-Acacia tortilis-Acacia abyssinica-Acacia oerfota-Acalypha fruticosa-Balanites aegyptiaca-Solanum somalense-Solanum incanum" =
+    "Cattle..Camel..Small Ruminants..Acacia tortilis..Acacia abyssinica..Acacia oerfota..Acalypha fruticosa..Balanites aegyptiaca..Solanum somalense..Solanum incanum",
+  "Cattle-Camel-Small Ruminants-Grewia ferruginea-Vernonia abyssinica-Acacia nubica" =
+    "Cattle..Camel..Small Ruminants..Grewia ferruginea..Vernonia abyssinica..Acacia nubica",
+  "Cattle (Meat)"="Cattle Meat",
+  "Cattle (Milk)"="Cattle Milk",
+  
+  "Chicken (Eggs)"= "Chicken Eggs",
+  "Chicken (Meat)"="Chicken Meat",
+  "Coffee Arabica"="Coffee",
+  "Coffee Arabica (Pods)"="Coffee Pods",
+  "Coffee Robusta (Pods)"="Coffee Pods",
+  "Coffee (Pods)"="Coffee Pods",
+  
+  
+  "Cocoa or Cacao"="Cocoa",
+  "Cocoa (Beans)"="Cocoa Bean",
+  "Cocoa (Pods)"="Cocoa Pods Husk",
+  
+  "Cotton (Seed)"="Cotton Seed",
+  "Cotton (Lint or Fibre)"="Cotton Lint",
+  "Cowpea (Leaf)"="Cowpea Leaf",
+  "Cowpea (Pod)"="Cowpea Pod",
+  
+  
+  "Durum Wheat-Wheat" = "Durum Wheat..Wheat",
+  "Faidherbia albida (Wood)" = "Faidherbia albida Wood",
+  "Fennel (Oil)"="Fennel Oil",
+  "Fennel (Seed)"="Fennel Seed",
+  "Gliricidia sepium-Pepper-Cardamom" = "Gliricidia sepium..Pepper..Cardamom",
+  
+  "Grape (Wine)"="Grape Wine",
+  "Grevillea robusta-Cardamom"="Grevillea robusta..Cardamom",
+  "Goat (Meat)"="Goat Meat",
+  "Goat (Milk)"="Goat Milk",
+  "Japanese Quail"="Quail",
+  "Jute mallow"="Jute Mallow",
+  "Leucaena leucocephala (Wood)" = "Leucaena leucocephala",
+  "Lima"="Lime",
+  "Maize-Gliricidia sepium" = "Maize..Gliricidia sepium",
+  "Maize-Pigeon Pea-Gliricidia sepium" = "Maize..Pigeon Pea..Gliricidia sepium",
+  "Millet (Other)" = "Millet",
+  "Oats"="Oat",
+  "Olive (Fruits)"="Olive Fruits",
+  "Patula Pine"="Pinus patula",
+  "Peas" = "Pea",   
+  "Pepper-Gliricidia sp." = "Pepper..Gliricidia sp.",
+  "Pepper-Grevillea robusta" = "Pepper..Grevillea robusta",
+  "Pepper-Grevillea robusta-Cardamom" = "Pepper..Grevillea robusta..Cardamom",
+  "Pigs"="Pig",
+  "Rabbit" = "Rabbits",
+  "Sheep (Meat)" = "Sheep",
+  "Sheep (Milk)" = "Sheep",
+  "Sheep (Wool)" = "Sheep",
+  "Sunflower (Seed)"="Sunflower Seed",
+  "Sugar Beet (Root)"="Sugar Beet Root",
+  "Sugar Beet (Sugar)"="Sugar Beet Sugar",
+  
+  "Sugar Cane"="Sugarcane",
+  "Sugarcane (Cane)"="Sugarcane Cane",
+  "Sugarcane (Sugar)"="Sugarcane Sugar",
+  
+  
+  "Tomato (Total Yield)" = "Tomato",
+  "Turkey berry" = "Turkey Berry"
 )
 
 for (pat in names(replacements)) {
@@ -2456,26 +2654,79 @@ for (pat in names(replacements)) {
   )
 }
 
+
+
 # Quick checks ----
 md.era.short.clean %>%
-  select(study_id, effect_size_id, 
+  select(study_id, effect_size_id, doi,title,
          C_product,C_product_type,C_product_subtype,C_product_simple,C_econ_inputs,
          T_product,T_product_type,T_product_subtype,T_product_simple,T_econ_inputs,
          bio_func_group,
          bio_ground_ref,
          out_subindicator,
-         out_subindicator_unit
+         out_subindicator_unit,
+         C_data_location
+         
          
   ) %>%
   readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_out_product.csv"))
 
-sort(unique(md.era.short.clean$C_product[md.era.short.clean$out_subindicator=="Abundance"])) #MAKE A LIST OF MISSING PRODUCTS FROM 01_product_new
-sort(unique(md.era.short.clean$C_product[md.era.short.clean$out_subindicator=="Biodiversity"])) 
+#sort(unique(md.era.short.clean$out_subindicator[md.era.short.clean$out_indicator=="Biodiversity"]))
+# TO CHECK: out_subindicator- Pest & Pathogen (Losses)-Pest & Pathogen (Numbers)
+#"Shannon-Wiener Index"-"Taxonomic Richness"
+
+#sort(unique(md.era.short.clean$C_product[md.era.short.clean$out_subindicator=="Abundance"])) 
+#sort(unique(md.era.short.clean$C_product[md.era.short.clean$out_subindicator=="Berger-Parker dominance (d)"])) 
+#sort(unique(md.era.short.clean$C_product[md.era.short.clean$out_subindicator=="Margalef Index"])) 
+#sort(unique(md.era.short.clean$C_product[md.era.short.clean$out_subindicator=="Pielou Index" ])) 
+#sort(unique(md.era.short.clean$C_product[md.era.short.clean$out_subindicator=="Shannon Evenness Index"])) 
+#sort(unique(md.era.short.clean$C_product[md.era.short.clean$out_subindicator=="Shannon Index"])) 
+#sort(unique(md.era.short.clean$C_product[md.era.short.clean$out_subindicator=="Species Evenness" ])) 
+#sort(unique(md.era.short.clean$C_product[md.era.short.clean$out_subindicator=="Shannon-Wiener Index"])) 
+#sort(unique(md.era.short.clean$C_product[md.era.short.clean$out_subindicator=="Taxonomic Richness" ])) 
+
+sort(unique(md.era.short.clean$C_product[md.era.short.clean$out_subindicator=="Pest & Pathogen (Numbers)"])) 
+sort(unique(md.era.short.clean$study_id[md.era.short.clean$out_subindicator=="Pest & Pathogen (Numbers)"])) 
+[1] "AC0012" "AG0010" "AG0041" "AG0123" "AN0012" "AN0041" "DK0002" "DK0099" "DK0132" "JS0011" "NJ0001" "NJ0009"
+[13] "NJ0018" "NJ0019" 
+
+"NJ0023" 
+"NJ0024" 
+"NJ0038" 
+"NJ0039"
+
+sort(unique(md.era.short.clean$out_subpillar)) 
+
 
 sort(unique(md.era.short.clean$C_product)) #MAKE A LIST OF MISSING PRODUCTS FROM 01_product_new
 sort(unique(md.era.short.clean$T_product)) #MAKE A LIST OF MISSING PRODUCTS FROM 01_product_new
 na_empty_summary["C_product", ] #in v6 17064 missing values; in v24 3150 empty values; in v32 1646; in v46 0
 na_empty_summary["T_product", ] #in v6 17064 missing values; in v24 3150 empty values; in v32 1646; in v46 0
+
+
+unmatched_crops <- bind_rows(
+  md.era.short.clean %>% 
+    select(product = C_product),
+  md.era.short.clean %>%
+    select(product = T_product)
+) %>%
+  # Split compound strings into individual tokens
+  mutate(product = str_split(product, fixed(".."))) %>%
+  unnest(product) %>%
+  mutate(product = str_squish(product)) %>%
+  filter(!is.na(product), product != "NA", product != "") %>%
+  distinct(product) %>%
+  # Left join to the reference to find what's missing
+  left_join(
+    fomd01.product.new%>% select(Product, Product.Simple),
+    by = c("product" = "Product")
+  ) %>%
+  filter(is.na(Product.Simple)) %>%
+  arrange(product)
+head(unmatched_crops)
+
+unmatched_crops %>%
+  readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "unmatched_crops.csv"))
 
 
 sort(unique(md.era.short.clean$C_product_type)) #to RECLASIFIED AGAIN BASED ON C_product_simple
