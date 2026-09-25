@@ -3003,7 +3003,6 @@ sort(unique(md.era.short.clean$T_out_year_end))
 sum(md.era.short.clean$C_out_year_end != md.era.short.clean$T_out_year_end, na.rm = TRUE)
 #[1] 12353
 
-
 sort(unique(md.era.short.clean$C_out_season_start))
 sort(unique(md.era.short.clean$T_out_season_start))
 
