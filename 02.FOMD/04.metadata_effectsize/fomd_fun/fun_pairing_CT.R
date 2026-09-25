@@ -18,7 +18,12 @@ fomd10.cols<-read_xlsx(
     "C_out_cv_final",            "T_out_cv_final" ,           "out_cv_grouping_method" ,  
     "out_effect_size_type",      "out_effect_size_yi",        "out_effect_size_vi"  ,     
     "pler_value_calc",           "pler_var_calc",       "ler_value_calc",     
-    "ler_sd_calc"))
+    "ler_sd_calc",
+    "ler_product",
+    "ler_effect_size_type",
+    "ler_effect_size_yi",
+    "ler_effect_size_vi"
+  ))
 fomd10.cols<-names(fomd10.cols)
 
 #==========================================================
