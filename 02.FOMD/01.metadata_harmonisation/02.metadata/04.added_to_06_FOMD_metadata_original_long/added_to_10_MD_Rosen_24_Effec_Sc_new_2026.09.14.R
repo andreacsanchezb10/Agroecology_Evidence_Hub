@@ -2766,6 +2766,7 @@ sort(unique(md.era.short.clean$out_soil_depth_l))
 #---outcome_value----
 #=========================
 #TO CHECK: I think the missing value for these C_out_value_metric should be efficiency index.
+# to check, i think the problem here get resolve if i add 1 in c_out_value
 #Nitrogen Agronomic Efficiency
 #Nitrogen Use Efficiency (ARE AGB)
 #Nitrogen Use Efficiency (ARE Product)

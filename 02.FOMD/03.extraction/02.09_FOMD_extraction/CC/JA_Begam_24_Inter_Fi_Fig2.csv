@@ -1,0 +1,81 @@
+point,treatment,raw point,,,treatment,value,SE
+Bar0,C1N1 - Maize,9.108280255,,,C1N1 - Maize,9.108280255,1.52866242
+Bar1,C1N1 - Maize,10.63694268,,,C1N2 - Maize,9.203821656,1.369426752
+Bar2,C1N2 - Maize,9.203821656,,,C1N3 - Maize,8.98089172,1.27388535
+Bar3,C1N2 - Maize,10.57324841,,,C1N4 - Maize,8.917197452,1.178343949
+Bar4,C1N3 - Maize,8.98089172,,,C1N5 - Maize,7.101910828,1.050955414
+Bar5,C1N3 - Maize,10.25477707,,,C3N1 - Maize + Cowpea (1:1),8.789808917,0.636942675
+Bar6,C1N4 - Maize,8.917197452,,,C3N2 - Maize + Cowpea (1:1),8.757961783,0.477707006
+Bar7,C1N4 - Maize,10.0955414,,,C3N3 - Maize + Cowpea (1:1),8.47133758,0.414012739
+Bar8,C1N5 - Maize,7.101910828,,,C3N4 - Maize + Cowpea (1:1),7.070063694,0.573248408
+Bar9,C1N5 - Maize,8.152866242,,,C3N5 - Maize + Cowpea (1:1),7.292993631,0.700636943
+Bar10,C3N1 - Maize + Cowpea (1:1),8.789808917,,,C4N1 - Maize + Cowpea (2:1),9.076433121,0.891719745
+Bar11,C3N1 - Maize + Cowpea (1:1),9.426751592,,,C4N2 - Maize + Cowpea (2:1),9.012738854,0.987261146
+Bar12,C3N2 - Maize + Cowpea (1:1),8.757961783,,,C4N3 - Maize + Cowpea (2:1),8.853503185,1.114649682
+Bar13,C3N2 - Maize + Cowpea (1:1),9.23566879,,,C4N4 - Maize + Cowpea (2:1),8.535031847,1.01910828
+Bar14,C3N3 - Maize + Cowpea (1:1),8.47133758,,,C4N5 - Maize + Cowpea (2:1),7.165605096,1.178343949
+Bar15,C3N3 - Maize + Cowpea (1:1),8.885350318,,,C5N1 - Maize + Cowpea (1:2),7.229299363,1.305732484
+Bar16,C3N4 - Maize + Cowpea (1:1),7.070063694,,,C5N2 - Maize + Cowpea (1:2),8.47133758,1.592356688
+Bar17,C3N4 - Maize + Cowpea (1:1),7.643312102,,,C5N3 - Maize + Cowpea (1:2),6.974522293,1.210191083
+Bar18,C3N5 - Maize + Cowpea (1:1),7.292993631,,,C5N4 - Maize + Cowpea (1:2),6.592356688,1.369426752
+Bar19,C3N5 - Maize + Cowpea (1:1),7.993630573,,,C5N5 - Maize + Cowpea (1:2),6.178343949,1.305732484
+Bar20,C4N1 - Maize + Cowpea (2:1),9.076433121,,,C1N1 - Maize,13.02547771,1.624203822
+Bar21,C4N1 - Maize + Cowpea (2:1),9.968152866,,,C1N2 - Maize,12.3566879,1.624203822
+Bar22,C4N2 - Maize + Cowpea (2:1),9.012738854,,,C1N3 - Maize,12.67515924,1.78343949
+Bar23,C4N2 - Maize + Cowpea (2:1),10,,,C1N4 - Maize,10.38216561,1.751592357
+Bar24,C4N3 - Maize + Cowpea (2:1),8.853503185,,,C1N5 - Maize,11.14649682,1.592356688
+Bar25,C4N3 - Maize + Cowpea (2:1),9.968152866,,,C3N1 - Maize + Cowpea (1:1),11.49681529,1.52866242
+Bar26,C4N4 - Maize + Cowpea (2:1),8.535031847,,,C3N2 - Maize + Cowpea (1:1),11.81528662,1.337579618
+Bar27,C4N4 - Maize + Cowpea (2:1),9.554140127,,,C3N3 - Maize + Cowpea (1:1),13.21656051,1.337579618
+Bar28,C4N5 - Maize + Cowpea (2:1),7.165605096,,,C3N4 - Maize + Cowpea (1:1),11.62420382,1.52866242
+Bar29,C4N5 - Maize + Cowpea (2:1),8.343949045,,,C3N5 - Maize + Cowpea (1:1),10.2866242,1.433121019
+Bar30,C5N1 - Maize + Cowpea (1:2),7.229299363,,,C4N1 - Maize + Cowpea (2:1),11.78343949,0.668789809
+Bar31,C5N1 - Maize + Cowpea (1:2),8.535031847,,,C4N2 - Maize + Cowpea (2:1),11.40127389,0.636942675
+Bar32,C5N2 - Maize + Cowpea (1:2),8.47133758,,,C4N3 - Maize + Cowpea (2:1),14.20382166,0.605095541
+Bar33,C5N2 - Maize + Cowpea (1:2),10.06369427,,,C4N4 - Maize + Cowpea (2:1),11.52866242,0.541401274
+Bar34,C5N3 - Maize + Cowpea (1:2),6.974522293,,,C4N5 - Maize + Cowpea (2:1),12.3566879,0.573248408
+Bar35,C5N3 - Maize + Cowpea (1:2),8.184713376,,,C5N1 - Maize + Cowpea (1:2),11.65605096,1.01910828
+Bar36,C5N4 - Maize + Cowpea (1:2),6.592356688,,,C5N2 - Maize + Cowpea (1:2),12.2611465,1.01910828
+Bar37,C5N4 - Maize + Cowpea (1:2),7.961783439,,,C5N3 - Maize + Cowpea (1:2),12.07006369,1.146496815
+Bar38,C5N5 - Maize + Cowpea (1:2),6.178343949,,,C5N4 - Maize + Cowpea (1:2),10.66878981,1.114649682
+Bar39,C5N5 - Maize + Cowpea (1:2),7.484076433,,,C5N5 - Maize + Cowpea (1:2),9.808917197,1.082802548
+Bar40,C1N1 - Maize,13.02547771,,,,,
+Bar41,C1N1 - Maize,14.64968153,,,,,
+Bar42,C1N2 - Maize,12.3566879,,,,,
+Bar43,C1N2 - Maize,13.98089172,,,,,
+Bar44,C1N3 - Maize,12.67515924,,,,,
+Bar45,C1N3 - Maize,14.45859873,,,,,
+Bar46,C1N4 - Maize,10.38216561,,,,,
+Bar47,C1N4 - Maize,12.13375796,,,,,
+Bar48,C1N5 - Maize,11.14649682,,,,,
+Bar49,C1N5 - Maize,12.7388535,,,,,
+Bar50,C3N1 - Maize + Cowpea (1:1),11.49681529,,,,,
+Bar51,C3N1 - Maize + Cowpea (1:1),13.02547771,,,,,
+Bar52,C3N2 - Maize + Cowpea (1:1),11.81528662,,,,,
+Bar53,C3N2 - Maize + Cowpea (1:1),13.15286624,,,,,
+Bar54,C3N3 - Maize + Cowpea (1:1),13.21656051,,,,,
+Bar55,C3N3 - Maize + Cowpea (1:1),14.55414013,,,,,
+Bar56,C3N4 - Maize + Cowpea (1:1),11.62420382,,,,,
+Bar57,C3N4 - Maize + Cowpea (1:1),13.15286624,,,,,
+Bar58,C3N5 - Maize + Cowpea (1:1),10.2866242,,,,,
+Bar59,C3N5 - Maize + Cowpea (1:1),11.71974522,,,,,
+Bar60,C4N1 - Maize + Cowpea (2:1),11.78343949,,,,,
+Bar61,C4N1 - Maize + Cowpea (2:1),12.4522293,,,,,
+Bar62,C4N2 - Maize + Cowpea (2:1),11.40127389,,,,,
+Bar63,C4N2 - Maize + Cowpea (2:1),12.03821656,,,,,
+Bar64,C4N3 - Maize + Cowpea (2:1),14.20382166,,,,,
+Bar65,C4N3 - Maize + Cowpea (2:1),14.8089172,,,,,
+Bar66,C4N4 - Maize + Cowpea (2:1),11.52866242,,,,,
+Bar67,C4N4 - Maize + Cowpea (2:1),12.07006369,,,,,
+Bar68,C4N5 - Maize + Cowpea (2:1),12.3566879,,,,,
+Bar69,C4N5 - Maize + Cowpea (2:1),12.92993631,,,,,
+Bar70,C5N1 - Maize + Cowpea (1:2),11.65605096,,,,,
+Bar71,C5N1 - Maize + Cowpea (1:2),12.67515924,,,,,
+Bar72,C5N2 - Maize + Cowpea (1:2),12.2611465,,,,,
+Bar73,C5N2 - Maize + Cowpea (1:2),13.28025478,,,,,
+Bar74,C5N3 - Maize + Cowpea (1:2),12.07006369,,,,,
+Bar75,C5N3 - Maize + Cowpea (1:2),13.21656051,,,,,
+Bar76,C5N4 - Maize + Cowpea (1:2),10.66878981,,,,,
+Bar77,C5N4 - Maize + Cowpea (1:2),11.78343949,,,,,
+Bar78,C5N5 - Maize + Cowpea (1:2),9.808917197,,,,,
+Bar79,C5N5 - Maize + Cowpea (1:2),10.89171975,,,,,
