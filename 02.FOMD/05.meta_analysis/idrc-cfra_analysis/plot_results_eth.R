@@ -336,7 +336,7 @@ fill_colors <- c(
 )
 text_colors <- c(
   "Strong positive" = "white",
-  "Positive"         = "#173404",
+  "Positive"         = "#444441",
   "Strong neutral"   = "white",
   "Neutral"          = "#444441",
   "Negative"         = "#444441",
