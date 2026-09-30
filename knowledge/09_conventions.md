@@ -75,7 +75,7 @@ Every count, version, tally and percentage belongs in the **`_status/`** set and
 qualitative. This is the main defence against the staleness that plagued an earlier version of these docs,
 where version numbers appeared in seven files and drifted apart.
 
-`01_status.md` is the **index you read** — it says which of the six `_status/` files owns each kind of number.
+`01_status.md` is the **index you read** — it says which of the seven `_status/` files owns each kind of number.
 You **write only the file you own** (each names its owner at the top). One shared numbers file meant every
 task, on any topic, ended by writing the same file; with two people on one OneDrive folder that guaranteed
 collisions. Splitting it keeps the single reading entry point and removes the shared write. → §13
@@ -145,7 +145,7 @@ folder is **history and recovery**, never coordination. Coordinate by owning dif
 ### What was changed on 2026-07-30 to make collisions structurally rare
 
 - **The two collision points were removed.** Every task used to end by writing `01_status.md` *and*
-  `_meta/UPDATE_LOG.md`, so two people collided even on unrelated work. Now: numbers live in six owned files
+  `_meta/UPDATE_LOG.md`, so two people collided even on unrelated work. Now: numbers live in seven owned files
   under `_status/` read through the `01_status.md` index (§8), and the log is **one file per entry** in
   `_meta/log/` — separate filenames cannot overwrite each other (`_meta/UPDATE_LOG.md`).
 - **Rule 2 is enforced mechanically, not by prose.** `.claude/settings.json` files at the **Hub root**, in

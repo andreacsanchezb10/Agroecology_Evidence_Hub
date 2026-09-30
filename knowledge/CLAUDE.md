@@ -40,7 +40,7 @@ Full definitions, the two screening vocabularies, and the deprecated-usage table
 4. **No numbers outside `_status/`.** Every version, row count, study count, tally and percentage lives in
    the `_status/` set, which you **read through `01_status.md`** — that index says which file owns what.
    Elsewhere, stay qualitative ("~190k rows"). Before quoting any number, read it from `_status/` and from
-   nowhere else. **Write only the `_status/` file you own**; six owned files replaced one shared file so that
+   nowhere else. **Write only the `_status/` file you own**; seven owned files replaced one shared file so that
    two people stop colliding on every task. → `09_conventions.md` §13
 5. **Analysis method is Andrea's.** Effect-size choice, pooling rules, exclusions, variance handling — her
    decisions. Don't invent them; ask. Documenting *data limitations* is different and is encouraged.
@@ -79,6 +79,7 @@ Full detail and the reasoning: `09_conventions.md` §13.
 | `08_effect_sizes_and_analysis.md` | effect sizes, meta-analysis code, or the analysis layer |
 | `control_treatment_scoring.md` | how control vs treatment is defined for the agroecology-gradient question (draft, Andrea to ratify) |
 | `09_conventions.md` | you're writing or running R here |
+| `website.md` | anything touches the public website, its data snapshot or its deployment |
 | `sources/ERA/*` | you're changing or debugging the ERA harmonization |
 | `_meta/MAINTENANCE.md` | you're updating these docs |
 

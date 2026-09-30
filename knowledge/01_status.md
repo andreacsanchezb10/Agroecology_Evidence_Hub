@@ -19,6 +19,7 @@
 | **`_status/code.md`** | script line counts, output file sizes, what runs and what is an empty stub | Andrea |
 | **`_status/ontology.md`** | ontology sheet and term counts | Lolita |
 | **`_status/project.md`** | deliverables and dates · the ownership table · known housekeeping items | Lolita + Andrea |
+| **`_status/website.md`** | what the public site publishes · vendored dependency sizes · why ERA is not on it yet | Lolita |
 
 Everything at once:
 
@@ -45,5 +46,5 @@ Stated here as pointers, not as figures — so this index never goes stale and n
 3. Use a **surgical edit**, not a whole-file rewrite — see `09_conventions.md` §13.
 4. Add a new file to `_meta/log/` — one file per entry, never a shared list. → `_meta/UPDATE_LOG.md`
 
-If a number doesn't fit any of the six files, it may not belong in this base at all — check
-`_meta/MAINTENANCE.md` ("What NOT to put here") before adding a seventh.
+If a number doesn't fit any of the seven files, it may not belong in this base at all — check
+`_meta/MAINTENANCE.md` ("What NOT to put here") before adding an eighth.

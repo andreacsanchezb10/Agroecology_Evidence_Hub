@@ -50,6 +50,10 @@ That last one is not optional — it's the honest list of what the data cannot c
 **`sources/ERA/02_era_handoff.md`** → `sources/ERA/04_era_open_issues.md` → `09_conventions.md`.
 Skip `02`, `03`, `07`.
 
+**Working on the public website**
+`CLAUDE.md` → **`website.md`** → `_status/website.md` → then `website/README.md` in the repo, which is the
+real manual. Nothing in the site is authoritative on method; it shows a percentage change, not an analysis.
+
 **An AI assistant with limited context**
 `CLAUDE.md` (auto-loads) → `01_status.md` → **exactly one** task doc from the map → the relevant
 `sources/ERA/*`. Don't load the whole base; it doesn't fit and it isn't needed.
