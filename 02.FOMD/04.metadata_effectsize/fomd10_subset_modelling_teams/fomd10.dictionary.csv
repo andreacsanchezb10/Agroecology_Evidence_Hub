@@ -100,6 +100,7 @@ C_varietal_animal_subpractice_raw,Character,NA,NA
 C_varietal_animal_breed,Character,"Name of the animal breed used in the control system. Record the commonly reported breed name as described in the study (e.g., Holstein, Jersey, Boer, Rhode Island Red). If the breed name is not reported, record NA.",Holstein
 C_varietal_animal_subpractice,Character,"Breeding category of the animal breed used in the control system. Indicate whether the breed is Improved, Hybrid, Crossbred, Unimproved, or another category reported in the study. This variable captures the animal breeding practice being compared in the experiment. If not reported, record NA.",Improved
 C_varietal_animal_type,Character,"Origin or classification of the animal breed used in the control system, describing whether the breed is Local, Indigenous, Exotic, or another category reported in the study. If not reported, record NA.",Exotic breed
+C_varietal_animal_trait,NA,NA,NA
 T_varietal_animal_subpractice_raw,Character,NA,NA
 T_varietal_animal_breed,Character,"Name of the animal breed used in the intervention (agroecological) system. Record the commonly reported breed name as described in the study (e.g., Nguni, Red Maasai, Indigenous chicken). If the breed name is not reported, record NA.",Nguni
 T_varietal_animal_subpractice,Character,"Breeding category of the animal breed used in the intervention system. Indicate whether the breed is Improved, Hybrid, Crossbred, Unimproved, or another category reported in the study. If not reported, record NA.",Unimproved

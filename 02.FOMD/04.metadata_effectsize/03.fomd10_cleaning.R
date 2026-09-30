@@ -27,9 +27,9 @@ source(file.path(path.metadata.effectsize, "fomd_fun/fun_lookup_ontologies.R"))
 #==========================================================
 # Read datasets
 #==========================================================
-#metadata<-"MD_Rosen_24_Effec_Sc" #Rosenstock et al. 2024. Effects of changing farming practices in African agriculture. 10.1038/s41597-024-03805-z 
+metadata<-"MD_Rosen_24_Effec_Sc" #Rosenstock et al. 2024. Effects of changing farming practices in African agriculture. 10.1038/s41597-024-03805-z 
 #metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
-metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
+#metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
 
 
 #---fomd10.formated
@@ -222,7 +222,7 @@ sort(unique(fomd10.clean$C_planting_method))
 #==========================================================
 #---- Match with 01_FOMD_ontologies ----
 #==========================================================
-#--- Reclassifying C_crop_tree_diversity as C_crop_tree_FAO_Food_Group
+#--- Reclassifying C_crop_tree_diversity as C_crop_tree_FAO_Food_Group ----
 fomd10.clean <- apply_lookup_commodity_group(
   df        = fomd10.clean,
   ref       = fomd01.crops.trees,
@@ -233,7 +233,7 @@ fomd10.clean <- apply_lookup_commodity_group(
 )
 sort(unique(fomd10.clean$C_crop_tree_FAO_Food_Group))
 
-#--- Reclassifying T_crop_diversity as T_crop_FAO_Food_Group
+#--- Reclassifying T_crop_diversity as T_crop_FAO_Food_Group ----
 fomd10.clean <- apply_lookup_commodity_group(
   df        = fomd10.clean,
   ref       = fomd01.crops.trees,
@@ -244,7 +244,7 @@ fomd10.clean <- apply_lookup_commodity_group(
 )
 sort(unique(fomd10.clean$T_crop_tree_FAO_Food_Group))
 
-#--- Get the FAO_Food_Groups that are common in the C and T practices
+#--- Get the FAO_Food_Groups that are common in the C and T practices ----
 fomd10.clean <- apply_CT_commodity_group_intersection(
   df      = fomd10.clean,
   col_C   = "C_crop_tree_FAO_Food_Group",
@@ -254,7 +254,7 @@ fomd10.clean <- apply_CT_commodity_group_intersection(
 
 sort(unique(fomd10.clean$CT_crop_tree_FAO_Food_Group))
 
-#--- Reclassifying C_crop_diversity as C_crop_FAO_Food_SubGroup
+#--- Reclassifying C_crop_diversity as C_crop_FAO_Food_SubGroup ----
 fomd10.clean <- apply_lookup_commodity_group(
   df        = fomd10.clean,
   ref       = fomd01.crops.trees,
@@ -265,7 +265,7 @@ fomd10.clean <- apply_lookup_commodity_group(
 )
 sort(unique(fomd10.clean$C_crop_tree_FAO_Food_SubGroup))
 
-#--- Reclassifying T_crop_diversity as T_crop_FAO_Food_SubGroup
+#--- Reclassifying T_crop_diversity as T_crop_FAO_Food_SubGroup ----
 fomd10.clean <- apply_lookup_commodity_group(
   df        = fomd10.clean,
   ref       = fomd01.crops.trees,
@@ -276,7 +276,7 @@ fomd10.clean <- apply_lookup_commodity_group(
 )
 sort(unique(fomd10.clean$T_crop_tree_FAO_Food_SubGroup))
 
-#--- Get the CT_crop_FAO_Food_SubGroup that are common in the C and T practices
+#--- Get the CT_crop_FAO_Food_SubGroup that are common in the C and T practices ----
 fomd10.clean <- apply_CT_commodity_group_intersection(
   df      = fomd10.clean,
   col_C   = "C_crop_tree_FAO_Food_SubGroup",
@@ -286,7 +286,7 @@ fomd10.clean <- apply_CT_commodity_group_intersection(
 
 sort(unique(fomd10.clean$CT_crop_tree_FAO_Food_SubGroup))
 
-#--- Reclassifying out_subindicator as effect_size_type
+#--- Reclassifying out_subindicator as effect_size_type ----
 fomd10.clean <- apply_lookup_ontologies(
   df        = fomd10.clean,
   path.metadata.structure = path.metadata.structure,
@@ -300,11 +300,12 @@ fomd10.clean <- apply_lookup_ontologies(
 
 unmatched_effect_size_type<-fomd10.clean %>%
   #select(doi,out_subindicator, out_effect_size) 
-  distinct(study_id,out_subindicator, out_effect_size_type)%>%
+  distinct(#study_id,
+           out_subindicator, out_effect_size_type)%>%
   arrange(out_effect_size_type)%>%
   filter(is.na(out_effect_size_type))
 
-#--- Reclassifying C_product as C_product_simple
+#--- Reclassifying C_product as C_product_simple ----
 fomd10.clean <- apply_lookup_ontologies(
   df        = fomd10.clean,
   path.metadata.structure = path.metadata.structure,
@@ -316,7 +317,7 @@ fomd10.clean <- apply_lookup_ontologies(
   sep=".."
 )
 
-#--- Reclassifying T_product as T_product_simple
+#--- Reclassifying T_product as T_product_simple ----
 fomd10.clean <- apply_lookup_ontologies(
   df        = fomd10.clean,
   path.metadata.structure = path.metadata.structure,
@@ -328,7 +329,7 @@ fomd10.clean <- apply_lookup_ontologies(
   sep=".."
 )
 
-#--- Reclassifying country as country_ISO
+#--- Reclassifying country as country_ISO ----
 fomd10.clean <- apply_lookup_ontologies(
   df        = fomd10.clean,
   path.metadata.structure = path.metadata.structure,

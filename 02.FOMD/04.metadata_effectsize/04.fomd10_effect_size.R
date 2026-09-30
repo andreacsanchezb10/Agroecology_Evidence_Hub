@@ -39,7 +39,7 @@ skim(fomd10.clean)
 
 length(fomd10_clean_files) # how many source files got combined
 nrow(fomd10.clean)
-length(unique(fomd10.clean$study_id)) #36
+length(unique(fomd10.clean$study_id)) #36 -> 1846
 #sort(unique(fomd10.clean$study_id[is.na(fomd10.clean$C_out_value )]))
 #sort(unique(fomd10.clean$study_id[fomd10.clean$C_out_var_metric =="95% Confidence Intervals"]))
 
@@ -56,33 +56,43 @@ for (col in c("effect_size_id","C_out_value_metric", "T_out_value_metric",
   print(sort(unique(fomd10.clean[[col]])))
 }
 
-skim(fomd10.clean$C_out_value)
-skim(fomd10.clean$T_out_value)
+skim(fomd10.clean$C_out_value) #1084 
+skim(fomd10.clean$T_out_value) #14
 
-skim(fomd10.clean$C_out_var_value)
-skim(fomd10.clean$T_out_var_value)
+skim(fomd10.clean$C_out_var_value) # 147354
+skim(fomd10.clean$T_out_var_value) #147009
 
 skim(fomd10.clean$C_out_sample_size)
 skim(fomd10.clean$T_out_sample_size)
 
-
 #---- Apply equation to calculate Mean AND SD from raw data ----
 fomd10.mean.sd<-calculate_mean_sd(fomd10.clean)
+
+x<-fomd10.mean.sd%>%
+  select(study_id,country,
+         C_out_value_metric,C_out_value,
+         T_out_value_metric, T_out_value,
+         C_out_mean,T_out_mean,
+         C_out_sd,T_out_sd,out_subindicator,
+         out_effect_size_type)%>%
+  filter(!is.na(C_out_value))%>%
+    filter(is.na(C_out_mean))
+head(x)
 
 #==========================================================
 # Calculate CV and number of samples
 # From observations that don't provide variance values or number of samples
 #==========================================================
 # --- quick checks ---
-skim(fomd10.mean.sd$C_out_mean)
-skim(fomd10.mean.sd$T_out_mean)
+skim(fomd10.mean.sd$C_out_mean) # 1167
+skim(fomd10.mean.sd$T_out_mean) #54
 sort(unique(fomd10.mean.sd$study_id[is.na(fomd10.mean.sd$C_out_mean)]))
 
-skim(fomd10.mean.sd$C_out_sd)
-skim(fomd10.mean.sd$T_out_sd)
+skim(fomd10.mean.sd$C_out_sd) #148940
+skim(fomd10.mean.sd$T_out_sd) #148357
 
-skim(fomd10.mean.sd$C_out_sample_size)
-skim(fomd10.mean.sd$T_out_sample_size)
+skim(fomd10.mean.sd$C_out_sample_size) #12758
+skim(fomd10.mean.sd$T_out_sample_size) #12758
 
 sort(unique(fomd10.mean.sd$out_subpillar))
 
@@ -103,15 +113,15 @@ fomd10.n.cv <- fomd10.n.cv%>%
     T_out_sample_size_imputed = coalesce(T_out_sample_size, T_out_sample_size_imputed),
     C_out_sample_size_imputed = coalesce(C_out_sample_size, C_out_sample_size_imputed))
 names(fomd10.n.cv)
-skim(fomd10.n.cv$C_out_cv_final)
-skim(fomd10.n.cv$T_out_cv_final)
+skim(fomd10.n.cv$C_out_cv_final) #110581
+skim(fomd10.n.cv$T_out_cv_final) #110581
 
 ## TO CHECK: there is a problem here, the code did not calculate n of samples for some rows of C
-skim(fomd10.n.cv$C_out_sample_size)
-skim(fomd10.n.cv$C_out_sample_size_imputed)
+skim(fomd10.n.cv$C_out_sample_size) #12758
+skim(fomd10.n.cv$C_out_sample_size_imputed) #9743
 
-skim(fomd10.n.cv$T_out_sample_size)
-skim(fomd10.n.cv$T_out_sample_size_imputed)
+skim(fomd10.n.cv$T_out_sample_size) #12758
+skim(fomd10.n.cv$T_out_sample_size_imputed)  #9743
 
 prueba<-fomd10.n.cv%>%
   filter(out_subindicator=="Crop Yield",
@@ -151,7 +161,7 @@ data.frame(
 #==========================================================
 # Calculate pLER and LER
 #==========================================================
-fomd10.ler<- fun_calculate_ler(fomd10.n.cv)%>%
+fomd10.ler<- fun_calculate_ler(fomd10.n.cv)
   select(study_id,
          out_subindicator,
          C_out_value_metric,
@@ -192,7 +202,7 @@ fomd10.ler<- fun_calculate_ler(fomd10.n.cv)%>%
 sort(unique(fomd10.ler$study_id))
 
 
-## there is a problem with JA_Dua, _17_Effec_LR ler since there are multiple controls
+## TO CHECK: there is a problem with JA_Dua, _17_Effec_LR ler since there are multiple controls
 ## TO CHECK: HOW TO RESOLVE THE PROBLEM WITH DUA..
 ## HOW TO GET var LER values need to be calculated
 crop_check <- fomd10.mean.sd %>%
@@ -210,8 +220,8 @@ crop_check
 #==========================================================
 # Checking out_subindicators with effect_size_type
 #==========================================================
-sort(unique(fomd10.ler$out_subindicator))#37
-sort(unique(fomd10.ler$out_indicator))#14
+sort(unique(fomd10.ler$out_subindicator))#37 #126
+sort(unique(fomd10.ler$out_indicator))#14 #22
 sort(unique(fomd10.ler$out_effect_size_type))#2
 
 sort(unique(fomd10.ler$out_subindicator[is.na(fomd10.n.cv$out_effect_size_type )]))
@@ -226,7 +236,6 @@ sort(unique(fomd10.ler$T_out_sample_size_imputed))
 sort(unique(fomd10.ler$C_out_sample_size_imputed))
 sort(unique(fomd10.ler$lnRR_cv_group_avg))
 sort(unique(fomd10.ler$lnRR_cv_final))
-
 
 fomd10.effectsize <- fomd10.ler %>%
   calc_lnRR_effectsize(T_out_mean, C_out_mean,
@@ -278,7 +287,6 @@ x<-fomd10.effectsize %>%
   filter(out_subpillar=="Efficiency")
 sort(unique(x$out_subpillar))
 
-
 #==========================================================
 #--------- Check for missing columns
 #==========================================================
@@ -300,19 +308,17 @@ irrelevant_cols<- c(
 "SMD" ,                                 "SMD_var"  )
 
 #--------- Remove irrelevant columns ------------
-
 fomd10.effectsize<-fomd10.effectsize%>%
   select(-irrelevant_cols)
 
 write_csv(fomd10.effectsize, paste0(path.metadata.effectsize, "04.fomd10_effect_size/fomd10_effect_size.csv"))
-
 
 #==========================================================
 # #Subset the Ethiopia data to send to the Modelling team
 #==========================================================
 fomd10.effectsize.eth<-fomd10.effectsize#%>%
   #filter(str_detect(country, "Ethiopia"))
-write_csv(fomd10.effectsize.eth, paste0(path.metadata.effectsize, "/fomd10_subset_modelling_teams/nonERA.fomd10_effect_size.v1.csv"))
+write_csv(fomd10.effectsize.eth, paste0(path.metadata.effectsize, "/fomd10_subset_modelling_teams/fomd10_effect_size.v2.csv"))
 
 #---10_FOMD_metadata_dictionary
 fomd10.dictionary<-read_xlsx(file.path(path.metadata.structure,"10_FOMD_metadata_synthesis_short.xlsx"), sheet = "10_FOMD_readme")%>%

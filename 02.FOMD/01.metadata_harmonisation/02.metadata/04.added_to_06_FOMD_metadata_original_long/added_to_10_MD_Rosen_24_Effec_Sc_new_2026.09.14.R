@@ -36,25 +36,18 @@ source(file.path(path.functions, "/fun_fomd09_cleaning.R"))
 fomd01.outcomes<-fomd01.outcomes%>%
   filter(!is.na(subindicator) )
 
-fomd01.product.new<-
-  read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies - Copy.xlsx"), sheet = "01_product_new")
-
-
-fomd01.outcomes<-
-  read_xlsx(file.path(path.metadata.structure,"01_FOMD_ontologies - Copy.xlsx"), sheet = "01_outcomes")
-
-
 #---04_FOMD_screening 
 ## TO CHECK: NEED TO UPDATE THE LIST OF PAPERS FROM ERA IN SCREENING AND IN IDENTIFIED DATASETS!!
 fomd04<-read_xlsx(file.path(path.metadata.structure,"04_FOMD_screening.xlsx"), sheet = "04_FOMD_screening")%>%
   filter(ss_id=="MD_Rosen_24_Effec_Sc")%>%
   filter(status =="I")
-length(unique(fomd04$study_id))#1720
+length(unique(fomd04$study_id))#1722
 length(unique(fomd04$study_id_ss))#1811
 
 #---ERA metadata short
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v47.csv"))
-md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v50.csv"))
+#md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v50.csv"))
+md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v51.csv"))
 
 
 length(unique(md.era.short$study_id)) #1810 studies
@@ -106,11 +99,11 @@ md.era.short.clean %>%
   select(study_id, effect_size_id, authors, title, year, journal, doi) %>%
   readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_bibliographic.csv"))
 
-length(unique(md.era.short.clean$study_id)) # 1810 studies
-length(unique(md.era.short.clean$effect_size_id))  #232209 rows #V50 191019 ROWS
-length(unique(md.era.short.clean$authors))  #1352
-length(unique(md.era.short.clean$title)) #978
-length(unique(md.era.short.clean$doi)) #1592 #1591
+length(unique(md.era.short.clean$study_id)) # 1810;1808 studies
+length(unique(md.era.short.clean$effect_size_id))  #232209 rows #V50 191019 ROWS;V51:166297
+length(unique(md.era.short.clean$authors))  #1347
+length(unique(md.era.short.clean$title)) #979
+length(unique(md.era.short.clean$doi)) #1592; #1591;1589
 
 #----------------------------------------------
 #---location----
@@ -169,6 +162,37 @@ md.era.short.clean <- md.era.short.clean %>%
          
   ) %>%
   select(-country_lookup,-site_admin_lookup,-site_latitude_lookup)
+
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(
+    site_latitude = case_when(
+      study_id == "CJ0126" & site_id == "B N1..B N2..B N3..B N4..B N5..B N6..B N7..B N8..B N9" ~
+        paste(rep("0.675", 9), collapse = ".."),
+      study_id == "CJ0126" & site_id == "BS W1..BS W2..BS W3..BS W4..BS W5..BS W6..BS W7..BS W8..BS W9" ~
+        paste(rep("0.520", 9), collapse = ".."),
+      study_id == "CJ0126" & site_id == "BS W1..BS W2..BS W3..BS W4..BS W5..BS W6..BS W7..BS W8..BS W9..B N1..B N2..B N3..B N4..B N5..B N6..B N7..B N8..B N9" ~
+        paste(rep("0.595", 18), collapse = ".."),
+      TRUE ~ site_latitude
+    ),
+    site_longitude = case_when(
+      study_id == "CJ0126" & site_id == "B N1..B N2..B N3..B N4..B N5..B N6..B N7..B N8..B N9" ~
+        paste(rep("34.355", 9), collapse = ".."),
+      study_id == "CJ0126" & site_id == "BS W1..BS W2..BS W3..BS W4..BS W5..BS W6..BS W7..BS W8..BS W9" ~
+        paste(rep("34.470", 9), collapse = ".."),
+      study_id == "CJ0126" & site_id == "BS W1..BS W2..BS W3..BS W4..BS W5..BS W6..BS W7..BS W8..BS W9..B N1..B N2..B N3..B N4..B N5..B N6..B N7..B N8..B N9" ~
+        paste(rep("34.415", 18), collapse = ".."),
+      TRUE ~ site_longitude
+    ),
+    site_buffer = case_when(
+      study_id == "CJ0126" & site_id %in% c(
+        "B N1..B N2..B N3..B N4..B N5..B N6..B N7..B N8..B N9",
+        "BS W1..BS W2..BS W3..BS W4..BS W5..BS W6..BS W7..BS W8..BS W9"
+      ) ~ paste(rep("100", 9), collapse = ".."),
+      study_id == "CJ0126" & site_id == "BS W1..BS W2..BS W3..BS W4..BS W5..BS W6..BS W7..BS W8..BS W9..B N1..B N2..B N3..B N4..B N5..B N6..B N7..B N8..B N9" ~
+        paste(rep("100", 18), collapse = ".."),
+      TRUE ~ site_buffer))
+
+sort(unique(md.era.short.clean$study_id[is.na(md.era.short.clean$site_latitude)]))
 
 sort(unique(md.era.short.clean$site_id[is.na(md.era.short.clean$site_admin)]))
 sort(unique(md.era.short.clean$site_id[is.na(md.era.short.clean$site_latitude)]))
@@ -480,6 +504,22 @@ sort(unique(md.era.short.clean$T_system_type))
 names(md.era.short.clean) <- gsub("^C_plant_", "C_crop_tree_", names(md.era.short.clean))
 names(md.era.short.clean) <- gsub("^T_plant_", "T_crop_tree_", names(md.era.short.clean))
 
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(
+    C_crop_tree_diversity = case_when(
+      study_id == "AG0116" ~ str_replace(C_crop_tree_diversity, fixed("Lemon & Lime"), "Lemon"),
+      TRUE ~ C_crop_tree_diversity),
+    T_crop_tree_diversity = case_when(
+      study_id == "AG0116" ~ str_replace(T_crop_tree_diversity, fixed("Lemon & Lime"), "Lemon"),
+      TRUE ~ T_crop_tree_diversity))%>%
+  mutate(
+    C_crop_tree_variety = case_when(
+      study_id == "AG0116" ~ str_replace(C_crop_tree_variety, fixed("Lemon & Lime"), "Lemon"),
+      TRUE ~ C_crop_tree_variety),
+    T_crop_tree_variety = case_when(
+      study_id == "AG0116" ~ str_replace(T_crop_tree_variety, fixed("Lemon & Lime"), "Lemon"),
+      TRUE ~ T_crop_tree_variety))
+
 # Apply all fixes to any set of columns
 crop_tree_cols <- c("C_crop_tree_diversity", "T_crop_tree_diversity",
                     "C_crop_tree_variety","T_crop_tree_variety",
@@ -688,7 +728,6 @@ unique_crops_diversity <- rbind(
   filter(is.na(FAO.Food.Group)) 
 
 length(unique(unique_crops_diversity$crop_tree_diversity)) #70-v41: 57; v45: 34;v46: 16; V47:5
-
 
 unique_crops_variety <- data.frame(
   crop_tree_diversity = unique(c(
@@ -1141,7 +1180,6 @@ sort(unique(md.era.short.clean$T_crop_seq_residues_fate))
 #----------------------------------------------
 #---agroforestry_practice----
 #----------------------------------------------
-## TO CHECK: NEED TO FIX C_agrof_subpractice=="Open Communal Grazing Land"----------------
 ## TO CHECK : verify later if it is better to keep track of spatial, component, shade..-----------
 md.era.short.clean<-md.era.short.clean%>% 
   mutate(
@@ -1173,15 +1211,6 @@ sort(unique(md.era.short.clean$T_agrof_subpractice_raw))
 
 sort(unique(md.era.short.clean$C_agrof_subpractice)) 
 sort(unique(md.era.short.clean$T_agrof_subpractice))
-
-prueba<-md.era.short.clean%>%
-  filter(T_agrof_subpractice=="Open Communal Grazing Land")%>%
-  select(study_id,effect_size_id,
-         C_subpractice_description_raw,T_subpractice_description_raw,
-         C_agrof_subpractice,T_agrof_subpractice,
-         out_subindicator,
-         C_data_location)
-sort(unique(prueba$C_agrof_subpractice)) 
 
 
 sort(unique(md.era.short.clean$agrof_shade_mean_min_max)) #Missing from ERA
@@ -2333,7 +2362,7 @@ md.era.short.clean <- md.era.short.clean %>%
     study_id=="AC0021"& out_subindicator=="Taxonomic Richness"~"Predators",
     C_product=="Rhizobial Diversity" ~"symbiotic nitrogen-fixing bacteria",
     study_id=="NJ0030"& out_subindicator=="Shannon-Wiener Index"~"symbiotic nitrogen-fixing bacteria",
-  
+    study_id==  "AC0012"& out_subindicator=="Pest & Pathogen (Numbers)"~"Pests",
     
     TRUE ~ bio_func_group))
 
@@ -2351,7 +2380,7 @@ md.era.short.clean <- md.era.short.clean %>%
     study_id=="NJ0060"& out_subindicator=="Beneficial Organisms"~"Abundance",
     study_id=="AN0032" & out_subindicator_unit== "log(ammonia oxidizing Bacteria copies/g)"~"Abundance",
     study_id=="AN0032" & out_subindicator_unit== "log(ammonia oxidizing Archaea copies/g)"~"Abundance",
-    
+    study_id==  "AC0012"& out_subindicator=="Pest & Pathogen (Numbers)"~"Abundance",
     
     study_id=="AN0032" & out_subindicator_unit== "log(nxra copies/g)"~"Abundance",
     study_id=="AN0032" & out_subindicator_unit== "log(16S copies/g)"~"Abundance",
@@ -2416,6 +2445,7 @@ md.era.short.clean <- md.era.short.clean %>%
       study_id=="CJ1012"~"Sheep",
       study_id=="EM1066"~ "Japanese Quail",
       study_id=="JO1014"~"Goat",
+      study_id==  "AC0012"& out_subindicator=="Abundance"~"Thrips",
       
       TRUE ~ C_product))%>%
   mutate(
@@ -2448,6 +2478,8 @@ md.era.short.clean <- md.era.short.clean %>%
       study_id=="CJ1012"~"Sheep",
       study_id=="EM1066"~ "Japanese Quail",
       study_id=="JO1014"~"Goat",
+      study_id==  "AC0012"& out_subindicator=="Abundance"~"Thrips",
+      
       TRUE ~ T_product))
 
 
@@ -2593,17 +2625,23 @@ md.era.short.clean %>%
          bio_ground_ref,
          out_subindicator,
          out_subindicator_unit,
-         C_data_location
+         C_data_location,
+         C_out_value,
+         C_out_var_metric,
+         C_out_var_value,
+         T_out_value,
+         T_out_var_metric,
+         T_out_var_value,
+         T_data_location
          
          
   ) %>%
   readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_out_product.csv"))
 
 #sort(unique(md.era.short.clean$out_subindicator[md.era.short.clean$out_indicator=="Biodiversity"]))
-# TO CHECK: out_subindicator- Pest & Pathogen (Losses)-Pest & Pathogen (Numbers)
-sort(unique(md.era.short.clean$C_product[md.era.short.clean$out_subindicator=="Pest & Pathogen (Numbers)"])) 
-sort(unique(md.era.short.clean$study_id[md.era.short.clean$out_subindicator=="Pest & Pathogen (Numbers)"])) 
-
+# TO CHECK: out_subindicator- Pest & Pathogen (Losses)
+sort(unique(md.era.short.clean$C_product[md.era.short.clean$out_subindicator=="Pest & Pathogen (Losses)"])) 
+sort(unique(md.era.short.clean$study_id[md.era.short.clean$out_subindicator=="Pest & Pathogen (Losses)"])) 
 
 
 sort(unique(md.era.short.clean$C_product)) 
@@ -2640,9 +2678,6 @@ sort(unique(md.era.short.clean$bio_ground_ref)) #MISSING FROM ERA
 #=========================
 #---outcome----
 #=========================
-# TO CHECK: out_subindicator- Pest & Pathogen (Losses)-Pest & Pathogen (Numbers)
-# TO CHECK: Missing columns: out_npv_discount_rate, out_npv_econ_period
-#out_wg_start, out_wg_start_unit, out_wg_days
 md.era.short.clean$out_subindicator <- gsub("Labor Cost" , "Labour Cost" , md.era.short.clean$out_subindicator, fixed = TRUE)
 
 md.era.short.clean <- md.era.short.clean %>%
@@ -2725,7 +2760,21 @@ md.era.short.clean<-md.era.short.clean%>%
     "Monetary Private Benefits-Sale of produce"
     
   )))
-  
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("out_wg_start_unit"),
+  pattern = "kg",replacement = "Kg")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("out_wg_start_unit"),
+  pattern = "KG",replacement = "Kg")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("out_wg_days"),
+  pattern = "unspecified",replacement = "Unspecified")
 
 # Quick checks -----
 md.era.short.clean %>%
@@ -2742,11 +2791,19 @@ md.era.short.clean %>%
          T_out_subindicator_unit,
          out_soil_depth_u,
          out_soil_depth_l,
-         #out_npv_discount_rate,
-         #out_npv_econ_period,
-         #out_wg_start,
-         #out_wg_start_unit,
-         #out_wg_days
+         out_npv_discount_rate,
+         out_npv_econ_period,
+         out_wg_start,
+         out_wg_start_unit,
+         out_wg_days,
+         C_data_location,
+         C_out_value,
+         C_out_var_metric,
+         C_out_var_value,
+         T_out_value,
+         T_out_var_metric,
+         T_out_var_value,
+         T_data_location
          
   ) %>%
   readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_outcome.csv"))
@@ -2754,13 +2811,20 @@ md.era.short.clean %>%
 unmatched_subindicator_type<-md.era.short.clean %>%
   left_join(fomd01.outcomes,by=c("out_subindicator"="subindicator"))%>%
   distinct(out_subindicator, subpillar, effect_size_type)%>%
-  arrange(subpillar)%>%
-  filter(is.na(subpillar))
+  arrange(effect_size_type)%>%
+  filter(is.na(effect_size_type))
 
 sort(unique(md.era.short.clean$out_subindicator_unit))
 
 sort(unique(md.era.short.clean$out_soil_depth_u))
 sort(unique(md.era.short.clean$out_soil_depth_l))
+
+sort(unique(md.era.short.clean$out_npv_discount_rate))
+sort(unique(md.era.short.clean$out_npv_econ_period))
+sort(unique(md.era.short.clean$out_wg_start))
+sort(unique(md.era.short.clean$out_wg_start_unit))
+sort(unique(md.era.short.clean$out_wg_days))
+
 
 #=========================
 #---outcome_value----
@@ -2798,13 +2862,9 @@ md.era.short.clean<-md.era.short.clean %>%
 #study_id=="AC0065","AC0172" has two rows with empty T_out_value
 #I checked the paper, and those rows should be remove
 md.era.short.clean<-md.era.short.clean%>%
-  filter(!(study_id=="AC0065"&effect_size_id=="123564"))%>%
-  filter(!(study_id=="AC0065"&effect_size_id=="124094"))%>%
-  filter(!(study_id=="AC0172"&effect_size_id=="132736"))%>%
-  filter(!(study_id=="AC0172"&effect_size_id=="132741"))%>%
-  filter(!(study_id=="AC0172"&effect_size_id=="132747"))
-  
-  
+  filter(!(study_id=="AC0065"&is.na(C_out_value)&is.na(T_out_value)))%>%
+  filter(!(study_id=="AC0172"&is.na(C_out_value)&is.na(T_out_value)))
+
 md.era.short.clean<-md.era.short.clean%>%
   mutate(
     C_out_var_value=as.character(C_out_var_value),
@@ -2856,14 +2916,39 @@ sort(unique(md.era.short.clean$T_out_var_value))
 #For the missing outcome values it's only 9 studies, and they're all ratio/efficiency results 
 #(Land Equivalent Ratio, Nitrogen/Phosphorus Agronomic Efficiency) that don't have a control value by definition. 
 #Overall the outcome data is about 99.5% complete
+sort(unique(md.era.short.clean$out_subindicator[is.na(md.era.short.clean$C_out_value)])) 
 
 nrow(md.era.short.clean[md.era.short.clean$C_out_value == "", ]) #1070 missing C_out_value values
 nrow(md.era.short.clean[md.era.short.clean$T_out_value == "", ]) #0 missing T_out_value values
+sort(unique(md.era.short.clean$out_subindicator[md.era.short.clean$C_out_value== "", ]))
+prueba<-md.era.short.clean%>%
+  filter(out_subindicator%in%
+           c(             "Nitrogen Agronomic Efficiency"   ,     
+              "Nitrogen Use Efficiency (ARE AGB)" ,    "Nitrogen Use Efficiency (ARE Product)",
+             "Nitrogen Use Efficiency (PNB Product)", "Phosphorus Agronomic Efficiency"   ))%>%
+  select(study_id, effect_size_id, 
+         out_subindicator,
+         C_out_value_metric,
+         C_out_value,
+         C_out_var_metric,
+         C_out_var_value,
+        
+         C_out_sample_size,
+         C_data_location,
+         T_out_value_metric,
+         T_out_value,
+         T_out_var_metric,
+         T_out_var_value,
+         T_out_sample_size,
+         T_data_location
+        )
+
 
 sort(unique(md.era.short.clean$C_out_var_metric))
 sort(unique(md.era.short.clean$T_out_var_metric))
 nrow(md.era.short.clean[md.era.short.clean$C_out_var_metric == "", ]) #in v6 182058; in v32 183067; in v50 147338
 nrow(md.era.short.clean[md.era.short.clean$T_out_var_metric == "", ]) #183074; in v32 182996; in v50 146993
+
 
 sort(unique(md.era.short.clean$C_out_var_value))
 sort(unique(md.era.short.clean$T_out_var_value))
@@ -2930,7 +3015,7 @@ sort(unique(md.era.short.clean$out_subindicator[md.era.short.clean$out_indicator
 
 sort(unique(md.era.short.clean$out_indicator))
 # Quick checks ----
-md.era.short.clean1 %>%
+md.era.short.clean %>%
   filter(study_id=="AC0002")%>%
   readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_ler_outcome_value.csv"))
   select(study_id, effect_size_id,
@@ -3022,7 +3107,7 @@ library(purrr)
 #---outcome----
 #=========================
 #--- Reclassifying out_subindicator as out_indicator
-md.era.short.clean <- apply_lookup_ontologies(
+md.era.short.clean <- apply_lookup_ontologies_ERA(
   df        = md.era.short.clean,
   ref       = fomd01.outcomes,
   key_col   = "subindicator",
@@ -3036,7 +3121,7 @@ sort(unique(md.era.short.clean$out_subindicator))
 sort(unique(md.era.short.clean$out_indicator))
 
 #--- Reclassifying out_subindicator as out_subpillar
-md.era.short.clean <- apply_lookup_ontologies(
+md.era.short.clean <- apply_lookup_ontologies_ERA(
   df        = md.era.short.clean,
   ref       = fomd01.outcomes,
   key_col   = "subindicator",
@@ -3091,12 +3176,8 @@ for (col in missing_cols) {
 # keep only columns in fomd10.cols, in the same order
 md.era.clean <- md.era.clean[, fomd10.cols, drop = FALSE]
 
-# check
-list(
-  only_in_md.era.clean = setdiff(names(md.era.clean), fomd10.names),
-  only_in_fomd10.names = setdiff(fomd10.names, names(md.era.clean))
-)
-md.era.clean1<-md.era.clean%>%
+
+md.era.clean<-md.era.clean%>%
   select(any_of(fomd10.cols))
 
 names(md.era.clean)
