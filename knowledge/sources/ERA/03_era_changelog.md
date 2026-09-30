@@ -1,4 +1,4 @@
-# Change log (v1 → v49): project memory
+# Change log (v1 → v51): project memory
 
 Distilled history of what each release changed. Most fixes originate as review comments from Andrea
 (the output consumer). Early version numbers are approximate (reconstructed from script comments &
@@ -94,7 +94,7 @@ biodiversity 2,996 → 1,054 rows, **0** with `C_product ≠ T_product`; DK0114 
 Deliberately **not** extended to the sibling `Beneficial Organisms` subindicator (`Out.Code`=268) — same
 structure but messier `Out.Group` (mixes organisms with sampling locations); see `open_issues.md`.
 
-## Generalized within-outcome pairing — v49 (current)
+## Generalized within-outcome pairing — v49
 Investigation showed biodiversity was **one instance of a general bug**: wherever ERA records several
 sub-measurements under one outcome (different taxa, **soil depths**, **pest species × sampling times**),
 the C/T pairing cross-joined them because the distinguishing field (`Out.Group` / `Out.Depth` / metric)
@@ -109,3 +109,44 @@ families — **Biodiversity, Pest & Pathogen, Soil\***. NA elsewhere, so untouch
 Costs, yields) **unchanged** — only Soil Carbon Stocks (−153) and Biomass Yield (−60) shifted, both from
 correct depth-matching of their depth-resolved rows. Still deferred pending Andrea: Feed Intake (`Out.Group`
 meaning unclear), Beneficial Organisms, and small residuals on emissions/yields — see `open_issues.md`.
+
+## Animal breed and diversity completion — v50 (released 17 Sept 2026)
+Post-build fills from the raw cc `Herd.Out` (`V.Var`): `C/T_animal_breed` and `C/T_varietal_animal_breed` for
+single-breed cc studies (multi-breed studies flagged in `product_to_confirm_v50.csv`), and `C/T_animal_diversity`
+completed from the recovered species map. Rows/studies unchanged (191,019 / 1,810). Released as
+`ERA/data/ERA_data_short_v50.csv`; Andrea's review of it produced v51.
+
+## Andrea's v50 review — v51 (current)
+Ten points, each verified on the v50 file and, for the data problems, against two or three source PDFs
+(`../../_meta/log/2026-09-28-01-era-v51-andrea-review.md`). **Result: 166,297 rows / 1,808 studies / 340 columns.**
+- **Pairs now agree on their measurement fields.** New `align_pair_fields()` (step 3, right after each merge): a
+  pair is kept only when the sampling window (`ED.Sample.Start/End`), `Out.Unit`, `Out.Agg.Stat` and `Out.WG.Days`
+  are equal or blank on one side (a single date inside the other arm's range counts as equal: JO0053's April 2019
+  campaign); the blank side is then filled. Removed **24,719 cross-joined pairs in 174 studies**: 18,838 from
+  sampling dates (soil moisture, N2O, CO2 and available-N time series: AC0131, NN0415, NN0003, DK0051, CJ0043 ...),
+  5,635 from mixed units (JS0070 Mg/ha/yr vs kg/ha/yr; Feed Intake −3,399, the residual flagged in v49), 246 from
+  weight-gain durations (DK0047 60/90/120 d). Per study × outcome with the cause: `pair_alignment_v51_reasons.csv`.
+  `out_agg_stat`, `out_year_start/_end`, `out_season_start`, `out_year` and the unit now differ between C and T on
+  **0 rows**. **DK0053** (Asante 2016, soil NO3) keeps no pair: its control and treatment series were entered on
+  disjoint sampling dates (ERA-side issue).
+- **mh sampling dates recovered.** mh stores `ED.Sample.Start/End` as Excel serial numbers (2005–2016, 22 studies);
+  v50 had lost them. Parsed and written as ISO dates.
+- **`out_season_start` re-sourced** to the measurement season (`Time` suffix, else `ED.Start.Season`; values 1–4
+  only). It was `Final.Start.Season`, the arm's establishment season, which the papers show is miscoded (CJ0067,
+  AC0007, JO0143 established all arms together).
+- **`out_comparison_id` implemented** (a `10_` template field never mapped): the pairing key used, `|`-joined in a
+  fixed order (study | site | Time | outcome | product | component L1 | component | Pair.Subkey | window | tier).
+  12,833 ids, each with ≥1 control and ≥1 treatment arm.
+- **Seven template columns added:** `C/T_varietal_animal_trait` (mh `V.Trait`, 4 studies), `out_npv_discount_rate`,
+  `out_npv_econ_period`, `out_wg_start`, `out_wg_start_unit`, `out_wg_days` (all present in ERA `Data.Out`; the
+  readme's "Missing from ERA" was wrong; values checked against DK0085, HK0306.1, NJ0037, BO1018, DK0037).
+  `out_wg_start` had been blanked by the year-sentinel step because its name contains "Start"; weight columns are
+  now excluded from that step (also repairs the herd starting weights).
+- **NN0376 excluded** (grazing exclosure vs open communal grazing, Haftay 2013): the bare token `Grazing` in the
+  agroforestry whitelist had admitted it, the treeless-control rule stamped "Monoculture" and the reorientation
+  swapped the arms (sign inverted). Token removed (sweep: no other study relied on it), the "Monoculture" rule is
+  gated to plant systems, study removed at Andrea's request (`excluded_studies_v51.csv`).
+- **Template drift reported, not padded:** the `10_` sheet now has 328 columns, 116 without an output
+  counterpart (per-arm site fields, `*_amount_unit`, effect-size columns) and 128 output columns not in it
+  (`template_drift_v51.csv`). Andrea's decision.
+- `animal_density` confirmed not recorded in ERA (the 9 cc stocking-rate rows are empty).

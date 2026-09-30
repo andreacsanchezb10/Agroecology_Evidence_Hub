@@ -18,7 +18,7 @@ cd ".../ERA/Script"
 ```
 
 - Rscript: `C:/Program Files/R/R-4.4.2/bin/Rscript.exe`. Uses `data.table`, `openxlsx`, `readxl`.
-- Takes ~15–20 minutes. Run it in the background and wait; don't poll.
+- Takes ~35–40 minutes (v51). Run it in the background and wait; don't poll.
 - **Always parse-check first** — a syntax error found 20 minutes in is 20 minutes wasted:
   `Rscript -e 'invisible(parse(".../era_harmonize.R")); cat("PARSE OK\n")'`
 - Output: `Downloads/ERA_crop_data_short_vNN.csv` plus companions. A human then moves and **renames** the
@@ -40,8 +40,11 @@ filename. Then update `../../_status/era.md` and `03_era_changelog.md` — that 
    bridge).
 3. **Build `all_pairs`** — the C/T-paired table — and derive columns (plant diversity, subpractices, product,
    animal diversity). **The pairing keys are set here**, including `add_pair_subkey()` (`Pair.Subkey`), the
-   v48/v49 fix that stops sub-measurements (taxon, metric, soil depth, species × time) from cross-joining.
-   **Anything affecting *which rows pair* belongs at this step, not step 5.**
+   v48/v49 fix that stops sub-measurements (taxon, metric, soil depth, species × time) from cross-joining, and
+   `align_pair_fields()` (v51), applied right after each merge, which keeps a pair only when sampling window,
+   unit, aggregation statistic and weight-gain duration agree (blank = wildcard; a single date inside the other
+   arm's range = same campaign) and fills the blank side. `add_comparison_id()` then writes `out_comparison_id`
+   from the key actually used. **Anything affecting *which rows pair* belongs at this step, not step 5.**
 4. **`fomd_map`** — the big named list mapping output columns to source/derived columns.
 5. **Post-build steps** on `fomd_out`: consolidated fert/chem fields, control-label filling, diversification
    reorientation, `practice_primary` / `practice_compared`, the v45 normalization pass, the v46 product fill,
@@ -56,6 +59,9 @@ filename. Then update `../../_status/era.md` and `03_era_changelog.md` — that 
 | `ERA_missing_from_FOMD_vNN.csv` | ERA fields not carried over (documented gaps) |
 | `product_to_confirm_vNN.csv` | rows/studies needing a human decision |
 | `ERA_harmonization_log_vNN.txt` | the run log |
+| `pair_alignment_vNN.csv` | pairs dropped by `align_pair_fields()` per study × outcome (v51); `_reasons` companion adds the cause |
+| `excluded_studies_vNN.csv` | study-level exclusions with reason (v51: NN0376) |
+| `template_drift_vNN.csv` | columns in the `10_` sheet but not in the output, and vice versa (v51) |
 
 Also read as an **input**: `ERA/Script/livestock_ss_overrides.csv` (manual livestock sample-size overrides),
 and from `era_cache/`: `animal_species_by_study.csv`, `po_paper_resolved.csv`.
@@ -201,6 +207,11 @@ belong to **harvest**, the rest to **postharvest** (v44). Only 6 of these codes 
   or use `[.]` / `[*]` character classes.
 - **Never end a backgrounded command with a stray `&`** inside another background wrapper — it detaches the
   real process and you get a false "completed".
+- **The year-sentinel step (step 5) picks columns by name** — anything containing `Year|Date|Start|End|Sample`
+  — and blanks values outside 1900–2030. It silently nulled `Out.WG.Start` (starting weights, kg) until v51
+  excluded `WG.Start|Start.Weight`. Check that list before adding any column whose name contains those words.
+- **mh dates are Excel serial numbers.** `ED.Sample.Start/End` in mh are numerics like 42165 (origin
+  1899-12-30), not Dates; anything that treats them as text or as R dates loses them.
 - The output CSV is often **moved** to `ERA/data/` between runs, so a verify script should try
   `Downloads/ERA_crop_data_short_vNN.csv` first, then `ERA/data/ERA_data_short_vNN.csv`.
 

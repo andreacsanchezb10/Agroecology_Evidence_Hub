@@ -18,9 +18,16 @@ The C/T pairing cross-multiplied sub-measurements that share one outcome and `Ou
 the unambiguous, high-impact families via `Pair.Subkey`: ~~Soil\* (depth + group)~~, ~~Pest & Pathogen
 (species × time)~~, ~~Biodiversity (taxon + metric)~~ — removing ~39k spurious rows.
 
+**v51 extended the fix to the measurement fields** (`align_pair_fields()`, step 3): sampling window, unit,
+aggregation statistic and weight-gain duration must agree within a pair — another 24,719 rows in 174 studies
+(`pair_alignment_v51_reasons.csv`). Still open from this: **DK0053** (Asante 2016, soil NO3) keeps no pair because
+its control and treatment series were entered on disjoint sampling dates; needs a correction in ERA.
+
 Still open, **deferred pending Andrea** because `Out.Group`'s meaning is ambiguous there and auto-matching
 would not be safe:
 - **Feed Intake** (~3,700 spurious, ~30%) — what does its `Out.Group` distinguish? Confirm the right unit.
+  **v51:** 3,399 of these went with the unit rule (arms recorded in different units); the `Out.Group` question
+  remains.
 - **Beneficial Organisms** (`Out.Code` 268, ~180 rows / 8 studies) — same structure as the fixed biodiversity
   rows, but its `Out.Group` mixes real organisms with sampling *locations* ("Under canopy", "3m away from the
   periphery"). Needs cleaning before the same taxon→product + pairing treatment can be applied.
@@ -64,8 +71,8 @@ would not be safe:
 - **`n == 1` on ~6,600 rows** — unreplicated; some genuinely so (single-plot or observational). Worth confirming.
 - **`era_domain` blank or odd** on ~1,200 rows (blank, or `Plant**Plant Product`). **Don't gate logic on it.**
 - **~35 fully-empty columns** — most intentional (postharvest dates, agroforestry shade/canopy/DBH, all
-  `land_structure_*`: ERA doesn't collect them). One is recoverable: **`animal_density`** — cc stocking rate
-  exists in `GM.Tot.Stock.Rate` / `Herd.N` but isn't mapped yet.
+  `land_structure_*`: ERA doesn't collect them). **`animal_density` is not recoverable** (checked v51): the cc
+  `GM.Method` stocking-rate fields are empty on all 9 rows and `Herd.N` is a head count.
 
 ## Naming legacy
 
@@ -93,13 +100,22 @@ would not be safe:
 
 # C. Needs a human decision — not pipeline work
 
-These are **not pending work for the pipeline**. Both are Andrea's (bibliography).
+These are **not pending work for the pipeline**. They are Andrea's, or the ERA data team's.
 
 - **Duplicate DOIs — merges.** The 35 sub-split groups and 13 complementary cross-code pairs still carry
   separate `study_id`s. Merging them to one `study_id` per publication is a bibliography decision (list in
   `duplicate_DOI_resolution.csv`). Only the one true duplicate was removed, in v47.
-- **Ambiguous agroforestry-biomass product** (HK0202.1, JS0204, NN0376) — filled with the crop mix and flagged
-  in `product_to_confirm_vNN.csv` for her to pick the intended component.
+- **Ambiguous agroforestry-biomass product** (HK0202.1, JS0204) — filled with the crop mix and flagged
+  in `product_to_confirm_vNN.csv` for her to pick the intended component. (NN0376 left this list: excluded in v51.)
+- **Grazing / pasture management has no family in the schema.** ERA records it (`A.Pasture.Man`, `A.Grazing`,
+  code d19) for livestock studies; NN0376 (exclosure vs open grazing) was excluded in v51 for that reason. A
+  family sourced from those fields would recover it for all livestock studies. → Andrea.
+- **Template drift** (v51): the `10_` sheet has 328 columns; 116 have no output counterpart (per-arm site fields
+  `C_/T_country`, `*_amount_unit`, single `out_agg_stat`, effect-size / LER columns) and 128 output columns are
+  not in the sheet. Lists in `template_drift_v51.csv`. Which side moves is Andrea's call.
+- **`Final.Start.Season` is miscoded at source** for at least CJ0067, AC0007, JO0143 (papers: all arms established
+  together). v51 stopped using it for outcome timing; the ERA data team should be told. Same for DK0053's
+  disjoint sampling dates.
 
 ---
 
