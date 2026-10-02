@@ -17,5 +17,13 @@
 
 02.FOMD/04.metadata_effectsize/02.fomd10_formated/fomd10_formated_MD_Rosen_24_Effec_Sc.csv
 
-02.FOMD/04.metadata_effectsize/fomd10_clean/fomd10_clean_MD_Rosen_24_Effec_Sc.csv
+02.FOMD/04.metadata_effectsize/03.fomd10_clean/fomd10_clean_MD_Rosen_24_Effec_Sc.csv
+
+# Every versioned effect-size output in this folder is 60-500+ MB and keeps
+# getting re-generated under a new vN suffix - ignore the whole family instead
+# of adding one filename per re-run (small files like fomd10.dictionary.csv
+# and the ontologies_*.csv files here don't match "effect_size" and stay tracked)
+02.FOMD/04.metadata_effectsize/fomd10_subset_modelling_teams/*effect_size*.csv
+
+02.FOMD/05.meta_analysis/idrc-cfra_analysis/01.cfra_data/fomd10_cfra.csv
 
