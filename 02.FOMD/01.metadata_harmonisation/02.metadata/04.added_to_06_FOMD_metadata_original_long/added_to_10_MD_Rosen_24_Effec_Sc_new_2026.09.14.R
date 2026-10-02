@@ -47,12 +47,13 @@ length(unique(fomd04$study_id_ss))#1811
 #---ERA metadata short
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v47.csv"))
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v50.csv"))
-md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v51.csv"))
+#md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v51.csv"))
+md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v52.csv"))
 
 
-length(unique(md.era.short$study_id)) #1810 studies
-length(unique(md.era.short$doi)) #1592
-sort(unique(md.era.short$country))
+length(unique(md.era.short$study_id)) #1808 studies
+length(unique(md.era.short$doi)) #1590
+sort(unique(md.era.short$country)) #63
 
 ###########################
 ###################
@@ -102,7 +103,7 @@ md.era.short.clean %>%
 length(unique(md.era.short.clean$study_id)) # 1810;1808 studies
 length(unique(md.era.short.clean$effect_size_id))  #232209 rows #V50 191019 ROWS;V51:166297
 length(unique(md.era.short.clean$authors))  #1347
-length(unique(md.era.short.clean$title)) #979
+length(unique(md.era.short.clean$title)) #980
 length(unique(md.era.short.clean$doi)) #1592; #1591;1589
 
 #----------------------------------------------
@@ -409,8 +410,8 @@ md.era.short.clean %>%
          T_site_longitude,T_site_buffer,T_site_key) %>%
   readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_location.csv"))
 
-length(unique(md.era.short.clean$T_site_key))  #1889
-length(unique(md.era.short.clean$C_site_key))  #1889
+length(unique(md.era.short.clean$T_site_key))  #1874
+length(unique(md.era.short.clean$C_site_key))  #1874
 sort(unique(md.era.short.clean$country)) #61
 sort(unique(md.era.short.clean$site_type))
 sort(unique(md.era.short.clean$site_id))
@@ -1109,6 +1110,11 @@ md.era.short.clean <- apply_replace_in_cols(
   cols = c("C_intercrop_subpractice", "T_intercrop_subpractice"),
   pattern = "&",replacement = "and") # Apply "&" -> "and" substitution
 
+md.era.short.clean<-md.era.short.clean%>%
+  mutate(T_intercrop_subpractice=case_when(
+    study_id=="CJ0050"&T_intercrop_subpractice=="Intercrop (N fixing and Non N fixing)"~"Push pull",
+    TRUE~T_intercrop_subpractice))
+
 
 # Quick checks ----
 md.era.short.clean %>%
@@ -1448,7 +1454,6 @@ sort(unique(md.era.short.clean$T_fert_organicN)) # Merged
 
 sort(unique(md.era.short.clean$C_fert_organicP)) # Merged
 sort(unique(md.era.short.clean$T_fert_organicP)) # Merged
-
 
 sort(unique(md.era.short.clean$C_fert_organicK)) # Merged
 sort(unique(md.era.short.clean$T_fert_organicK)) # Merged
@@ -2129,6 +2134,12 @@ md.era.short.clean <- md.era.short.clean %>%
       TRUE ~ T_irrig_water_type
     )
   )
+
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(T_irrig_method = case_when(
+    study_id == "NM0110" & T_irrig_method == "Irrigation (Other)" ~ "Drip Irrigation",
+    TRUE ~ T_irrig_method))
+  
 
 # Quick checks ----
 md.era.short.clean %>%
@@ -2825,7 +2836,6 @@ sort(unique(md.era.short.clean$out_wg_start))
 sort(unique(md.era.short.clean$out_wg_start_unit))
 sort(unique(md.era.short.clean$out_wg_days))
 
-
 #=========================
 #---outcome_value----
 #=========================
@@ -3093,7 +3103,7 @@ sort(unique(md.era.short.clean$C_out_season_start))
 sort(unique(md.era.short.clean$T_out_season_start))
 
 sum(md.era.short.clean$C_out_season_start != md.era.short.clean$T_out_season_start, na.rm = TRUE)
-#[1] 176
+#[1] 0
 
 sort(unique(md.era.short.clean$out_season_end))
 
@@ -3175,7 +3185,6 @@ for (col in missing_cols) {
 
 # keep only columns in fomd10.cols, in the same order
 md.era.clean <- md.era.clean[, fomd10.cols, drop = FALSE]
-
 
 md.era.clean<-md.era.clean%>%
   select(any_of(fomd10.cols))
