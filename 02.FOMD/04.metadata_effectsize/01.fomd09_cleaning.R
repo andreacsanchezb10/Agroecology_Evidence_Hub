@@ -52,7 +52,7 @@ for (col in c("exp_design", "exp_plot_size", "exp_field_size", "exp_duration")) 
   cat("---", col, "---\n")
   print(sort(unique(fomd09.clean[[col]])))
 }
-#sort(unique(fomd09.clean$study_id[fomd09.clean$exp_plot_size =="unspecified"]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$exp_field_size =="nd"]))
 
 #--- Check experiment time details ----
 for (col in c("time_raw", "time_year_start", "time_year_end", "time_season")) {
@@ -72,8 +72,8 @@ fomd09.clean <- add_fomd09_commodity(fomd09.clean)
 
 unmatched_crops <- find_unmatched_crops(fomd09.clean, path.metadata.effectsize)
 
-#sort(unique(fomd09.clean$study_id[fomd09.clean$crop_tree_variety  =="Onion(POH-1**PYO-1**PWO-2**PRO-6**PRO-7**Pb Naroya)"]))
-#sort(unique(fomd09.clean$practice_id[fomd09.clean$crop_tree_variety  =="Maize(Unspecified)/"]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$crop_tree_density   =="Maize[Unspecified(Unspecified)]/Tephrosia candida[Unspecified(Unspecified)]/"]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$crop_tree_variety  =="Maize(MM 604)/Grass Unspecified(Unspecified)/Native legumes(Unspecified)"]))
 
 #-- check if unmached_crops are because of mispealing
 fomd01.crops.trees <- local({
@@ -157,7 +157,7 @@ for (col in c("intercrop_subpractice_raw", "intercrop_subpractice","intercrop_de
   print(sort(unique(fomd09.clean[[col]])))
 }
 
-#sort(unique(fomd09.clean$study_id[fomd09.clean$intercrop_start_season =="Long rainiy season"]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$intercrop_subpractice =="Relay Intercropping (N fixing)" ]))
 
 #--- Add crop sequence practice information ----
 fomd09.clean <- collapse_fomd09_columns(
@@ -192,7 +192,7 @@ fomd09.clean <- add_fomd09_mean_min_max(fomd09.clean, prefix = "agrof_dhb")
 #--- Add nutrient management practice (inorganic) information ----
 fomd09.clean <- add_fomd09_fert_inorganic(fomd09.clean)
 
-#sort(unique(fomd09.clean$study_id[fomd09.clean$fert_inorganic_type_amount_unit     =="Urea[20(kg/ha)]..Super phosphate[40(kg/ha)]..muriate of potash[40(kg/ha)]"]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$fert_inorganic_type_amount_unit     =="Diammonium Phosphate[100(kg/ha)]..Urea[102(kg/ha)]"]))
 
 #--- Add nutrient management practice (organic) information ----
 fomd09.clean <- add_fomd09_fert_organic(fomd09.clean)
@@ -204,8 +204,8 @@ fomd09.clean <- add_fomd09_weed(fomd09.clean)
 
 #---Add chemical management practice information ----
 fomd09.clean <- add_fomd09_chem(fomd09.clean)
-sort(unique(fomd09.clean$study_id[fomd09.clean$chem_name_amount_unit   =="NA[0(NA)]" ]))
-sort(unique(fomd09.clean$practice_id[fomd09.clean$chem_name_amount_unit   =="NA[0(NA)]" ]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$chem_name_amount_unit   =="NA[0(NA)]..Unspecified[Unspecified(Unspecified)]" ]))
+#sort(unique(fomd09.clean$practice_id[fomd09.clean$chem_name_amount_unit   =="NA[0(NA)]" ]))
 
 #---Add residues management practice information ----
 sort(unique(fomd09.clean$residues_subpractice_raw))
@@ -291,7 +291,7 @@ for (col in c("product", "econ_inputs", "bio_func_group", "bio_ground_ref"
 
 unmatched_products <- find_unmatched_products(fomd09.clean, path.metadata.structure)
 
-#sort(unique(fomd09.clean$study_id[fomd09.clean$product01   =="Maize Core"]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$bio_func_group   =="Natural enemies"]))
 
 #--- Check subindicator information ----
 for (col in c("out_subindicator", "out_subindicator_unit",
@@ -306,7 +306,7 @@ for (col in c("out_subindicator", "out_subindicator_unit",
   print(sort(unique(fomd09.clean[[col]])))
 }
 
-#sort(unique(fomd09.clean$study_id[fomd09.clean$out_subindicator =="Shannon Index" ]))
+sort(unique(fomd09.clean$study_id[fomd09.clean$out_subindicator_unit =="Unitless" ]))
 
 #--- Check outcome value information ----
 for (col in c("out_value_metric", "out_value",
@@ -318,6 +318,8 @@ for (col in c("out_value_metric", "out_value",
   cat("---", col, "---\n")
   print(sort(unique(fomd09.clean[[col]])))
 }
+
+#sort(unique(fomd09.clean$study_id[fomd09.clean$out_sample_size =="102" ]))
 
 #--- Check outcome LER information ----
 for (col in c("out_value_product01", "out_var_value_product01",
@@ -380,7 +382,7 @@ fomd09.clean <- apply_lookup_ontologies(
   sep=".."
 )
 
-sort(unique(fomd09.clean$out_subindicator[fomd09.clean$out_subpillar==""]))
+sort(unique(fomd09.clean$study_id[fomd09.clean$out_subindicator=="Damaged caused by pest"]))
 sort(unique(fomd09.clean$out_subindicator[is.na(fomd09.clean$out_subpillar)]))
 
 #--- Reclassifying out_subindicator as out_pillar

@@ -125,6 +125,21 @@ pairing_spec_cols <- tribble(
     #---outcome----
     "out_subindicator_unit"
   )),
+  
+  #--------------------------------------
+  #--- out_subpillar =="Yield" ----
+  #--- For Pairing system yield ----
+  #--------------------------------------
+  "Yield",        "system",        list(c(
+    #--- location
+    "site_type","site_id","site_admin", "site_agg" ,"site_latlong_type",                    
+    "site_latitude","site_longitude","site_buffer","site_key",
+    #---product_outcome----
+    #"product",
+    #---outcome----
+    "out_subindicator_unit"
+  )),
+  
   #--------------------------------------
   #--- out_subpillar =="Yield"----
   #--- For Pairing partial ler yield ----
@@ -195,6 +210,12 @@ build_dispatch_id <- function(data, spec, id_col_fn) {
 #( Biodiversity + Economics +"Efficiency"+"Physical") — a direct one-to-one match, no pivoting.
 fun_pair_bio_context <- function(df) {
   
+  # from the same country but a different number of site replicates still
+  # match - only affects Biodiversity pairing, not the other branches.
+  dedupe_country <- function(x, sep = "\\.\\.") {
+    vapply(strsplit(x, sep), function(tok) paste(unique(tok), collapse = ".."), character(1))
+  }
+  
   spec <- pairing_spec_cols %>% dplyr::filter(subpillar == "Biodiversity",branch == "context")
   
   purrr::map_dfr(seq_len(nrow(spec)), function(i) {
@@ -203,6 +224,7 @@ fun_pair_bio_context <- function(df) {
     id_cols <- c(pairing_base_cols, extra)
     
     sub_df <- df %>% dplyr::filter(out_subpillar == sp)
+    sub_df$country <- dedupe_country(sub_df$country)
     sub_df$row_id <- build_row_id(sub_df, id_cols)
     
     df.C <- sub_df %>%
@@ -340,6 +362,59 @@ fun_pair_yield_focal <- function(df) {
     dplyr::filter(!is.na(T_practice_id)) %>%
     dplyr::mutate(out_comparison_id = paste0(C_practice_id, "-", out_comparison_id))
     
+}
+
+#==========================================================
+#--- Pairing system-yield function ---
+## Used for out_subpillar == "Yield", focal-eligible rows (is_focal_row()==TRUE
+## on both sides) where Control reports one crop's yield but Treatment reports
+## one combined number for the whole intercropped system (e.g. total biomass
+## of maize+cowpea together) - product differs across C and T by design, so
+## it is NOT part of the matching key here, unlike fun_pair_yield_focal().
+#==========================================================
+fun_pair_yield_system <- function(df) {
+  
+  spec    <- pairing_spec_cols %>% dplyr::filter(subpillar == "Yield", branch == "system")
+  extra   <- unlist(spec$extra_cols)
+  id_cols <- c(pairing_base_cols, extra)
+  
+  df$row_id <- ifelse(is_focal_row(df), build_row_id(df, id_cols), NA_character_)
+  
+  df.C <- df %>%
+    dplyr::filter(grepl("C", practice_id)) %>%
+    split_ct()
+  
+  df.C$out_comparison_id <- ifelse(
+    is_focal_row(df.C),
+    build_row_id(df.C, c("out_comparison_treatment", setdiff(id_cols, "practice_id"))),
+    NA_character_
+  )
+  
+  df.C %>%
+    dplyr::filter(!is.na(row_id)) %>%
+    dplyr::select(-row_id) %>%
+    dplyr::left_join(
+      df %>% dplyr::select(-dplyr::any_of(setdiff(id_cols, c(
+        "practice_id",
+        "country", "site_type","site_id","site_admin",
+        "site_agg","site_latlong_type","site_latitude",
+        "site_longitude","site_buffer", "site_key",
+        "out_subindicator_unit")))),
+      by = c("out_comparison_id" = "row_id"),
+      suffix = c(".C", ".T"),
+      relationship = "many-to-many"
+    ) %>%
+    dplyr::rename_with(~ paste0("T_", sub("\\.T$", "", .)), dplyr::ends_with(".T")) %>%
+    dplyr::rename_with(~ paste0("C_", sub("\\.C$", "", .)), dplyr::ends_with(".C")) %>%
+    dplyr::filter(!is.na(T_practice_id)) %>%
+    # genuine "system" case: T_product is a MULTI-crop row that contains
+    # C_product as one of its own "..-joined tokens - not just any string
+    # difference (e.g. "Maize Cob" vs "Maize Stover" is a different plant
+    # part of the SAME crop, not a system-vs-focal-crop comparison)
+    dplyr::filter(mapply(function(cp, tp) {
+      !is.na(cp) && !is.na(tp) && grepl("\\.\\.", tp) && cp %in% strsplit(tp, "\\.\\.")[[1]]
+    }, C_product, T_product)) %>%
+    dplyr::mutate(out_comparison_id = paste0(C_practice_id, "-", out_comparison_id))
 }
 
 #==========================================================

@@ -149,9 +149,9 @@ exclude_pairs <- tribble(
   "No fertilizer applied",       "Inorganic Fertilizer",   # not an AE/RA practice
   "Inorganic Fertilizer",         "No fertilizer applied",
   "Synthetic pesticide",          "No Chemical Applied",
-  "Inorganic Fertilizer",         "Mixed fertilizer",
+  #"Inorganic Fertilizer",         "Mixed fertilizer",
   "Organic fertilizer",           "Mixed fertilizer",
-  "Inorganic Fertilizer",         "Organic fertilizer",    
+  #"Inorganic Fertilizer",         "Organic fertilizer",    
   
   "No Chemical Applied"  ,         "Synthetic pesticide"
  

@@ -19,8 +19,8 @@ source(file.path(path.metadata.effectsize, "fomd_fun/fun_pairing_CT.R"))
 #==========================================================
 # Read datasets
 #==========================================================
-metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
-#metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
+#metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
+metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
 
 #---09_FOMD_clean
 fomd09.clean <- read_csv(
@@ -88,14 +88,20 @@ paired_context<-fun_pair_context(fomd09.clean)
 paired_yield_focal<-fun_pair_yield_focal(fomd09.clean)
 
 #-------------------------------------------------------------------------------------
-#-- TO DO: PAIRING WHEN C_product and T_product don't match for Crop Yield and Biomass Yield
+#-- Pairing yield system function -----
+# PAIRING WHEN C_product and T_product don't match for Crop Yield and Biomass Yield
 # these are for cases when yield is provided for the system in Treatment (eg. yield of maize monoculture vs.
 #yield of maize+cowpea (together) intercropping)
 #-------------------------------------------------------------------------------------
-x<-paired_yield_focal%>%
-  #filter(study_id=="JA_Kabir_17_A Stu_In",
+paired_yield_system<-fun_pair_yield_system(fomd09.clean)
+sort(unique(paired_yield_system$study_id))
+
+x<-paired_yield_system%>%
+  #filter(C_product!=T_product)%>%
+  #filter(#study_id=="JA_Kabir_17_A Stu_In",
     
-  #     out_subindicator=="Crop Yield")%>%
+   #    out_subindicator=="Crop Yield"
+    #   )%>%
   select(      study_id,
          out_subindicator,
          C_out_value_metric,
@@ -117,7 +123,6 @@ x<-paired_yield_focal%>%
                   C_product,
          T_product,
          T_crop_tree_diversity)
-  
 
 #-------------------------------------------------------------------------------------
 #--- Pairing yield partial ler function -----
@@ -158,7 +163,7 @@ y<-paired_yield_pler%>%
                T_crop_tree_diversity)
 
 #-------------------------------------------------------------------------------------
-#--- Yield to cal partial and total ler function -----
+#--- Yield to call partial and total ler function -----
 #-------------------------------------------------------------------------------------
 paired_yield_ler<-fun_pair_yield_total_ler(fomd09.clean)
 names()
@@ -176,12 +181,19 @@ JA_Banti_15_Deter_Ho #no se que paso con este articulo
 #-------------------------------------------------------------------------------------
 #--- Pairing bio context function ---
 #-------------------------------------------------------------------------------------
+# Same dedupe as fun_pair_bio_context() - repeated country tokens
+# ("Peru..Peru..Peru") shouldn't block a match against "Peru..Peru"
+dedupe_country <- function(x, sep = "\\.\\.") {
+  vapply(strsplit(x, sep), function(tok) paste(unique(tok), collapse = ".."), character(1))
+}
+fomd09.clean.bio <- fomd09.clean %>% mutate(country = dedupe_country(country))
+
 # expected: every Control row's treatment name(s), reconstructed the same
 # way pair_context() does it internally, before any matching happens
 spec <- pairing_spec_cols %>% filter(subpillar == "Biodiversity",branch == "context")
 
 # every Control row's own match key, before joining
-expected <- fomd09.clean %>%
+expected <- fomd09.clean.bio %>%
   filter(grepl("C", practice_id), out_subpillar %in% c("Biodiversity")) %>%
   split_ct()
 expected$comparison_id <- build_dispatch_id(
@@ -190,7 +202,7 @@ expected$comparison_id <- build_dispatch_id(
 )
 
 # every row's own key, from the Treatment side
-all_rows <- fomd09.clean
+all_rows <- fomd09.clean.bio
 all_rows$row_id <- build_dispatch_id(all_rows, spec, function(extra) c(pairing_base_cols, extra))
 
 # Control rows whose key never appears among the Treatment rows' keys
@@ -203,13 +215,13 @@ missing_bio_context
 bio_cols_to_check <- c(pairing_base_cols, unlist(spec$extra_cols))
 
 rows <- fomd09.clean %>%
-  filter(study_id == "JA_Armbr_07_Testi_En",
+  filter(study_id == "JA_Kapoo_08_Effec_Jo",
          out_subindicator == "Abundance",
-         practice_id %in% c("C1", "T1")) %>%
+         practice_id %in% c("C9", "T3")) %>%
   select(practice_id, all_of(bio_cols_to_check))
 
-c <- rows %>% filter(practice_id == "C1") %>% select(-practice_id) %>% unlist()
-t <- rows %>% filter(practice_id == "T1") %>% select(-practice_id) %>% unlist()
+c <- rows %>% filter(practice_id == "C9") %>% select(-practice_id) %>% unlist()
+t <- rows %>% filter(practice_id == "T3") %>% select(-practice_id) %>% unlist()
 
 tibble(column = names(c), C1 = c, T3 = t) %>%
   filter(C1 != T3 | is.na(C1) != is.na(T3))
@@ -250,13 +262,13 @@ cols_to_check <- c(pairing_base_cols, context_extra)
 cols_to_check
 
 rows <- fomd09.clean %>%
-  filter(study_id == "JA_Gebru_15_﻿Eval_Jo",
-         out_subindicator == "Gross Return",
-         practice_id %in% c("C1", "T2")) %>%
+  filter(study_id == "JA_Bossi_05_Soil _Mi",
+         out_subindicator == "Soil Organic Carbon",
+         practice_id %in% c("C3", "C6")) %>%
   select(practice_id, all_of(cols_to_check))
 
-c <- rows %>% filter(practice_id == "C1") %>% select(-practice_id) %>% unlist()
-t <- rows %>% filter(practice_id == "T2") %>% select(-practice_id) %>% unlist()
+c <- rows %>% filter(practice_id == "C3") %>% select(-practice_id) %>% unlist()
+t <- rows %>% filter(practice_id == "C6") %>% select(-practice_id) %>% unlist()
 
 tibble(column = names(c), C1 = c, T3 = t) %>%
   filter(C1 != T3 | is.na(C1) != is.na(T3))
@@ -290,14 +302,60 @@ nrow(missing_yield_focal)   # how many never found their Treatment
 missing_yield_focal
 
 rows <- fomd09_focal %>%
-  filter(study_id == "JA_Kabir_17_A Stu_In", practice_id %in% c("C1", "T6")) %>%
+  filter(study_id == "JA_Reda _05_Relay_Jo", 
+         out_subindicator == "Biomass Yield",
+         practice_id %in% c("C1", "T1")) %>%
   select(practice_id, all_of(id_cols))
 
 c <- rows %>% filter(practice_id == "C1") %>% select(-practice_id) %>% slice(1) %>% unlist()
-t <- rows %>% filter(practice_id == "T6") %>% select(-practice_id) %>% slice(1) %>% unlist()
+t <- rows %>% filter(practice_id == "T1") %>% select(-practice_id) %>% slice(1) %>% unlist()
 
 tibble(column = names(c), C = c, T = t) %>%
   filter(C != T | is.na(C) != is.na(T))
+
+#-------------------------------------------------------------------------------------
+#--- Pairing yield system function -----
+#-------------------------------------------------------------------------------------
+spec    <- pairing_spec_cols %>% dplyr::filter(subpillar == "Yield", branch == "system")
+extra   <- unlist(spec$extra_cols)
+id_cols <- c(pairing_base_cols, extra)
+
+# restrict to the focal universe - same gate fun_pair_yield_system() uses
+fomd09_focal <- fomd09.clean %>% dplyr::filter(is_focal_row(fomd09.clean))
+
+# expected: every focal Control row's own match key (product-agnostic), before joining
+expected <- fomd09_focal %>%
+  dplyr::filter(grepl("C", practice_id)) %>%
+  split_ct()
+expected$comparison_id <- build_row_id(expected, c("out_comparison_treatment", setdiff(id_cols, "practice_id")))
+
+# every focal row's own key, from the Treatment side (also product-agnostic)
+all_rows <- fomd09_focal
+all_rows$row_id <- build_row_id(all_rows, id_cols)
+
+# every Control row paired against whichever Treatment row(s) share its product-agnostic
+# key, then kept only where that's a genuine system case: T_product is multi-crop and
+# contains the Control's own crop as one of its "..-joined tokens
+candidates <- expected %>%
+  dplyr::inner_join(
+    all_rows %>% dplyr::select(row_id, T_product = product, T_practice_id = practice_id),
+    by = c("comparison_id" = "row_id")
+  ) %>%
+  dplyr::filter(mapply(function(cp, tp) {
+    !is.na(cp) && !is.na(tp) && grepl("\\.\\.", tp) && cp %in% strsplit(tp, "\\.\\.")[[1]]
+  }, product, T_product))
+
+# which of those genuine candidates actually made it into paired_yield_system's output?
+found_ids <- paste0(paired_yield_system$C_practice_id, "-", paired_yield_system$T_practice_id, "-", paired_yield_system$study_id)
+
+missing_yield_system <- candidates %>%
+  dplyr::mutate(candidate_id = paste0(practice_id, "-", T_practice_id, "-", study_id)) %>%
+  dplyr::filter(!candidate_id %in% found_ids) %>%
+  dplyr::select(study_id, practice_id, T_practice_id, out_subindicator, product, T_product)
+
+nrow(candidates)           # how many genuine system-yield candidates exist in the raw data
+nrow(missing_yield_system) # how many never made it into paired_yield_system
+missing_yield_system
 
 #-------------------------------------------------------------------------------------
 #--- Pairing yield partial ler function -----
@@ -374,6 +432,40 @@ col_presence <- tibble::tibble(
   dplyr::filter(!(in_context & in_focal & in_pler))  # keep only columns NOT common to all three
 
 
+
+#==========================================================
+#--- Checking: any row from this source missing in fomd10.formated? -----------------
+#==========================================================
+# Built the same way fomd10.formated is, but WITHOUT the schema select(any_of(fomd10.cols))
+# trim - C_practice_id/T_practice_id aren't part of the 10_ schema, so they'd already be
+# gone by the time fomd10.formated exists.
+all_paired <- dplyr::bind_rows(
+  paired_bio_context,
+  paired_context,
+  paired_yield_focal,
+  paired_yield_system,
+  paired_yield_pler,
+  paired_yield_ler
+)
+# Every (study_id, practice_id, out_subindicator) combo eligible for pairing (i.e. its
+# out_subpillar is covered by at least one branch) should end up SOMEWHERE in the final
+# output - either as the Control side (C_practice_id) or the Treatment side (T_practice_id)
+# of some comparison. This catches rows that fell through every branch, not just one.
+raw_ids <- fomd09.clean %>%
+  dplyr::filter(out_subpillar %in% c("Biodiversity","Economics","Efficiency","Physical","Yield")) %>%
+  dplyr::distinct(study_id, practice_id, out_subindicator)
+
+found_c <- all_paired %>% dplyr::distinct(study_id, practice_id = C_practice_id, out_subindicator)
+found_t <- all_paired %>% dplyr::distinct(study_id, practice_id = T_practice_id, out_subindicator)
+found   <- dplyr::bind_rows(found_c, found_t) %>% dplyr::distinct()
+
+missing_from_fomd10 <- raw_ids %>%
+  dplyr::anti_join(found, by = c("study_id","practice_id","out_subindicator"))
+
+nrow(raw_ids)
+nrow(missing_from_fomd10)
+missing_from_fomd10
+
 #==========================================================
 # Combine paired files and unselect unnecesary columns
 #==========================================================
@@ -381,6 +473,7 @@ fomd10.formated <- dplyr::bind_rows(
   paired_bio_context,
   paired_context,
   paired_yield_focal,
+  paired_yield_system,
   paired_yield_pler,
   paired_yield_ler
 ) %>%
@@ -389,6 +482,9 @@ fomd10.formated <- dplyr::bind_rows(
 
 skim(fomd10.formated)
 
+#==========================================================
+# Write fomd10.formated
+#==========================================================
 readr::write_csv(
   fomd10.formated, 
   paste0(path.metadata.effectsize, "02.fomd10_formated/fomd10_formated_",metadata,".csv"))

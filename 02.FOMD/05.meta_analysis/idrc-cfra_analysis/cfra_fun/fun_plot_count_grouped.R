@@ -14,13 +14,21 @@ library(patchwork)
 #     "<practice domain> (vs. <control>)", and each row shows only the treatment practice
 #   - domains, headings and practices ordered by the number of positive strong results
 #   - outcome columns keep the fixed outcome_order, shown once at the top
-# Returns a patchwork; attr(result, "n_rows") gives the number of rows, for the figure height.
+# Size options:
+#   text_size          font size in points at print size
+#   heading_step       height of a heading, relative to a practice row
+#   tile_height        share of the row filled by the tile
+#   heading_wrap       characters per line before a heading wraps (60 = one line)
+#   vertical_outcomes  TRUE writes the outcome names at 90 degrees (for narrow figures)
+# Returns a patchwork; attr(result, "n_rows") gives the height in rows, for the figure height.
 #==========================================================
 plot_votes_grouped <- function(cells, archetype_name,
                                outcome_order = c("Yield", "Profitability", "Soil health", "Inputs efficiency",
                                                  "Resilience to pests", "Labour demand", "Biodiversity", "Climate mitigation"),
                                min_es_cell = 10, strong_es = 100, cut_positive = 65, cut_negative = 35,
-                               text_size = 8, show_no_data = FALSE) {
+                               text_size = 7, show_no_data = TRUE,
+                               heading_step = 0.6, tile_height = 0.85, heading_wrap = 60,
+                               vertical_outcomes = FALSE) {
   
   # 0. Check the archetype name
   if (!archetype_name %in% cells$archetype) {
@@ -29,7 +37,8 @@ plot_votes_grouped <- function(cells, archetype_name,
   
   # 1. Food group, heading (domain and control) and row (treatment)
   cells <- cells %>%
-    mutate(block   = as.character(food_group),
+    mutate(practice_group = sub("^Diversification (spatial|temporal)$", "Diversification", practice_group),
+           block   = as.character(food_group),
            heading = paste0(practice_group, " (vs. ", tolower(C_practice), ")"),
            row     = T_practice)
   
@@ -91,48 +100,93 @@ plot_votes_grouped <- function(cells, archetype_name,
             desc(head_ps), desc(head_es), heading, desc(row_ps), desc(row_es))
   
   # 5. One panel per food group
-  draw_block <- function(b, letter, first) {
+  # y positions (top to bottom): a heading takes heading_step of a row, a practice takes one row
+  layout_block <- function(b) {
     ro <- row_order %>% filter(block == b)
-    
-    # y positions, top to bottom: each heading followed by its practices
-    y_keys <- unlist(lapply(unique(ro$heading), function(h)
+    keys <- unlist(lapply(unique(ro$heading), function(h)
       c(paste0("H||", h), paste0("R||", h, "||", ro$row[ro$heading == h]))))
-    y_lab  <- sub("^H[|][|]", "", sub("^R[|][|].*[|][|]", "", y_keys))
-    y_face <- ifelse(startsWith(y_keys, "H||"), "bold", "plain")
-    
+    is_head <- startsWith(keys, "H||")
+    label   <- sub("^H[|][|]", "", sub("^R[|][|].*[|][|]", "", keys))
+    label   <- ifelse(is_head, str_wrap(label, heading_wrap), label)      # long headings on two lines
+    n_lines <- str_count(label, "\n") + 1
+    step    <- ifelse(is_head, heading_step + 0.35 * (n_lines - 1), 1)
+    tibble(key = keys,
+           label = label,
+           face  = ifelse(is_head, "bold", "plain"),
+           ypos  = -(cumsum(step) - step / 2))            # centre of each slot, from the top down
+  }
+  
+  draw_block <- function(b, letter, first) {
+    lay <- layout_block(b)
     d <- plot.data %>%
       filter(block == b) %>%
-      mutate(y = factor(paste0("R||", heading, "||", row), levels = rev(y_keys)))
+      mutate(key = paste0("R||", heading, "||", row)) %>%
+      left_join(lay %>% select(key, ypos), by = "key")
     
-    ggplot(d, aes(x = outcome_group, y = y)) +
-      geom_tile(aes(fill = class), colour = "white", linewidth = 0.6) +
+    ggplot(d, aes(x = outcome_group, y = ypos)) +
+      geom_tile(aes(fill = class), colour = "white", linewidth = 0.6, height = tile_height) +
       geom_text(data = filter(d, shown), aes(label = pct_label, colour = text_colour), size = text_size * 0.34, vjust = -0.1) +
       geom_text(data = filter(d, shown), aes(label = n_label, colour = text_colour), size = text_size * 0.27, vjust = 1.3) +
       geom_text(data = filter(d, !shown, effect_sizes > 0), aes(label = n_label, colour = text_colour), size = text_size * 0.27) +
       { if (show_no_data) geom_text(data = filter(d, effect_sizes == 0), aes(label = n_label, colour = text_colour), size = text_size * 0.24) } +
-      
       scale_fill_manual(values = class_colours, drop = FALSE, guide = "none") +
       scale_colour_identity() +
-      scale_x_discrete(position = "top", drop = FALSE, labels = function(x) str_wrap(x, 9)) +
-      scale_y_discrete(drop = FALSE, labels = setNames(y_lab, y_keys)) +    # headings are empty rows
+      scale_x_discrete(position = "top", drop = FALSE,
+                       labels = function(x) if (vertical_outcomes) x else str_wrap(x, 10)) +
+      scale_y_continuous(breaks = lay$ypos, labels = lay$label,               # headings have no tiles
+                         limits = c(min(lay$ypos) - 0.5, 0), expand = c(0, 0)) +
       labs(title = paste0(letter, ") ", b), x = NULL, y = NULL) +
-      theme_minimal(base_size = 11) +
       theme_minimal(base_size = text_size) +
       theme(panel.grid = element_blank(),
-            plot.title = element_text(face = "bold", size = text_size + 1.5),
+            plot.title = element_text(face = "bold", size = text_size + 1.5, margin = margin(b = 2)),
             plot.title.position = "plot",
-            axis.text.x = if (first) element_text(size = text_size, face = "bold", lineheight = 0.9) else element_blank(),
-            axis.text.y = suppressWarnings(element_text(size = text_size, hjust = 1, face = rev(y_face))))
-    
+            plot.margin = margin(if (first) 10 else 2, 2, 2, 2),   # more space above the first panel
+            axis.text.x = if (!first) element_blank() else if (vertical_outcomes)
+              element_text(size = text_size, face = "bold", angle = 90, hjust = 0, vjust = 0.5) else
+                element_text(size = text_size, face = "bold", lineheight = 0.85),
+            axis.text.y = suppressWarnings(element_text(size = text_size, hjust = 1, face = lay$face, lineheight = 0.8)))
   }
   plots  <- Map(draw_block, block_levels, letters[seq_along(block_levels)], seq_along(block_levels) == 1)
-  n_rows <- sapply(block_levels, function(b) {
-    ro <- row_order[row_order$block == b, ]; nrow(ro) + length(unique(ro$heading)) })
+  n_rows <- sapply(block_levels, function(b) { lay <- layout_block(b); -min(lay$ypos) + 0.5 })
   
-  # panel heights: rows and headings, plus room for the food-group title (and outcome names in the first panel)
-  extra <- c(1.4, rep(0.6, length(n_rows) - 1))
-  out <- wrap_plots(plots, ncol = 1, heights = n_rows + extra)
+  # panel heights = rows only, so every row has the same height in all food groups;
+  # the titles and outcome names take their own space, counted only in the figure height
+  extra <- c(if (vertical_outcomes) 3.4 else 1.6, rep(0.9, length(n_rows) - 1))
+  out <- wrap_plots(plots, ncol = 1, heights = n_rows)
   attr(out, "n_rows") <- sum(n_rows + extra)
   out
 }
 
+#==========================================================
+# grid_legend_small(): compact legend for the A4 figures (same colours as plot_votes_grouped)
+#==========================================================
+# Columns = direction (negative / neutral / positive), rows = evidence (strong / limited).
+grid_legend_small <- function(strong_es = 100, cut_positive = 65, cut_negative = 35, text_size = 7) {
+  leg <- tibble::tribble(
+    ~direction, ~evidence, ~colour,
+    "Negative", "Strong",  "#C00000",
+    "Negative", "Limited", "#F4A6AE",
+    "Neutral",  "Strong",  "#8A8A8A",
+    "Neutral",  "Limited", "#D9D9D9",
+    "Positive", "Strong",  "#4E6B2C",
+    "Positive", "Limited", "#7ED321") %>%
+    mutate(direction = factor(direction, levels = c("Negative", "Neutral", "Positive")),
+           evidence  = factor(evidence,  levels = c("Limited", "Strong")))      # Strong on top
+  col_labels <- c(Negative = paste0("Negative (\u2264", cut_negative, "%)"),
+                  Neutral  = paste0("Neutral (", cut_negative + 1, "\u2013", cut_positive - 1, "%)"),
+                  Positive = paste0("Positive (\u2265", cut_positive, "%)"))
+  row_labels <- c(Strong  = paste0("Strong evidence (n \u2265 ", strong_es, ")"),
+                  Limited = paste0("Limited evidence (n < ", strong_es, ")"))
+  ggplot(leg, aes(x = direction, y = evidence)) +
+    geom_tile(aes(fill = colour), colour = "white", linewidth = 1) +
+    scale_fill_identity() +
+    scale_x_discrete(position = "top", labels = col_labels) +
+    scale_y_discrete(labels = row_labels) +
+    labs(x = NULL, y = NULL, title = "% positive comparisons") +
+    theme_minimal(base_size = text_size) +
+    theme(panel.grid = element_blank(),
+          plot.title = element_text(size = text_size, face = "bold", hjust = 0.5),
+          plot.title.position = "panel",
+          axis.text.x = element_text(size = text_size - 0.5, face = "bold", lineheight = 0.9),
+          axis.text.y = element_text(size = text_size - 0.5))
+}
