@@ -23,8 +23,8 @@ source(file.path(path.metadata.effectsize,"/fomd_fun/fun_lookup_ontologies.R"))
 #==========================================================
 # Read datasets
 #==========================================================
-#metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
-metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
+metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
+#metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
 
 #--- Check that every verified-paper .xlsm in a subfolder shares the same columns
 check_09FOMD_column_consistency(subfolder = metadata)
@@ -72,7 +72,7 @@ fomd09.clean <- add_fomd09_commodity(fomd09.clean)
 
 unmatched_crops <- find_unmatched_crops(fomd09.clean, path.metadata.effectsize)
 
-#sort(unique(fomd09.clean$study_id[fomd09.clean$crop_tree_density   =="Maize[Unspecified(Unspecified)]/Tephrosia candida[Unspecified(Unspecified)]/"]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$crop_tree_density   =="Collard[6.25(plants/m2)]-Spring Onion[5.36(plants/m2)]"]))
 #sort(unique(fomd09.clean$study_id[fomd09.clean$crop_tree_variety  =="Maize(MM 604)/Grass Unspecified(Unspecified)/Native legumes(Unspecified)"]))
 
 #-- check if unmached_crops are because of mispealing
@@ -142,6 +142,8 @@ for (col in c("planting_subpractice_raw", "planting_subpractice","planting_metho
   print(sort(unique(fomd09.clean[[col]])))
 }
 
+#sort(unique(fomd09.clean$study_id[fomd09.clean$planting_subpractice   =="Transplanting"]))
+
 #---- Add improved crop varieties information ----
 fomd09.clean <- add_fomd09_varietal(fomd09.clean,  prefix = "varietal_crop",   variety_suffix = "variety")
 #sort(unique(fomd09.clean$study_id[fomd09.clean1$varietal_crop_variety == "Fava Bean(Badï)"]))
@@ -182,17 +184,18 @@ fomd09.clean <- collapse_fomd09_columns(
   sep = "..",
   dedupe = TRUE
 )
+sort(unique(fomd09.clean$study_id[fomd09.clean$agrof_subpractice    =="Alleycropping (Non N fixing)..Agroforestry (low diversity)..Moderate pruning"]))
 
 fomd09.clean <- add_fomd09_mean_min_max(fomd09.clean,  prefix = "agrof_shade")
 fomd09.clean <- add_fomd09_mean_min_max(fomd09.clean, prefix = "agrof_canopy_height")
 fomd09.clean <- add_fomd09_mean_min_max(fomd09.clean, prefix = "agrof_dhb")
 
-#sort(unique(fomd09.clean$study_id[fomd09.clean$agrof_shade_mean_min_max   =="29(NA-NA)"]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$agrof_shade_mean_min_max   =="Alleycropping (Non N fixing)..Agroforestry (low diversity)..Moderate pruning"]))
 
 #--- Add nutrient management practice (inorganic) information ----
 fomd09.clean <- add_fomd09_fert_inorganic(fomd09.clean)
 
-#sort(unique(fomd09.clean$study_id[fomd09.clean$fert_inorganic_type_amount_unit     =="Diammonium Phosphate[100(kg/ha)]..Urea[102(kg/ha)]"]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$fert_subpractice =="Inorganic N Reduction..Manure"]))
 
 #--- Add nutrient management practice (organic) information ----
 fomd09.clean <- add_fomd09_fert_organic(fomd09.clean)
@@ -202,9 +205,11 @@ fomd09.clean <- add_fomd09_fert_organic(fomd09.clean)
 #---Add weeding management moderator information----
 fomd09.clean <- add_fomd09_weed(fomd09.clean)
 
+#sort(unique(fomd09.clean$study_id[fomd09.clean$weed_frequency_unit =="18(season)" ]))
+
 #---Add chemical management practice information ----
 fomd09.clean <- add_fomd09_chem(fomd09.clean)
-#sort(unique(fomd09.clean$study_id[fomd09.clean$chem_name_amount_unit   =="NA[0(NA)]..Unspecified[Unspecified(Unspecified)]" ]))
+sort(unique(fomd09.clean$study_id[fomd09.clean$chem_name_amount_unit   =="NA[0(NA)]..NA[0(NA)]" ]))
 #sort(unique(fomd09.clean$practice_id[fomd09.clean$chem_name_amount_unit   =="NA[0(NA)]" ]))
 
 #---Add residues management practice information ----
@@ -212,6 +217,8 @@ sort(unique(fomd09.clean$residues_subpractice_raw))
 fomd09.clean <- collapse_fomd09_columns(fomd09.clean,  prefix = "residues_subpractice0")
 
 fomd09.clean <- add_fomd09_residues(fomd09.clean)
+
+#sort(unique(fomd09.clean$practice_id[fomd09.clean$chem_name_amount_unit   =="NA[0(NA)]" ]))
 
 #--- Add pH amendment practice information ----
 fomd09.clean <- fomd09.clean %>%
@@ -240,6 +247,8 @@ for (col in c("irrig_subpractice_raw", "irrig_subpractice","irrig_method",
   print(sort(unique(fomd09.clean[[col]])))
 }
 
+#sort(unique(fomd09.clean$study_id[fomd09.clean$irrig_method    =="Furrow irrigation" ]))
+
 #---Add water harvesting  practice information ----
 sort(unique(fomd09.clean$watharv_subpractice_raw))
 fomd09.clean <- collapse_fomd09_columns(fomd09.clean,  prefix = "watharv_subpractice0")
@@ -251,6 +260,8 @@ for (col in c("harvest_subpractice_raw", "harvest_subpractice","harvest_date_sta
   cat("---", col, "---\n")
   print(sort(unique(fomd09.clean[[col]])))
 }
+
+#sort(unique(fomd09.clean$study_id[fomd09.clean$harvest_subpractice   =="Harvesting Timing" ]))
 
 #--- Add postharvesting practice information ----
 fomd09.clean <- collapse_fomd09_columns(fomd09.clean,  prefix = "postharvest_subpractice0")
@@ -291,7 +302,7 @@ for (col in c("product", "econ_inputs", "bio_func_group", "bio_ground_ref"
 
 unmatched_products <- find_unmatched_products(fomd09.clean, path.metadata.structure)
 
-#sort(unique(fomd09.clean$study_id[fomd09.clean$bio_func_group   =="Natural enemies"]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$product    =="Phthorimaea operculella"]))
 
 #--- Check subindicator information ----
 for (col in c("out_subindicator", "out_subindicator_unit",
@@ -307,6 +318,7 @@ for (col in c("out_subindicator", "out_subindicator_unit",
 }
 
 sort(unique(fomd09.clean$study_id[fomd09.clean$out_subindicator_unit =="Unitless" ]))
+sort(unique(fomd09.clean$out_subindicator[fomd09.clean$out_subindicator_unit =="Unitless" ]))
 
 #--- Check outcome value information ----
 for (col in c("out_value_metric", "out_value",
@@ -349,6 +361,8 @@ for (col in c("data_location", "out_agg_stat",
   cat("---", col, "---\n")
   print(sort(unique(fomd09.clean[[col]])))
 }
+
+sort(unique(fomd09.clean$study_id[fomd09.clean$out_year  =="2003" ]))
 
 #==========================================================
 #---- Match with 01_FOMD_ontologies ----

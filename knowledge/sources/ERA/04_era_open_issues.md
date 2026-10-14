@@ -11,6 +11,23 @@ in `../../01_status.md`.
 
 # A. Ours to fix — data-quality items
 
+## Detail tables do not join for multi-site studies (found v52, NOT fixed)
+`Fert.Method` and `Res.Method` join on `c("B.Code","Site.ID","Time","<level>.Level.Name")`, but a study whose
+observations are pooled across sites stores `Site.ID` in `Data.Out` as a `..`-concatenation
+("KARI Embu_1..KARI Embu_2..KARI Embu_3"), which never matches the single-site rows of the detail table. The
+fertiliser and residue **detail** (category, type, amount, unit) therefore vanishes silently for those rows:
+**6,389 raw observation rows across ~204 studies**, of which 1,951 (77 ie studies) carry a fertiliser level.
+Visible symptom: CJ0146's biochar levels (`F.Category = "Biochar"` in `Fert.Method`) never reach the output.
+Fix shape: expand the detail table across the concatenated sites, as `expand_wildcards()` already does for
+"All Sites". **Proposed for v53.**
+
+## Intercrop / crop-sequence blank arm needs a POSITIVE label, not an absence (found v52)
+After v52, 5,703 intercrop and 1,578 crop-sequence rows still have one arm blank. These are not missing absence
+labels: the blank arm's own crop diversity lists several crops, so ERA simply left `I.Practice` / `R.Practice`
+empty on an arm that *is* an intercrop or a rotation. Writing "Monoculture" there would be wrong, so v52
+refuses and reports them. Deriving the positive label from the crop-diversity separators would change
+`practice_primary`, so it is a bigger change. -> Andrea.
+
 ## Within-outcome cross-join pairing (fixed for the main families in v48/v49)
 
 The C/T pairing cross-multiplied sub-measurements that share one outcome and `Out.Code`. Quantified at
@@ -105,6 +122,17 @@ These are **not pending work for the pipeline**. They are Andrea's, or the ERA d
 - **Duplicate DOIs — merges.** The 35 sub-split groups and 13 complementary cross-code pairs still carry
   separate `study_id`s. Merging them to one `study_id` per publication is a bibliography decision (list in
   `duplicate_DOI_resolution.csv`). Only the one true duplicate was removed, in v47.
+- **Four studies whose arms differ only in free text** (NJ0109, AC0079, AG0034, NM0001), plus one where the
+  contrast is a sowing date (EO0081). ERA flattened a real difference at extraction: NJ0109's farmer-practice
+  arm was given the conventional-tillage attributes (confirmed against Micheni et al. 2016 Table 2 p. 5), and
+  AC0079's `CM 60N` level exists in `Fert.Out` but is not linked to the `CT + 60CM` arm. Reported to Andrea and
+  the ERA data team on 1 Oct; needs an ERA-side correction. All 17 verdicts: `identical_CT_diagnosis_v52.csv`.
+- **Two contrasts with no column in the `10_` schema**: AG0096 agronet covers (ERA `Other.Out`) and NJ0154
+  cookstoves (ERA `E.Out`; its control arm carries code h14 "Unimproved Stove Technology"). -> Andrea.
+- **195 rows whose treatment arm is newly labelled "No Liming (control)"** were deliberately NOT re-oriented in
+  v52, so that every effect-size sign stays identical to v51. Whether the no-input arm should become the
+  control there is Andrea's decision. More generally, the ~30,000 rows v52 makes analysable keep whatever
+  orientation ERA's `T.Control` gave them.
 - **Ambiguous agroforestry-biomass product** (HK0202.1, JS0204) — filled with the crop mix and flagged
   in `product_to_confirm_vNN.csv` for her to pick the intended component. (NN0376 left this list: excluded in v51.)
 - **Grazing / pasture management has no family in the schema.** ERA records it (`A.Pasture.Man`, `A.Grazing`,

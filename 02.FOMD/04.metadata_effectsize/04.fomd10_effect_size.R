@@ -39,7 +39,7 @@ skim(fomd10.clean)
 
 length(fomd10_clean_files) # how many source files got combined
 nrow(fomd10.clean)
-length(unique(fomd10.clean$study_id)) #36 -> 1846
+length(unique(fomd10.clean$study_id)) #36 -> 1846 -> 1851
 #sort(unique(fomd10.clean$study_id[is.na(fomd10.clean$C_out_value )]))
 #sort(unique(fomd10.clean$study_id[fomd10.clean$C_out_var_metric =="95% Confidence Intervals"]))
 
@@ -56,14 +56,14 @@ for (col in c("effect_size_id","C_out_value_metric", "T_out_value_metric",
   print(sort(unique(fomd10.clean[[col]])))
 }
 
-skim(fomd10.clean$C_out_value) #1084 
-skim(fomd10.clean$T_out_value) #14
+skim(fomd10.clean$C_out_value) #1084; 1079 
+skim(fomd10.clean$T_out_value) #14; 9
 
-skim(fomd10.clean$C_out_var_value) # 147354
-skim(fomd10.clean$T_out_var_value) #147009
+skim(fomd10.clean$C_out_var_value) # 147354; 130474
+skim(fomd10.clean$T_out_var_value) #147009; 130324
 
-skim(fomd10.clean$C_out_sample_size)
-skim(fomd10.clean$T_out_sample_size)
+skim(fomd10.clean$C_out_sample_size) #12054
+skim(fomd10.clean$T_out_sample_size) #12054
 
 #---- Apply equation to calculate Mean AND SD from raw data ----
 fomd10.mean.sd<-calculate_mean_sd(fomd10.clean)
@@ -91,8 +91,8 @@ sort(unique(fomd10.mean.sd$study_id[is.na(fomd10.mean.sd$C_out_mean)]))
 skim(fomd10.mean.sd$C_out_sd) #148940
 skim(fomd10.mean.sd$T_out_sd) #148357
 
-skim(fomd10.mean.sd$C_out_sample_size) #12758
-skim(fomd10.mean.sd$T_out_sample_size) #12758
+skim(fomd10.mean.sd$C_out_sample_size) #12758; 12110
+skim(fomd10.mean.sd$T_out_sample_size) #12758; 12110
 
 sort(unique(fomd10.mean.sd$out_subpillar))
 
@@ -101,6 +101,9 @@ sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_subpillar=="Econo
 sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_subpillar=="Efficiency"]))
 sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_subpillar=="Physical"]))
 sort(unique(fomd10.mean.sd$out_subindicator[fomd10.mean.sd$out_subpillar=="Yield"]))
+
+sort(unique(fomd10.mean.sd$study_id[fomd10.mean.sd$out_subindicator=="Partial Land Equivalent Ratio"]))
+
 
 #---- Apply equation to calculate sample size AND SD ----
 fomd10.n.cv <- n_cv_calculation(
@@ -113,15 +116,15 @@ fomd10.n.cv <- fomd10.n.cv%>%
     T_out_sample_size_imputed = coalesce(T_out_sample_size, T_out_sample_size_imputed),
     C_out_sample_size_imputed = coalesce(C_out_sample_size, C_out_sample_size_imputed))
 names(fomd10.n.cv)
-skim(fomd10.n.cv$C_out_cv_final) #110581
-skim(fomd10.n.cv$T_out_cv_final) #110581
+skim(fomd10.n.cv$C_out_cv_final) #110581; 87169
+skim(fomd10.n.cv$T_out_cv_final) #110581; 87169
 
 ## TO CHECK: there is a problem here, the code did not calculate n of samples for some rows of C
-skim(fomd10.n.cv$C_out_sample_size) #12758
-skim(fomd10.n.cv$C_out_sample_size_imputed) #9743
+skim(fomd10.n.cv$C_out_sample_size) #12758; 12110
+skim(fomd10.n.cv$C_out_sample_size_imputed) #9743; 9095
 
-skim(fomd10.n.cv$T_out_sample_size) #12758
-skim(fomd10.n.cv$T_out_sample_size_imputed)  #9743
+skim(fomd10.n.cv$T_out_sample_size) #12758; 12110
+skim(fomd10.n.cv$T_out_sample_size_imputed)  #9743; 9095
 
 prueba<-fomd10.n.cv%>%
   filter(out_subindicator=="Crop Yield",
@@ -157,6 +160,19 @@ data.frame(
   column  = cols,
   n_na    = colSums(is.na(fomd10.n.cv[, cols])),
   pct_na  = colMeans(is.na(fomd10.n.cv[, cols])) * 100)
+
+sort(unique(fomd10.n.cv$study_id[is.na(fomd10.n.cv$T_out_value)]))
+sort(unique(fomd10.n.cv$study_id[is.na(fomd10.n.cv$C_out_value)]))
+
+prueba2<-fomd10.n.cv%>%
+  filter(#study_id=="JA_Gebru_15_﻿Eval_Jo",
+         is.na(fomd10.n.cv$C_out_value),
+         !(out_subindicator%in%c(
+           "Partial Land Equivalent Ratio","Land Equivalent Ratio"
+                                 )))%>%
+  select(study_id,country,out_subindicator)
+sort(unique(prueba2$out_subindicator))
+sort(unique(prueba2$country))
 
 #==========================================================
 # Calculate pLER and LER
@@ -221,7 +237,7 @@ crop_check
 # Checking out_subindicators with effect_size_type
 #==========================================================
 sort(unique(fomd10.ler$out_subindicator))#37 #126
-sort(unique(fomd10.ler$out_indicator))#14 #22
+sort(unique(fomd10.ler$out_indicator))#14 #22; 23
 sort(unique(fomd10.ler$out_effect_size_type))#2
 
 sort(unique(fomd10.ler$out_subindicator[is.na(fomd10.n.cv$out_effect_size_type )]))

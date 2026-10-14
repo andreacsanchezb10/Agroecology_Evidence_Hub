@@ -193,12 +193,12 @@ Natural/seminatural habitats management,NA,Natural habitat,Forest,Primary forest
 Natural/seminatural habitats management,NA,Natural habitat,Forest,Primary forest,Tropical deciduous forest,NA,NA,BIOFincas,NA
 Natural/seminatural habitats management,NA,Natural habitat,Forest,Secondary forest,Secondary Forest,NA,NA,BIOFincas,NA
 Natural/seminatural habitats management,NA,Semi-natural habitat,Secondary Succesional Habitat,Abandoned productive land,Abandoned cropland,"Abandoned cropland left to rewild, with no mention of any intention to refarm the land",NA,BIOFincas,NA
-Natural/seminatural habitats management,NA,NA,Forest,NA,Forest (condition/management unspecified),"Vegetation made up of four growth forms known as restoids (reed-like plants), ericoids (heath-like shrubs), geophytes (bulbous herbs) and sclerophyllous proteiods (tall shrubs with large leaves) (Cowling and Richardson, 1995).",NA,BIOFincas,NA
+Natural/seminatural habitats management,NA,NA,Forest,Secondary forest,Forest (condition/management unspecified),"Vegetation made up of four growth forms known as restoids (reed-like plants), ericoids (heath-like shrubs), geophytes (bulbous herbs) and sclerophyllous proteiods (tall shrubs with large leaves) (Cowling and Richardson, 1995).",NA,BIOFincas,NA
 Natural/seminatural habitats management,NA,NA,Forest,Secondary forest,Forest (disturbed/managed),"Unmanaged forests, which can include primary or secondary tree growth",NA,BIOFincas,NA
 Natural/seminatural habitats management,NA,NA,NA,NA,Fynbos,NA,NA,BIOFincas,NA
-Natural/seminatural habitats management,NA,Natural habitat,Grassland,NA,Grassland (natural),NA,NA,BIOFincas,NA
-Natural/seminatural habitats management,NA,Semi-natural habitat,Grassland,NA,Grassland (semi natural),NA,NA,BIOFincas,NA
-Natural/seminatural habitats management,NA,NA,Grassland,NA,Grassland (unknown if natural/semi-natural),NA,NA,BIOFincas,NA
+Natural/seminatural habitats management,NA,Natural habitat,Grassland,Grassland (natural),Grassland (natural),NA,NA,BIOFincas,NA
+Natural/seminatural habitats management,NA,Semi-natural habitat,Grassland,Grassland (semi-natural),Grassland (semi natural),NA,NA,BIOFincas,NA
+Natural/seminatural habitats management,NA,NA,Grassland,Grassland (semi-natural),Grassland (unknown if natural/semi-natural),NA,NA,BIOFincas,NA
 Natural/seminatural habitats management,NA,NA,NA,NA,Remnant,Land with natural vegetation on or off-farm set aside (not used for farming) for biodiversity or other environmental purposes (it could be also that is inaccessible or inappropriate for ag).,NA,BIOFincas,NA
 Natural/seminatural habitats management,NA,NA,Secondary Succesional Habitat,Secondary Succesional Habitat,Secondary Succesional Habitat,NA,NA,BIOFincas,NA
 Natural/seminatural habitats management,NA,Semi-natural habitat,Forest,Semi-natural forest,Semi natural forest,Forest of native or wild tree species mixed with some non-native or planted species,NA,BIOFincas,NA

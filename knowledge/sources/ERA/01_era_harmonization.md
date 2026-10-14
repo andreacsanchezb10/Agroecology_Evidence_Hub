@@ -62,6 +62,7 @@ filename. Then update `../../_status/era.md` and `03_era_changelog.md` — that 
 | `pair_alignment_vNN.csv` | pairs dropped by `align_pair_fields()` per study × outcome (v51); `_reasons` companion adds the cause |
 | `excluded_studies_vNN.csv` | study-level exclusions with reason (v51: NN0376) |
 | `template_drift_vNN.csv` | columns in the `10_` sheet but not in the output, and vice versa (v51) |
+| `subpractice_fill_vNN.csv` | where every explicit no-application label came from, and every refusal with its reason (v52) |
 
 Also read as an **input**: `ERA/Script/livestock_ss_overrides.csv` (manual livestock sample-size overrides),
 and from `era_cache/`: `animal_species_by_study.csv`, `po_paper_resolved.csv`.
@@ -99,6 +100,20 @@ not a real mispairing — the `_combined` field is the unambiguous view.
 because Andrea builds her own nutrient columns from those. The old `[applied: N…]` suffix was removed in v44.
 
 ## Explicit controls — no blank control arm
+
+**v52 generalised this.** A blank arm means the practice was not applied (confirmed from the source papers and
+the arm names), so step 6g labels it, both arms symmetrically, by three routes in priority order: the arm's own
+ERA h-code, its raw level name where that states the absence, then inference. Most terms are **ERA's own**,
+from `ERA/dataverse_files/03g. Practice_Codes.tab` — the "h" series (h10.1 "No fertilizers added", h23 "No
+Irrigation Control or Rainfed Agriculture", h6 "Conventional Tillage", h55 "Unimproved Variety", h35 "Crop
+Residues Removed"). Only "No Residues Applied" and "No Water Harvesting" are ours. Inference is refused when
+the family's code appears in the study's `Base.Codes` (the practice was applied to every arm), when the arm's
+own codes show the practice, or when a "receipt" column shows the input was actually applied.
+
+**Two traps, both found by testing the patterns against the real level names before trusting a run.** In ERA
+`no-till` is a conservation *treatment* (code b38), not an absence — matching it would invert the contrast. And
+a value carrying a component separator (`..`, `***`, `+`) describes several things at once, so a single absence
+token cannot describe the arm: "No manure +P" received phosphorus, "Irrigated...Rainfed" is both.
 
 A blank control arm gets an explicit label so the contrast is legible:
 - **Monoculture** — treeless / sole-crop control opposite intercrop, agroforestry or rotation.
@@ -210,6 +225,12 @@ belong to **harvest**, the rest to **postharvest** (v44). Only 6 of these codes 
 - **The year-sentinel step (step 5) picks columns by name** — anything containing `Year|Date|Start|End|Sample`
   — and blanks values outside 1900–2030. It silently nulled `Out.WG.Start` (starting weights, kg) until v51
   excluded `WG.Start|Start.Weight`. Check that list before adding any column whose name contains those words.
+- **Filling one arm changes the gates of every later rule.** `.hasv()` treats any non-empty string as "a
+  practice is present", so the v32/v34 input rules must read the pre-fill snapshot (`HASV0`/`VALDIFF0`) taken at
+  the top of step 6g, never the live column. One sub-rule that was missed (`.l_rev`, which re-orients a
+  no-liming treatment arm) silently swapped control and treatment on 195 rows until it was caught. **Diff the
+  outcome values against the previous release, not just `ct_reoriented`**: a flipped row also swaps its join
+  key, so it simply fails to join rather than showing up as a difference.
 - **mh dates are Excel serial numbers.** `ED.Sample.Start/End` in mh are numerics like 42165 (origin
   1899-12-30), not Dates; anything that treats them as text or as R dates loses them.
 - The output CSV is often **moved** to `ERA/data/` between runs, so a verify script should try

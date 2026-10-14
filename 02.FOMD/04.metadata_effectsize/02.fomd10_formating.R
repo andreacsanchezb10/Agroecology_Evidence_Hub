@@ -19,8 +19,8 @@ source(file.path(path.metadata.effectsize, "fomd_fun/fun_pairing_CT.R"))
 #==========================================================
 # Read datasets
 #==========================================================
-#metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
-metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
+metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
+#metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
 
 #---09_FOMD_clean
 fomd09.clean <- read_csv(
@@ -49,6 +49,7 @@ sort(unique(fomd09.clean$out_subindicator[fomd09.clean$out_subpillar =="Yield"])
 sort(unique(fomd09.clean$study_id[fomd09.clean$out_subpillar =="Physical" ]))
 sort(unique(fomd09.clean$system_type[fomd09.clean$out_subpillar =="Physical"]))
 sort(unique(fomd09.clean$out_subindicator[is.na(fomd09.clean$out_subpillar)]))
+sort(unique(fomd09.clean$study_id[fomd09.clean$out_subindicator =="Partial Land Equivalent Ratio" ]))
 
 #sort(unique(fomd09.clean$study_id[is.na(fomd09.clean$country )]))
 #sort(unique(fomd09.clean$study_id[fomd09.clean$country =="South_Africa"]))
@@ -376,14 +377,14 @@ all_rows$row_id <- build_row_id(all_rows, id_cols)
 
 missing_yield_pler <- expected %>%
   dplyr::filter(!comparison_id %in% all_rows$row_id) %>%
-  dplyr::select(study_id, practice_id, out_subpillar, product, out_comparison_treatment)
+  dplyr::select(study_id, practice_id, out_subindicator, product, out_comparison_treatment)
 
 nrow(expected)
 nrow(missing_yield_pler)
 missing_yield_pler
 
 rows <- exploded_all %>%
-  filter(study_id == "JA_Gebru_15_﻿Eval_Jo", practice_id %in% c("C1", "T1")) %>%
+  filter(study_id == "JA_Gitar_20_Revis_Fi", practice_id %in% c("C1", "T1")) %>%
   #select(practice_id, all_of(id_cols))
   select(practice_id, product, out_value, pler_value)
 c <- rows %>% filter(practice_id == "C1") %>% select(-practice_id) %>% slice(1) %>% unlist()
