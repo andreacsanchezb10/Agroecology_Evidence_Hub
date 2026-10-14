@@ -39,7 +39,7 @@ skim(fomd10.clean)
 
 length(fomd10_clean_files) # how many source files got combined
 nrow(fomd10.clean)
-length(unique(fomd10.clean$study_id)) #36 -> 1846 -> 1851
+length(unique(fomd10.clean$study_id)) #36 -> 1846 -> 1851; 1854
 #sort(unique(fomd10.clean$study_id[is.na(fomd10.clean$C_out_value )]))
 #sort(unique(fomd10.clean$study_id[fomd10.clean$C_out_var_metric =="95% Confidence Intervals"]))
 
@@ -56,11 +56,11 @@ for (col in c("effect_size_id","C_out_value_metric", "T_out_value_metric",
   print(sort(unique(fomd10.clean[[col]])))
 }
 
-skim(fomd10.clean$C_out_value) #1084; 1079 
-skim(fomd10.clean$T_out_value) #14; 9
+skim(fomd10.clean$C_out_value) #1084; 1079; 1103
+skim(fomd10.clean$T_out_value) #14; 9; 33
 
-skim(fomd10.clean$C_out_var_value) # 147354; 130474
-skim(fomd10.clean$T_out_var_value) #147009; 130324
+skim(fomd10.clean$C_out_var_value) # 147354; 130474; 130498
+skim(fomd10.clean$T_out_var_value) #147009; 130324; 130348
 
 skim(fomd10.clean$C_out_sample_size) #12054
 skim(fomd10.clean$T_out_sample_size) #12054
@@ -84,12 +84,12 @@ head(x)
 # From observations that don't provide variance values or number of samples
 #==========================================================
 # --- quick checks ---
-skim(fomd10.mean.sd$C_out_mean) # 1167
-skim(fomd10.mean.sd$T_out_mean) #54
+skim(fomd10.mean.sd$C_out_mean) # 1167; 1191
+skim(fomd10.mean.sd$T_out_mean) #54; 78
 sort(unique(fomd10.mean.sd$study_id[is.na(fomd10.mean.sd$C_out_mean)]))
 
-skim(fomd10.mean.sd$C_out_sd) #148940
-skim(fomd10.mean.sd$T_out_sd) #148357
+skim(fomd10.mean.sd$C_out_sd) #148940; 132146
+skim(fomd10.mean.sd$T_out_sd) #148357; 131808
 
 skim(fomd10.mean.sd$C_out_sample_size) #12758; 12110
 skim(fomd10.mean.sd$T_out_sample_size) #12758; 12110
@@ -208,7 +208,7 @@ fomd10.ler<- fun_calculate_ler(fomd10.n.cv)
          C_out_cv_final,
          T_out_cv_final,
          "C_out_sample_size_imputed","T_out_sample_size_imputed",
-         "pler_value_calc" ,"pler_var_calc",  
+         "pler_value_calc" ,"pler_sd_calc",  
          "ler_calc_n_rows"  ,                   
          "ler_value_calc" ,                      "ler_sd_calc"  ,
          ler_product ,

@@ -4,7 +4,7 @@
 # Total LER = sum of Partial LERs for every crop in an intercrop system
 # (e.g. Maize/Bean LER = pler_maize + pler_bean). This function:
 #   1. Calculates each crop's Partial LER (pler_value_calc) and its
-#      variance (pler_var_calc) from the paired T/C means, SD (via CV),
+#      variance (pler_sd_calc) from the paired T/C means, SD (via CV),
 #      and sample sizes.
 #   2. Sums those per-crop values within each ler_comparison_id group to
 #      get the study's Total LER (ler_value_calc) and its SD (ler_sd_calc).
@@ -50,14 +50,26 @@ fun_calculate_ler <- function(dt) {
       # CV_final (SD/mean) is used instead of raw SD because CV_final is
       # already gap-filled by n_cv_calculation() for studies that didn't
       # report their own SD — using raw SD here would leave those rows NA.
-      pler_var_calc = case_when(
-        !is.na(ler_comparison_id) & out_subindicator == "Partial Land Equivalent Ratio" ~ pler_var_value,
+      pler_sd_calc = case_when(
+        #When T_out_var_metric %in% c("Grouped SD (Standard Deviation)","SD (Standard Deviation)")
+        !is.na(ler_comparison_id) & out_subindicator == "Partial Land Equivalent Ratio"&
+          !is.na(pler_var_value)&
+          T_out_var_metric %in% metrics.direct_sd  ~ pler_var_value,
         
-        !is.na(ler_comparison_id) & out_subindicator != "Land Equivalent Ratio" ~
-          pler_value_calc^2 * (
+        #When T_out_var_metric %in% c("Grouped SE (Standard Error)","SE (Standard Error)","Grouped SEM (Standard Error of Mean)",        "SEM (Standard Error of Mean)")
+        !is.na(ler_comparison_id) & out_subindicator == "Partial Land Equivalent Ratio"&
+          !is.na(pler_var_value)&
+          T_out_var_metric %in% metrics.se_sd  ~ se_sd(var_value   = pler_var_value,
+                                                       sample_size = T_out_sample_size_imputed),
+        ##
+        
+        !is.na(ler_comparison_id) & !(out_subindicator %in%c( "Land Equivalent Ratio",
+                                                              "Partial Land Equivalent Ratio")) ~
+          sqrt(
+            pler_value_calc^2 * (
             (T_out_cv_final^2 / T_out_sample_size_imputed) +
               (C_out_cv_final^2 / C_out_sample_size_imputed)
-          ),
+          )),
         
         
         TRUE ~ NA_real_
@@ -77,7 +89,7 @@ fun_calculate_ler <- function(dt) {
       ler_value_calc = sum(pler_value_calc, na.rm = TRUE),
       
       # Variances of independent quantities ADD (not their SDs) — so the
-      # Total LER's variance is the sum of each crop's own pler_var_calc,
+      # Total LER's variance is the sum of each crop's own pler_sd_calc,
       # and its SD is the square root of that sum.
       # Guard: if a crop DOES have a pler_value_calc but its OWN variance
       # is missing, we don't actually know the group's combined variance —
@@ -85,9 +97,9 @@ fun_calculate_ler <- function(dt) {
       # zero variance (understating the true uncertainty), so force NA
       # instead of a falsely-precise number.
       ler_sd_calc = if_else(
-        any(!is.na(pler_value_calc) & is.na(pler_var_calc)),
+        any(!is.na(pler_value_calc) & is.na(pler_sd_calc)),
         NA_real_,
-        sqrt(sum(pler_var_calc, na.rm = TRUE))
+        sqrt(sum(pler_sd_calc^2, na.rm = TRUE))
       ),
       
       # which crops make up this LER comparison — every crop component's
@@ -114,9 +126,17 @@ fun_calculate_ler <- function(dt) {
       # the "_var_value" naming convention used elsewhere), so sqrt() it to
       # stay on the same scale (SD) as ler_sd_calc.
       ler_sd_calc = case_when(
-        is.na(pler_var_calc) & !is.na(ler_var_value_total) ~ sqrt(ler_var_value_total),
+        
+        #When T_out_var_metric %in% c("Grouped SD (Standard Deviation)","SD (Standard Deviation)")
+        is.na(pler_sd_calc) & !is.na(ler_var_value_total) & T_out_var_metric %in% metrics.direct_sd ~ler_var_value_total,
+        
+        #When T_out_var_metric %in% c("Grouped SE (Standard Error)","SE (Standard Error)","Grouped SEM (Standard Error of Mean)",        "SEM (Standard Error of Mean)")
+        
+        is.na(pler_sd_calc) & !is.na(ler_var_value_total) & T_out_var_metric %in% metrics.se_sd ~
+          se_sd(ler_var_value_total, T_out_sample_size_imputed),
+        
         # value reported but variance wasn't -> genuinely unknown, not zero
-        is.na(pler_var_calc) & !is.na(ler_value_total) & is.na(ler_var_value_total) ~ NA_real_,
+        is.na(pler_sd_calc) & !is.na(ler_value_total) & is.na(ler_var_value_total) ~ NA_real_,
         is.na(ler_comparison_id) & is.na(ler_var_value_total) ~ NA_real_,
         TRUE ~ ler_sd_calc
       )

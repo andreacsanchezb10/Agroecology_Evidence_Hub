@@ -39,11 +39,6 @@ harmonize_col_types <- function(files) {
 #[11] "Unspecified"
 #[12]"95% Confidence Intervals"
 
-
-calculate_mean_sd <- function(data,
-                              prefix_c = "C",
-                              prefix_t = "T") {
-  
 # ---------------------------------------------------------------------------
 # --- Helper functions to calculate "Mean" ---
 # ---------------------------------------------------------------------------
@@ -51,12 +46,12 @@ calculate_mean_sd <- function(data,
 #--- Median + IQR → Mean: Mean = (Q1 + Median + Q3) / 3 ----
 # REFERENCE: Wan, et al. (2014). # https://doi.org/10.1186/1471-2288-14-135  (Scenario 2)
 metrics.iqr_mean <- c("IQR (interquartile)")
-  
+
 iqr_mean <- function(q1, median, q3) {
-    result <- (q1 + median + q3) / 3
-    return(result)
-  }
-  
+  result <- (q1 + median + q3) / 3
+  return(result)
+}
+
 # ---------------------------------------------------------------------------
 # --- Helper functions to calculate "SD (Standard Deviation)" ---
 # ---------------------------------------------------------------------------
@@ -127,6 +122,12 @@ ci95_sd <- function(lower, upper, sample_size) {
 
 #---  Unspecified → SD: SD = NA
 metrics.na         <- c("Unspecified")
+
+
+calculate_mean_sd <- function(data,
+                              prefix_c = "C",
+                              prefix_t = "T") {
+  
 
 # ---------------------------------------------------------------------------
 # --- Internal function to compute mean & SD for one prefix ---
