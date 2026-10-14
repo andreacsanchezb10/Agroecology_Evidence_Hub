@@ -133,10 +133,10 @@ paired_yield_pler<-fun_pair_yield_partial_ler(fomd09.clean)
 sort(unique(paired_yield_pler$ler_comparison_id))
 names(paired_yield_pler)
 y<-paired_yield_pler%>%
-  #filter(study_id=="JA_Kabir_17_A Stu_In"
+  filter(study_id=="JA_Gitar_20_Revis_Fi"
          #,
          #out_subindicator=="Crop Yield"
-  #)%>%
+  )%>%
   select(      study_id,
                out_subindicator,
                C_out_value_metric,
@@ -384,11 +384,11 @@ nrow(missing_yield_pler)
 missing_yield_pler
 
 rows <- exploded_all %>%
-  filter(study_id == "JA_Gitar_20_Revis_Fi", practice_id %in% c("C1", "T1")) %>%
+  filter(study_id == "JA_Mulug_19_Phosp_Pe", practice_id %in% c("C5", "T3")) %>%
   #select(practice_id, all_of(id_cols))
   select(practice_id, product, out_value, pler_value)
-c <- rows %>% filter(practice_id == "C1") %>% select(-practice_id) %>% slice(1) %>% unlist()
-t <- rows %>% filter(practice_id == "T1") %>% select(-practice_id) %>% slice(1) %>% unlist()
+c <- rows %>% filter(practice_id == "C5") %>% select(-practice_id) %>% slice(1) %>% unlist()
+t <- rows %>% filter(practice_id == "T3") %>% select(-practice_id) %>% slice(1) %>% unlist()
 
 tibble(column = names(c), C = c, T = t) %>%
   filter(C != T | is.na(C) != is.na(T))
