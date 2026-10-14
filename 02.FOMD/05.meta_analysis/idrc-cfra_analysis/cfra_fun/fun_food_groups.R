@@ -65,13 +65,19 @@ assign_food_group <- function(df, product_lookup) {
     if (length(fg) == 0) NA_character_ else fg
   }, df$T_crop_tree_FAO_Food_Group, df$T_crop_tree_FAO_Food_SubGroup, SIMPLIFY = FALSE, USE.NAMES = FALSE)
   
+  # crop-level outcomes use the measured crop; if the measured product has no food group
+  # (e.g. a pest or weed taxon in pest/weed abundance or diversity), use the crops of the system
+  use_crop <- df$outcome_group %in% crop_level_outcomes &
+    !vapply(crop_groups, function(x) all(is.na(x)), logical(1))
+  
   # one row per food group (duplicated when the system has several food groups)
   df %>%
-    mutate(food_group_basis = if_else(outcome_group %in% crop_level_outcomes, "measured crop", "cropping system"),
-           food_group = if_else(outcome_group %in% crop_level_outcomes, crop_groups, system_groups),
+    mutate(food_group_basis = if_else(use_crop, "measured crop", "cropping system"),
+           food_group = if_else(use_crop, crop_groups, system_groups),
            multi_crop_system = lengths(food_group) > 1) %>%
     unnest(food_group) %>%
     mutate(food_group = factor(food_group, levels = food_group_order))
+
 }
 
 #--- 5. N-fixing trees in the system ----

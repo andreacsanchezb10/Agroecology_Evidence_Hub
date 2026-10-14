@@ -23,8 +23,9 @@ source(file.path(path.metadata.effectsize,"/fomd_fun/fun_lookup_ontologies.R"))
 #==========================================================
 # Read datasets
 #==========================================================
-metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
+#metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
 #metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
+metadata<-"MA_Sanch_22_Finan_Ec" #Sanchez et al. 2022. Financial profitability of diversified farming systems: A global meta-analysis. 10.1016/j.ecolecon.2022.107595
 
 #--- Check that every verified-paper .xlsm in a subfolder shares the same columns
 check_09FOMD_column_consistency(subfolder = metadata)
@@ -52,7 +53,7 @@ for (col in c("exp_design", "exp_plot_size", "exp_field_size", "exp_duration")) 
   cat("---", col, "---\n")
   print(sort(unique(fomd09.clean[[col]])))
 }
-#sort(unique(fomd09.clean$study_id[fomd09.clean$exp_field_size =="nd"]))
+sort(unique(fomd09.clean$study_id[fomd09.clean$exp_duration  =="4"]))
 
 #--- Check experiment time details ----
 for (col in c("time_raw", "time_year_start", "time_year_end", "time_season")) {
@@ -72,7 +73,7 @@ fomd09.clean <- add_fomd09_commodity(fomd09.clean)
 
 unmatched_crops <- find_unmatched_crops(fomd09.clean, path.metadata.effectsize)
 
-#sort(unique(fomd09.clean$study_id[fomd09.clean$crop_tree_density   =="Collard[6.25(plants/m2)]-Spring Onion[5.36(plants/m2)]"]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$crop_tree_density   =="Maize[36(kg seed/ha)]-Common Bean[Unspecified(Unspecified)]-Leucaena leucocephala[3475(plants/ha)]-"]))
 #sort(unique(fomd09.clean$study_id[fomd09.clean$crop_tree_variety  =="Maize(MM 604)/Grass Unspecified(Unspecified)/Native legumes(Unspecified)"]))
 
 #-- check if unmached_crops are because of mispealing
@@ -175,6 +176,8 @@ for (col in c("crop_seq_subpractice_raw","crop_seq_start_year","crop_seq_start_s
   print(sort(unique(fomd09.clean[[col]])))
 }
 
+#sort(unique(fomd09.clean$study_id[fomd09.clean$crop_seq_subpractice  =="Rotation (N fixing and Non N fixing)..Intercrop Rotation" ]))
+
 #--- Add agroforestry practice information----
 sort(unique(fomd09.clean$agrof_subpractice_raw))
 fomd09.clean <- collapse_fomd09_columns(
@@ -195,7 +198,7 @@ fomd09.clean <- add_fomd09_mean_min_max(fomd09.clean, prefix = "agrof_dhb")
 #--- Add nutrient management practice (inorganic) information ----
 fomd09.clean <- add_fomd09_fert_inorganic(fomd09.clean)
 
-#sort(unique(fomd09.clean$study_id[fomd09.clean$fert_subpractice =="Inorganic N Reduction..Manure"]))
+sort(unique(fomd09.clean$study_id[fomd09.clean$fert_inorganic_type_amount_unit  =="Inorganic Fertilizer[17(kg/ha)]" ]))
 
 #--- Add nutrient management practice (organic) information ----
 fomd09.clean <- add_fomd09_fert_organic(fomd09.clean)
@@ -209,7 +212,7 @@ fomd09.clean <- add_fomd09_weed(fomd09.clean)
 
 #---Add chemical management practice information ----
 fomd09.clean <- add_fomd09_chem(fomd09.clean)
-sort(unique(fomd09.clean$study_id[fomd09.clean$chem_name_amount_unit   =="NA[0(NA)]..NA[0(NA)]" ]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$chem_name_amount_unit   =="roundup[7.5(l/ha)]..harness[2(l/ha)]" ]))
 #sort(unique(fomd09.clean$practice_id[fomd09.clean$chem_name_amount_unit   =="NA[0(NA)]" ]))
 
 #---Add residues management practice information ----
@@ -302,7 +305,8 @@ for (col in c("product", "econ_inputs", "bio_func_group", "bio_ground_ref"
 
 unmatched_products <- find_unmatched_products(fomd09.clean, path.metadata.structure)
 
-#sort(unique(fomd09.clean$study_id[fomd09.clean$product    =="Phthorimaea operculella"]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$product  =="Pigeon Pea Grain" ]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$bio_func_group   =="Striga hermonthica" ]))
 
 #--- Check subindicator information ----
 for (col in c("out_subindicator", "out_subindicator_unit",
@@ -362,7 +366,7 @@ for (col in c("data_location", "out_agg_stat",
   print(sort(unique(fomd09.clean[[col]])))
 }
 
-sort(unique(fomd09.clean$study_id[fomd09.clean$out_year  =="2003" ]))
+#sort(unique(fomd09.clean$study_id[fomd09.clean$out_year  =="2003" ]))
 
 #==========================================================
 #---- Match with 01_FOMD_ontologies ----

@@ -28,8 +28,9 @@ source(file.path(path.metadata.effectsize, "fomd_fun/fun_lookup_ontologies.R"))
 # Read datasets
 #==========================================================
 #metadata<-"MD_Rosen_24_Effec_Sc" #Rosenstock et al. 2024. Effects of changing farming practices in African agriculture. 10.1038/s41597-024-03805-z 
-metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
+#metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
 #metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
+metadata<-"MA_Sanch_22_Finan_Ec" #Sanchez et al. 2022. Financial profitability of diversified farming systems: A global meta-analysis. 10.1016/j.ecolecon.2022.107595
 
 
 #---fomd10.formated

@@ -21,8 +21,8 @@ source(file.path(path.meta.analysis, "cfra_fun/fun_food_groups.R"))
 #==========================================================
 #--- fomd10.effect.size -----
 fomd10<-read_csv(file.path(path.metadata.effectsize,"04.fomd10_effect_size/fomd10_effect_size.csv"), show_col_types = FALSE)
-nrow(fomd10) #v51: 167802;v52: 167797
-length(unique(fomd10$study_id)) #1844
+nrow(fomd10) #v51: 167802;v52: 167797; 168436
+length(unique(fomd10$study_id)) #1844; 1854
 
 sort(unique(fomd10$country)) #60
 
@@ -54,8 +54,8 @@ sort(unique(fomd10.cfra$country)) #15
 sort(unique(fomd10.cfra$C_site_latitude))
 sort(unique(fomd10.cfra$T_site_latitude))
 length(unique(fomd10.cfra$study_id));nrow(fomd10.cfra) 
-#[1] v51 637; v52 637
-#[1] v51 42892; v52 42892
+#[1] v51 637; v52 637; 646
+#[1] v51 42892; v52 42892; 43373
 
 #--- 1.2 Remove Animal related effect sizes ----
 removed.subindicators<-c("Animal Survival" ,
@@ -87,7 +87,7 @@ removed.subindicators<-c("Animal Survival" ,
 fomd10.cfra <- fomd10.cfra %>%
   filter(!tolower(out_subindicator) %in% tolower(removed.subindicators))
 
-sort(unique(fomd10.cfra$out_subindicator)) #62 
+sort(unique(fomd10.cfra$out_subindicator)) #62 ; 65
 #sort(unique(fomd10.cfra$out_subindicator[is.na(fomd10.cfra$out_pillar)])) 
 sort(unique(fomd10.cfra$out_pillar)) #3 
 #[1] "Mitigation"   "Productivity" "Resilience"
@@ -100,15 +100,15 @@ fomd10.cfra <- fomd10.cfra %>%
   filter(!is.na(C_crop_tree_density))
 
 nrow(fomd10.cfra); length(unique(fomd10.cfra$study_id)) 
-#[1] v51 32026; v52 32026
-#[1] v51 467; v52 467
+#[1] v51 32026; v52 32026; 32483
+#[1] v51 467; v52 467; 476
 
 #--- 1.3 Remove effect sizes that do not report mean for control and treatment ----
 fomd10.cfra <- fomd10.cfra %>% filter(!is.na(C_out_mean), !is.na(T_out_mean))
 
 nrow(fomd10.cfra); length(unique(fomd10.cfra$study_id))
-#[1] v51 32008; v52 32008
-#[1] v51 466; v52 466
+#[1] v51 32008; v52 32008; 32441
+#[1] v51 466; v52 466; 474
 
 #--- 1.4 Remove effect sizes without usable site coordinates ----
 # Pooled multi-site effect sizes store coordinates as "lat1..lat2..": keep if at least one pair is valid
@@ -131,8 +131,8 @@ View(no.coords)
 fomd10.cfra <- fomd10.cfra[has_coords, ]
 rm(has_coords)
 nrow(fomd10.cfra); length(unique(fomd10.cfra$study_id))
-#[1] v51 31966; v52 31966
-#[1] v51 466; v52 466
+#[1] v51 31966; v52 31966; 32399
+#[1] v51 466; v52 466; 474
 
 #--- 1.5 Contrast screening: C and T must differ, and every practice reported in both ----
 # All paired C_/T_ practice descriptors (every *_subpractice), plus crop, variety, density and weeding method
@@ -174,19 +174,21 @@ table(identical = !fomd10.cfra$ct_varies, one_arm = !is.na(fomd10.cfra$ct_one_ar
 
 fomd10.cfra <- fomd10.cfra %>% filter(ct_varies, is.na(ct_one_arm_empty))
 nrow(fomd10.cfra); length(unique(fomd10.cfra$study_id))
-#[1] v51 17811; v52 26026; v52.2 25609
-#[1] v51 339; v52 423; v52.2 413
+#[1] v51 17811; v52 26026; v52.2 25609; 26021
+#[1] v51 339; v52 423; v52.2 413; 420
 
 #--- 1.5b Remove postharvest practices (not AE/RA production practices) ----
 fomd10.cfra <- fomd10.cfra %>%
   filter(is.na(postharvest_practice))
 
 nrow(fomd10.cfra); length(unique(fomd10.cfra$study_id))
-#[1] v51 17303; v52 25518; v52.2 25101
-#[1] v51 334; v52 418; v52.2 408
+#[1] v51 17303; v52 25518; v52.2 25101; 25513
+#[1] v51 334; v52 418; v52.2 408; 415
 
 #--- 1.6 Outcomes: outcome group and direction of each paired comparison (criterion iv) ----
 fomd10.cfra <- add_outcome_direction(fomd10.cfra)
+
+#sort(unique(fomd10$study_id[fomd10$out_subindicator=="Total Factor Productivity"])) 
 
 #--- 1.6.1 # Check: subindicators in the data that are not in outcome_lookup ----
 # They will be dropped; add them to outcome_lookup (cfra_fun/fun_outcomes.R) if they should be kept.
@@ -197,8 +199,8 @@ fomd10.cfra %>% filter(pest_count) %>%
   summarise(paired_comparisons = n_distinct(effect_size_id), .groups = "drop")
 
 nrow(fomd10.cfra); length(unique(fomd10.cfra$study_id))
-#[1] v51 17291; v52 25480; v52.2 25063
-#[1] v51 334; v52 418; v52.2 408
+#[1] v51 17291; v52 25480; v52.2 25063; 25513
+#[1] v51 334; v52 418; v52.2 408; 415
 
 #--- 1.7 Food groups relevant to school meals (criterion iii) ----
 # crop -> food group lookup from the ontology (read only)
@@ -213,9 +215,11 @@ fomd10.cfra <- assign_food_group(fomd10.cfra, product_lookup)   # one row per fo
 fomd10.cfra <- add_nfix_trees(fomd10.cfra)
 
 # TO CHECK always:paired comparisons without a school-meal food group (fodder, stimulant, spice, fibre crops)
+# TO CHECK: if the pepper papers in ERA are vegetables or what
 food_tocheck<-fomd10.cfra %>%
   filter(is.na(food_group)) %>%
-  count(T_crop_tree_diversity,
+  count(study_id,
+    T_crop_tree_diversity,
     T_crop_tree_FAO_Food_Group, 
         T_product_simple, outcome_group,sort = TRUE)
 
@@ -223,8 +227,8 @@ fomd10.cfra <- fomd10.cfra %>% filter(!is.na(food_group))
 
 
 nrow(fomd10.cfra); length(unique(fomd10.cfra$study_id))
-#[1] v51 16935; v52 25151; v52.2 24769
-#[1] v51 317; v52 398; v52.2 389
+#[1] v51 16935; v52 25151; v52.2 24769; 25436
+#[1] v51 317; v52 398; v52.2 389; 397
 
 #--- 1.8 Check: variety management types and traits (all CFRA countries) ----
 source(file.path(path.meta.analysis, "cfra_fun/fun_practices_reclassification.R"))

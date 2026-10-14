@@ -61,7 +61,7 @@ add_fomd09_bibliographic <- function(fomd09.clean, path.metadata.structure, meta
   #04_FOMD_screening
   fomd04 <- read_xlsx(file.path(path.metadata.structure, "04_FOMD_screening.xlsx"), sheet = "04_FOMD_screening") %>%
     filter(ss_id == metadata) %>%
-    filter(status == "I")
+    filter(status %in% c("I","O"))
   
   cat("--- fomd04 study_id ---\n"); print(length(unique(fomd04$study_id)))
   
