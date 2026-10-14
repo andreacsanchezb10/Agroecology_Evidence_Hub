@@ -19,9 +19,11 @@ library(stringr)
 #----------------------------------------------------------
 outcome_lookup <- tribble(
   ~out_subindicator,                    ~outcome_group,         ~lower_is_better,
-  "Crop Yield",                         "Yield",                FALSE,
+  "Area Time Equivalent Ratio",         "Yield",                FALSE,
   "Biomass Yield",                      "Yield",                FALSE,
   "Crop Residue Yield",                 "Yield",                FALSE,
+  "Crop Yield",                         "Yield",                FALSE,
+  "Total Factor Productivity",          "Yield",                FALSE,
   
   "Gross Margin",                       "Profitability",        FALSE,
   "Gross Return",                       "Profitability",        FALSE,
@@ -34,9 +36,11 @@ outcome_lookup <- tribble(
   "Return to Labour",                   "Profitability",        FALSE,
   "Labour Cost",                        "Profitability",        TRUE,
   "Variable Cost",                      "Profitability",        TRUE,
+  "Variable Cost per Unit Product",     "Profitability",        TRUE,
   "Fixed Cost",                         "Profitability",        TRUE,
   "Total Cost",                         "Profitability",        TRUE,
   
+  "Cation Exchange Capacity",           "Soil health",          FALSE,
   "Soil Organic Carbon",                "Soil health",          FALSE,
   "Soil Organic Carbon (Change)",       "Soil health",          FALSE,
   "Soil Organic Matter",                "Soil health",          FALSE,
@@ -47,12 +51,12 @@ outcome_lookup <- tribble(
   "Soil NO3",                           "Soil health",          FALSE,
   "Soil Available Phosphorus",          "Soil health",          FALSE,
   "Effective Cation Exchange Capacity", "Soil health",          FALSE,
-  "Cation Exchange Capacity",           "Soil health",          FALSE,
   "Soil Moisture",                      "Soil health",          FALSE,
   "Infiltration Rate",                  "Soil health",          FALSE,
   "Erosion",                            "Soil health",          TRUE,
   "Runoff",                             "Soil health",          TRUE,
   
+  "Aboveground Carbon Biomass",         "Climate mitigation",   FALSE,
   "Carbon Dioxide Emissions",           "Climate mitigation",   TRUE,
   "CO2 Equivalent Emissions",           "Climate mitigation",   TRUE,
   "Emissions Intensity",                "Climate mitigation",   TRUE,
@@ -74,9 +78,11 @@ outcome_lookup <- tribble(
   
   "Abundance",                          "Biodiversity",         FALSE,
   "Berger-Parker dominance (d)",        "Biodiversity",         TRUE,
+  "Pielou Index",                       "Biodiversity",         FALSE,
   "Shannon-Wiener Index",               "Biodiversity",         FALSE,
   "Species Evenness",                   "Biodiversity",         FALSE,
-  "Species Richness",                   "Biodiversity",         FALSE
+  "Species Richness",                   "Biodiversity",         FALSE,
+  "Taxonomic Richness",                 "Biodiversity",         FALSE
 )
 
 #----------------------------------------------------------
