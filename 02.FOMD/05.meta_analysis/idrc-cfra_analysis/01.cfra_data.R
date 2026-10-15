@@ -227,8 +227,8 @@ fomd10.cfra <- fomd10.cfra %>% filter(!is.na(food_group))
 
 
 nrow(fomd10.cfra); length(unique(fomd10.cfra$study_id))
-#[1] v51 16935; v52 25151; v52.2 24769; 25436
-#[1] v51 317; v52 398; v52.2 389; 397
+#[1] v51 16935; v52 25151; v52.2 24769; 25436;25387
+#[1] v51 317; v52 398; v52.2 389; 397;396
 
 #--- 1.8 Check: variety management types and traits (all CFRA countries) ----
 source(file.path(path.meta.analysis, "cfra_fun/fun_practices_reclassification.R"))

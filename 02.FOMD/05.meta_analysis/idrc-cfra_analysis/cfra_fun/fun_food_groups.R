@@ -6,8 +6,10 @@ library(stringr)
 # Food groups relevant to school meals
 #==========================================================
 # Food group of each effect size:
-#   - crop-level outcomes (yield, inputs efficiency, pests):
+#   - crop-level outcomes (yield, inputs efficiency, resilience to pests):
 #       food group of the crop on which the outcome was measured (T_product_simple)
+#   - resilience to pests measured on an organism (pest or weed counts, product = taxon):
+#       food group(s) of the cropping system, as for system-level outcomes
 #   - system-level outcomes (soil health, biodiversity, climate mitigation,
 #     labour demand, profitability):
 #       food group(s) of the whole cropping system (CT_crop_tree_FAO_Food_Group)
@@ -65,10 +67,11 @@ assign_food_group <- function(df, product_lookup) {
     if (length(fg) == 0) NA_character_ else fg
   }, df$T_crop_tree_FAO_Food_Group, df$T_crop_tree_FAO_Food_SubGroup, SIMPLIFY = FALSE, USE.NAMES = FALSE)
   
-  # crop-level outcomes use the measured crop; if the measured product has no food group
-  # (e.g. a pest or weed taxon in pest/weed abundance or diversity), use the crops of the system
+  # crop-level outcomes use the measured crop. Only for pest and weed counts (resilience to pests),
+  # whose product is the organism counted, a product with no food group falls back to the system's crops
+  no_group <- vapply(crop_groups, function(x) all(is.na(x)), logical(1))
   use_crop <- df$outcome_group %in% crop_level_outcomes &
-    !vapply(crop_groups, function(x) all(is.na(x)), logical(1))
+    !(df$outcome_group %in% "Resilience to pests" & no_group)
   
   # one row per food group (duplicated when the system has several food groups)
   df %>%
