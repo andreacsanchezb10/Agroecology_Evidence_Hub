@@ -35,7 +35,8 @@ archetypes <- tribble(
 # Thresholds (same for all countries)
 min_paired_comparisons <- 100  # below this, expand to agro-ecological zones (2.2.1)
 min_es_cell  <- 1             # cells with fewer paired comparisons are not coloured
-strong_es    <- 50             # strong evidence
+strong_es    <- 50            # strong evidence: at least this many comparisons
+strong_studies<-3             # ... and from at least this many studies
 cut_positive <- 65
 cut_negative <- 35
 
@@ -134,7 +135,7 @@ practices.check <- arc.long %>%
   summarise(studies = n_distinct(study_id),
             paired_comparisons = n_distinct(effect_size_id), .groups = "drop") %>%
   arrange(practice_group, C_practice, T_practice)
-#View(practices.check)
+View(practices.check)
 
 # Tested practices (T vs C) per archetype, food group and practice group
 practices <- arc.long %>%
@@ -297,7 +298,8 @@ for (i in seq_len(nrow(archetypes))) {
 #--- 5.1 Figure: Evidence synthesis on the effects of AE/RA practices on eight farm outcomes  ----
 source(file.path(path.meta.analysis, "cfra_fun/fun_plot_count_grouped.R"))
 
-legend.grid <- grid_legend_small(strong_es = strong_es, cut_positive = cut_positive,
+legend.grid <- grid_legend_small(strong_es = strong_es, strong_studies = strong_studies,
+                                 cut_positive = cut_positive,
                                  cut_negative = cut_negative, text_size = 7)
 parts <- list(all = c("Cereals", "Pulses and legumes", "Vegetables", "Roots and tubers", "Nuts and seeds", "Fruits"))
 row_in <- 0.22                                   # inches per practice row
@@ -314,6 +316,7 @@ for (i in seq_len(nrow(archetypes))) {
     if (!any(cc$archetype == arc_name)) next
     
     p <- plot_votes_grouped(cc, arc_name, min_es_cell = min_es_cell, strong_es = strong_es,
+                            strong_studies = strong_studies,
                             cut_positive = cut_positive, cut_negative = cut_negative, text_size = 7)
     
     # legend below the figure, centred
@@ -339,7 +342,7 @@ for (i in seq_len(nrow(archetypes))) {
 #==========================================================
 source(file.path(path.meta.analysis, "cfra_fun/fun_practice_detail_analysis.R"))
 
-#--- Archetype 2A: Table S4 Effect of Organic fertilizer on cereals yield, soil health, biodiversity ----
+#--- Archetype 2A: Table S3 Effect of Organic fertilizer on cereals yield, soil health, biodiversity ----
 # Cereals, Organic fertilizer, Yield
 ic.2a.sxa <- practice_detail(arc.long, "2A - Soil restoration", "Organic fertilizer", "No fertilizer applied",
                              food = "Cereals", outcome = "Yield", data = arc.data,
@@ -405,7 +408,7 @@ View(table.2a.sx)
 
 write_csv(table.2a.sx, file.path(path.output, "ken_2A_TableSX_cereals_organic.csv"))
 
-#--- Archetype 2A: Table S5 Effect of Mixed fertilizer on cereals yield, and soil health ----
+#--- Archetype 2A: Table S4 Effect of Mixed fertilizer on cereals yield, and soil health ----
 # Cereals, Mixed fertilizer, Yield
 ic.2a.sxa <- practice_detail(arc.long, "2A - Soil restoration", "Mixed fertilizer", "No fertilizer applied",
                              food = "Cereals", outcome = "Yield", data = arc.data,
@@ -455,7 +458,7 @@ View(table.2a.sx)
 
 write_csv(table.2a.sx, file.path(path.output, "ken_2A_TableSX_cereals_mixed_fertilizer.csv"))
 
-#--- Archetype 2A: Table S6 Effect of Residues incorporation on cereals soil health ----
+#--- Archetype 2A: Table S5 Effect of Residues incorporation on cereals soil health ----
 # Cereals, Residues incorporation, Soil health
 ic.2a.sx <- practice_detail(arc.long, "2A - Soil restoration", "Residues incorporation", "Residues removed",
                              food = "Cereals", outcome = "Soil health", data = arc.data,
@@ -477,24 +480,33 @@ View(table.2a.sx)
 
 write_csv(table.2a.sx, file.path(path.output, "ken_2A_TableSX_cereals_residues_incorporation.csv"))
 
-#--- Archetype 2A: Table S7 Effect of Intercropping on cereals yield ----
+#--- Archetype 2A: Table S6 Effect of Intercropping on cereals yield, resilience to pests ----
 # Cereals, Intercropping, Yield
-ic.2a.sx <- practice_detail(arc.long, "2A - Soil restoration", "Intercropping", "Monoculture",
+arc.long.2a.s6a <- arc.long %>%
+  mutate(
+    # Desmodium common names and species -> Desmodium spp.; Crotalaria species -> Crotalaria spp.
+    T_crop_tree_diversity = str_replace_all(T_crop_tree_diversity,
+                                            regex("\\b(Silverleaf|Greenleaf|Tick Clover sp)\\b", ignore_case = TRUE),
+                                            "Desmodium spp."),
+    T_crop_tree_diversity = str_replace_all(T_crop_tree_diversity,
+                                            "\\b(Desmodium|Crotalaria) [a-z]+\\.?", "\\1 spp."),
+    T_intercrop_subpractice = case_when(
+      str_detect(coalesce(T_crop_tree_diversity, ""), "Desmodium")      ~ "Push-pull",
+      str_detect(coalesce(T_intercrop_subpractice, ""), "Push pull")    ~ "Push-pull",
+      str_detect(coalesce(T_intercrop_subpractice, ""), "\\(N fixing")  ~ "With a nitrogen-fixing species",
+      str_detect(coalesce(T_intercrop_subpractice, ""), "Non N fixing") ~ "Without a nitrogen-fixing species",
+      TRUE                                                               ~ T_intercrop_subpractice))
+  
+ic.2a.s6a <-  practice_detail(arc.long.2a.s6a, "2A - Soil restoration", "Intercropping", "Monoculture",
                              food = "Cereals", outcome = "Yield", data = arc.data,
                              extra = "T_intercrop_subpractice")
 
-View(ic.2a.sx$companions)    # cereal measured + species it was intercropped with
 
-table.2a.sx <- ic.2a.sx$companions %>%
+View(ic.2a.s6a$companions)    # cereal measured + species it was intercropped with
+
+table.2a.s6a <- ic.2a.s6a$companions %>%
   mutate(`Outcome measured` = "Yield")%>%
-  mutate(T_intercrop_subpractice=case_when(
-    T_intercrop_subpractice%in%c("Intercrop (N fixing and Non N fixing)",
-                                 "Green Manure (N fixing In Space) + Relay Intercropping (N fixing and Non N fixing)")
-    
-    ~"With a nitrogen-fixing species",
-    T_intercrop_subpractice=="Intercrop (Non N fixing)"~"Without a nitrogen-fixing species",
-    T_intercrop_subpractice=="Push pull"~"Push-pull",
-    TRUE~T_intercrop_subpractice))%>%
+  
   rename(`Intercrop type` = T_intercrop_subpractice)%>%
   
   select(1:3,10,4:9)%>%
@@ -504,21 +516,63 @@ table.2a.sx <- ic.2a.sx$companions %>%
           `Intercrop type`,
           `Companion species`,
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
+View(table.2a.s6a)
 
-View(table.2a.sx)
+# Cereals, Intercropping, Resilience to pests
+# pest rows: the pest in its own column, the cereal in T_product_simple
+cereals <- c("Maize", "Sorghum", "Finger Millet", "Pearl Millet", "Baby Corn", "Rice", "Wheat", "Teff", "Barley")
 
-write_csv(table.2a.sx, file.path(path.output, "ken_2A_TableSX_cereals_intercropping.csv"))
+arc.long.2a.s6b <- arc.long.2a.s6a %>%
+  filter(outcome_group == "Resilience to pests") %>%
+  mutate(Pest = case_when(str_detect(T_product, "Striga")              ~ "Weeds (Striga)",
+                          str_detect(T_product, "Stemborer")           ~ "Insect pests (stem borers)",
+                          str_detect(T_product, "Thrips|Thysanoptera") ~ "Insect pests (thrips)",
+                          TRUE                                         ~ coalesce(bio_func_group, T_product)),
+         # "Maize..Lepidoptera" -> "Maize"; "Lamiales" -> the cereal(s) in the intercrop
+         T_product_simple = if_else(str_detect(T_product_simple, fixed("..")),
+                                    str_remove(T_product_simple, "\\.\\..*$"),
+                                    vapply(str_split(coalesce(T_crop_tree_diversity, ""), "[-/]"),
+                                           function(s) paste(intersect(str_trim(s), cereals), collapse = " + "),
+                                           character(1))))
+
+ic.2a.s6b <- practice_detail(arc.long.2a.s6b, "2A - Soil restoration", "Intercropping", "Monoculture",
+                             food = "Cereals", outcome = "Resilience to pests", data = arc.data,
+                             extra = c("T_intercrop_subpractice", "Pest"))
+
+View(ic.2a.s6b$companions)
+
+table.2a.s6b <- ic.2a.s6b$companions %>%
+  mutate(`Outcome measured` = "Resilience to ") %>%
+  rename(`Intercrop type` = T_intercrop_subpractice,
+         `Pest or weed` = Pest) %>%
+  mutate(`Outcome measured`=paste0(`Outcome measured`,`Pest or weed`))%>%
+  select(`Measured crop`, `Companion species`, `Intercrop type`,
+         `Outcome measured`, everything(), -`Pest or weed`) %>%
+  mutate(`Companion species` = if_else(is.na(`Companion species`), "-", `Companion species`)) %>%
+  arrange(`Measured crop`,# `Pest or weed`, 
+          `Intercrop type`, `Companion species`,
+          desc(`% positive comparisons`))
+View(table.2a.s6b)
+
+table.2a.s6 <- do.call(rbind, Map(with_header,
+                                  list(table.2a.s6a, table.2a.s6b),
+                                  c("a) Cereal yields, by measured crop, companion species and intercrop type.",
+                                    "b) Resilience to pests and weeds in cereal intercrops, by measred crop, companion species and intercrop type."
+                                  )))
+View(table.2a.s6)
+
+write_csv(table.2a.s6, file.path(path.output, "ken_2A_TableS6_cereals_intercropping.csv"))
 
 
-#--- Archetype 2A: Table S8 Effect of Organic fertilizer on Pulses and legumes yield ----
+#--- Archetype 2A: Table S7 Effect of Organic fertilizer on Pulses and legumes yield ----
 # a) Pulses and legumes, Organic fertilizer, Yield
-ic.2a.sxa <- practice_detail(arc.long, "2A - Soil restoration", "Organic fertilizer", "No fertilizer applied",
+ic.2a.s7a <- practice_detail(arc.long, "2A - Soil restoration", "Organic fertilizer", "No fertilizer applied",
                              food = "Pulses and legumes", outcome = "Yield", data = arc.data,
                              extra = "T_fert_subpractice")
 
-View(ic.2a.sxa$companions)    # cereal measured + species it was intercropped with
+View(ic.2a.s7a$companions)    # cereal measured + species it was intercropped with
 
-table.2a.sxa <- ic.2a.sxa$companions %>%
+table.2a.sxa <- ic.2a.s7a$companions %>%
   rename(`Organic input` = T_fert_subpractice)%>%
   mutate(`Outcome measured` = "Yield")%>%
   select(1:3,10,4:9)%>%

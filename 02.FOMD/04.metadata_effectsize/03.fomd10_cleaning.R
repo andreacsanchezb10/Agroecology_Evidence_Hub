@@ -121,6 +121,22 @@ for (col in c("variety_management_subpractice","variety_management_practice","va
 }
 
 prueba<-fomd10.clean%>%
+  #Water management-----
+select(doi, C_irrig_subpractice,
+       study_id,title,
+       water_management_subpractice,water_management_practice ,water_management_theme,
+       #"practice_compared" , "practice_compared_detail" ,"practice_compared_n"
+       )%>%
+  filter(!is.na(water_management_subpractice))%>%
+  filter(is.na(water_management_practice))
+
+distinct(water_management_subpractice)
+sort(unique(fomd10.clean$C_planting_subpractice))
+sort(unique(fomd10.clean$C_planting_method))
+
+
+
+  
   #Pest management-----
 select(study_id, C_chem_subpractice,T_chem_subpractice,
        CT_chem_subpractice,
@@ -131,6 +147,19 @@ select(study_id, C_chem_subpractice,T_chem_subpractice,
   filter(is.na(pest_management_practice))
 
 sort(unique(prueba$CT_chem_subpractice))
+
+
+  #Biomass management-----
+select(doi, C_residues_subpractice_raw,T_residues_subpractice_raw,
+       C_residues_material,T_residues_material,
+       biomass_management_subpractice,biomass_management_practice ,biomass_management_theme,
+       #"practice_compared" ,  "practice_compared_detail" ,    "practice_compared_n"
+       )%>%
+  filter(!is.na(biomass_management_subpractice))%>%
+  filter(is.na(biomass_management_practice))
+
+sort(unique(prueba$practice_compared))
+x<-prueba[grepl("Inorganic fertilizer", prueba$practice_compared, ignore.case = TRUE), ]
 
   #nutrient management ----
 select(doi, CT_fert_subpractice,CT_fert_practice,
@@ -195,29 +224,7 @@ select(doi, soil_management_subpractice,soil_management_practice ,soil_managemen
 
 sort(unique(prueba$CT_varietal_crop_subpractice))
 
-  #Biomass management-----
-select(doi, C_residues_subpractice_raw,T_residues_subpractice_raw,
-       C_residues_material,T_residues_material,
-       biomass_management_subpractice,biomass_management_practice ,biomass_management_theme,
-       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
-  filter(!is.na(biomass_management_subpractice))%>%
-  filter(is.na(biomass_management_practice))
 
-sort(unique(prueba$practice_compared))
-x<-prueba[grepl("Inorganic fertilizer", prueba$practice_compared, ignore.case = TRUE), ]
-
-  #Water management-----
-select(doi, C_irrig_subpractice,
-       water_management_subpractice,water_management_practice ,water_management_theme,
-       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
-  filter(!is.na(water_management_subpractice))%>%
-  filter(is.na(water_management_practice))
-
-distinct(water_management_subpractice)
-sort(unique(fomd10.clean$C_planting_subpractice))
-sort(unique(fomd10.clean$C_planting_method))
-  
- 
 #diversification temporal-----
   #select(doi, diversification_temporal_subpractice,diversification_temporal_practice ,diversification_temporal_theme,
   #      "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%

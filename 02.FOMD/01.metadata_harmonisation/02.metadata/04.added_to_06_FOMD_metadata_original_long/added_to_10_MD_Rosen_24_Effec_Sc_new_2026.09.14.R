@@ -503,7 +503,6 @@ sort(unique(md.era.short.clean$site_key))
 #----------------------------------------------
 #---experiment_details----
 #----------------------------------------------
-## TO CHECK: see what to do here, this can differ from T and C
 md.era.short.clean <- apply_replace_in_cols( 
   md.era.short.clean, cols = c("exp_design"),
   pattern = "Unspecifified|Unspesified", replacement = "Unspecified", fixed = FALSE)
@@ -1263,7 +1262,6 @@ sort(unique(md.era.short.clean$T_crop_seq_residues_fate))
 #----------------------------------------------
 #---agroforestry_practice----
 #----------------------------------------------
-## TO CHECK : verify later if it is better to keep track of spatial, component, shade..-----------
 md.era.short.clean<-md.era.short.clean%>% 
   mutate(
     C_agrof_subpractice= case_when(
@@ -1660,6 +1658,7 @@ replacements <- c(
   "Growth Promotor"= "Animal (Growth Promoter)",
   "Growth promoter"="Animal (Growth Promoter)",
   "Growth Promoter"="Animal (Growth Promoter)",
+  "Chemical Weeding (Herbicides)"="Herbicide",
   "Unspecified"= "Unspecified (if pesticide org or inorg was applied)",
   "Mechanical"= "Mechanical (Unspecified)",
   "Mechanical (Unspecified) (Unspecified (if pesticide org or inorg was applied))"="Mechanical (Unspecified)",
@@ -1744,6 +1743,7 @@ md.era.short.clean <- apply_replace_in_cols(
   pattern = "; ",replacement = "..") 
 
 replacements <- c(
+  
   "Incorp. - Herb Non-N-fixing"= "Crop Residue Incorporation (Non N fixing)",
   
   "Mulch - Herb Non-N-fixing" = "Mulch Herb (Non N fixing)",
@@ -2277,6 +2277,12 @@ md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
   cols = c("C_watharv_subpractice", "T_watharv_subpractice"),
   pattern = ", ",replacement = "..") 
+
+md.era.short.clean <- md.era.short.clean%>%
+  mutate(T_watharv_subpractice=case_when(
+           study_id== "EO0043"&
+           T_watharv_subpractice=="Bunds..Other Water Harvesting Practice"~"Bunds..Grass Strips",
+         TRUE~T_watharv_subpractice))
 
 # Quick checks ----
 md.era.short.clean %>%
