@@ -254,7 +254,9 @@ plot_aez_evidence <- function(arc, rule, aez_raster, lookup, points_used,
   ggplot() +
     geom_sf(data = arc, fill = "white", colour = "grey80", linewidth = 0.15) +
     geom_raster(data = df, aes(x = x, y = y, fill = zone), key_glyph = draw_key_polygon) +
+    geom_sf(data = pr, fill = NA, colour = "grey45", linewidth = 0.15) +            # county borders inside the high-priority areas
     geom_sf(data = st_union(pr), fill = NA, colour = "grey10", linewidth = 0.6) +
+    
     # within high-priority areas: blue with white outline; added: white with blue outline
     geom_sf(data = filter(sites, origin == "Within high-priority areas"), aes(size = size_class, shape = origin),
             fill = "#08519C", colour = "white", stroke = 0.3, alpha = 0.9, key_glyph = draw_key_point,

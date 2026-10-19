@@ -103,7 +103,7 @@ md.era.short.clean %>%
 length(unique(md.era.short.clean$study_id)) # 1810;1808 studies
 length(unique(md.era.short.clean$effect_size_id))  #232209 rows #V50 191019 ROWS;V51:166297
 length(unique(md.era.short.clean$authors))  #1347
-length(unique(md.era.short.clean$title)) #980
+length(unique(md.era.short.clean$title)) #980;986
 length(unique(md.era.short.clean$doi)) #1592; #1591;1589
 
 #----------------------------------------------
@@ -166,6 +166,63 @@ md.era.short.clean <- md.era.short.clean %>%
 
 md.era.short.clean <- md.era.short.clean %>%
   mutate(
+    site_id=case_when(
+      study_id=="AN0118"&site_id=="Issue: Multiple matches on Site.ID"~"Mchinji..Msakambewa, Dowa..Salima",
+      TRUE ~ site_id),
+    
+    site_type= case_when(
+      study_id == "CJ0126" & site_id == "B N1..B N2..B N3..B N4..B N5..B N6..B N7..B N8..B N9" ~
+        paste(rep("Farmer Managed", 9), collapse = ".."),
+      study_id == "CJ0126" & site_id == "BS W1..BS W2..BS W3..BS W4..BS W5..BS W6..BS W7..BS W8..BS W9" ~
+        paste(rep("Farmer Managed", 9), collapse = ".."),
+      study_id == "CJ0126" & site_id == "BS W1..BS W2..BS W3..BS W4..BS W5..BS W6..BS W7..BS W8..BS W9..B N1..B N2..B N3..B N4..B N5..B N6..B N7..B N8..B N9" ~
+        paste(rep("Farmer Managed", 18), collapse = ".."),
+      
+      study_id == "NN0411" & site_id == "Mareko..Mito" ~ "Farmer Managed..Farmer Managed",
+      study_id == "NN0499" & site_id == "South Achefer" ~"Researcher Managed & On-farm",
+      study_id=="AN0118"&site_id=="Mchinji..Msakambewa, Dowa..Salima"~"Farm..Farm..Farm",
+      
+      study_id=="EM1044"~"Researcher Managed & Research Facility",
+      TRUE ~ site_type),
+    
+    site_admin= case_when(
+      study_id == "CJ0126" & site_id == "B N1..B N2..B N3..B N4..B N5..B N6..B N7..B N8..B N9" ~
+        paste(rep("Region", 9), collapse = ".."),
+      study_id == "CJ0126" & site_id == "BS W1..BS W2..BS W3..BS W4..BS W5..BS W6..BS W7..BS W8..BS W9" ~
+        paste(rep("Region", 9), collapse = ".."),
+      study_id == "CJ0126" & site_id == "BS W1..BS W2..BS W3..BS W4..BS W5..BS W6..BS W7..BS W8..BS W9..B N1..B N2..B N3..B N4..B N5..B N6..B N7..B N8..B N9" ~
+        paste(rep("Region", 18), collapse = ".."),
+      study_id == "NN0411" & site_id == "Mareko..Mito" ~ "District..District",
+      study_id == "NN0499" & site_id == "South Achefer" ~"District",
+      study_id=="AN0118"&site_id=="Mchinji..Msakambewa, Dowa..Salima"~"District..District..District",
+      study_id=="EO0147"&site_id=="Ilala Agricultural Research Institute"~"Facility",
+      study_id=="EM1044"~"Facility",
+      TRUE ~ site_admin),
+    
+    site_agg= case_when(
+      study_id == "CJ0126" & site_id == "B N1..B N2..B N3..B N4..B N5..B N6..B N7..B N8..B N9" ~
+        paste(rep("Yes", 9), collapse = ".."),
+      study_id == "CJ0126" & site_id == "BS W1..BS W2..BS W3..BS W4..BS W5..BS W6..BS W7..BS W8..BS W9" ~
+        paste(rep("Yes", 9), collapse = ".."),
+      study_id == "CJ0126" & site_id == "BS W1..BS W2..BS W3..BS W4..BS W5..BS W6..BS W7..BS W8..BS W9..B N1..B N2..B N3..B N4..B N5..B N6..B N7..B N8..B N9" ~
+        paste(rep("Yes", 18), collapse = ".."),
+      study_id == "NN0411" & site_id == "Mareko..Mito" ~ "No..No",
+      study_id == "NN0499" & site_id == "South Achefer" ~"No",
+      study_id=="AN0118"&site_id=="Mchinji..Msakambewa, Dowa..Salima"~"No..No..No",
+      study_id=="EO0147"&site_id=="Ilala Agricultural Research Institute"~"No",
+      study_id=="EM1044"~"No",
+      study_id=="JO0204"~"No",
+      study_id=="HK0157"~"No",
+      study_id=="LM0108"~"No",
+      study_id=="LM0117.1"~"No",
+      
+      study_id== "NJ0025" & site_id=="Makoholi Research Station"~"No",
+      
+      
+      
+      TRUE ~ site_agg),
+    
+    
     site_latitude = case_when(
       study_id == "CJ0126" & site_id == "B N1..B N2..B N3..B N4..B N5..B N6..B N7..B N8..B N9" ~
         paste(rep("0.675", 9), collapse = ".."),
@@ -173,6 +230,11 @@ md.era.short.clean <- md.era.short.clean %>%
         paste(rep("0.520", 9), collapse = ".."),
       study_id == "CJ0126" & site_id == "BS W1..BS W2..BS W3..BS W4..BS W5..BS W6..BS W7..BS W8..BS W9..B N1..B N2..B N3..B N4..B N5..B N6..B N7..B N8..B N9" ~
         paste(rep("0.595", 18), collapse = ".."),
+      study_id == "NN0411" & site_id == "Mareko..Mito" ~ "7.64316..7.67968",
+      study_id == "NN0499" & site_id == "South Achefer" ~ "11.5",
+      study_id=="AN0118"&site_id=="Mchinji..Msakambewa, Dowa..Salima"~"-13.795697..-13.55..-13.76",
+      study_id=="EM1044"~"31.25",
+      
       TRUE ~ site_latitude
     ),
     site_longitude = case_when(
@@ -182,6 +244,12 @@ md.era.short.clean <- md.era.short.clean %>%
         paste(rep("34.470", 9), collapse = ".."),
       study_id == "CJ0126" & site_id == "BS W1..BS W2..BS W3..BS W4..BS W5..BS W6..BS W7..BS W8..BS W9..B N1..B N2..B N3..B N4..B N5..B N6..B N7..B N8..B N9" ~
         paste(rep("34.415", 18), collapse = ".."),
+      study_id == "NN0411" & site_id == "Mareko..Mito" ~ "38.35349..38.36045",
+      study_id == "NN0499" & site_id == "South Achefer" ~ "36.85",
+      study_id=="AN0118"&site_id=="Mchinji..Msakambewa, Dowa..Salima"~"32.892422..33.9..34.47",
+      study_id=="EM1044"~"31.75",
+      
+      
       TRUE ~ site_longitude
     ),
     site_buffer = case_when(
@@ -191,16 +259,25 @@ md.era.short.clean <- md.era.short.clean %>%
       ) ~ paste(rep("100", 9), collapse = ".."),
       study_id == "CJ0126" & site_id == "BS W1..BS W2..BS W3..BS W4..BS W5..BS W6..BS W7..BS W8..BS W9..B N1..B N2..B N3..B N4..B N5..B N6..B N7..B N8..B N9" ~
         paste(rep("100", 18), collapse = ".."),
-      TRUE ~ site_buffer))
+      study_id == "NN0411" & site_id == "Mareko..Mito" ~ "5000..4500",
+      study_id == "NN0499" & site_id == "South Achefer" ~ "5000",
+      study_id=="AN0118"&site_id=="Mchinji..Msakambewa, Dowa..Salima"~"100..100..100",
+      study_id=="EM1044"~"1000",
+      
+      TRUE ~ site_buffer))%>%
+  
+  #Remove (I checked the study and these rows do not correspond with the information provided by table 6)
+  filter(!(study_id=="AN0027"&
+           site_id=="NRC, Dokki, Cairo..Cairo University, Agricultural Experimental Station"))
 
-sort(unique(md.era.short.clean$study_id[is.na(md.era.short.clean$site_latitude)]))
+sort(unique(md.era.short.clean$study_id[is.na(md.era.short.clean$site_latitude)])) #character(0)
 
-sort(unique(md.era.short.clean$site_id[is.na(md.era.short.clean$site_admin)]))
-sort(unique(md.era.short.clean$site_id[is.na(md.era.short.clean$site_latitude)]))
-sort(unique(md.era.short.clean$site_id[is.na(md.era.short.clean$site_longitude)]))
-sort(unique(md.era.short.clean$site_id[is.na(md.era.short.clean$site_buffer)]))
+sort(unique(md.era.short.clean$study_id[is.na(md.era.short.clean$site_admin)])) #character(0)
+sort(unique(md.era.short.clean$site_id[is.na(md.era.short.clean$site_latitude)])) #character(0)
+sort(unique(md.era.short.clean$site_id[is.na(md.era.short.clean$site_longitude)]))#character(0)
+sort(unique(md.era.short.clean$site_id[is.na(md.era.short.clean$site_buffer)])) #554
 sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_type==""]))
-sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_agg==""]))
+sort(unique(md.era.short.clean$study_id[md.era.short.clean$site_agg==""]))
 sort(unique(md.era.short.clean$site_id[md.era.short.clean$site_latitude==""]))
 
 md.era.short.clean <- md.era.short.clean %>%
@@ -410,8 +487,8 @@ md.era.short.clean %>%
          T_site_longitude,T_site_buffer,T_site_key) %>%
   readr::write_csv(file.path(Sys.getenv("USERPROFILE"), "Downloads/era", "md_era_short_clean_location.csv"))
 
-length(unique(md.era.short.clean$T_site_key))  #1874
-length(unique(md.era.short.clean$C_site_key))  #1874
+length(unique(md.era.short.clean$T_site_key))  #1875
+length(unique(md.era.short.clean$C_site_key))  #1875
 sort(unique(md.era.short.clean$country)) #61
 sort(unique(md.era.short.clean$site_type))
 sort(unique(md.era.short.clean$site_id))
@@ -1232,6 +1309,11 @@ md.era.short.clean <- apply_replace_in_cols(
   cols = c("C_fert_subpractice", "T_fert_subpractice"),
   pattern = "No Fertilizer Application",replacement = "No Fertilizers Applied") 
 
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean,
+  cols = c("C_fert_subpractice", "T_fert_subpractice"),
+  pattern = "No fertilizers added",replacement = "No Fertilizers Applied") 
+
 # Apply "Unspecified" -> "Unspecified (if  fertilizer org or inorg was applied)" substitution
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
@@ -1581,6 +1663,7 @@ replacements <- c(
   "Unspecified"= "Unspecified (if pesticide org or inorg was applied)",
   "Mechanical"= "Mechanical (Unspecified)",
   "Mechanical (Unspecified) (Unspecified (if pesticide org or inorg was applied))"="Mechanical (Unspecified)",
+  "Hand Weeding"= "Hand Weeding (Unspecified)",
   "Hand Weeding (Unspecified (if pesticide org or inorg was applied))"="Hand Weeding (Unspecified)"
 )
 
@@ -2962,13 +3045,13 @@ nrow(md.era.short.clean[md.era.short.clean$T_out_var_metric == "", ]) #183074; i
 
 sort(unique(md.era.short.clean$C_out_var_value))
 sort(unique(md.era.short.clean$T_out_var_value))
-nrow(md.era.short.clean[md.era.short.clean$C_out_var_value == "", ]) #183075; in v32 183067
-nrow(md.era.short.clean[md.era.short.clean$T_out_var_value == "", ])#182988; in v32 182996
+nrow(md.era.short.clean[md.era.short.clean$C_out_var_value == "", ]) #183075; in v32 183067; v52 130425
+nrow(md.era.short.clean[md.era.short.clean$T_out_var_value == "", ])#182988; in v32 182996; v52 130275
 
 sort(unique(md.era.short.clean$C_out_sample_size))
 sort(unique(md.era.short.clean$T_out_sample_size))
-na_empty_summary["C_out_sample_size", ] #in v6 17064 missing values; in v24 16896; in v32 12722
-na_empty_summary["T_out_sample_size", ] #in v6 17064 missing values; in v24 16896; in v32 12722
+na_empty_summary["C_out_sample_size", ] #in v6 17064 missing values; in v24 16896; in v32 12722; v52 12054
+na_empty_summary["T_out_sample_size", ] #in v6 17064 missing values; in v24 16896; in v32 12722; v52 12054
 
 sort(unique(md.era.short.clean$C_data_location))
 sort(unique(md.era.short.clean$T_data_location))
