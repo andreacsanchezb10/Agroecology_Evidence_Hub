@@ -21,7 +21,7 @@ source(file.path(path.meta.analysis, "cfra_fun/fun_food_groups.R"))
 #==========================================================
 #--- fomd10.effect.size -----
 fomd10<-read_csv(file.path(path.metadata.effectsize,"04.fomd10_effect_size/fomd10_effect_size.csv"), show_col_types = FALSE)
-nrow(fomd10) #v51: 167802;v52: 167797; 168436
+nrow(fomd10) #v51: 167802;v52: 167797; 168436; 168434
 length(unique(fomd10$study_id)) #1844; 1854
 
 sort(unique(fomd10$country)) #60
@@ -131,7 +131,7 @@ View(no.coords)
 fomd10.cfra <- fomd10.cfra[has_coords, ]
 rm(has_coords)
 nrow(fomd10.cfra); length(unique(fomd10.cfra$study_id))
-#[1] v51 31966; v52 31966; 32399
+#[1] v51 31966; v52 31966; 32399; 32441
 #[1] v51 466; v52 466; 474
 
 #--- 1.5 Contrast screening: C and T must differ, and every practice reported in both ----
@@ -174,7 +174,7 @@ table(identical = !fomd10.cfra$ct_varies, one_arm = !is.na(fomd10.cfra$ct_one_ar
 
 fomd10.cfra <- fomd10.cfra %>% filter(ct_varies, is.na(ct_one_arm_empty))
 nrow(fomd10.cfra); length(unique(fomd10.cfra$study_id))
-#[1] v51 17811; v52 26026; v52.2 25609; 26021
+#[1] v51 17811; v52 26026; v52.2 25609; 26021; 26053
 #[1] v51 339; v52 423; v52.2 413; 420
 
 #--- 1.5b Remove postharvest practices (not AE/RA production practices) ----
@@ -182,7 +182,7 @@ fomd10.cfra <- fomd10.cfra %>%
   filter(is.na(postharvest_practice))
 
 nrow(fomd10.cfra); length(unique(fomd10.cfra$study_id))
-#[1] v51 17303; v52 25518; v52.2 25101; 25513
+#[1] v51 17303; v52 25518; v52.2 25101; 25513; 25545
 #[1] v51 334; v52 418; v52.2 408; 415
 
 #--- 1.6 Outcomes: outcome group and direction of each paired comparison (criterion iv) ----
@@ -199,7 +199,7 @@ fomd10.cfra %>% filter(pest_count) %>%
   summarise(paired_comparisons = n_distinct(effect_size_id), .groups = "drop")
 
 nrow(fomd10.cfra); length(unique(fomd10.cfra$study_id))
-#[1] v51 17291; v52 25480; v52.2 25063; 25513
+#[1] v51 17291; v52 25480; v52.2 25063; 25513; 25545
 #[1] v51 334; v52 418; v52.2 408; 415
 
 #--- 1.7 Food groups relevant to school meals (criterion iii) ----
@@ -227,7 +227,7 @@ fomd10.cfra <- fomd10.cfra %>% filter(!is.na(food_group))
 
 
 nrow(fomd10.cfra); length(unique(fomd10.cfra$study_id))
-#[1] v51 16935; v52 25151; v52.2 24769; 25436;25387
+#[1] v51 16935; v52 25151; v52.2 24769; 25436;25387; 25419
 #[1] v51 317; v52 398; v52.2 389; 397;396
 
 #--- 1.8 Check: variety management types and traits (all CFRA countries) ----

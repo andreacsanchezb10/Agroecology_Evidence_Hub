@@ -64,8 +64,8 @@ data.pool <- read_csv(file.path(path.meta.analysis, "01.cfra_data/fomd10_cfra.cs
 data <- data.pool %>% filter(str_detect(country, country_name))
 
 nrow(data); length(unique(data$study_id))
-#[1] 6830
-#[1] 96
+#[1] 6830;7222
+#[1] 96;101
 
 #--- Agro-ecological zones (GAEZ v4) ----
 aez.found <- aez_files[file.exists(file.path(path.meta.analysis, "GAEZ", aez_files))]
@@ -103,16 +103,16 @@ for (a in names(selection)) {
 
 #===== 2A - Soil restoration | sufficient within high-priority areas: TRUE 
 #aez zone                                                       share studies_priority studies_final comparisons_final
-#1  2  Tropics, lowland; semi-arid, with soil/terrain limitations 19.5   8                8           219 
-#2 50  Land with severe soil/terrain limitations                  17.2  20               20           446
-#3  1  Tropics, lowland; semi-arid, no soil/terrain limitations   10.4   1                1           1
+#1  2  Tropics, lowland; semi-arid, with soil/terrain limitations 19.5   9                9           283 
+#2 50  Land with severe soil/terrain limitations                  17.2  22               22           485
+#3  1  Tropics, lowland; semi-arid, no soil/terrain limitations   10.4   1                1           2
 #evidence gaps: none
 
 #===== 2B - Arid micro-gardens | sufficient within high-priority areas: FALSE 
 #aez zone                                                       share studies_priority studies_final comparisons_final
-#1  2  Tropics, lowland; semi-arid, with soil/terrain limitations 37.2  6                6            86 
-#2 53  Desert/Arid climate                                        31.5  0                1            28
-#3  1  Tropics, lowland; semi-arid, no soil/terrain limitations   11.0  0                1            1
+#1  2  Tropics, lowland; semi-arid, with soil/terrain limitations 37.2  6                7            124 
+#2 53  Desert/Arid climate                                        31.5  0                2            33
+#3  1  Tropics, lowland; semi-arid, no soil/terrain limitations   11.0  0                1            2
 #evidence gaps: none
 
 # Comparisons used per archetype, with their origin (column `selection`)
