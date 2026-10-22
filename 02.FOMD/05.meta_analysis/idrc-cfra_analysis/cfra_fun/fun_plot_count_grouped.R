@@ -25,15 +25,9 @@ library(patchwork)
 plot_votes_grouped <- function(cells, archetype_name,
                                outcome_order = c("Yield", "Profitability", "Soil health", "Inputs efficiency",
                                                  "Resilience to pests", "Labour demand", "Biodiversity", "Climate mitigation"),
-                               min_es_cell = 10, 
-                               strong_es = 50,
-                               strong_studies = 3, 
-                               cut_positive = 65, 
-                               cut_negative = 35,
-                               text_size = 7, 
-                               show_no_data = TRUE,
-                               heading_step = 0.6, 
-                               tile_height = 0.85, heading_wrap = 60,
+                               min_es_cell = 10, strong_es = 100, cut_positive = 65, cut_negative = 35,
+                               text_size = 7, show_no_data = TRUE,
+                               heading_step = 0.6, tile_height = 0.85, heading_wrap = 60,
                                vertical_outcomes = FALSE) {
   
   # 0. Check the archetype name
@@ -71,7 +65,7 @@ plot_votes_grouped <- function(cells, archetype_name,
     mutate(pct = round(pct_positive),
            outcome_group = factor(outcome_group, levels = outcome_order),
            shown  = effect_sizes >= min_es_cell,
-           strong = effect_sizes >= strong_es & k >= strong_studies,
+           strong = effect_sizes >= strong_es,
            class = case_when(!shown                          ~ class_levels[7],
                              pct <= cut_negative &  strong   ~ class_levels[1],
                              pct <= cut_negative             ~ class_levels[2],
@@ -167,9 +161,7 @@ plot_votes_grouped <- function(cells, archetype_name,
 # grid_legend_small(): compact legend for the A4 figures (same colours as plot_votes_grouped)
 #==========================================================
 # Columns = direction (negative / neutral / positive), rows = evidence (strong / limited).
-grid_legend_small <- function(strong_es = 50,
-                              strong_studies = 3, 
-                              cut_positive = 65, cut_negative = 35, text_size = 7) {
+grid_legend_small <- function(strong_es = 100, cut_positive = 65, cut_negative = 35, text_size = 7) {
   leg <- tibble::tribble(
     ~direction, ~evidence, ~colour,
     "Negative", "Strong",  "#C00000",
@@ -183,8 +175,8 @@ grid_legend_small <- function(strong_es = 50,
   col_labels <- c(Negative = paste0("Negative (\u2264", cut_negative, "%)"),
                   Neutral  = paste0("Neutral (", cut_negative + 1, "\u2013", cut_positive - 1, "%)"),
                   Positive = paste0("Positive (\u2265", cut_positive, "%)"))
-  row_labels <- c(Strong  = paste0("Strong evidence (n \u2265 ", strong_es, ", \u2265 ", strong_studies, " studies)"),
-                  Limited = paste0("Limited evidence (fewer comparisons or studies)"))
+  row_labels <- c(Strong  = paste0("Strong evidence (n \u2265 ", strong_es, ")"),
+                  Limited = paste0("Limited evidence (n < ", strong_es, ")"))
   ggplot(leg, aes(x = direction, y = evidence)) +
     geom_tile(aes(fill = colour), colour = "white", linewidth = 1) +
     scale_fill_identity() +

@@ -20,8 +20,8 @@ source(file.path(path.metadata.effectsize, "fomd_fun/fun_pairing_CT.R"))
 # Read datasets
 #==========================================================
 #metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
-#metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
-metadata<-"MA_Sanch_22_Finan_Ec" #Sanchez et al. 2022. Financial profitability of diversified farming systems: A global meta-analysis. 10.1016/j.ecolecon.2022.107595
+metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
+#metadata<-"MA_Sanch_22_Finan_Ec" #Sanchez et al. 2022. Financial profitability of diversified farming systems: A global meta-analysis. 10.1016/j.ecolecon.2022.107595
 
 #---09_FOMD_clean
 fomd09.clean <- read_csv(

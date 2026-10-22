@@ -24,8 +24,8 @@ source(file.path(path.metadata.effectsize,"/fomd_fun/fun_lookup_ontologies.R"))
 # Read datasets
 #==========================================================
 #metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
-#metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
-metadata<-"MA_Sanch_22_Finan_Ec" #Sanchez et al. 2022. Financial profitability of diversified farming systems: A global meta-analysis. 10.1016/j.ecolecon.2022.107595
+metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
+#metadata<-"MA_Sanch_22_Finan_Ec" #Sanchez et al. 2022. Financial profitability of diversified farming systems: A global meta-analysis. 10.1016/j.ecolecon.2022.107595
 
 #--- Check that every verified-paper .xlsm in a subfolder shares the same columns
 check_09FOMD_column_consistency(subfolder = metadata)
@@ -53,7 +53,7 @@ for (col in c("exp_design", "exp_plot_size", "exp_field_size", "exp_duration")) 
   cat("---", col, "---\n")
   print(sort(unique(fomd09.clean[[col]])))
 }
-sort(unique(fomd09.clean$study_id[fomd09.clean$exp_duration  =="4"]))
+sort(unique(fomd09.clean$study_id[fomd09.clean$exp_duration  =="5"]))
 
 #--- Check experiment time details ----
 for (col in c("time_raw", "time_year_start", "time_year_end", "time_season")) {

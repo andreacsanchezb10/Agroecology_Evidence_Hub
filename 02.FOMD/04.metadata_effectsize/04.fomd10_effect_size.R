@@ -39,7 +39,7 @@ skim(fomd10.clean)
 
 length(fomd10_clean_files) # how many source files got combined
 nrow(fomd10.clean)
-length(unique(fomd10.clean$study_id)) #36 -> 1846 -> 1851; 1854
+length(unique(fomd10.clean$study_id)) #36 -> 1846 -> 1851; 1854; 1860
 #sort(unique(fomd10.clean$study_id[is.na(fomd10.clean$C_out_value )]))
 #sort(unique(fomd10.clean$study_id[fomd10.clean$C_out_var_metric =="95% Confidence Intervals"]))
 
@@ -56,11 +56,11 @@ for (col in c("effect_size_id","C_out_value_metric", "T_out_value_metric",
   print(sort(unique(fomd10.clean[[col]])))
 }
 
-skim(fomd10.clean$C_out_value) #1084; 1079; 1103
-skim(fomd10.clean$T_out_value) #14; 9; 33
+skim(fomd10.clean$C_out_value) #1084; 1079; 1103; 1135
+skim(fomd10.clean$T_out_value) #14; 9; 33; 65
 
-skim(fomd10.clean$C_out_var_value) # 147354; 130474; 130498
-skim(fomd10.clean$T_out_var_value) #147009; 130324; 130348
+skim(fomd10.clean$C_out_var_value) # 147354; 130474; 130498; 130546
+skim(fomd10.clean$T_out_var_value) #147009; 130324; 130348; 130396
 
 skim(fomd10.clean$C_out_sample_size) #12054
 skim(fomd10.clean$T_out_sample_size) #12054
@@ -84,12 +84,12 @@ head(x)
 # From observations that don't provide variance values or number of samples
 #==========================================================
 # --- quick checks ---
-skim(fomd10.mean.sd$C_out_mean) # 1167; 1191
-skim(fomd10.mean.sd$T_out_mean) #54; 78
+skim(fomd10.mean.sd$C_out_mean) # 1167; 1191; 1135; 1167
+skim(fomd10.mean.sd$T_out_mean) #54; 78; 69; 101
 sort(unique(fomd10.mean.sd$study_id[is.na(fomd10.mean.sd$C_out_mean)]))
 
-skim(fomd10.mean.sd$C_out_sd) #148940; 132146
-skim(fomd10.mean.sd$T_out_sd) #148357; 131808
+skim(fomd10.mean.sd$C_out_sd) #148940; 132146; 132209
+skim(fomd10.mean.sd$T_out_sd) #148357; 131808; 131871
 
 skim(fomd10.mean.sd$C_out_sample_size) #12758; 12110
 skim(fomd10.mean.sd$T_out_sample_size) #12758; 12110
@@ -116,8 +116,8 @@ fomd10.n.cv <- fomd10.n.cv%>%
     T_out_sample_size_imputed = coalesce(T_out_sample_size, T_out_sample_size_imputed),
     C_out_sample_size_imputed = coalesce(C_out_sample_size, C_out_sample_size_imputed))
 names(fomd10.n.cv)
-skim(fomd10.n.cv$C_out_cv_final) #110581; 87169
-skim(fomd10.n.cv$T_out_cv_final) #110581; 87169
+skim(fomd10.n.cv$C_out_cv_final) #110581; 87169; 87285
+skim(fomd10.n.cv$T_out_cv_final) #110581; 87169; 87285
 
 ## TO CHECK: there is a problem here, the code did not calculate n of samples for some rows of C
 skim(fomd10.n.cv$C_out_sample_size) #12758; 12110
@@ -332,9 +332,7 @@ write_csv(fomd10.effectsize, paste0(path.metadata.effectsize, "04.fomd10_effect_
 #==========================================================
 # #Subset the Ethiopia data to send to the Modelling team
 #==========================================================
-fomd10.effectsize.eth<-fomd10.effectsize#%>%
-  #filter(str_detect(country, "Ethiopia"))
-write_csv(fomd10.effectsize.eth, paste0(path.metadata.effectsize, "/fomd10_subset_modelling_teams/fomd10_effect_size.v2.csv"))
+write_csv(fomd10.effectsize, paste0(path.metadata.effectsize, "/fomd10_subset_modelling_teams/fomd10_effect_size.v3.csv"))
 
 #---10_FOMD_metadata_dictionary
 fomd10.dictionary<-read_xlsx(file.path(path.metadata.structure,"10_FOMD_metadata_synthesis_short.xlsx"), sheet = "10_FOMD_readme")%>%

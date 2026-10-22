@@ -103,7 +103,7 @@ md.era.short.clean %>%
 length(unique(md.era.short.clean$study_id)) # 1810;1808 studies
 length(unique(md.era.short.clean$effect_size_id))  #232209 rows #V50 191019 ROWS;V51:166297
 length(unique(md.era.short.clean$authors))  #1347
-length(unique(md.era.short.clean$title)) #980;986
+length(unique(md.era.short.clean$title)) #980;988
 length(unique(md.era.short.clean$doi)) #1592; #1591;1589
 
 #----------------------------------------------
@@ -1301,6 +1301,38 @@ sort(unique(md.era.short.clean$agrof_dhb_mean_min_max))#Missing from ERA
 #----------------------------------------------
 #---nutrient_management_practice (inorganic)----
 #----------------------------------------------
+md.era.short.clean <- md.era.short.clean%>%
+  mutate(
+    C_fert_subpractice_raw= case_when(study_id=="NN0540"~"0N + 20kg/ha P",TRUE~C_fert_subpractice_raw),
+    C_fert_subpractice= case_when(study_id=="NN0540"~"Inorganic Fertilizer",TRUE~C_fert_subpractice),
+    C_fert_inorganic_category= case_when(study_id=="NN0540"~"Inorganic",TRUE~C_fert_inorganic_category),
+    C_fert_inorganic_type= case_when(study_id=="NN0540"~"P (Unspecified)",TRUE~C_fert_inorganic_type),
+    C_fert_inorganic_unit= case_when(study_id=="NN0540"~"kg/ha",TRUE~C_fert_inorganic_unit),
+    C_fert_inorganic_combined= case_when(study_id=="NN0540"~"P (Unspecified)(20[kg/ha])",TRUE~C_fert_inorganic_combined),
+    C_fert_inorganic_amount= case_when(study_id=="NN0540"~"20",TRUE~C_fert_inorganic_amount),
+    C_fert_inorganicNPK_unit= case_when(study_id=="NN0540"~"kg/ha",TRUE~C_fert_inorganicNPK_unit),
+    C_fert_inorganicP= case_when(study_id=="NN0540"~"20",TRUE~C_fert_inorganicP),
+    T_fert_inorganicP= case_when(study_id=="NN0540"~"20",TRUE~T_fert_inorganicP))%>%
+  
+  mutate(
+    C_fert_subpractice_raw= case_when(study_id=="CJ0024"~"0N + 20kg/ha P",TRUE~C_fert_subpractice_raw),
+    C_fert_subpractice= case_when(study_id=="CJ0024"~"Inorganic Fertilizer",TRUE~C_fert_subpractice),
+    C_fert_inorganic_category= case_when(study_id=="CJ0024"~"Inorganic",TRUE~C_fert_inorganic_category),
+    C_fert_inorganic_type= case_when(study_id=="CJ0024"~"Tripe Superphosphate",TRUE~C_fert_inorganic_type),
+    C_fert_inorganic_unit= case_when(study_id=="CJ0024"~"kg/ha",TRUE~C_fert_inorganic_unit),
+    C_fert_inorganic_combined= case_when(study_id=="CJ0024"~"Tripe Superphosphate(20[kg/ha])",TRUE~C_fert_inorganic_combined),
+    C_fert_inorganic_amount= case_when(study_id=="CJ0024"~"20",TRUE~C_fert_inorganic_amount),
+    C_fert_inorganicNPK_unit= case_when(study_id=="CJ0024"~"kg/ha",TRUE~C_fert_inorganicNPK_unit),
+    C_fert_inorganicP= case_when(study_id=="CJ0024"~"20",TRUE~C_fert_inorganicP),
+    T_fert_inorganic_type	=case_when(study_id=="CJ0024"~paste0(T_fert_inorganic_type,"; Tripe Superphosphate"),TRUE~T_fert_inorganic_type),
+    T_fert_inorganic_unit	=case_when(study_id=="CJ0024"~paste0(T_fert_inorganic_unit,"; kg/ha"),TRUE~T_fert_inorganic_unit),
+    T_fert_inorganic_combined	=case_when(study_id=="CJ0024"~paste0(T_fert_inorganic_combined,"; Tripe Superphosphate(20[kg/ha])"),TRUE~T_fert_inorganic_combined),
+    T_fert_inorganic_amount=case_when(study_id=="CJ0024"~paste0(T_fert_inorganic_amount,"; 20"),TRUE~T_fert_inorganic_amount),
+    T_fert_inorganicP= case_when(study_id=="CJ0024"~"20",TRUE~T_fert_inorganicP)
+    
+    )
+    
+    
 # Apply "No Fertilizer Application" -> "No Fertilizers Applied" substitution
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
@@ -1420,6 +1452,8 @@ md.era.short.clean <- md.era.short.clean%>%
          T_fert_inorganicP2O5_amount_unit= combine_amount_unit(amount = T_fert_inorganicP2O5,unit   = T_fert_inorganicNPK_unit),
          T_fert_inorganicK2O_amount_unit= combine_amount_unit(amount = T_fert_inorganicK2O,unit   = T_fert_inorganicNPK_unit)
   )
+
+
 
 
 # Quick checks ----
@@ -1961,6 +1995,16 @@ md.era.short.clean <- md.era.short.clean %>%
     )
   )
 
+md.era.short.clean <- md.era.short.clean %>%
+  mutate(
+    C_residues_subpractice=case_when(
+      study_id=="NN0540"&C_residues_subpractice=="Crop Residue Unresolved (Unspecified)"~"Crop Residue Unresolved (Non N fixing)",
+      TRUE~C_residues_subpractice),
+    T_residues_subpractice=case_when(
+      study_id=="NN0540"&T_residues_subpractice=="Crop Residue Unresolved (Unspecified)"~"Crop Residue Unresolved (Non N fixing)",
+      TRUE~T_residues_subpractice))
+  
+  
 # Quick checks ----
 md.era.short.clean %>%
   select(study_id, effect_size_id, 
@@ -3045,8 +3089,8 @@ prueba<-md.era.short.clean%>%
 
 sort(unique(md.era.short.clean$C_out_var_metric))
 sort(unique(md.era.short.clean$T_out_var_metric))
-nrow(md.era.short.clean[md.era.short.clean$C_out_var_metric == "", ]) #in v6 182058; in v32 183067; in v50 147338
-nrow(md.era.short.clean[md.era.short.clean$T_out_var_metric == "", ]) #183074; in v32 182996; in v50 146993
+nrow(md.era.short.clean[md.era.short.clean$C_out_var_metric == "", ]) #in v50 147338; V52 130425
+nrow(md.era.short.clean[md.era.short.clean$T_out_var_metric == "", ]) # in v50 146993; V52 130275
 
 
 sort(unique(md.era.short.clean$C_out_var_value))
