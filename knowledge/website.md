@@ -46,12 +46,36 @@ Consequences worth knowing:
   already been stale once.
 - **The site computes its own effect sizes** from the paired `C_…` / `T_…` means, rather than reading the
   effect-size columns. So it does not inherit bugs in the effect-size scripts, but it also does not inherit
-  their fixes, and it shows a plain percentage change rather than anything Andrea has ratified. The map is
-  for orientation and download, **not** a published analysis.
+  their fixes. It shows the effect size `yi` with its standard error `se` and variance `vi` for each
+  comparison, and medians of `yi` as summaries; none of that is a pooled estimate Andrea has ratified. The map is for orientation and download, **not** a
+  published analysis.
 - **Downloads are always in English**, whatever language the page is in, so that everyone is working from
   one vocabulary. The interface and the data terms are translated for display only.
 
-## Three rules that are enforced in the code
+## Five rules that are enforced in the code
+
+**Positive always means the agroecological practice did better.** The effect size the site shows, `yi`, is
+ln(T/C) turned by the outcome's good direction: +1 where a higher value is better, −1 where a lower one is
+(costs, erosion, pests, weeds). The direction comes from the `Sign` column of the ontology's `01_outcomes`
+sheet, copied read-only by `tools/fetch_outcome_signs.py` into `outcome_signs.csv`. `build.py` adds two
+things the sheet does not settle, both marked as belonging in the workbook: the obvious reading of the four
+sub-indicators left blank (`SIGN_FIXES`), and a rule for Abundance by organism counted (`BAD_ORGANISMS`:
+more weeds or pests is worse), because the sheet marks Abundance "higher is better" for every organism.
+Comparisons with no known direction have no `yi`, colour grey, and stay outside "did better". The download
+keeps the raw `lnRR` and the `direction`, so anyone can undo it. Lolita decided this on 2026-10-19 after
+reading the summary sentence; the counts either way are in `_status/website.md`.
+
+**The practice is always the agroecological arm.** The sources label their arms control and treatment
+their own way, and sometimes the conventional arm is the "treatment". `build.py` holds a list of
+conventional terms, `COMPARATOR_TERMS`, written from the level-0 row of `control_treatment_scoring.md`
+together with its rule that the absence of an input is not agroecology. A comparison whose source
+treatment carries one of those terms, and whose control does not, is turned round before anything is
+computed. One where both arms carry one has no agroecological side: it is set aside and not published.
+The build prints every swap and every pair set aside on each run, so the list is checked against the data
+every time. The list is Andrea's to ratify; counts are in `_status/website.md`. A natural or semi-natural
+habitat is never the practice: against farming it is the comparator and the comparison is marked as such
+(`comparatorType`, a filter and a column, named in the summary sentence); against conventional farming, or
+another habitat, the pair has no agroecological practice and is set aside too.
 
 **Everything is served from the repository.** The site loads no script, stylesheet, font or map data from
 anyone else's server. Libraries, fonts and the boundary files are all committed under `docs/vendor/`, which
@@ -90,9 +114,13 @@ collected properly rather than mailed, that needs a service and a decision.
 | Spanish and French reviewed by a native speaker **and** an agronomist — currently unreviewed | Andrea / team |
 | Photograph rights: most hero images have no cleared licence recorded | Lolita |
 | The repository sits on a personal GitHub account, not an institutional one | Lolita / Sarah |
-| Stats4SD still appears as a partner on the About page though they are no longer involved | Lolita |
+| The list of conventional terms that orients each comparison, and leaving out pairs with no agroecological side | Andrea |
+| The good direction per outcome: four blank `Sign` cells in `01_outcomes`, and Abundance, whose direction depends on the organism and so cannot sit in a per-sub-indicator column; both live in `build.py` until the workbook has them | Lolita (workbook), Andrea (method) |
 | Whether the site shows ERA at all, and under what caveat | Andrea |
 | Whether to publish a real analysis rather than a percentage change | Andrea |
+| Intercrop component yields compared with the *other* crop's sole stand (Belay 2009, Choudhary 2014, Gebru 2015: the largest effect sizes on the site, lnRR −3.4 to +4.1, are of this kind); and lnRR on counts near zero (129 rows with an arm below 0.5). Keep, restrict to whole-system rows, or use LER — see the 2026-10-19 log | Andrea |
+| Biswas et al. (Paut): 7 published yield rows whose treatment unit is "m3/ha/yr..t/ha/yr", timber volume and crop mass added, set against a single-unit control; small values, meaningless ratio | Andrea |
+| Perry et al. 2016 richness rows: the forest arm (109 species, n = 8) looks like a pooled total set against per-sample means (6.72, n = 32). Check against the paper | Lolita / Jones extraction |
 | A domain name, and anything that costs money | Sarah |
 
 The map, the filters, the languages and the forms are all documented in `website/README.md`; this doc exists
