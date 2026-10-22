@@ -19,7 +19,7 @@ library(stringr)
 #==========================================================
 
 #--- 1. Outcomes measured on a single crop ----
-crop_level_outcomes <- c("Yield", "Inputs efficiency", "Resilience to pests")
+crop_level_outcomes <- c("Productivity", "Inputs efficiency", "Resilience to pests")
 
 #--- 2. School-meal food groups, in the order shown in figures ----
 food_group_order <- c("Cereals", "Pulses and legumes", "Nuts and seeds", "Roots and tubers",

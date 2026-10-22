@@ -13,9 +13,9 @@ library(tibble)
 #   1. Practice groups to use
 #   2. Rename practices        (e.g. all "Organic mulch (...)" -> "Organic mulch")
 #   3. Rename the control for specific pairs only
-#                              (e.g. "Crop residues removed" vs "Organic mulch" -> "No mulch" vs "Organic mulch")
+#                              (e.g. "Crop residues removed" vs "Organic mulch" -> "No residues or mulch" vs "Organic mulch")
 #   4. Swap control and treatment when they are the wrong way round
-#                              (e.g. "Organic mulch" vs "No mulch" -> "No mulch" vs "Organic mulch")
+#                              (e.g. "Organic mulch" vs "No residues or mulch" -> "No residues or mulch" vs "Organic mulch")
 #   4b. Move practices to another management domain
 #   4c. Variety management: local vs improved variety
 #   5. Function reclassify_practices() that applies steps 1-4c
@@ -47,13 +47,16 @@ practice_rename <- tribble(
   "Crop residues incorporated",  "Residues incorporation",
   "Tree pruning incorporated",   "Residues incorporation",
   "Crop residues retained",      "Residues retention",
-  "Crop residues grazed",        "Residues removed",
-  "Crop residues removed",       "Residues removed",
+  "Tree pruning retain",         "Residues retention",
+  "Crop residues grazed",        "No residues or mulch",
+  "Crop residues removed",       "No residues or mulch",
+  "No mulch",                    "No residues or mulch",
   "Organic mulch",               "Organic mulch",
   
-  "Alleycropping","Agroforestry",
-  "Boundary Planting","Agroforestry",
-  "Intercropping","Intercropping",
+  "Alleycropping",               "Agroforestry",
+  "Boundary Planting",           "Agroforestry",
+  "Intercropping",               "Intercropping",
+  "No Boundary Planting + Intercropping (N fixing mixed)", "Intercropping",
   
   "Woody Fallow (N fixing)","Improved fallow",
   "Crop Rotation (N fixing mixed)", "Crop rotation",
@@ -82,8 +85,8 @@ practice_rename <- tribble(
 # the control is renamed to `C_new`. Use names as they are after step 2.
 control_rename <- tribble(
   ~C_practice,          ~T_practice,        ~C_new,
-  "Residues removed",   "Organic mulch",    "No mulch",
-  "No Chemical Applied","Inoculation", "No Inoculation Applied"
+  "Residues removed",   "Organic mulch",    "No residues or mulch",
+  "No Chemical Applied","Inoculation", "No fertilizer applied"
 )
 
 #----------------------------------------------------------
@@ -94,20 +97,23 @@ control_rename <- tribble(
 # Use names as they are after steps 2, 3 and 4c.
 swap_pairs <- tribble(
   ~C_practice,              ~T_practice,
-  "Organic mulch",          "No mulch",
-  "Residues incorporation",  "Residues removed",
-   "Crop rotation",          "Monoculture",
+  "Organic mulch",          "No residues or mulch",
+  "Residues incorporation", "No residues or mulch",
+   "Crop rotation",         "Monoculture",
   
-  "Inorganic Fertilizer",    "No fertilizer applied", 
-  "Mixed fertilizer",        "Organic fertilizer",
-  "Inoculation",              "No Chemical Applied",
+  "Inorganic Fertilizer",   "No fertilizer applied", 
+  "Mixed fertilizer",       "Organic fertilizer",
+  "Inoculation",            "No Chemical Applied",
   
-  "Reduced tillage",          "Conventional tillage",
-  "Zero tillage",          "Conventional tillage",
+  "Reduced tillage",        "Conventional tillage",
+  "Zero tillage",           "Conventional tillage",
   
+  "Local variety",          "Improved variety" ,            # local variety (AE practice) always in the treatment
+
+  "Microcatchments",        "No water harvesting",
   
-  "Local variety","Improved variety" ,            # local variety (AE practice) always in the treatment
-)
+  "Mechanical weeding",      "No Chemical Applied"
+  )
 
 #----------------------------------------------------------
 #--- 4b. Move practices to another management domain ----
@@ -145,8 +151,8 @@ variety_origin <- function(practice, type, variety = NA_character_) {
 # Use names as they are after steps 2-4c.
 exclude_pairs <- tribble(
   ~C_practice,                    ~T_practice,
-  "Residues removed",             "Plastic mulch",  # not an AE/RA practice
-  "No fertilizer applied",       "Inorganic Fertilizer",   # not an AE/RA practice
+  "No residues or mulch",         "Plastic mulch",  # not an AE/RA practice
+  "No fertilizer applied",        "Inorganic Fertilizer",   # not an AE/RA practice
   "Inorganic Fertilizer",         "No fertilizer applied",
   "Synthetic pesticide",          "No Chemical Applied",
   #"Inorganic Fertilizer",         "Mixed fertilizer",

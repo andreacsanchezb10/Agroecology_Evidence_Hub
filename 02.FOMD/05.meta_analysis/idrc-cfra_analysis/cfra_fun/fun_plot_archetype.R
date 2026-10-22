@@ -254,7 +254,9 @@ plot_aez_evidence <- function(arc, rule, aez_raster, lookup, points_used,
   ggplot() +
     geom_sf(data = arc, fill = "white", colour = "grey80", linewidth = 0.15) +
     geom_raster(data = df, aes(x = x, y = y, fill = zone), key_glyph = draw_key_polygon) +
+    geom_sf(data = pr, fill = NA, colour = "grey45", linewidth = 0.15) +            # county borders inside the high-priority areas
     geom_sf(data = st_union(pr), fill = NA, colour = "grey10", linewidth = 0.6) +
+    
     # within high-priority areas: blue with white outline; added: white with blue outline
     geom_sf(data = filter(sites, origin == "Within high-priority areas"), aes(size = size_class, shape = origin),
             fill = "#08519C", colour = "white", stroke = 0.3, alpha = 0.9, key_glyph = draw_key_point,
@@ -439,7 +441,7 @@ aez_table <- function(arc, rule, aez_raster, lookup, sel, pool, points_pool, aez
     left_join(transmute(lookup, aez = as.integer(value), `Agroecological zone` = label), by = "aez") %>%
     mutate(share = coalesce(share, 0), `Main zone` = if_else(share >= min_share, "Yes", "No")) %>%
     filter(share >= 0.1 | rowSums(across(any_of(cols)), na.rm = TRUE) > 0) %>%   # drop slivers without evidence
-    arrange(desc(share)) %>%
+    arrange(desc(`Main zone`), desc(.data[[cols[2]]]), desc(share)) %>%
     select(`Agroecological zone`, `Share of high-priority areas (%)` = share, `Main zone`, any_of(cols))
   
   total <- bind_cols(tibble(`Agroecological zone` = "Total", `Share of high-priority areas (%)` = 100, `Main zone` = ""),
@@ -484,7 +486,7 @@ county_table <- function(arc, rule, sel, pool, points_pool,
                 summarise(Studies = n_distinct(study_id), Comparisons = n_distinct(effect_size_id), .groups = "drop"),
               by = "unit") %>%
     mutate(Studies = coalesce(Studies, 0L), Comparisons = coalesce(Comparisons, 0L)) %>%
-    arrange(desc(class), desc(Comparisons), unit)
+    arrange(desc(Comparisons), desc(class), unit)
   
   total <- tibble(unit = "Total", class = NA,
                   Studies = n_distinct(ev$study_id), Comparisons = n_distinct(ev$effect_size_id))

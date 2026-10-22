@@ -23,12 +23,20 @@ library(patchwork)
 # Returns a patchwork; attr(result, "n_rows") gives the height in rows, for the figure height.
 #==========================================================
 plot_votes_grouped <- function(cells, archetype_name,
-                               outcome_order = c("Yield", "Profitability", "Soil health", "Inputs efficiency",
-                                                 "Resilience to pests", "Labour demand", "Biodiversity", "Climate mitigation"),
-                               min_es_cell = 10, strong_es = 100, cut_positive = 65, cut_negative = 35,
-                               text_size = 7, show_no_data = TRUE,
-                               heading_step = 0.6, tile_height = 0.85, heading_wrap = 60,
-                               vertical_outcomes = FALSE) {
+                               outcome_order = c("Productivity", "Profitability","Labour demand",
+                                                 "Soil health", "Inputs efficiency","Resilience to pests",
+                                                   "Biodiversity", "Climate mitigation"),
+                               min_es_cell = 10, 
+                               strong_es = 50,
+                               strong_studies = 3, 
+                               cut_positive = 65, 
+                               cut_negative = 35,
+                               text_size = 7, 
+                               show_no_data = TRUE,
+                               heading_step = 0.6, 
+                               tile_height = 0.85, heading_wrap = 60,
+                               vertical_outcomes = FALSE,
+                               rows = "all") {
   
   # 0. Check the archetype name
   if (!archetype_name %in% cells$archetype) {
@@ -39,7 +47,7 @@ plot_votes_grouped <- function(cells, archetype_name,
   cells <- cells %>%
     mutate(practice_group = sub("^Diversification (spatial|temporal)$", "Diversification", practice_group),
            block   = as.character(food_group),
-           heading = paste0(practice_group, " (vs. ", tolower(C_practice), ")"),
+           heading = paste0(practice_group, ", compared with ", tolower(C_practice)),
            row     = T_practice)
   
   # 2. Legend classes and colours (as in plot_votes)
@@ -51,10 +59,14 @@ plot_votes_grouped <- function(cells, archetype_name,
     paste0("Positive (>=", cut_positive, "% positive) - strong evidence (n>=", strong_es, ")"),
     paste0("Positive (>=", cut_positive, "% positive) - limited evidence (n<", strong_es, ")"),
     paste0("Insufficient evidence (n<", min_es_cell, ")"))
-  class_colours <- setNames(c("#C00000", "#F4A6AE", "#8A8A8A", "#D9D9D9",
-                              "#4E6B2C", "#7ED321", "#EAE7DC"), class_levels)
-  text_colours  <- setNames(c("white", "#444441", "white", "#444441",
-                              "white", "#444441", "#A6A08F"), class_levels)
+  class_colours <- setNames(c("#B35806", "#FDB863", "#7F7F7F", "#D9D9D9",
+                              "#2166AC", "#92C5DE", "#F3F1EC"), class_levels)
+  text_colours  <- setNames(c("white", "#3D2600", "white", "#333333",
+                              "white", "#0B2545", "#A6A08F"), class_levels)
+  #class_colours <- setNames(c("#C00000", "#F4A6AE", "#8A8A8A", "#D9D9D9",
+   #                           "#4E6B2C", "#7ED321", "#EAE7DC"), class_levels)
+  #text_colours  <- setNames(c("white", "#444441", "white", "#444441",
+   #                           "white", "#444441", "#A6A08F"), class_levels)
   
   # 3. Cells of this archetype, with every practice x outcome combination
   plot.data <- cells %>%
@@ -65,7 +77,7 @@ plot_votes_grouped <- function(cells, archetype_name,
     mutate(pct = round(pct_positive),
            outcome_group = factor(outcome_group, levels = outcome_order),
            shown  = effect_sizes >= min_es_cell,
-           strong = effect_sizes >= strong_es,
+           strong = effect_sizes >= strong_es & k >= strong_studies,
            class = case_when(!shown                          ~ class_levels[7],
                              pct <= cut_negative &  strong   ~ class_levels[1],
                              pct <= cut_negative             ~ class_levels[2],
@@ -76,10 +88,12 @@ plot_votes_grouped <- function(cells, archetype_name,
            class = factor(class, levels = class_levels),
            text_colour = unname(text_colours[as.character(class)]),
            pct_label = if_else(shown, paste0(pct, "%"), ""),
-           n_label = if_else(effect_sizes > 0, paste0("n= ", effect_sizes), "No data"),
+           n_label = if_else(effect_sizes > 0, paste0("n = ", effect_sizes), "No data"),
            pos_strong = class == class_levels[5]) %>%
     group_by(block, heading, row) %>%
-    filter(any(shown)) %>%                                   # drop rows without any reported cell
+    filter(rows == "all" |
+             (rows == "strong"  &  any(strong & shown)) |
+             (rows == "limited" & !any(strong & shown))) %>%
     ungroup()
   
   # 4. Order by the number of positive results supported by strong evidence
@@ -125,7 +139,8 @@ plot_votes_grouped <- function(cells, archetype_name,
     
     ggplot(d, aes(x = outcome_group, y = ypos)) +
       geom_tile(aes(fill = class), colour = "white", linewidth = 0.6, height = tile_height) +
-      geom_text(data = filter(d, shown), aes(label = pct_label, colour = text_colour), size = text_size * 0.34, vjust = -0.1) +
+      geom_text(data = filter(d, shown), aes(label = pct_label, colour = text_colour,
+                                             fontface = ifelse(strong, "bold", "plain")), size = text_size * 0.34, vjust = -0.1) +
       geom_text(data = filter(d, shown), aes(label = n_label, colour = text_colour), size = text_size * 0.27, vjust = 1.3) +
       geom_text(data = filter(d, !shown, effect_sizes > 0), aes(label = n_label, colour = text_colour), size = text_size * 0.27) +
       { if (show_no_data) geom_text(data = filter(d, effect_sizes == 0), aes(label = n_label, colour = text_colour), size = text_size * 0.24) } +
@@ -143,7 +158,9 @@ plot_votes_grouped <- function(cells, archetype_name,
             plot.margin = margin(if (first) 10 else 2, 2, 2, 2),   # more space above the first panel
             axis.text.x = if (!first) element_blank() else if (vertical_outcomes)
               element_text(size = text_size, face = "bold", angle = 90, hjust = 0, vjust = 0.5) else
-                element_text(size = text_size, face = "bold", lineheight = 0.85),
+                element_text(size = text_size, face = "bold", lineheight = 0.85, vjust = 0,
+                             margin = margin(b = 1)),
+            axis.ticks.length.x = unit(0, "pt"),
             axis.text.y = suppressWarnings(element_text(size = text_size, hjust = 1, face = lay$face, lineheight = 0.8)))
   }
   plots  <- Map(draw_block, block_levels, letters[seq_along(block_levels)], seq_along(block_levels) == 1)
@@ -161,32 +178,43 @@ plot_votes_grouped <- function(cells, archetype_name,
 # grid_legend_small(): compact legend for the A4 figures (same colours as plot_votes_grouped)
 #==========================================================
 # Columns = direction (negative / neutral / positive), rows = evidence (strong / limited).
-grid_legend_small <- function(strong_es = 100, cut_positive = 65, cut_negative = 35, text_size = 7) {
+grid_legend_small <- function(strong_es = 50,
+                              strong_studies = 3, 
+                              cut_positive = 65, cut_negative = 35, text_size = 7) {
   leg <- tibble::tribble(
     ~direction, ~evidence, ~colour,
-    "Negative", "Strong",  "#C00000",
-    "Negative", "Limited", "#F4A6AE",
-    "Neutral",  "Strong",  "#8A8A8A",
-    "Neutral",  "Limited", "#D9D9D9",
-    "Positive", "Strong",  "#4E6B2C",
-    "Positive", "Limited", "#7ED321") %>%
+   # "Negative", "Strong",  "#C00000",
+    #"Negative", "Limited", "#F4A6AE",
+    #"Neutral",  "Strong",  "#8A8A8A",
+    #"Neutral",  "Limited", "#D9D9D9",
+    #"Positive", "Strong",  "#4E6B2C",
+    #"Positive", "Limited", "#7ED321") %>%
+   "Negative", "Strong",  "#B35806",
+   "Negative", "Limited", "#FDB863",
+   "Neutral",  "Strong",  "#7F7F7F",
+   "Neutral",  "Limited", "#D9D9D9",
+   "Positive", "Strong",  "#2166AC",
+   "Positive", "Limited", "#92C5DE") %>%
     mutate(direction = factor(direction, levels = c("Negative", "Neutral", "Positive")),
            evidence  = factor(evidence,  levels = c("Limited", "Strong")))      # Strong on top
-  col_labels <- c(Negative = paste0("Negative (\u2264", cut_negative, "%)"),
-                  Neutral  = paste0("Neutral (", cut_negative + 1, "\u2013", cut_positive - 1, "%)"),
-                  Positive = paste0("Positive (\u2265", cut_positive, "%)"))
-  row_labels <- c(Strong  = paste0("Strong evidence (n \u2265 ", strong_es, ")"),
-                  Limited = paste0("Limited evidence (n < ", strong_es, ")"))
+  col_labels <- c(Negative = paste0("Negative\n(\u2264", cut_negative, "%)"),
+                  Neutral  = paste0("Neutral\n(", cut_negative + 1, "\u2013", cut_positive - 1, "%)"),
+                  Positive = paste0("Positive\n(\u2265", cut_positive, "%)"))
+  row_labels <- c(Strong  = paste0("Strong evidence (n \u2265 ", strong_es, ", \u2265 ", strong_studies, " studies)"),
+                  Limited = paste0("Limited evidence (fewer comparisons or studies)"))
   ggplot(leg, aes(x = direction, y = evidence)) +
     geom_tile(aes(fill = colour), colour = "white", linewidth = 1) +
     scale_fill_identity() +
     scale_x_discrete(position = "top", labels = col_labels) +
     scale_y_discrete(labels = row_labels) +
-    labs(x = NULL, y = NULL, title = "% positive comparisons") +
+    
+    labs(x = NULL, y = NULL, title = "% positive comparisons", caption = "Empty cells: not measured") +
     theme_minimal(base_size = text_size) +
     theme(panel.grid = element_blank(),
+          plot.caption = element_text(size = text_size - 0.5, hjust = 0.5, colour = "#555555"),
           plot.title = element_text(size = text_size, face = "bold", hjust = 0.5),
           plot.title.position = "panel",
-          axis.text.x = element_text(size = text_size - 0.5, face = "bold", lineheight = 0.9),
+          axis.text.x = element_text(size = text_size - 0.5, #face = "bold",
+                                     lineheight = 0.9),
           axis.text.y = element_text(size = text_size - 0.5))
 }

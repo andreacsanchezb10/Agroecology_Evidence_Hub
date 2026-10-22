@@ -19,11 +19,11 @@ library(stringr)
 #----------------------------------------------------------
 outcome_lookup <- tribble(
   ~out_subindicator,                    ~outcome_group,         ~lower_is_better,
-  "Area Time Equivalent Ratio",         "Yield",                FALSE,
-  "Biomass Yield",                      "Yield",                FALSE,
-  "Crop Residue Yield",                 "Yield",                FALSE,
-  "Crop Yield",                         "Yield",                FALSE,
-  "Total Factor Productivity",          "Yield",                FALSE,
+  "Area Time Equivalent Ratio",         "Productivity",                FALSE,
+  "Biomass Yield",                      "Productivity",                FALSE,
+  "Crop Residue Yield",                 "Productivity",                FALSE,
+  "Crop Yield",                         "Productivity",                FALSE,
+  "Total Factor Productivity",          "Productivity",                FALSE,
   
   "Gross Margin",                       "Profitability",        FALSE,
   "Gross Return",                       "Profitability",        FALSE,
@@ -35,6 +35,7 @@ outcome_lookup <- tribble(
   "Return on Investment",               "Profitability",        FALSE,
   "Return to Labour",                   "Profitability",        FALSE,
   "Labour Cost",                        "Profitability",        TRUE,
+  "Net Present Value",                  "Profitability",        FALSE,
   "Variable Cost",                      "Profitability",        TRUE,
   "Variable Cost per Unit Product",     "Profitability",        TRUE,
   "Fixed Cost",                         "Profitability",        TRUE,
