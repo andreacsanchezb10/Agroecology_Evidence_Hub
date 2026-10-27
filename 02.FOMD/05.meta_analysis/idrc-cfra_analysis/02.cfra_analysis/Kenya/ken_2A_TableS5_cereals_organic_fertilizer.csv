@@ -1,0 +1,26 @@
+V1,V2,V3,V4,V5,V6,V7,V8,V9,V10
+"a) Cereal productivity, by measured crop, companion species, type of organic input, and outcome measured.",,,,,,,,,
+Measured crop,Companion species,Organic input,Outcome measured,Studies,Comparisons,Positive comparisons,Neutral comparisons,Negative comparisons,% positive comparisons
+Maize,-,Biosolids,Crop Yield,1,3,3,0,0,100
+Maize,-,Compost,Crop Yield,2,33,32,0,1,97
+Maize,-,Manure,Biomass Yield,1,4,4,0,0,100
+Maize,Common Bean + Leucaena leucocephala,Manure,Crop Residue Yield,1,10,1,0,9,10
+Maize,-,Manure,Crop Residue Yield,1,2,1,0,1,50
+Maize,-,Manure,Crop Yield,6,17,15,1,1,88
+Maize,Common Bean + Leucaena leucocephala,Manure,Crop Yield,1,10,1,0,9,10
+Maize,-,Organic (Other),Crop Yield,1,36,12,0,24,33
+Sorghum,-,Manure,Crop Residue Yield,2,22,18,0,4,82
+Sorghum,-,Manure,Crop Yield,2,14,12,0,2,86
+"b) Soil health in cereal systems, by main crop, companion species, type of organic input, and outcome measured.",,,,,,,,,
+Main crop,Companion species,Organic input,Outcome measured,Studies,Comparisons,Positive comparisons,Neutral comparisons,Negative comparisons,% positive comparisons
+Maize,-,Compost,Soil NH4,1,10,10,0,0,100
+Maize,-,Compost,Soil NO3,1,10,10,0,0,100
+Maize,-,Compost,Soil Organic Carbon,1,10,10,0,0,100
+Maize,-,Compost,Soil Total Nitrogen,1,10,10,0,0,100
+Maize,-,Manure,Soil NH4,1,2,2,0,0,100
+Maize,-,Manure,Soil NO3,1,2,2,0,0,100
+Maize,-,Manure,Soil Organic Carbon,3,8,8,0,0,100
+Maize,-,Manure,Soil Organic Carbon (Change),1,1,1,0,0,100
+Maize,-,Manure,Soil Total Nitrogen,4,10,7,2,1,70
+Sorghum,-,Manure,Soil Organic Carbon,1,4,2,0,2,50
+Sorghum,-,Manure,Soil Total Nitrogen,1,4,2,1,1,50

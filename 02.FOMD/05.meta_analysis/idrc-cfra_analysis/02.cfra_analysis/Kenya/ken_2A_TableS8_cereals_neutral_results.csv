@@ -1,0 +1,39 @@
+V1,V2,V3,V4,V5,V6,V7,V8,V9,V10
+"a) Biochar amendment compared with no fertilizer, by measured crop, companion species, type of biochar amendment, and outcome measured.",,,,,,,,,
+Measured crop,Companion species,Biochar amendment,Outcome measured,Studies,Comparisons,Positive comparisons,Neutral comparisons,Negative comparisons,% positive comparisons
+Maize,-,Biochar,Crop Yield,3,41,18,0,23,44
+Maize,Soybean,Biochar,Crop Yield,1,26,24,0,2,92
+"b) Agroforestry compared with monoculture, by measured crop, companion species, agroforestry type, and outcome measured.",,,,,,,,,
+Measured crop,Companion species,Agroforestry type,Outcome measured,Studies,Comparisons,Positive comparisons,Neutral comparisons,Negative comparisons,% positive comparisons
+Maize,Cowpea + Grevillea robusta,Alleycropping (N fixing and Non N fixing),Crop Residue Yield,1,4,0,0,4,0
+Maize,Sesbania sesban,Alleycropping (N fixing),Biomass Yield,1,30,18,0,12,60
+Maize,Croton macrostachyus,Alleycropping (N fixing),Crop Residue Yield,1,4,1,0,3,25
+Maize,Markhamia lutea,Alleycropping (N fixing),Crop Residue Yield,1,4,0,0,4,0
+Maize,Acacia albida Delile + Mung Bean,Alleycropping (N fixing),Crop Yield,1,12,1,0,11,8
+Maize,Sesbania sesban,Alleycropping (N fixing),Crop Yield,1,10,6,0,4,60
+Maize,Leucaena leucocephala + Mung Bean,Alleycropping (N fixing),Crop Yield,1,6,6,0,0,100
+Maize,Croton macrostachyus,Alleycropping (N fixing),Crop Yield,1,4,4,0,0,100
+Maize,Markhamia lutea,Alleycropping (N fixing),Crop Yield,1,4,0,0,4,0
+Maize,Cordia africana + Faidherbia albida + Grevillea robusta + Vachellia seyal + Vachellia xanthophloea,Alleycropping (N fixing),Crop Yield,1,3,2,0,1,67
+Maize,Cordia africana,Alleycropping (Non N fixing),Crop Yield,1,3,2,0,1,67
+Maize,Faidherbia albida,Alleycropping (Non N fixing),Crop Yield,1,3,2,0,1,67
+Maize,Markhamia lutea,Alleycropping (Unspecified),Crop Residue Yield,1,12,12,0,0,100
+Maize,Croton macrostachyus,Alleycropping (Unspecified),Crop Residue Yield,1,12,11,0,1,92
+Maize,Croton macrostachyus,Alleycropping (Unspecified),Crop Yield,1,12,10,0,2,83
+Maize,Markhamia lutea,Alleycropping (Unspecified),Crop Yield,1,12,8,1,3,67
+Maize,Common Bean + Leucaena leucocephala,Living Fences or Hedgerows,Crop Residue Yield,1,20,4,0,16,20
+Maize,Common Bean + Leucaena leucocephala,Living Fences or Hedgerows,Crop Yield,1,20,4,0,16,20
+"c) Crop rotation compared with monoculture, by measured crop, companion species, crop rotation type, and outcome measured.",,,,,,,,,
+Measured crop,Companion species,Crop rottation type,Outcome measured,Studies,Comparisons,Positive comparisons,Neutral comparisons,Negative comparisons,% positive comparisons
+Maize,Cowpea,Rotation (N fixing and Non N fixing),Crop Yield,1,36,21,0,15,58
+Maize,Cowpea + Pigeon Pea,Rotation (N fixing and Non N fixing),Crop Yield,1,36,16,0,20,44
+Maize,Acacia albida Delile + Mung Bean,Rotation (N fixing and Non N fixing),Crop Yield,1,12,1,0,11,8
+Maize,Leucaena leucocephala + Mung Bean,Rotation (N fixing and Non N fixing),Crop Yield,1,6,6,0,0,100
+"d) Reduced tillage compared with conventional tillage, by measured crop, companion species, tillage practice, and outcome measured.",,,,,,,,,
+Measured crop,Companion species,Tillage practice,Outcome measured,Studies,Comparisons,Positive comparisons,Neutral comparisons,Negative comparisons,% positive comparisons
+Maize,-,Reduced or Minimum Tillage,Biomass Yield,1,3,0,0,3,0
+Maize,Common Bean,Reduced or Minimum Tillage,Biomass Yield,1,2,0,0,2,0
+Maize,-,Reduced or Minimum Tillage,Crop Yield,3,7,4,0,3,57
+Maize,Common Bean,Reduced or Minimum Tillage,Crop Yield,1,2,0,0,2,0
+Sorghum,-,Reduced or Minimum Tillage,Crop Residue Yield,2,42,26,0,16,62
+Sorghum,-,Reduced or Minimum Tillage,Crop Yield,2,26,15,1,10,58

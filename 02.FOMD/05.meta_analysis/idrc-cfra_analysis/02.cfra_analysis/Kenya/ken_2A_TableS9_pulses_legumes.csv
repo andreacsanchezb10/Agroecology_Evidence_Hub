@@ -1,0 +1,30 @@
+V1,V2,V3,V4,V5,V6,V7,V8,V9,V10
+"a) Intercropping compared with sole pulse or legume crops, by measured crop, companion species, intercrop type, and outcome measured.",,,,,,,,,
+Measured crop,Companion species,Intercrop type,Outcome measured,Studies,Comparisons,Positive comparisons,Neutral comparisons,Negative comparisons,% positive comparisons
+Common Bean,Baby Corn,With a nitrogen-fixing species,Crop Yield,1,2,0,0,2,0
+Common Bean,Baby Corn + Sunflower,With a nitrogen-fixing species,Crop Yield,1,2,0,0,2,0
+Common Bean,Kale,With a nitrogen-fixing species,Crop Yield,1,2,1,0,1,50
+Common Bean,Maize,With a nitrogen-fixing species,Crop Yield,1,4,2,0,2,50
+Common Bean,Maize + Pearl Millet,With a nitrogen-fixing species,Crop Yield,1,4,2,0,2,50
+Common Bean,Maize + Pearl Millet + Sorghum,With a nitrogen-fixing species,Crop Yield,1,4,2,0,2,50
+Common Bean,Potato,With a nitrogen-fixing species,Area Time Equivalent Ratio,1,2,1,0,1,50
+Common Bean,Potato,With a nitrogen-fixing species,Crop Yield,1,2,0,0,2,0
+Common Bean,Potato + Sunflower,With a nitrogen-fixing species,Crop Yield,1,2,0,0,2,0
+Common Bean,Sunflower,With a nitrogen-fixing species,Crop Yield,1,2,0,0,2,0
+Lablab purpureus,Potato,With a nitrogen-fixing species,Area Time Equivalent Ratio,1,2,1,0,1,50
+Pigeon Pea,Maize,With a nitrogen-fixing species,Biomass Yield,1,108,33,2,73,31
+Pigeon Pea,Maize,With a nitrogen-fixing species,Crop Yield,1,108,27,6,75,25
+Soybean,Maize,With a nitrogen-fixing species,Crop Yield,1,4,0,0,4,0
+"b) Crop residue incorporation relative to residue removal, by measured crop, companion species, type of residue, and outcome measured.",,,,,,,,,
+Measured crop,Companion species,Type of residue,Outcome measured,Studies,Comparisons,Positive comparisons,Neutral comparisons,Negative comparisons,% positive comparisons
+Common Bean,Leucaena leucocephala,Crop Residue Incorporation (N fixing),Crop Yield,1,3,0,0,3,0
+Common Bean,Maize,Crop Residue Incorporation (Non N fixing),Biomass Yield,1,2,1,0,1,50
+Common Bean,Maize,Crop Residue Incorporation (Non N fixing),Crop Yield,1,1,1,0,0,100
+Common Bean,Leucaena leucocephala + Maize,Tree Prunings Incorporated (Unspecified),Biomass Yield,1,1,1,0,0,100
+Common Bean,Leucaena leucocephala + Maize,Tree Prunings Incorporated (Unspecified),Crop Yield,1,1,0,0,1,0
+Pigeon Pea,Maize,Crop Residue Incorporation (Unspecified),Biomass Yield,1,72,24,0,48,33
+Pigeon Pea,Maize,Crop Residue Incorporation (Unspecified),Crop Yield,1,72,20,3,49,28
+"c) Local relative to improved varieties, by measured crop, companion species, local variety, and outcome measured.",,,,,,,,,
+Measured crop,Companion species,Local variety,Outcome measured,Studies,Comparisons,Positive comparisons,Neutral comparisons,Negative comparisons,% positive comparisons
+Soybean,-,Soybean(Nyala),Biomass Yield,1,18,2,0,16,11
+Soybean,-,Soybean(Nyala),Crop Yield,2,18,6,0,12,33
