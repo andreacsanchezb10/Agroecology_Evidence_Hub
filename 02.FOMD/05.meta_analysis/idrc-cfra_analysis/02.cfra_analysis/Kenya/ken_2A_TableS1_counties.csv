@@ -1,9 +1,9 @@
 County,Criteria met,Studies,Comparisons
-Machakos,4,9,1110
+Machakos,4,9,852
 Kiambu,3,9,632
 Siaya,3,13,403
 Kakamega,3,9,332
-Embu,4,12,287
+Embu,4,12,283
 Homa Bay,3,12,272
 Tharaka-Nithi,3,7,209
 Vihiga,4,6,146
@@ -13,14 +13,14 @@ Trans Nzoia,3,3,75
 Murang'a,3,2,64
 Nandi,3,2,56
 Nakuru,3,4,55
-Kilifi,3,5,46
+Kilifi,3,5,45
 Kirinyaga,3,2,29
 Migori,3,2,25
 Kisii,3,4,23
 Nyandarua,3,2,21
 Nyamira,3,1,9
 Uasin Gishu,4,2,5
-Kwale,3,1,2
+Kwale,3,1,1
 Meru,3,1,1
 Bomet,4,0,0
 Elgeyo-Marakwet,4,0,0
@@ -31,4 +31,4 @@ Narok,3,0,0
 Samburu,3,0,0
 Taita Taveta,3,0,0
 West Pokot,3,0,0
-Total,NA,82,3976
+Total,NA,82,3713

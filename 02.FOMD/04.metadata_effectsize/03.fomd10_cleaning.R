@@ -27,10 +27,10 @@ source(file.path(path.metadata.effectsize, "fomd_fun/fun_lookup_ontologies.R"))
 #==========================================================
 # Read datasets
 #==========================================================
-#metadata<-"MD_Rosen_24_Effec_Sc" #Rosenstock et al. 2024. Effects of changing farming practices in African agriculture. 10.1038/s41597-024-03805-z 
+metadata<-"MD_Rosen_24_Effec_Sc" #Rosenstock et al. 2024. Effects of changing farming practices in African agriculture. 10.1038/s41597-024-03805-z 
 #metadata<-"MD_Paut,_24_A glo_Sc" #Paut et al. 2024. A global dataset of experimental intercropping and agroforestry studies in horticulture. 10.1038/s41597-023-02831-7
 #metadata<-"MD_Jones_21_A glo_Sc" #Jones et al. 2021. A global database of diversified farming effects on biodiversity and yield. 10.1038/s41597-021-01000-y
-metadata<-"MA_Sanch_22_Finan_Ec" #Sanchez et al. 2022. Financial profitability of diversified farming systems: A global meta-analysis. 10.1016/j.ecolecon.2022.107595
+#metadata<-"MA_Sanch_22_Finan_Ec" #Sanchez et al. 2022. Financial profitability of diversified farming systems: A global meta-analysis. 10.1016/j.ecolecon.2022.107595
 
 
 #---fomd10.formated
@@ -121,6 +121,55 @@ for (col in c("variety_management_subpractice","variety_management_practice","va
 }
 
 prueba<-fomd10.clean%>%
+  #Biomass management-----
+select(study_id, C_residues_subpractice_raw,T_residues_subpractice_raw,
+       C_residues_material,T_residues_material,
+       biomass_management_subpractice,biomass_management_practice ,biomass_management_theme,
+       #"practice_compared" ,  "practice_compared_detail" ,    "practice_compared_n"
+)%>%
+  filter(!is.na(biomass_management_subpractice))%>%
+  filter(is.na(biomass_management_practice))
+
+sort(unique(prueba$practice_compared))
+x<-prueba[grepl("Inorganic fertilizer", prueba$practice_compared, ignore.case = TRUE), ]
+
+
+  #Water management-----
+select(doi, C_irrig_subpractice,
+       study_id,title,
+       water_management_subpractice,water_management_practice ,water_management_theme,
+       #"practice_compared" , "practice_compared_detail" ,"practice_compared_n"
+       )%>%
+  filter(!is.na(water_management_subpractice))%>%
+  filter(is.na(water_management_practice))
+
+distinct(water_management_subpractice)
+sort(unique(fomd10.clean$C_planting_subpractice))
+sort(unique(fomd10.clean$C_planting_method))
+
+
+
+  
+  #Pest management-----
+select(study_id, C_chem_subpractice,T_chem_subpractice,
+       CT_chem_subpractice,
+       pest_management_subpractice,pest_management_practice ,pest_management_theme,
+       # "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n"
+)%>%
+  filter(!is.na(pest_management_subpractice))%>%
+  filter(is.na(pest_management_practice))
+
+sort(unique(prueba$CT_chem_subpractice))
+
+
+  #nutrient management ----
+select(doi, CT_fert_subpractice,CT_fert_practice,
+       nutrient_management_subpractice ,nutrient_management_practice,nutrient_management_theme,
+       #"practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n"
+       )%>%
+  filter(!is.na(nutrient_management_subpractice))%>%
+  filter(is.na(nutrient_management_practice))
+
   #diversification spatial-----
 select(doi,study_id,
        diversification_spatial_subpractice,
@@ -137,16 +186,6 @@ sort(unique(prueba$diversification_spatial_subpractice))
 sort(unique(prueba$doi))
 
 
-  #Pest management-----
-select(study_id, C_chem_subpractice,T_chem_subpractice,
-       CT_chem_subpractice,
-       pest_management_subpractice,pest_management_practice ,pest_management_theme,
-       # "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n"
-)%>%
-  filter(!is.na(pest_management_subpractice))%>%
-  filter(is.na(pest_management_theme))
-
-sort(unique(prueba$CT_chem_subpractice))
   #Soil management-----
 select(doi, soil_management_subpractice,soil_management_practice ,soil_management_theme)%>%
       # "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
@@ -161,12 +200,7 @@ select(doi, soil_management_subpractice,soil_management_practice ,soil_managemen
          "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
   filter(!is.na(variety_management_subpractice))%>%
   filter(is.na(variety_management_practice))
-  #nutrient management ----
-  select(doi, CT_fert_subpractice,CT_fert_practice,
-         nutrient_management_subpractice ,nutrient_management_practice,nutrient_management_theme,
-         "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
-  filter(!is.na(nutrient_management_subpractice))%>%
-  filter(is.na(nutrient_management_practice))
+
 
   
   # post-harvest practices
@@ -191,29 +225,7 @@ select(doi, soil_management_subpractice,soil_management_practice ,soil_managemen
 
 sort(unique(prueba$CT_varietal_crop_subpractice))
 
-  #Biomass management-----
-select(doi, C_residues_subpractice_raw,T_residues_subpractice_raw,
-       C_residues_material,T_residues_material,
-       biomass_management_subpractice,biomass_management_practice ,biomass_management_theme,
-       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
-  filter(!is.na(biomass_management_subpractice))%>%
-  filter(is.na(biomass_management_practice))
 
-sort(unique(prueba$practice_compared))
-x<-prueba[grepl("Inorganic fertilizer", prueba$practice_compared, ignore.case = TRUE), ]
-
-  #Water management-----
-select(doi, C_irrig_subpractice,
-       water_management_subpractice,water_management_practice ,water_management_theme,
-       "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
-  filter(!is.na(water_management_subpractice))%>%
-  filter(is.na(water_management_practice))
-
-distinct(water_management_subpractice)
-sort(unique(fomd10.clean$C_planting_subpractice))
-sort(unique(fomd10.clean$C_planting_method))
-  
- 
 #diversification temporal-----
   #select(doi, diversification_temporal_subpractice,diversification_temporal_practice ,diversification_temporal_theme,
   #      "practice_compared" ,                   "practice_compared_detail" ,            "practice_compared_n")%>%
