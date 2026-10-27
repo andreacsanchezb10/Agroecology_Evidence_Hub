@@ -44,10 +44,10 @@ practice_groups <- c("biomass_management",
 # Any practice name (control or treatment) that starts with `starts_with` becomes `new_name`
 practice_rename <- tribble(
   ~starts_with,                  ~new_name,
-  "Crop residues incorporated",  "Residues incorporation",
-  "Tree pruning incorporated",   "Residues incorporation",
-  "Crop residues retained",      "Residues retention",
-  "Tree pruning retain",         "Residues retention",
+  "Crop residues incorporated",  "Residue incorporation",
+  "Tree pruning incorporated",   "Residue incorporation",
+  "Crop residues retained",      "Residue retention",
+  "Tree pruning retain",         "Residue retention",
   "Crop residues grazed",        "No residues or mulch",
   "Crop residues removed",       "No residues or mulch",
   "No mulch",                    "No residues or mulch",
@@ -98,7 +98,7 @@ control_rename <- tribble(
 swap_pairs <- tribble(
   ~C_practice,              ~T_practice,
   "Organic mulch",          "No residues or mulch",
-  "Residues incorporation", "No residues or mulch",
+  "Residue incorporation", "No residues or mulch",
    "Crop rotation",         "Monoculture",
   
   "Inorganic Fertilizer",   "No fertilizer applied", 
@@ -152,6 +152,8 @@ variety_origin <- function(practice, type, variety = NA_character_) {
 exclude_pairs <- tribble(
   ~C_practice,                    ~T_practice,
   "No residues or mulch",         "Plastic mulch",  # not an AE/RA practice
+  "No residues or mulch",         "Organic mulch (unspecified) + Plastic mulch",  # not an AE/RA practice
+  
   "No fertilizer applied",        "Inorganic Fertilizer",   # not an AE/RA practice
   "Inorganic Fertilizer",         "No fertilizer applied",
   "Synthetic pesticide",          "No Chemical Applied",

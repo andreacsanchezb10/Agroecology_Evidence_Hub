@@ -1,0 +1,14 @@
+V1,V2,V3,V4,V5,V6,V7,V8,V9,V10
+"a) Resilience to pests in nuts and seeds intercrops, by main crop, companion species, intercrop type, and outcome measured.",,,,,,,,,
+Main crop,Companion species,Intercrop type,Outcome measured,Studies,Comparisons,Positive comparisons,Neutral comparisons,Negative comparisons,% positive comparisons
+Sunflower,Baby Corn + Common Bean,With a nitrogen-fixing species,Resilience to insect pests (thrips),1,2,2,0,0,100
+Sunflower,Common Bean,With a nitrogen-fixing species,Resilience to insect pests (thrips),1,2,2,0,0,100
+Sunflower,Common Bean + Potato,With a nitrogen-fixing species,Resilience to insect pests (thrips),1,2,2,0,0,100
+"b) Biodiversity in nuts and seeds intercrops, by main crop, companion species, intercrop type, and outcome measured.",,,,,,,,,
+Main crop,Companion species,Intercrop type,Outcome measured,Studies,Comparisons,Positive comparisons,Neutral comparisons,Negative comparisons,% positive comparisons
+Sunflower,Baby Corn + Common Bean,With a nitrogen-fixing species,Abundance of natural enemies of pests (Ceranisus spp.),1,2,0,0,2,0
+Sunflower,Baby Corn + Common Bean,With a nitrogen-fixing species,Abundance of natural enemies of pests (Orius spp.),1,2,2,0,0,100
+Sunflower,Common Bean,With a nitrogen-fixing species,Abundance of natural enemies of pests (Ceranisus spp.),1,2,0,0,2,0
+Sunflower,Common Bean,With a nitrogen-fixing species,Abundance of natural enemies of pests (Orius spp.),1,2,2,0,0,100
+Sunflower,Common Bean + Potato,With a nitrogen-fixing species,Abundance of natural enemies of pests (Ceranisus spp.),1,2,0,0,2,0
+Sunflower,Common Bean + Potato,With a nitrogen-fixing species,Abundance of natural enemies of pests (Orius spp.),1,2,2,0,0,100

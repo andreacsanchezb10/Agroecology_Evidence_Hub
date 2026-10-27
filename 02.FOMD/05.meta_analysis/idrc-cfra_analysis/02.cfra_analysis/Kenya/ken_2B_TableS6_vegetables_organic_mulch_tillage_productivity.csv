@@ -1,0 +1,13 @@
+V1,V2,V3,V4,V5,V6,V7,V8,V9,V10
+"a) Organic mulch compared with no mulch, by measured crop, companion species, type of organic mulch, and outcome measured.",,,,,,,,,
+Measured crop,Companion species,Organic mulch,Outcome measured,Studies,Comparisons,Positive comparisons,Neutral comparisons,Negative comparisons,% positive comparisons
+Cabbage,-,Mulch Herb (Non N fixing),Crop Yield,2,5,1,0,4,20
+Garlic,-,Mulch Herb (Non N fixing),Crop Yield,2,17,4,0,13,24
+Onion / Shallot,-,Mulch Herb (Non N fixing),Crop Yield,2,5,1,1,3,20
+Tomato,-,Mulch Herb (Non N fixing),Crop Yield,2,5,1,0,4,20
+"b) Zero tillage compared with conventional tillage, by measured crop, companion species, tillage practice, and outcome measured.",,,,,,,,,
+Measured crop,Companion species,Tillage practice,Outcome measured,Studies,Comparisons,Positive comparisons,Neutral comparisons,Negative comparisons,% positive comparisons
+Cabbage,-,No or Zero Tillage,Crop Yield,1,4,0,0,4,0
+Garlic,-,No or Zero Tillage,Crop Yield,1,16,3,0,13,19
+Onion / Shallot,-,No or Zero Tillage,Crop Yield,1,4,0,1,3,0
+Tomato,-,No or Zero Tillage,Crop Yield,1,4,0,0,4,0

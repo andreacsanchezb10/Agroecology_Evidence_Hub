@@ -217,9 +217,6 @@ md.era.short.clean <- md.era.short.clean %>%
       study_id=="LM0117.1"~"No",
       
       study_id== "NJ0025" & site_id=="Makoholi Research Station"~"No",
-      
-      
-      
       TRUE ~ site_agg),
     
     
@@ -234,6 +231,14 @@ md.era.short.clean <- md.era.short.clean %>%
       study_id == "NN0499" & site_id == "South Achefer" ~ "11.5",
       study_id=="AN0118"&site_id=="Mchinji..Msakambewa, Dowa..Salima"~"-13.795697..-13.55..-13.76",
       study_id=="EM1044"~"31.25",
+      study_id == "EO0003" & site_id == "Kisumu" ~ "-0.0843",
+      
+      study_id == "CJ0190" & site_id == "Dangishta" ~ "11.32",
+      study_id == "CJ0190" & site_id == "Robit..Dangishta" ~ "11.65..11.32",
+      
+      study_id == "JO0135" & site_id == "Dangishita..Robit..Yemu" ~ "11.32..11.65..9.61958",
+      study_id == "JO0140" & site_id == "Dangishita..Robit" ~ "11.32..11.65",
+      
       
       TRUE ~ site_latitude
     ),
@@ -248,7 +253,13 @@ md.era.short.clean <- md.era.short.clean %>%
       study_id == "NN0499" & site_id == "South Achefer" ~ "36.85",
       study_id=="AN0118"&site_id=="Mchinji..Msakambewa, Dowa..Salima"~"32.892422..33.9..34.47",
       study_id=="EM1044"~"31.75",
+      study_id == "EO0003" & site_id == "Kisumu" ~ "34.6922",
       
+      study_id == "CJ0190" & site_id == "Dangishta" ~ "36.85",
+      study_id == "CJ0190" & site_id == "Robit..Dangishta" ~ "37.47..36.85",
+      
+      study_id == "JO0135" & site_id == "Dangishita..Robit..Yemu" ~ "36.85..37.47..-0.817817976",
+      study_id == "JO0140" & site_id == "Dangishita..Robit" ~ "36.85..37.47",
       
       TRUE ~ site_longitude
     ),
@@ -1999,9 +2010,14 @@ md.era.short.clean <- md.era.short.clean %>%
   mutate(
     C_residues_subpractice=case_when(
       study_id=="NN0540"&C_residues_subpractice=="Crop Residue Unresolved (Unspecified)"~"Crop Residue Unresolved (Non N fixing)",
-      TRUE~C_residues_subpractice),
+     
+      
+       TRUE~C_residues_subpractice),
     T_residues_subpractice=case_when(
       study_id=="NN0540"&T_residues_subpractice=="Crop Residue Unresolved (Unspecified)"~"Crop Residue Unresolved (Non N fixing)",
+      
+      study_id=="JO0188"&T_residues_subpractice_raw%in%c("RFtS","RFbS")~"Mulch (Unspecified Plants)..Plastic Mulch",
+      
       TRUE~T_residues_subpractice))
   
   
@@ -2323,9 +2339,12 @@ md.era.short.clean <- apply_replace_in_cols(
   pattern = ", ",replacement = "..") 
 
 md.era.short.clean <- md.era.short.clean%>%
+  mutate(C_watharv_subpractice=case_when(
+    study_id== "JO0188"& C_watharv_subpractice=="No Water Harvesting"~"Ridge & Furrow",
+    TRUE~T_watharv_subpractice))%>%
+
   mutate(T_watharv_subpractice=case_when(
-           study_id== "EO0043"&
-           T_watharv_subpractice=="Bunds..Other Water Harvesting Practice"~"Bunds..Grass Strips",
+           study_id== "EO0043"&T_watharv_subpractice=="Bunds..Other Water Harvesting Practice"~"Bunds..Grass Strips",
          TRUE~T_watharv_subpractice))
 
 # Quick checks ----
@@ -2720,7 +2739,7 @@ replacements <- c(
   "Mung Bean or Green Gram"="Green Gram",
   "Oats"="Oat",
   "Olive (Fruits)"="Olive Fruits",
-  "Onion and Shallot (Total Yield)"="Onion..Shallot",
+  "Onion and Shallot (Total Yield)"="Onion",
   "Plantains and Cooking Banana"="Plantain..Cooking Banana",
   "Patula Pine"="Pinus patula",
   "Peanut (Pod)"="Peanut Pod",
@@ -2733,9 +2752,9 @@ replacements <- c(
   "Pigs"="Pig",
   "Rabbit" = "Rabbits",
   "Rape or Canola Leaf"="Canola Leaf",
-  "Sheep (Meat)" = "Sheep",
-  "Sheep (Milk)" = "Sheep",
-  "Sheep (Wool)" = "Sheep",
+  "Sheep (Meat)" = "Sheep Meat",
+  "Sheep (Milk)" = "Sheep Milk",
+  "Sheep (Wool)" = "Sheep Wool",
   "Sunflower (Seed)"="Sunflower Seed",
   "Sugar Beet (Root)"="Sugar Beet Root",
   "Sugar Beet (Sugar)"="Sugar Beet Sugar",
@@ -2759,6 +2778,30 @@ for (pat in names(replacements)) {
     replacement = replacements[[pat]]
   )
 }
+
+md.era.short.clean<-md.era.short.clean %>%
+  mutate(
+    T_product=case_when(
+      study_id=="CJ0186"&T_product=="Pepper Seed"~"Pepper Fruit",
+      study_id=="CJ0190"&T_product=="Pepper Seed"~"Pepper Fruit",
+      
+      study_id=="JS0204"&T_product=="Pepper Fruit" ~"Black Pepper Fruit",
+      study_id=="JS0204"&T_product=="Gliricidia sepium..Pepper..Cardamom" ~"Gliricidia sepium..Black Pepper..Cardamom",
+      study_id=="JS0204"&T_product=="Pepper..Gliricidia sp." ~"Black Pepper..Gliricidia sp.",
+      study_id=="JS0204"&T_product=="Pepper..Grevillea robusta" ~"Black Pepper..Grevillea robusta",
+      study_id=="JS0204"&T_product=="Pepper..Grevillea robusta..Cardamom" ~"Black Pepper..Grevillea robusta..Cardamom",
+      
+      TRUE~T_product
+    ),
+    C_product=case_when(
+      study_id=="CJ0186"&C_product=="Pepper Seed"~"Pepper Fruit",
+      study_id=="CJ0190"&C_product=="Pepper Seed"~"Pepper Fruit",
+      
+      study_id=="JS0204"&C_product=="Pepper Fruit" ~"Black Pepper Fruit",
+      
+      TRUE~C_product
+    )
+  )
 
 # Quick checks ----
 md.era.short.clean %>%

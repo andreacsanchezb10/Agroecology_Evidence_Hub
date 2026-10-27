@@ -1,0 +1,19 @@
+V1,V2,V3,V4,V5,V6,V7,V8,V9,V10
+"a) Cereal productivity, by measured crop, companion species, type of residue incorporated, and outcome measured.",,,,,,,,,
+Measured crop,Companion species,Residues type,Outcome measured,Studies,Comparisons,Positive comparisons,Neutral comparisons,Negative comparisons,% positive comparisons
+Maize,-,Crop Residue Incorporation (N fixing),Crop Yield,1,2,2,0,0,100
+Maize,-,Crop Residue Incorporation (Non N fixing),Crop Yield,2,17,10,0,7,59
+Maize,-,Tree Prunings Incorporated (N fixing),Crop Yield,1,32,21,1,10,66
+"b) Soil health in cereal systems, by main crop, companion species, type of residue incorporated, and outcome measured.",,,,,,,,,
+Main crop,Companion species,Residues type,Outcome measured,Studies,Comparisons,Positive comparisons,Neutral comparisons,Negative comparisons,% positive comparisons
+Maize,-,Crop Residue Incorporation (N fixing),Soil Organic Carbon,1,2,2,0,0,100
+Maize,-,Crop Residue Incorporation (N fixing),Soil Total Nitrogen,1,2,2,0,0,100
+Maize,-,Crop Residue Incorporation (Non N fixing),Soil Moisture,1,4,2,0,2,50
+Maize,-,Crop Residue Incorporation (Non N fixing),Soil NH4,1,4,1,0,3,25
+Maize,-,Crop Residue Incorporation (Non N fixing),Soil NO3,1,4,4,0,0,100
+Maize,-,Crop Residue Incorporation (Non N fixing),Soil Organic Carbon,1,1,1,0,0,100
+Maize,-,Crop Residue Incorporation (Non N fixing),Soil Total Nitrogen,2,5,2,1,2,40
+Maize,-,Tree Prunings Incorporated (Non N fixing),Soil Moisture,1,8,4,0,4,50
+Maize,-,Tree Prunings Incorporated (Non N fixing),Soil NH4,1,8,4,2,2,50
+Maize,-,Tree Prunings Incorporated (Non N fixing),Soil NO3,1,8,8,0,0,100
+Maize,-,Tree Prunings Incorporated (Non N fixing),Soil Total Nitrogen,1,8,5,3,0,62
