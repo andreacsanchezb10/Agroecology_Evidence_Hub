@@ -270,6 +270,7 @@ md.era.short.clean <- md.era.short.clean %>%
            site_id=="NRC, Dokki, Cairo..Cairo University, Agricultural Experimental Station"))
 
 sort(unique(md.era.short.clean$study_id[is.na(md.era.short.clean$site_latitude)])) #character(0)
+
 sort(unique(md.era.short.clean$study_id[is.na(md.era.short.clean$site_admin)])) #character(0)
 sort(unique(md.era.short.clean$site_id[is.na(md.era.short.clean$site_latitude)])) #character(0)
 sort(unique(md.era.short.clean$site_id[is.na(md.era.short.clean$site_longitude)]))#character(0)
@@ -758,10 +759,6 @@ md.era.short.clean <- apply_replace_in_cols(
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean, cols = crop_tree_cols,
   pattern = "Shea Nut", replacement = "Sheanut")
-
-md.era.short.clean <- apply_replace_in_cols(
-  md.era.short.clean, cols = crop_tree_cols,
-  pattern = "Acacia albida Delile", replacement = "Faidherbia albida")
 
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
@@ -1311,7 +1308,6 @@ md.era.short.clean <-md.era.short.clean%>%
     C_agrof_subpractice=case_when(
       study_id=="LM0264"&C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Gliricidia sepium-Maize"~"Monoculture",
       study_id%in% c("HK0261","NN0247")&C_crop_tree_diversity=="Maize-Gliricidia sepium"& T_crop_tree_diversity=="Maize-Gliricidia sepium"~"Alleycropping (N fixing)",
-      study_id=="CJ0076"&C_crop_tree_diversity=="Cooking Banana"& T_crop_tree_diversity=="Cooking Banana-Common Bean"~"",
       
       TRUE~C_agrof_subpractice))%>%
   
@@ -1319,43 +1315,34 @@ md.era.short.clean <-md.era.short.clean%>%
     study_id=="LM0264"&C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Gliricidia sepium-Maize"~"Alleycropping (N fixing)",
     study_id%in%c("HK0261","NN0241","NN0247")&
       C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Maize-Gliricidia sepium"~"Alleycropping (N fixing)",
+    
     study_id%in%c("HK0261","NN0247")&C_crop_tree_diversity=="Maize-Gliricidia sepium"& T_crop_tree_diversity=="Maize-Gliricidia sepium"~"Alleycropping (N fixing)",
+    
     study_id=="JO0177"~"Alleycropping (Non N fixing)",
-    study_id=="NN0310"&C_crop_tree_diversity=="Common Bean/Maize"& T_crop_tree_diversity=="Casuarina equisetifolia-Common Bean/Casuarina equisetifolia-Maize/Casuarina equisetifolia-Common Bean"~"Alleycropping (N fixing)",
-    
-    study_id=="LM0276"&C_crop_tree_diversity=="Cowpea/Maize"& T_crop_tree_diversity=="Cowpea-Grevillea robusta/Cowpea-Grevillea robusta"~"Alleycropping (Non N fixing)",
-    study_id=="AC0033"&C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Maize-Faidherbia albida-Cordia africana-Vachellia seyal-Vachellia xanthophloea-Grevillea robusta"~"Alleycropping (N fixing and Non N fixing)",
-    study_id=="NN0310"&C_crop_tree_diversity=="Common Bean/Maize"& T_crop_tree_diversity=="Common Bean-Entada abyssinica/Common Bean-Entada abyssinica/Entada abyssinica-Maize/Entada abyssinica-Maize/Common Bean-Entada abyssinica"~"Alleycropping (N fixing)",
-    
-    study_id=="CJ0076"&C_crop_tree_diversity=="Cooking Banana"& T_crop_tree_diversity=="Cooking Banana-Common Bean"~"",
     
     TRUE~T_agrof_subpractice))%>%
   
   mutate(C_intercrop_subpractice=case_when(
     study_id=="LM0264"&C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Gliricidia sepium-Maize"~"",
-    study_id%in%c("HK0261","NN0241","NN0247")&C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Maize-Gliricidia sepium"~"",
-    
-    study_id%in%c("HK0261","NN0247")&C_crop_tree_diversity=="Maize-Gliricidia sepium"& T_crop_tree_diversity=="Maize-Gliricidia sepium"~"",
-    study_id=="AC0033"&C_crop_tree_diversity=="Maize"~"",
-    
-    
-    
-    TRUE~C_intercrop_subpractice))%>%
-  mutate(T_intercrop_subpractice=case_when(
-    study_id=="LM0264"&C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Gliricidia sepium-Maize"~"",
-    study_id%in%c("HK0261","NN0241","NN0247")&
+    study_id%in%c("HK0261","NN0241",,"NN0247")&
       C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Maize-Gliricidia sepium"~"",
     
     study_id%in%c("HK0261","NN0247")&C_crop_tree_diversity=="Maize-Gliricidia sepium"& T_crop_tree_diversity=="Maize-Gliricidia sepium"~"",
-    study_id=="AC0033"&C_crop_tree_diversity=="Maize"~"",
+    TRUE~C_intercrop_subpractice))%>%
+  mutate(T_intercrop_subpractice=case_when(
+    study_id=="LM0264"&C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Gliricidia sepium-Maize"~"",
+    study_id%in%c("HK0261","NN0241")&
+      C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Maize-Gliricidia sepium"~"",
     
+    study_id%in%c("HK0261","NN0247")&C_crop_tree_diversity=="Maize-Gliricidia sepium"& T_crop_tree_diversity=="Maize-Gliricidia sepium"~"",
     TRUE~T_intercrop_subpractice))
 
+
+  
+    
 # Quick checks ----
 md.era.short.clean %>%
   select(study_id, effect_size_id, 
-         C_crop_tree_diversity,T_crop_tree_diversity,
-         C_intercrop_subpractice,T_intercrop_subpractice,
          C_agrof_subpractice_raw,C_agrof_subpractice,
          C_agrof_shade_mean_min_max,C_agrof_canopy_height_mean_min_max,
          C_agrof_dhb_mean_min_max,
@@ -2896,6 +2883,7 @@ md.era.short.clean %>%
 # TO CHECK: out_subindicator- Pest & Pathogen (Losses)
 sort(unique(md.era.short.clean$C_product[md.era.short.clean$out_subindicator=="Pest & Pathogen (Losses)"])) 
 sort(unique(md.era.short.clean$study_id[md.era.short.clean$out_subindicator=="Pest & Pathogen (Losses)"])) 
+
 
 sort(unique(md.era.short.clean$C_product)) 
 sort(unique(md.era.short.clean$T_product)) 
