@@ -65,7 +65,7 @@ data.pool <- read_csv(file.path(path.meta.analysis, "01.cfra_data/fomd10_cfra.cs
 data <- data.pool %>% filter(str_detect(country, country_name))
 
 nrow(data); length(unique(data$study_id))
-#[1] 6830;7222; 7291; 6972
+#[1] 6830;7222; 7291; 6972; 6928
 #[1] 96;101; 104
 
 #--- Agro-ecological zones (GAEZ v4) ----
@@ -104,16 +104,16 @@ for (a in names(selection)) {
 
 #===== 2A - Soil restoration | sufficient within high-priority areas: TRUE 
 #aez zone                                                       share studies_priority studies_final comparisons_final
-#1  2  Tropics, lowland; semi-arid, with soil/terrain limitations 19.5   9                9           279 
-#2 50  Land with severe soil/terrain limitations                  17.2  22               27           570
-#3  1  Tropics, lowland; semi-arid, no soil/terrain limitations   10.4   1                1           1
+#1  2  Tropics, lowland; semi-arid, with soil/terrain limitations 19.5   9                9           357 
+#2 50  Land with severe soil/terrain limitations                  17.2  22               28           629
+#3  1  Tropics, lowland; semi-arid, no soil/terrain limitations   10.4   1                1           4
 #evidence gaps: none
 
 #===== 2B - Arid micro-gardens | sufficient within high-priority areas: FALSE 
 #aez zone                                                       share studies_priority studies_final comparisons_final
-#1  2  Tropics, lowland; semi-arid, with soil/terrain limitations 37.2  6                8            126 
-#2 53  Desert/Arid climate                                        31.5  0                1            6
-#3  1  Tropics, lowland; semi-arid, no soil/terrain limitations   11.0  0                1            1
+#1  2  Tropics, lowland; semi-arid, with soil/terrain limitations 37.2  6                9            138 
+#2 53  Desert/Arid climate                                        31.5  0                2            18
+#3  1  Tropics, lowland; semi-arid, no soil/terrain limitations   11.0  0                1            4
 #evidence gaps: none
 
 # Comparisons used per archetype, with their origin (column `selection`)
@@ -141,15 +141,16 @@ View(practices.check)
 # Tested practices (T vs C) per archetype, food group and practice group
 practices <- arc.long %>%
   group_by(#archetype,
-    study_id,
-    food_group, practice_group, T_practice, C_practice) %>%
+    #study_id,
+    food_group, 
+    practice_group, T_practice, C_practice) %>%
   summarise(studies = n_distinct(study_id),
             paired_comparisons = n_distinct(effect_size_id), .groups = "drop") %>%
   arrange(#archetype,
     #study_id,
-    food_group, practice_group, desc(paired_comparisons))
+    #food_group,
+    practice_group, desc(paired_comparisons))
 View(practices)
-
 
 arc.long %>% semi_join(exclude_pairs, by = c("C_practice", "T_practice"))
 
@@ -568,15 +569,39 @@ View(table.2a.s4)
 
 write_csv(table.2a.s4, file.path(path.output, "ken_2A_TableS4_cereals_residues_incorporation.csv"))
 
-#--- Archetype 2A: Table 2A.S5 Effect of Organic fertilizer on cereals productivity and soil health ----
+#--- Archetype 2A: Table 2A.S5 Effect of Residue retention on cereals productivity ----
+# a) Cereals, Residues incorporation, Productivity
+ic.2a.s5 <- practice_detail(arc.long, "2A - Soil restoration", "Residue retention", "No residues or mulch",
+                             food = "Cereals", outcome = "Productivity", data = arc.data,
+                             extra = c("T_residues_subpractice", "out_subindicator"))
+
+View(ic.2a.s5$companions)    # cereal measured + species it was intercropped with
+
+table.2a.s5 <- ic.2a.s5$companions %>%
+  rename(`Residues type` = T_residues_subpractice,
+         `Outcome measured` = out_subindicator)%>%
+  mutate(`Companion species`=if_else(is.na(`Companion species`),"-",`Companion species`),
+         `Residues type`=str_replace_all(`Residues type`, "\\.{2,}", " + "))%>%
+  arrange(`Measured crop`,       # 1st: A to Z
+          `Residues type`,
+          `Outcome measured`,
+          desc(Comparisons),
+          desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
+
+View(table.2a.s5)
+
+
+write_csv(table.2a.s5, file.path(path.output, "ken_2A_TableS5_cereals_residues_retention.csv"))
+
+#--- Archetype 2A: Table 2A.S6 Effect of Organic fertilizer on cereals productivity and soil health ----
 # a) Cereals, Organic fertilizer, Productivity
-ic.2a.s5a <- practice_detail(arc.long, "2A - Soil restoration", "Organic fertilizer", "No fertilizer applied",
+ic.2a.s6a <- practice_detail(arc.long, "2A - Soil restoration", "Organic fertilizer", "No fertilizer applied",
                              food = "Cereals", outcome = "Productivity", data = arc.data,
                              extra = c("T_fert_subpractice","out_subindicator"))
 
-View(ic.2a.s5a$companions)    # cereal measured + species it was intercropped with
+View(ic.2a.s6a$companions)    # cereal measured + species it was intercropped with
 
-table.2a.s5a <- ic.2a.s5a$companions %>%
+table.2a.s6a <- ic.2a.s6a$companions %>%
   rename(`Organic input` = T_fert_subpractice,
          `Outcome measured` = out_subindicator)%>%
  
@@ -587,16 +612,16 @@ table.2a.s5a <- ic.2a.s5a$companions %>%
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
 
-View(table.2a.s5a)
+View(table.2a.s6a)
 
 # b) Cereals, Organic fertilizer, Soil health
-ic.2a.s5b <- practice_detail(arc.long, "2A - Soil restoration", "Organic fertilizer", "No fertilizer applied",
+ic.2a.s6b <- practice_detail(arc.long, "2A - Soil restoration", "Organic fertilizer", "No fertilizer applied",
                              food = "Cereals", outcome = "Soil health", data = arc.data,
                              extra = c("T_fert_subpractice", "out_subindicator"))
 
-View(ic.2a.s5b$companions)    # cereal measured + species it was intercropped with
+View(ic.2a.s6b$companions)    # cereal measured + species it was intercropped with
 
-table.2a.s5b <- ic.2a.s5b$companions %>%
+table.2a.s6b <- ic.2a.s6b$companions %>%
   rename(`Organic input` = T_fert_subpractice,
          `Main crop` = `Measured crop`, 
          `Outcome measured` = out_subindicator)%>%
@@ -607,26 +632,26 @@ table.2a.s5b <- ic.2a.s5b$companions %>%
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
 
-View(table.2a.s5b)
+View(table.2a.s6b)
 
-table.2a.s5 <- do.call(rbind, Map(with_header,
-                                  list(table.2a.s5a, table.2a.s5b),
+table.2a.s6 <- do.call(rbind, Map(with_header,
+                                  list(table.2a.s6a, table.2a.s6b),
                                   c("a) Cereal productivity, by measured crop, companion species, type of organic input, and outcome measured.",
                                     "b) Soil health in cereal systems, by main crop, companion species, type of organic input, and outcome measured."
                                     )))
-View(table.2a.s5)
+View(table.2a.s6)
 
-write_csv(table.2a.s5, file.path(path.output, "ken_2A_TableS5_cereals_organic_fertilizer.csv"))
+write_csv(table.2a.s6, file.path(path.output, "ken_2A_TableS6_cereals_organic_fertilizer.csv"))
 
-#--- Archetype 2A: Table 2A.S6 Effect of Mixed fertilizer on cereals Productivity, and soil health ----
+#--- Archetype 2A: Table 2A.S7 Effect of Mixed fertilizer on cereals Productivity, and soil health ----
 # a) Cereals, Mixed fertilizer, Productivity
-ic.2a.s6a <- practice_detail(arc.long, "2A - Soil restoration", "Mixed fertilizer", "No fertilizer applied",
+ic.2a.s7a <- practice_detail(arc.long, "2A - Soil restoration", "Mixed fertilizer", "No fertilizer applied",
                              food = "Cereals", outcome = "Productivity", data = arc.data,
                              extra = c("T_fert_subpractice", "out_subindicator"))
 
-View(ic.2a.s6a$companions)    # cereal measured + species it was intercropped with
+View(ic.2a.s7a$companions)    # cereal measured + species it was intercropped with
 
-table.2a.s6a <- ic.2a.s6a$companions %>%
+table.2a.s7a <- ic.2a.s7a$companions %>%
   rename(`Mixed input` = T_fert_subpractice,
          `Outcome measured` = out_subindicator)%>%
   
@@ -638,16 +663,16 @@ table.2a.s6a <- ic.2a.s6a$companions %>%
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
 
-View(table.2a.s6a)
+View(table.2a.s7a)
 
 # b) Cereals, Mixed fertilizer, Soil health
-ic.2a.s6b <- practice_detail(arc.long, "2A - Soil restoration", "Mixed fertilizer", "No fertilizer applied",
+ic.2a.s7b <- practice_detail(arc.long, "2A - Soil restoration", "Mixed fertilizer", "No fertilizer applied",
                              food = "Cereals", outcome = "Soil health", data = arc.data,
                              extra = c("T_fert_subpractice", "out_subindicator"))
 
-View(ic.2a.s6b$companions)    # cereal measured + species it was intercropped with
+View(ic.2a.s7b$companions)    # cereal measured + species it was intercropped with
 
-table.2a.s6b <- ic.2a.s6b$companions %>%
+table.2a.s7b <- ic.2a.s7b$companions %>%
   rename(`Mixed input` = T_fert_subpractice,
          `Main crop` = `Measured crop`, 
          `Outcome measured` = out_subindicator)%>%
@@ -659,20 +684,20 @@ table.2a.s6b <- ic.2a.s6b$companions %>%
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
 
-View(table.2a.s6b)
+View(table.2a.s7b)
 
-table.2a.s6 <- do.call(rbind, Map(with_header,
-                                  list(table.2a.s6a, table.2a.s6b),
+table.2a.s7 <- do.call(rbind, Map(with_header,
+                                  list(table.2a.s7a, table.2a.s7b),
                                   c("a) Cereal productivity, by measured crop, companion species, type of mixed input, and outcome measured.",
                                     "b) Soil health in cereal systems, by main crop, companion species, type of mixed input, and outcome measured."
                                     )))
-View(table.2a.s6)
+View(table.2a.s7)
 
-write_csv(table.2a.s6, file.path(path.output, "ken_2A_TableS6_cereals_mixed_fertilizer.csv"))
+write_csv(table.2a.s7, file.path(path.output, "ken_2A_TableS7_cereals_mixed_fertilizer.csv"))
 
-#--- Archetype 2A: Table 2A.S7 Effect of Intercropping on cereals productivity, resilience to pests ----
+#--- Archetype 2A: Table 2A.S8 Effect of Intercropping on cereals productivity, resilience to pests ----
 # a) Cereals, Intercropping, Productivity
-arc.long.2a.s7a <- arc.long %>%
+arc.long.2a.s8a <- arc.long %>%
   mutate(
     # Desmodium common names and species -> Desmodium spp.; Crotalaria species -> Crotalaria spp.
     T_crop_tree_diversity = str_replace_all(T_crop_tree_diversity,
@@ -687,14 +712,14 @@ arc.long.2a.s7a <- arc.long %>%
       str_detect(coalesce(T_intercrop_subpractice, ""), "Non N fixing") ~ "Without a nitrogen-fixing species",
       TRUE                                                               ~ T_intercrop_subpractice))
   
-ic.2a.s7a <-  practice_detail(arc.long.2a.s7a, "2A - Soil restoration", "Intercropping", "Monoculture",
+ic.2a.s8a <-  practice_detail(arc.long.2a.s8a, "2A - Soil restoration", "Intercropping", "Monoculture",
                              food = "Cereals", outcome = "Productivity", data = arc.data,
                              extra = c("T_intercrop_subpractice","out_subindicator"))
 
 
-#View(ic.2a.s7a$companions)    # cereal measured + species it was intercropped with
+#View(ic.2a.s8a$companions)    # cereal measured + species it was intercropped with
 
-table.2a.s7a <- ic.2a.s7a$companions %>%
+table.2a.s8a <- ic.2a.s8a$companions %>%
 
   rename(`Intercrop type` = T_intercrop_subpractice,
          `Outcome measured` = out_subindicator)%>%
@@ -705,13 +730,13 @@ table.2a.s7a <- ic.2a.s7a$companions %>%
           `Outcome measured`,
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
-View(table.2a.s7a)
+View(table.2a.s8a)
 
 # b) Cereals, Intercropping, Resilience to pests
 # pest rows: the pest in its own column, the cereal in T_product_simple
 cereals <- c("Maize", "Sorghum", "Finger Millet", "Pearl Millet", "Baby Corn", "Rice", "Wheat", "Teff", "Barley")
 
-arc.long.2a.s7b <- arc.long.2a.s7a %>%
+arc.long.2a.s8b <- arc.long.2a.s8a %>%
   filter(outcome_group == "Resilience to pests") %>%
   mutate(Pest = case_when(str_detect(T_product, "Striga")              ~ "Weeds (Striga)",
                           str_detect(T_product, "Stemborer")           ~ "Insect pests (stem borers)",
@@ -724,13 +749,13 @@ arc.long.2a.s7b <- arc.long.2a.s7a %>%
                                            function(s) paste(intersect(str_trim(s), cereals), collapse = " + "),
                                            character(1))))
 
-ic.2a.s7b <- practice_detail(arc.long.2a.s7b, "2A - Soil restoration", "Intercropping", "Monoculture",
+ic.2a.s8b <- practice_detail(arc.long.2a.s8b, "2A - Soil restoration", "Intercropping", "Monoculture",
                              food = "Cereals", outcome = "Resilience to pests", data = arc.data,
                              extra = c("T_intercrop_subpractice", "Pest"))
 
-#View(ic.2a.s7b$companions)
+#View(ic.2a.s8b$companions)
 
-table.2a.s7b <- ic.2a.s7b$companions %>%
+table.2a.s8b <- ic.2a.s8b$companions %>%
   mutate(`Outcome measured` = "Resilience to ") %>%
   rename(`Intercrop type` = T_intercrop_subpractice,
          `Main crop` = `Measured crop`,
@@ -743,27 +768,26 @@ table.2a.s7b <- ic.2a.s7b$companions %>%
           `Intercrop type`, `Companion species`,
           desc(Comparisons),
           desc(`% positive comparisons`))
-View(table.2a.s7b)
+View(table.2a.s8b)
 
-table.2a.s7 <- do.call(rbind, Map(with_header,
-                                  list(table.2a.s7a, table.2a.s7b),
+table.2a.s8 <- do.call(rbind, Map(with_header,
+                                  list(table.2a.s8a, table.2a.s8b),
                                   c("a) Cereal productivity, by measured crop, companion species, intercrop type, and outcome measured.",
                                     "b) Resilience to pests and weeds in cereal intercrops, by main crop, companion species, intercrop type, and outcome measured."
                                   )))
-View(table.2a.s7)
+View(table.2a.s8)
 
-write_csv(table.2a.s7, file.path(path.output, "ken_2A_TableS7_cereals_intercropping.csv"))
+write_csv(table.2a.s8, file.path(path.output, "ken_2A_TableS8_cereals_intercropping.csv"))
 
-
-#--- Archetype 2A: Table 2A.S8 Effect of Biochar amendment, Agroforestry, crop rotation, and Reduce tillage on cereals Productivity ----
+#--- Archetype 2A: Table 2A.S9 Effect of Biochar amendment, Agroforestry, crop rotation, and Reduce tillage on cereals Productivity ----
 # a) Cereals, Biochar amendment, Productivity
-ic.2a.s8a <- practice_detail(arc.long, "2A - Soil restoration", "Biochar amendment", "No fertilizer applied",
+ic.2a.s9a <- practice_detail(arc.long, "2A - Soil restoration", "Biochar amendment", "No fertilizer applied",
                              food = "Cereals", outcome = "Productivity", data = arc.data,
                              extra = c("T_fert_subpractice", "out_subindicator"))
 
-View(ic.2a.s8a$companions)    # cereal measured + species it was intercropped with
+#View(ic.2a.s9a$companions)    # cereal measured + species it was intercropped with
 
-table.2a.s8a <- ic.2a.s8a$companions %>%
+table.2a.s9a <- ic.2a.s9a$companions %>%
   rename(`Biochar amendment` = T_fert_subpractice,
          `Outcome measured` = out_subindicator)%>%
   mutate(`Companion species`=if_else(is.na(`Companion species`),"-",`Companion species`))%>%
@@ -773,16 +797,16 @@ table.2a.s8a <- ic.2a.s8a$companions %>%
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
 
-View(table.2a.s8a)
+#View(table.2a.s9a)
 
 # b) Cereals, Agroforestry, Productivity
-ic.2a.s8b <- practice_detail(arc.long, "2A - Soil restoration", "Agroforestry", "Monoculture",
+ic.2a.s9b <- practice_detail(arc.long, "2A - Soil restoration", "Agroforestry", "Monoculture",
                              food = "Cereals", outcome = "Productivity", data = arc.data,
                              extra = c("T_agrof_subpractice", "out_subindicator"))
 
-View(ic.2a.s8b$companions)    # cereal measured + species it was intercropped with
+#View(ic.2a.s9b$companions)    # cereal measured + species it was intercropped with
 
-table.2a.s8b <- ic.2a.s8b$companions %>%
+table.2a.s9b <- ic.2a.s9b$companions %>%
   rename(`Agroforestry type` = T_agrof_subpractice,
          `Outcome measured` = out_subindicator)%>%
   mutate(`Companion species`=if_else(is.na(`Companion species`),"-",`Companion species`))%>%
@@ -792,35 +816,16 @@ table.2a.s8b <- ic.2a.s8b$companions %>%
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
 
-View(table.2a.s8b)
+#View(table.2a.s9b)
 
 # c) Cereals, Crop rotation, Productivity
-ic.2a.s8c <- practice_detail(arc.long, "2A - Soil restoration", "Crop rotation", "Monoculture",
-                             food = "Cereals", outcome = "Productivity", data = arc.data,
-                             extra = c("T_crop_seq_subpractice", "out_subindicator"))
-
-View(ic.2a.s8c$companions)    # cereal measured + species it was intercropped with
-
-table.2a.s8c <- ic.2a.s8c$companions %>%
-  rename(`Crop rottation type` = T_crop_seq_subpractice,
-         `Outcome measured` = out_subindicator)%>%
-  mutate(`Companion species`=if_else(is.na(`Companion species`),"-",`Companion species`))%>%
-  arrange(`Measured crop`,       # 1st: A to Z
-          `Crop rottation type`,
-          `Outcome measured`,
-          desc(Comparisons),
-          desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
-
-View(table.2a.s8c)
-
-# d) Cereals, Crop rotation, Productivity
-ic.2a.s8d <- practice_detail(arc.long, "2A - Soil restoration", "Reduced tillage", "Conventional tillage",
+ic.2a.s9c <- practice_detail(arc.long, "2A - Soil restoration", "Reduced tillage", "Conventional tillage",
                              food = "Cereals", outcome = "Productivity", data = arc.data,
                              extra = c("T_tillage_subpractice", "out_subindicator"))
 
-View(ic.2a.s8d$companions)    # cereal measured + species it was intercropped with
+#View(ic.2a.s9c$companions)    # cereal measured + species it was intercropped with
 
-table.2a.s8d <- ic.2a.s8d$companions %>%
+table.2a.s9c <- ic.2a.s9c$companions %>%
   rename(`Tillage practice` = T_tillage_subpractice,
          `Outcome measured` = out_subindicator)%>%
   mutate(`Companion species`=if_else(is.na(`Companion species`),"-",`Companion species`))%>%
@@ -830,25 +835,47 @@ table.2a.s8d <- ic.2a.s8d$companions %>%
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
 
-View(table.2a.s8d)
+#View(table.2a.s9c)
+
+# d) Cereals, Crop rotation, Profitability
+ic.2a.s9d <- practice_detail(arc.long, "2A - Soil restoration", "Reduced tillage", "Conventional tillage",
+                             food = "Cereals", outcome = "Profitability", data = arc.data,
+                             extra = c("T_tillage_subpractice", "out_subindicator"))
+
+#View(ic.2a.s9d$companions)    # cereal measured + species it was intercropped with
+
+table.2a.s9d <- ic.2a.s9d$companions %>%
+  rename(`Tillage practice` = T_tillage_subpractice,
+         `Main crop`= `Measured crop`,
+         `Outcome measured` = out_subindicator)%>%
+  mutate(`Companion species`=if_else(is.na(`Companion species`),"-",`Companion species`))%>%
+  arrange(`Main crop`,       # 1st: A to Z
+          `Tillage practice`,
+          `Outcome measured`,
+          desc(Comparisons),
+          desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
+
+#View(table.2a.s9d)
+
 
 # Table 2A.S8: a) to c), each with its own header
-table.2a.s8 <- do.call(rbind, Map(with_header,
-                                  list(table.2a.s8a, table.2a.s8b, table.2a.s8c,table.2a.s8d),
+table.2a.s9 <- do.call(rbind, Map(with_header,
+                                  list(table.2a.s9a, table.2a.s9b, table.2a.s9c),
                                   c(
                                     "a) Biochar amendment compared with no fertilizer, by measured crop, companion species, type of biochar amendment, and outcome measured.",
                                     "b) Agroforestry compared with monoculture, by measured crop, companion species, agroforestry type, and outcome measured.",
-                                    "c) Crop rotation compared with monoculture, by measured crop, companion species, crop rotation type, and outcome measured.",
-                                    "d) Reduced tillage compared with conventional tillage, by measured crop, companion species, tillage practice, and outcome measured.")))
+                                    "c) Reduced tillage compared with conventional tillage, by measured crop, companion species, tillage practice, and outcome measured."
 
-View(table.2a.s8)
+                                    )))
 
-write_csv(table.2a.s8, file.path(path.output, "ken_2A_TableS8_cereals_neutral_results.csv"))
+View(table.2a.s9)
+
+write_csv(table.2a.s9, file.path(path.output, "ken_2A_TableS9_cereals_neutral_results.csv"))
 
 
-#--- Archetype 2A: Table 2A.S9 Effect of Intercropping, Residues incorporation and Local varieties on Pulses and legumes productivity ----
+#--- Archetype 2A: Table 2A.S10 Effect of Intercropping, Residues incorporation and Local varieties on Pulses and legumes productivity ----
 # a) Pulses and legumes, Intercropping, Productivity
-arc.long.2a.s9a <- arc.long %>%
+arc.long.2a.s10a <- arc.long %>%
   mutate(
     # Desmodium common names and species -> Desmodium spp.; Crotalaria species -> Crotalaria spp.
     T_crop_tree_diversity = str_replace_all(T_crop_tree_diversity,
@@ -863,14 +890,14 @@ arc.long.2a.s9a <- arc.long %>%
       str_detect(coalesce(T_intercrop_subpractice, ""), "Non N fixing") ~ "Without a nitrogen-fixing species",
       TRUE                                                               ~ T_intercrop_subpractice))
 
-ic.2a.s9a <-  practice_detail(arc.long.2a.s9a, "2A - Soil restoration", "Intercropping", "Monoculture",
+ic.2a.s10a <-  practice_detail(arc.long.2a.s10a, "2A - Soil restoration", "Intercropping", "Monoculture",
                               food = "Pulses and legumes", outcome = "Productivity", data = arc.data,
                               extra = c("T_intercrop_subpractice","out_subindicator"))
 
 
-View(ic.2a.s9a$companions)    # cereal measured + species it was intercropped with
+#View(ic.2a.s10a$companions)    # cereal measured + species it was intercropped with
 
-table.2a.s9a <- ic.2a.s9a$companions %>%
+table.2a.s10a <- ic.2a.s10a$companions %>%
   
   rename(`Intercrop type` = T_intercrop_subpractice,
          `Outcome measured` = out_subindicator)%>%
@@ -892,14 +919,14 @@ table.2a.s9a <- ic.2a.s9a$companions %>%
           `Outcome measured`,
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
-View(table.2a.s9a)
+#View(table.2a.s10a)
 
 # b) Pulses and legumes, Residue incorporation, Productivity
-ic.2a.s9b <- practice_detail(arc.long, "2A - Soil restoration", "Residue incorporation", "No residues or mulch",
+ic.2a.s10b <- practice_detail(arc.long, "2A - Soil restoration", "Residue incorporation", "No residues or mulch",
                              food = "Pulses and legumes", outcome = "Productivity", data = arc.data,
                              extra = c("T_residues_subpractice","out_subindicator"))
 
-table.2a.s9b <- ic.2a.s9b$companions %>%
+table.2a.s10b <- ic.2a.s10b$companions %>%
   rename(`Type of residue` = T_residues_subpractice,
          `Outcome measured` = out_subindicator)%>%
   
@@ -910,43 +937,27 @@ table.2a.s9b <- ic.2a.s9b$companions %>%
           `Outcome measured`,
           desc(Comparisons),
           desc(`% positive comparisons`))
-View(table.2a.s9b)
+#View(table.2a.s10b)
 
-# c) Pulses and legumes, Local variety, Productivity
-ic.2a.s9c <- practice_detail(arc.long, "2A - Soil restoration", "Local variety", "Improved variety",
-                             food = "Pulses and legumes", outcome = "Productivity", data = arc.data,
-                             extra = c("T_varietal_crop_variety","out_subindicator"))
-
-table.2a.s9c <- ic.2a.s9c$companions %>%
-  rename(`Local variety` = T_varietal_crop_variety,
-         `Outcome measured` = out_subindicator)%>%
-  
-  mutate(`Companion species` = if_else(is.na(`Companion species`), "-", `Companion species`)) %>%
-  arrange(`Measured crop`, `Local variety`, 
-          `Outcome measured`,
-          desc(Comparisons),
-          desc(`% positive comparisons`))
-View(table.2a.s9c)
-
-# Table 2A.S9: a) to c), each with its own header
-table.2a.s9 <- do.call(rbind, Map(with_header,
-                                  list(table.2a.s9a, table.2a.s9b, table.2a.s9c),
+# Table 2A.S9: a) to b), each with its own header
+table.2a.s10 <- do.call(rbind, Map(with_header,
+                                  list(table.2a.s10a, table.2a.s10b),
                                   c(
                                     "a) Intercropping compared with sole pulse or legume crops, by measured crop, companion species, intercrop type, and outcome measured.",
-                                    "b) Crop residue incorporation compared with residue removal, by measured crop, companion species, type of residue, and outcome measured.",
-                                    "c) Local compared with improved varieties, by measured crop, companion species, local variety, and outcome measured.")))
-View(table.2a.s9)
+                                    "b) Crop residue incorporation compared with residue removal, by measured crop, companion species, type of residue, and outcome measured."
+                                   )))
+View(table.2a.s10)
 
-write_csv(table.2a.s9, file.path(path.output, "ken_2A_TableS9_pulses_legumes.csv"))
+write_csv(table.2a.s10, file.path(path.output, "ken_2A_TableS10_pulses_legumes.csv"))
 
-#--- Archetype 2A: Table 2A.S10 Effect of Supplemental irrigation on Vegetables yield ----
+#--- Archetype 2A: Table 2A.S11 Effect of Supplemental irrigation on Vegetables yield ----
 # Vegetables, Supplemental irrigation, Yield
-ic.2a.s10 <- practice_detail(arc.long, "2A - Soil restoration", "Supplemental irrigation", "Rainfed agriculture",
+ic.2a.s11 <- practice_detail(arc.long, "2A - Soil restoration", "Supplemental irrigation", "Rainfed agriculture",
                             food = "Vegetables", outcome = "Productivity", data = arc.data,
                             extra = c("T_irrig_method","out_subindicator"))
-#View(ic.2a.s10$companions)    
+#View(ic.2a.s11$companions)    
 
-table.2a.s10 <- ic.2a.s10$companions %>%
+table.2a.s11 <- ic.2a.s11$companions %>%
   mutate(T_irrig_method=case_when(
     T_irrig_method=="Drip irrigation"~"Supplemental drip irrigation",
     TRUE~T_irrig_method
@@ -960,9 +971,9 @@ table.2a.s10 <- ic.2a.s10$companions %>%
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
 
-View(table.2a.s10)
+View(table.2a.s11)
 
-write_csv(table.2a.s10, file.path(path.output, "ken_2A_TableS10_vegetables_supplementary_irrigation.csv"))
+write_csv(table.2a.s11, file.path(path.output, "ken_2A_TableS11_vegetables_supplementary_irrigation.csv"))
 
 
 #----------------------------------------------------------------------
@@ -974,7 +985,7 @@ ic.2b.s3a <- practice_detail(arc.long, "2B - Arid micro-gardens", "Residue incor
                              food = "Cereals", outcome = "Productivity", data = arc.data,
                              extra = c("T_residues_subpractice", "out_subindicator"))
 
-View(ic.2b.s3a$companions)    # cereal measured + species it was intercropped with
+#View(ic.2b.s3a$companions)    # cereal measured + species it was intercropped with
 
 table.2b.s3a <- ic.2b.s3a$companions %>%
   rename(`Residues type` = T_residues_subpractice,
@@ -987,13 +998,13 @@ table.2b.s3a <- ic.2b.s3a$companions %>%
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
 
-View(table.2b.s3a)
+#View(table.2b.s3a)
 
 # b) Cereals, Residue incorporation, Soil health
 ic.2b.s3b <- practice_detail(arc.long, "2B - Arid micro-gardens", "Residue incorporation", "No residues or mulch",
                              food = "Cereals", outcome = "Soil health", data = arc.data,
                              extra = c("T_residues_subpractice", "out_subindicator"))
-View(ic.2b.s3b$companions)    # cereal measured + species it was intercropped with
+#View(ic.2b.s3b$companions)    # cereal measured + species it was intercropped with
 
 table.2b.s3b <- ic.2b.s3b$companions %>%
   rename(`Residues type` = T_residues_subpractice,
@@ -1007,14 +1018,14 @@ table.2b.s3b <- ic.2b.s3b$companions %>%
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
 
-View(table.2b.s3b)
+#View(table.2b.s3b)
 
 table.2b.s3 <- do.call(rbind, Map(with_header,
                                   list(table.2b.s3a, table.2b.s3b),
                                   c("a) Cereal productivity, by measured crop, companion species, type of residue incorporated, and outcome measured.",
                                     "b) Soil health in cereal systems, by main crop, companion species, type of residue incorporated, and outcome measured."
                                   )))
-View(table.2b.s3)
+#View(table.2b.s3)
 
 write_csv(table.2b.s3, file.path(path.output, "ken_2B_TableS3_cereals_residues_incorporation.csv"))
 
@@ -1024,7 +1035,7 @@ ic.2b.s4a <- practice_detail(arc.long, "2B - Arid micro-gardens", "Organic mulch
                              food = "Cereals", outcome = "Productivity", data = arc.data,
                              extra = c("T_residues_subpractice","out_subindicator"))
 
-View(ic.2b.s4a$companions)    # cereal measured + species it was intercropped with
+#View(ic.2b.s4a$companions)    # cereal measured + species it was intercropped with
 
 table.2b.s4a <- ic.2b.s4a$companions %>%
   rename(`Organic mulch` = T_residues_subpractice,
@@ -1036,14 +1047,14 @@ table.2b.s4a <- ic.2b.s4a$companions %>%
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
 
-View(table.2b.s4a)
+#View(table.2b.s4a)
 
 # b) Cereals, Organic mulch, Soil health
 ic.2b.s4b <- practice_detail(arc.long, "2B - Arid micro-gardens", "Organic mulch", "No residues or mulch",
                              food = "Cereals", outcome = "Soil health", data = arc.data,
                              extra = c("T_residues_subpractice", "out_subindicator"))
 
-View(ic.2b.s4b$companions)    # cereal measured + species it was intercropped with
+#View(ic.2b.s4b$companions)    # cereal measured + species it was intercropped with
 
 table.2b.s4b <- ic.2b.s4b$companions %>%
   rename(`Organic mulch` = T_residues_subpractice,
@@ -1056,14 +1067,14 @@ table.2b.s4b <- ic.2b.s4b$companions %>%
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
 
-View(table.2b.s4b)
+#View(table.2b.s4b)
 
 table.2b.s4 <- do.call(rbind, Map(with_header,
                                   list(table.2b.s4a, table.2b.s4b),
                                   c("a) Cereal productivity, by measured crop, companion species, type of organic mulch, and outcome measured.",
                                     "b) Soil health in cereal systems, by main crop, companion species, type of organic mulch, and outcome measured."
                                     )))
-View(table.2b.s4)
+#View(table.2b.s4)
 
 write_csv(table.2b.s4, file.path(path.output, "ken_2B_TableS4_cereals_organic_mulch.csv"))
 
@@ -1073,7 +1084,7 @@ ic.2b.s5 <- practice_detail(arc.long, "2B - Arid micro-gardens", "Mixed fertiliz
                              food = "Cereals", outcome = "Productivity", data = arc.data,
                              extra = c("T_fert_subpractice", "out_subindicator"))
 
-View(ic.2b.s5$companions)    # cereal measured + species it was intercropped with
+#View(ic.2b.s5$companions)    # cereal measured + species it was intercropped with
 
 table.2b.s5 <- ic.2b.s5$companions %>%
   rename(`Mixed input` = T_fert_subpractice,
@@ -1087,14 +1098,88 @@ table.2b.s5 <- ic.2b.s5$companions %>%
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
 
-View(table.2b.s5)
+#View(table.2b.s5)
 
 
 write_csv(table.2b.s5, file.path(path.output, "ken_2B_TableS5_cereals_mixed_fertilizer.csv"))
 
-#--- Archetype 2B: Table 2B.S6 Effect of Intercropping on Pulses and legumes Productivity, Resilience to pests, Biodiversity ----
+#--- Archetype 2B: Table 2B.S6 Effect of Reduce tillage on cereals Productivity, Profitability, and labour ----
+# a) Cereals, Reduced tillage, Productivity
+ic.2b.s6a <- practice_detail(arc.long, "2B - Arid micro-gardens", "Reduced tillage", "Conventional tillage",
+                             food = "Cereals", outcome = "Productivity", data = arc.data,
+                             extra = c("T_tillage_subpractice", "out_subindicator"))
+
+#View(ic.2b.s6a$companions)    # cereal measured + species it was intercropped with
+
+table.2b.s6a <- ic.2b.s6a$companions %>%
+  rename(`Tillage practice` = T_tillage_subpractice,
+         #`Main crop`= `Measured crop`,
+         `Outcome measured` = out_subindicator)%>%
+  mutate(`Companion species`=if_else(is.na(`Companion species`),"-",`Companion species`))%>%
+  arrange(`Measured crop`,       # 1st: A to Z
+          `Tillage practice`,
+          `Outcome measured`,
+          desc(Comparisons),
+          desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
+
+#View(table.2b.s6a)
+
+# b) Cereals, Reduced tillage, Profitability
+ic.2b.s6b <- practice_detail(arc.long, "2B - Arid micro-gardens", "Reduced tillage", "Conventional tillage",
+                             food = "Cereals", outcome = "Profitability", data = arc.data,
+                             extra = c("T_tillage_subpractice", "out_subindicator"))
+
+#View(ic.2b.s6b$companions)    # cereal measured + species it was intercropped with
+
+table.2b.s6b <- ic.2b.s6b$companions %>%
+  rename(`Tillage practice` = T_tillage_subpractice,
+         `Main crop`= `Measured crop`,
+         `Outcome measured` = out_subindicator)%>%
+  mutate(`Companion species`=if_else(is.na(`Companion species`),"-",`Companion species`))%>%
+  arrange(`Main crop`,       # 1st: A to Z
+          `Tillage practice`,
+          `Outcome measured`,
+          desc(Comparisons),
+          desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
+
+#View(table.2b.s6b)
+
+# c) Cereals, Reduced tillage, Profitability
+ic.2b.s6c <- practice_detail(arc.long, "2B - Arid micro-gardens", "Reduced tillage", "Conventional tillage",
+                             food = "Cereals", outcome = "Labour demand", data = arc.data,
+                             extra = c("T_tillage_subpractice", "out_subindicator"))
+
+#View(ic.2b.s6c$companions)    # cereal measured + species it was intercropped with
+
+table.2b.s6c <- ic.2b.s6c$companions %>%
+  rename(`Tillage practice` = T_tillage_subpractice,
+         `Main crop`= `Measured crop`,
+         `Outcome measured` = out_subindicator)%>%
+  mutate(`Companion species`=if_else(is.na(`Companion species`),"-",`Companion species`))%>%
+  arrange(`Main crop`,       # 1st: A to Z
+          `Tillage practice`,
+          `Outcome measured`,
+          desc(Comparisons),
+          desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
+
+#View(table.2b.s6c)
+
+# Table 2B.S6: a) to c), each with its own header
+table.2b.s6 <- do.call(rbind, Map(with_header,
+                                  list(table.2b.s6a, table.2b.s6b, table.2b.s6c),
+                                  c(
+                                    "a) Cereal productivity, by measured crop, companion species, tillage practice, and outcome measured.",
+                                    "b) Profitability of cereal systems, by main crop, companion species, tillage practice, and outcome measured.",
+                                    "c) Labour demand in cereal systems, by main crop, companion species, tillage practice, and outcome measured."
+                                  )))
+
+#View(table.2b.s6)
+
+write_csv(table.2b.s6, file.path(path.output, "ken_2B_TableS6_cereals_reduced_tillage.csv"))
+
+#--- Archetype 2B: Table 2B.S7 Effect of Intercropping on Pulses and legumes Productivity, Resilience to pests, Biodiversity ----
 # a) Pulses and legumes, Intercropping, Productivity
-arc.long.2b.s6a <- arc.long %>%
+arc.long.2b.s7a <- arc.long %>%
   mutate(
     # Desmodium common names and species -> Desmodium spp.; Crotalaria species -> Crotalaria spp.
     T_crop_tree_diversity = str_replace_all(T_crop_tree_diversity,
@@ -1109,14 +1194,14 @@ arc.long.2b.s6a <- arc.long %>%
       str_detect(coalesce(T_intercrop_subpractice, ""), "Non N fixing") ~ "Without a nitrogen-fixing species",
       TRUE                                                               ~ T_intercrop_subpractice))
 
-ic.2b.s6a <-  practice_detail(arc.long.2b.s6a, "2B - Arid micro-gardens", "Intercropping", "Monoculture",
+ic.2b.s7a <-  practice_detail(arc.long.2b.s7a, "2B - Arid micro-gardens", "Intercropping", "Monoculture",
                               food = "Pulses and legumes", outcome = "Productivity", data = arc.data,
                               extra = c("T_intercrop_subpractice","out_subindicator"))
 
 
-View(ic.2b.s6a$companions)    # cereal measured + species it was intercropped with
+#View(ic.2b.s7a$companions)    # cereal measured + species it was intercropped with
 
-table.2b.s6a <- ic.2b.s6a$companions %>%
+table.2b.s7a <- ic.2b.s7a$companions %>%
   
   rename(`Intercrop type` = T_intercrop_subpractice,
          `Outcome measured` = out_subindicator)%>%
@@ -1127,13 +1212,13 @@ table.2b.s6a <- ic.2b.s6a$companions %>%
           `Outcome measured`,
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
-View(table.2b.s6a)
+#View(table.2b.s6a)
 
 # b) Pulses and legumes, Intercropping, Resilience to pests
 # pest rows: the pest in its own column, the cereal in T_product_simple
 pulses <- c("Common Bean", "Cowpea")
 
-arc.long.2b.s6b <- arc.long.2b.s6a %>%
+arc.long.2b.s7b <- arc.long.2b.s7a %>%
   filter(outcome_group == "Resilience to pests") %>%
   mutate(Pest = case_when(str_detect(T_product, "Striga")              ~ "Weeds (Striga)",
                           str_detect(T_product, "Stemborer")           ~ "Insect pests (stem borers)",
@@ -1146,13 +1231,13 @@ arc.long.2b.s6b <- arc.long.2b.s6a %>%
                                            function(s) paste(intersect(str_trim(s), pulses), collapse = " + "),
                                            character(1))))
 
-ic.2b.s6b <- practice_detail(arc.long.2b.s6b, "2B - Arid micro-gardens", "Intercropping", "Monoculture",
+ic.2b.s7b <- practice_detail(arc.long.2b.s7b, "2B - Arid micro-gardens", "Intercropping", "Monoculture",
                              food = "Pulses and legumes", outcome = "Resilience to pests", data = arc.data,
                              extra = c("T_intercrop_subpractice", "Pest"))
 
-View(ic.2b.s6b$companions)
+#View(ic.2b.s7b$companions)
 
-table.2b.s6b <- ic.2b.s6b$companions %>%
+table.2b.s7b <- ic.2b.s7b$companions %>%
   mutate(`Outcome measured` = "Resilience to ") %>%
   rename(`Intercrop type` = T_intercrop_subpractice,
          `Main crop` = `Measured crop`,
@@ -1165,24 +1250,24 @@ table.2b.s6b <- ic.2b.s6b$companions %>%
           `Intercrop type`, `Companion species`,
           desc(Comparisons),
           desc(`% positive comparisons`))
-View(table.2b.s6b)
+#View(table.2b.s7b)
 
 # c) Pulses and legumes, Intercropping, Biodiversity
 # organism counted in its own column, the pulse(s) of the intercrop in T_product_simple
-arc.long.2b.s6c <- arc.long.2b.s6a %>%
+arc.long.2b.s7c <- arc.long.2b.s7a %>%
   filter(outcome_group == "Biodiversity") %>%
   mutate(Organism = paste0(coalesce(bio_func_group, "Other organisms"), " (", T_product, ")"),
          T_product_simple = vapply(str_split(coalesce(T_crop_tree_diversity, ""), "[-/]"),
                                    function(s) paste(intersect(str_trim(s), pulses), collapse = " + "),
                                    character(1)))
 
-ic.2b.s6c <- practice_detail(arc.long.2b.s6c, "2B - Arid micro-gardens", "Intercropping", "Monoculture",
+ic.2b.s7c <- practice_detail(arc.long.2b.s7c, "2B - Arid micro-gardens", "Intercropping", "Monoculture",
                              food = "Pulses and legumes", outcome = "Biodiversity", data = arc.data,
                              extra = c("T_intercrop_subpractice", "Organism", "out_subindicator"))
 
-View(ic.2b.s6c$companions)
+#View(ic.2b.s7c$companions)
 
-table.2b.s6c <- ic.2b.s6c$companions %>%
+table.2b.s7c <- ic.2b.s7c$companions %>%
   rename(`Intercrop type` = T_intercrop_subpractice,
          `Main crop` = `Measured crop`) %>%
   mutate(`Outcome measured` = paste0(out_subindicator, " of ", str_replace(Organism, "^\\w", tolower)),
@@ -1191,27 +1276,27 @@ table.2b.s6c <- ic.2b.s6c$companions %>%
          -Organism, -out_subindicator) %>%
   arrange(`Main crop`, `Intercrop type`, `Companion species`, `Outcome measured`,
           desc(Comparisons), desc(`% positive comparisons`))
-View(table.2b.s6c)
+#View(table.2b.s7c)
 
 
-table.2b.s6 <- do.call(rbind, Map(with_header,
-                                  list(table.2b.s6a, table.2b.s6b, table.2b.s6c),
+table.2b.s7 <- do.call(rbind, Map(with_header,
+                                  list(table.2b.s7a, table.2b.s7b, table.2b.s7c),
                                   c("a) Pulse and legume productivity, by measured crop, companion species, intercrop type, and outcome measured.",
                                     "b) Resilience to pests in pulse and legume intercrops, by main crop, companion species, intercrop type, and outcome measured.",
                                     "c) Biodiversity in pulse and legume intercrops, by main crop, companion species, intercrop type, and outcome measured.")))
-View(table.2b.s6)
+#View(table.2b.s7)
 
-write_csv(table.2b.s6, file.path(path.output, "ken_2B_TableS6_pulses_intercropping.csv"))
+write_csv(table.2b.s7, file.path(path.output, "ken_2B_TableS7_pulses_intercropping.csv"))
 
-#--- Archetype 2B: Table 2B.S7 Effect of Biochar amendment, Mixed fertilizer on Pulses and legumes Productivity ----
+#--- Archetype 2B: Table 2B.S8 Effect of Biochar amendment, Mixed fertilizer on Pulses and legumes Productivity ----
 # a) Cereals, Biochar amendment, Productivity
-ic.2b.s7a <- practice_detail(arc.long, "2B - Arid micro-gardens", "Biochar amendment", "No fertilizer applied",
+ic.2b.s8a <- practice_detail(arc.long, "2B - Arid micro-gardens", "Biochar amendment", "No fertilizer applied",
                              food = "Pulses and legumes", outcome = "Productivity", data = arc.data,
                              extra = c("T_fert_subpractice", "out_subindicator"))
 
-View(ic.2b.s7a$companions)    # cereal measured + species it was intercropped with
+#View(ic.2b.s8a$companions)    # cereal measured + species it was intercropped with
 
-table.2b.s7a <- ic.2b.s7a$companions %>%
+table.2b.s8a <- ic.2b.s8a$companions %>%
   rename(`Biochar amendment` = T_fert_subpractice,
          `Outcome measured` = out_subindicator)%>%
   mutate(`Companion species`=if_else(is.na(`Companion species`),"-",`Companion species`))%>%
@@ -1221,16 +1306,16 @@ table.2b.s7a <- ic.2b.s7a$companions %>%
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
 
-View(table.2b.s7a)
+#View(table.2b.s8a)
 
 # b) Cereals, Mixed fertilizer, Productivity
-ic.2b.s7b <- practice_detail(arc.long, "2B - Arid micro-gardens", "Mixed fertilizer", "No fertilizer applied",
+ic.2b.s8b <- practice_detail(arc.long, "2B - Arid micro-gardens", "Mixed fertilizer", "No fertilizer applied",
                              food = "Pulses and legumes", outcome = "Productivity", data = arc.data,
                              extra = c("T_fert_subpractice", "out_subindicator"))
 
-View(ic.2b.s7b$companions)    # cereal measured + species it was intercropped with
+#View(ic.2b.s8b$companions)    # cereal measured + species it was intercropped with
 
-table.2b.s7b <- ic.2b.s7b$companions %>%
+table.2b.s8b <- ic.2b.s8b$companions %>%
   rename(`Mixed input` = T_fert_subpractice,
          `Outcome measured` = out_subindicator)%>%
   
@@ -1242,116 +1327,24 @@ table.2b.s7b <- ic.2b.s7b$companions %>%
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
 
-View(table.2b.s7b)
+#View(table.2b.s8b)
 
 
-# Table 2B.s7: a) to b), each with its own header
-table.2b.s7 <- do.call(rbind, Map(with_header,
-                                  list(table.2b.s7a, table.2b.s7b),
-                                  c("a) Biochar amendment compared with no fertilizer, by measured crop, companion species, type of biochar amendment, and outcome measured.",
-                                    "b) Mixed fertilizers compared with no fertilizer, by measured crop, companion species, type of mixed input, and outcome measured.")))
-View(table.2b.s7)
-
-write_csv(table.2b.s7, file.path(path.output, "ken_2B_TableS7_pulses_biochar_mixed_fertilizer.csv"))
-
-#--- Archetype 2B: Table 2A.S8 Effect of Intercropping on Nuts and seeds Resilience to pests, Biodiversity ----
-# a) Nuts and seeds, Intercropping, Resilience to pests
-arc.long.2b.s8 <- arc.long %>%
-  mutate(
-    # Desmodium common names and species -> Desmodium spp.; Crotalaria species -> Crotalaria spp.
-    T_crop_tree_diversity = str_replace_all(T_crop_tree_diversity,
-                                            regex("\\b(Silverleaf|Greenleaf|Tick Clover sp)\\b", ignore_case = TRUE),
-                                            "Desmodium spp."),
-    T_crop_tree_diversity = str_replace_all(T_crop_tree_diversity,
-                                            "\\b(Desmodium|Crotalaria) [a-z]+\\.?", "\\1 spp."),
-    T_intercrop_subpractice = case_when(
-      str_detect(coalesce(T_crop_tree_diversity, ""), "Desmodium")      ~ "Push-pull",
-      str_detect(coalesce(T_intercrop_subpractice, ""), "Push pull")    ~ "Push-pull",
-      str_detect(coalesce(T_intercrop_subpractice, ""), "\\(N fixing")  ~ "With a nitrogen-fixing species",
-      str_detect(coalesce(T_intercrop_subpractice, ""), "Non N fixing") ~ "Without a nitrogen-fixing species",
-      TRUE                                                               ~ T_intercrop_subpractice))
-
-# pest rows: the pest in its own column, the Nuts and seeds crops in T_product_simple
-nuts_seeds <- c("Sunflower")
-
-arc.long.2b.s8a <- arc.long.2b.s8 %>%
-  filter(outcome_group == "Resilience to pests") %>%
-  mutate(Pest = case_when(str_detect(T_product, "Striga")              ~ "Weeds (Striga)",
-                          str_detect(T_product, "Stemborer")           ~ "Insect pests (stem borers)",
-                          str_detect(T_product, "Thrips|Thysanoptera") ~ "Insect pests (thrips)",
-                          TRUE                                         ~ coalesce(bio_func_group, T_product)),
-         # "Maize..Lepidoptera" -> "Maize"; "Lamiales" -> the cereal(s) in the intercrop
-         T_product_simple = if_else(str_detect(T_product_simple, fixed("..")),
-                                    str_remove(T_product_simple, "\\.\\..*$"),
-                                    vapply(str_split(coalesce(T_crop_tree_diversity, ""), "[-/]"),
-                                           function(s) paste(intersect(str_trim(s), nuts_seeds), collapse = " + "),
-                                           character(1))))
-
-ic.2b.s8a <- practice_detail(arc.long.2b.s8a, "2B - Arid micro-gardens", "Intercropping", "Monoculture",
-                             food = "Nuts and seeds", outcome = "Resilience to pests", data = arc.data,
-                             extra = c("T_intercrop_subpractice", "Pest"))
-
-View(ic.2b.s8a$companions)
-
-table.2b.s8a <- ic.2b.s8a$companions %>%
-  mutate(`Outcome measured` = "Resilience to ") %>%
-  rename(`Intercrop type` = T_intercrop_subpractice,
-         `Main crop` = `Measured crop`,
-         `Pest or weed` = Pest) %>%
-  mutate(`Outcome measured` = paste0(`Outcome measured`, str_replace(`Pest or weed`, "^\\w", tolower))) %>%
-  select(`Main crop`, `Companion species`, `Intercrop type`,
-         `Outcome measured`, everything(), -`Pest or weed`) %>%
-  mutate(`Companion species` = if_else(is.na(`Companion species`), "-", `Companion species`)) %>%
-  arrange(`Main crop`,# `Pest or weed`, 
-          `Intercrop type`, `Companion species`,
-          desc(Comparisons),
-          desc(`% positive comparisons`))
-View(table.2b.s8a)
-
-# b) Nuts and seeds, Intercropping, Biodiversity
-# organism counted in its own column, the nuts and seeds of the intercrop in T_product_simple
-arc.long.2b.s8b <- arc.long.2b.s8 %>%
-  filter(outcome_group == "Biodiversity") %>%
-  mutate(Organism = paste0(coalesce(bio_func_group, "Other organisms"), " (", T_product, ")"),
-         T_product_simple = vapply(str_split(coalesce(T_crop_tree_diversity, ""), "[-/]"),
-                                   function(s) paste(intersect(str_trim(s), nuts_seeds), collapse = " + "),
-                                   character(1)))
-
-ic.2b.s8b <- practice_detail(arc.long.2b.s8b, "2B - Arid micro-gardens", "Intercropping", "Monoculture",
-                             food = "Nuts and seeds", outcome = "Biodiversity", data = arc.data,
-                             extra = c("T_intercrop_subpractice", "Organism", "out_subindicator"))
-
-View(ic.2b.s8b$companions)
-
-table.2b.s8b <- ic.2b.s8b$companions %>%
-  rename(`Intercrop type` = T_intercrop_subpractice,
-         `Main crop` = `Measured crop`) %>%
-  mutate(`Outcome measured` = paste0(out_subindicator, " of ", str_replace(Organism, "^\\w", tolower)),
-         `Companion species` = if_else(is.na(`Companion species`), "-", `Companion species`)) %>%
-  select(`Main crop`, `Companion species`, `Intercrop type`, `Outcome measured`, everything(),
-         -Organism, -out_subindicator) %>%
-  arrange(`Main crop`, `Intercrop type`, `Companion species`, `Outcome measured`,
-          desc(Comparisons), desc(`% positive comparisons`))
-View(table.2b.s8b)
-
-
+# Table 2B.s8: a) to b), each with its own header
 table.2b.s8 <- do.call(rbind, Map(with_header,
                                   list(table.2b.s8a, table.2b.s8b),
-                                  c(
-                                    "a) Resilience to pests in nuts and seeds intercrops, by main crop, companion species, intercrop type, and outcome measured.",
-                                    "b) Biodiversity in nuts and seeds intercrops, by main crop, companion species, intercrop type, and outcome measured.")))
+                                  c("a) Biochar amendment compared with no fertilizer, by measured crop, companion species, type of biochar amendment, and outcome measured.",
+                                    "b) Mixed fertilizers compared with no fertilizer, by measured crop, companion species, type of mixed input, and outcome measured.")))
+#View(table.2b.s7)
 
-
-View(table.2b.s8)
-
-write_csv(table.2b.s8, file.path(path.output, "ken_2B_TableS8_nuts_seeds_intercropping.csv"))
+write_csv(table.2b.s8, file.path(path.output, "ken_2B_TableS8_pulses_biochar_mixed_fertilizer.csv"))
 
 #--- Archetype 2B: Table 2B.S9 Effect of Supplemental irrigation on Vegetables Productivity and Profitability ----
 # Vegetables, Supplemental irrigation, Productivity
 ic.2b.s9a <- practice_detail(arc.long, "2B - Arid micro-gardens", "Supplemental irrigation", "Rainfed agriculture",
                              food = "Vegetables", outcome = "Productivity", data = arc.data,
                              extra = c("T_irrig_method","out_subindicator"))
-View(ic.2b.s9a$companions)    
+#View(ic.2b.s9a$companions)    
 
 table.2b.s9a <- ic.2b.s9a$companions %>%
   mutate(T_irrig_method=case_when(
@@ -1367,13 +1360,13 @@ table.2b.s9a <- ic.2b.s9a$companions %>%
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
 
-View(table.2b.s9a)
+#View(table.2b.s9a)
 
 # Vegetables, Supplemental irrigation, Profitability
 ic.2b.s9b <- practice_detail(arc.long, "2B - Arid micro-gardens", "Supplemental irrigation", "Rainfed agriculture",
                              food = "Vegetables", outcome = "Profitability", data = arc.data,
                              extra = c("T_irrig_method","out_subindicator"))
-View(ic.2b.s9b$companions)    
+#View(ic.2b.s9b$companions)    
 
 table.2b.s9b <- ic.2b.s9b$companions %>%
   mutate(T_irrig_method=case_when(
@@ -1390,15 +1383,16 @@ table.2b.s9b <- ic.2b.s9b$companions %>%
           desc(Comparisons),
           desc(`% positive comparisons`))     # 3rd: largest to smallest within each outcome
 
-View(table.2b.s9b)
+#View(table.2b.s9b)
 
 table.2b.s9 <- do.call(rbind, Map(with_header,
                                   list(table.2b.s9a, table.2b.s9b),
                                   c("a) Vegetable productivity, by measured crop, companion species, irrigation method, and outcome measured.",
                                     "b) Profitability of vegetable systems, by main crop, companion species, irrigation method, and outcome measured."
                                   )))
-View(table.2b.s9)
+#View(table.2b.s9)
 
 write_csv(table.2b.s9, file.path(path.output, "ken_2B_Tables9_vegetables_supplementary_irrigation.csv"))
+
 
 

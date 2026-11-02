@@ -48,7 +48,8 @@ length(unique(fomd04$study_id_ss))#1811
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v47.csv"))
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v50.csv"))
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v51.csv"))
-md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v52.csv"))
+#md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v52.csv"))
+md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v53.csv"))
 
 
 length(unique(md.era.short$study_id)) #1808 studies
@@ -103,7 +104,7 @@ md.era.short.clean %>%
 length(unique(md.era.short.clean$study_id)) # 1810;1808 studies
 length(unique(md.era.short.clean$effect_size_id))  #232209 rows #V50 191019 ROWS;V51:166297
 length(unique(md.era.short.clean$authors))  #1347
-length(unique(md.era.short.clean$title)) #980;988
+length(unique(md.era.short.clean$title)) #980;988;993
 length(unique(md.era.short.clean$doi)) #1592; #1591;1589
 
 #----------------------------------------------
@@ -233,13 +234,6 @@ md.era.short.clean <- md.era.short.clean %>%
       study_id=="EM1044"~"31.25",
       study_id == "EO0003" & site_id == "Kisumu" ~ "-0.0843",
       
-      study_id == "CJ0190" & site_id == "Dangishta" ~ "11.32",
-      study_id == "CJ0190" & site_id == "Robit..Dangishta" ~ "11.65..11.32",
-      
-      study_id == "JO0135" & site_id == "Dangishita..Robit..Yemu" ~ "11.32..11.65..9.61958",
-      study_id == "JO0140" & site_id == "Dangishita..Robit" ~ "11.32..11.65",
-      
-      
       TRUE ~ site_latitude
     ),
     site_longitude = case_when(
@@ -254,13 +248,7 @@ md.era.short.clean <- md.era.short.clean %>%
       study_id=="AN0118"&site_id=="Mchinji..Msakambewa, Dowa..Salima"~"32.892422..33.9..34.47",
       study_id=="EM1044"~"31.75",
       study_id == "EO0003" & site_id == "Kisumu" ~ "34.6922",
-      
-      study_id == "CJ0190" & site_id == "Dangishta" ~ "36.85",
-      study_id == "CJ0190" & site_id == "Robit..Dangishta" ~ "37.47..36.85",
-      
-      study_id == "JO0135" & site_id == "Dangishita..Robit..Yemu" ~ "36.85..37.47..-0.817817976",
-      study_id == "JO0140" & site_id == "Dangishita..Robit" ~ "36.85..37.47",
-      
+
       TRUE ~ site_longitude
     ),
     site_buffer = case_when(
@@ -603,9 +591,12 @@ md.era.short.clean <- md.era.short.clean %>%
   mutate(
     C_crop_tree_variety = case_when(
       study_id == "AG0116" ~ str_replace(C_crop_tree_variety, fixed("Lemon & Lime"), "Lemon"),
+      study_id == "JS0204" ~ str_replace(C_crop_tree_variety, fixed("Pepper(NA)"), "Black Pepper(NA)"),
       TRUE ~ C_crop_tree_variety),
     T_crop_tree_variety = case_when(
       study_id == "AG0116" ~ str_replace(T_crop_tree_variety, fixed("Lemon & Lime"), "Lemon"),
+      study_id == "JS0204" ~ str_replace(T_crop_tree_variety, fixed("Pepper(NA)"), "Black Pepper(NA)"),
+      
       TRUE ~ T_crop_tree_variety))
 
 # Apply all fixes to any set of columns
@@ -1013,6 +1004,17 @@ md.era.short.clean <- apply_replace_in_cols(
   cols = c("C_varietal_crop_subpractice","T_varietal_crop_subpractice"),
   pattern = "Unspecified Variety Variety",replacement =  "Unspecified Variety") 
 
+md.era.short.clean <- md.era.short.clean %>%
+mutate(
+  C_varietal_crop_name = case_when(
+    study_id == "JS0204" ~ str_replace(C_varietal_crop_name, fixed("Pepper"), "Black Pepper"),
+    TRUE ~ C_varietal_crop_name),
+  T_varietal_crop_name = case_when(
+    study_id == "JS0204" ~ str_replace(T_varietal_crop_name, fixed("Pepper"), "Black Pepper"),
+    
+    TRUE ~ T_varietal_crop_name))
+
+
 # Quick checks-----
 md.era.short.clean %>%
   select(study_id, effect_size_id, 
@@ -1200,8 +1202,18 @@ md.era.short.clean <- apply_replace_in_cols(
 md.era.short.clean<-md.era.short.clean%>%
   mutate(T_intercrop_subpractice=case_when(
     study_id=="CJ0050"&T_intercrop_subpractice=="Intercrop (N fixing and Non N fixing)"~"Push pull",
-    TRUE~T_intercrop_subpractice))
-
+    study_id=="LM0168"&T_intercrop_subpractice=="Intercrop (N fixing and Non N fixing)"~"",
+    study_id=="LM0171"&T_intercrop_subpractice=="Intercrop (N fixing and Non N fixing)"~"",
+    study_id=="JO0177"&T_intercrop_subpractice=="Intercrop (Non N fixing)"~"",
+    
+    TRUE~T_intercrop_subpractice))%>%
+  
+  mutate(C_intercrop_subpractice=case_when(
+    study_id=="LM0168"&C_intercrop_subpractice=="Monoculture"~"",
+    study_id=="LM0171"&C_intercrop_subpractice=="Monoculture"~"",
+    study_id=="JO0177"&C_intercrop_subpractice=="Monoculture"~"",
+    
+    TRUE~C_intercrop_subpractice))
 
 # Quick checks ----
 md.era.short.clean %>%
@@ -1245,6 +1257,11 @@ md.era.short.clean <- apply_replace_in_cols(md.era.short.clean,
   cols = c("C_crop_seq_residues_fate", "T_crop_seq_residues_fate"),
   pattern = "NA",replacement = "Unspecified")
 
+md.era.short.clean<-md.era.short.clean%>%
+  mutate(T_crop_seq_subpractice=case_when(
+    study_id=="AN0129"&T_crop_seq_subpractice=="Rotation (N fixing and Non N fixing)"~"Agroforestry Fallow (N fixing)",
+    TRUE~T_crop_seq_subpractice))
+
 # Quick checks ----
 md.era.short.clean %>%
   select(study_id, effect_size_id, 
@@ -1286,6 +1303,24 @@ md.era.short.clean <-md.era.short.clean%>%
     study_id=="LM0279"&out_subindicator=="Land Equivalent Ratio"~"Monoculture",
     TRUE~C_agrof_subpractice))
 
+md.era.short.clean <-md.era.short.clean%>%
+  mutate(C_agrof_subpractice=case_when(
+    study_id=="LM0264"&C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Gliricidia sepium-Maize"~"Monoculture",
+    TRUE~C_agrof_subpractice))%>%
+  mutate(T_agrof_subpractice=case_when(
+    study_id=="LM0264"&C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Gliricidia sepium-Maize"~"Alleycropping (N fixing and Non N fixing)",
+    study_id=="JO0177"~"Alleycropping (Non N fixing)",
+    
+    TRUE~T_agrof_subpractice))%>%
+  
+  mutate(C_intercrop_subpractice=case_when(
+    study_id=="LM0264"&C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Gliricidia sepium-Maize"~"",
+    TRUE~C_intercrop_subpractice))%>%
+  mutate(T_intercrop_subpractice=case_when(
+    study_id=="LM0264"&C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Gliricidia sepium-Maize"~"",
+    TRUE~T_intercrop_subpractice))
+  
+    
 # Quick checks ----
 md.era.short.clean %>%
   select(study_id, effect_size_id, 
@@ -2715,7 +2750,7 @@ replacements <- c(
   "Faidherbia albida (Wood)" = "Faidherbia albida Wood",
   "Fennel (Oil)"="Fennel Oil",
   "Fennel (Seed)"="Fennel Seed",
-  "Gliricidia sepium-Pepper-Cardamom" = "Gliricidia sepium..Pepper..Cardamom",
+  "Gliricidia sepium-Black Pepper-Cardamom" = "Gliricidia sepium..Black Pepper..Cardamom",
   
   "Grape (Wine)"="Grape Wine",
   "Grass Pea..Indian Pea..Blue Sweet Pea..Chickling Pea..White Pea..White Vetch"=
@@ -2779,29 +2814,29 @@ for (pat in names(replacements)) {
   )
 }
 
-md.era.short.clean<-md.era.short.clean %>%
-  mutate(
-    T_product=case_when(
-      study_id=="CJ0186"&T_product=="Pepper Seed"~"Pepper Fruit",
-      study_id=="CJ0190"&T_product=="Pepper Seed"~"Pepper Fruit",
+#md.era.short.clean<-md.era.short.clean %>%
+#mutate(
+# T_product=case_when(
+      #study_id=="CJ0186"&T_product=="Pepper Seed"~"Pepper Fruit",
+      #study_id=="CJ0190"&T_product=="Pepper Seed"~"Pepper Fruit",
       
-      study_id=="JS0204"&T_product=="Pepper Fruit" ~"Black Pepper Fruit",
-      study_id=="JS0204"&T_product=="Gliricidia sepium..Pepper..Cardamom" ~"Gliricidia sepium..Black Pepper..Cardamom",
-      study_id=="JS0204"&T_product=="Pepper..Gliricidia sp." ~"Black Pepper..Gliricidia sp.",
-      study_id=="JS0204"&T_product=="Pepper..Grevillea robusta" ~"Black Pepper..Grevillea robusta",
-      study_id=="JS0204"&T_product=="Pepper..Grevillea robusta..Cardamom" ~"Black Pepper..Grevillea robusta..Cardamom",
+      #study_id=="JS0204"&T_product=="Pepper Fruit" ~"Black Pepper Fruit",
+      #study_id=="JS0204"&T_product=="Gliricidia sepium..Pepper..Cardamom" ~"Gliricidia sepium..Black Pepper..Cardamom",
+      #study_id=="JS0204"&T_product=="Pepper..Gliricidia sp." ~"Black Pepper..Gliricidia sp.",
+      #study_id=="JS0204"&T_product=="Pepper..Grevillea robusta" ~"Black Pepper..Grevillea robusta",
+      #study_id=="JS0204"&T_product=="Pepper..Grevillea robusta..Cardamom" ~"Black Pepper..Grevillea robusta..Cardamom",
       
-      TRUE~T_product
-    ),
-    C_product=case_when(
-      study_id=="CJ0186"&C_product=="Pepper Seed"~"Pepper Fruit",
-      study_id=="CJ0190"&C_product=="Pepper Seed"~"Pepper Fruit",
+#   TRUE~T_product
+#  ),
+# C_product=case_when(
+#   study_id=="CJ0186"&C_product=="Pepper Seed"~"Pepper Fruit",
+#   study_id=="CJ0190"&C_product=="Pepper Seed"~"Pepper Fruit",
       
-      study_id=="JS0204"&C_product=="Pepper Fruit" ~"Black Pepper Fruit",
+#    study_id=="JS0204"&C_product=="Pepper Fruit" ~"Black Pepper Fruit",
       
-      TRUE~C_product
-    )
-  )
+#   TRUE~C_product
+#  )
+# )
 
 # Quick checks ----
 md.era.short.clean %>%

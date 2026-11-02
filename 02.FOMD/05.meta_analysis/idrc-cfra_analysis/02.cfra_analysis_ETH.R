@@ -337,6 +337,51 @@ for (i in seq_len(nrow(archetypes))) {
          map, width = 6, height = 6, dpi = 300, bg = "white")
 }
 
+#--- 4.2. Table S1: studies and comparisons per high-priority area, one per archetype ----
+# 3A: one row per high-priority woreda, with its zone, region and priority tier
+# 3B, 3C (rasters): one row per number of criteria met
+county_table_numbers <- c("3A" = 1, "3B" = 1, "3C" = 1)   # supplementary table number of each archetype
+
+for (i in seq_len(nrow(archetypes))) {
+  code   <- archetypes$code[i]
+  arc    <- read_arc(archetypes$file[i])
+  vector <- "tier" %in% names(arc)
+  
+  table.county <- county_table(arc, archetypes$rule[i], selection[[archetypes$archetype[i]]],
+                               pool.long, points.pool, class_col = if (vector) "tier" else "score")
+  
+  if (vector) {
+    pr <- arc[with(arc, eval(str2lang(archetypes$rule[i]))) %in% TRUE, ]   # names repeat outside the high-priority woredas
+    table.county <- table.county %>%
+      left_join(st_drop_geometry(pr) %>% distinct(NAME_1, zone, region, tier_label), by = "NAME_1") %>%
+      transmute(Woreda = NAME_1, Zone = zone, Region = region, `Priority tier` = tier_label,
+                Studies, Comparisons)
+  } else {
+    table.county <- table.county %>%
+      transmute(`Criteria met` = if_else(NAME_1 == "Total", "Total", as.character(score)),
+                Studies, Comparisons)
+  }
+  View(table.county)
+  
+  write_csv(table.county, file.path(path.output, paste0(country_code, "_", code, "_TableS",
+                                                        county_table_numbers[[code]], "_counties.csv")), na = "")
+}
+
+#--- 4.3. Table S2: agro-ecological zones and evidence per zone, one per archetype ----
+aez_table_numbers <- c("3A" = 2, "3B" = 2, "3C" = 2)   # supplementary table number of each archetype
+
+for (i in seq_len(nrow(archetypes))) {
+  code <- archetypes$code[i]
+  arc  <- read_arc(archetypes$file[i])
+  
+  table.aez <- aez_table(arc, archetypes$rule[i], aez.rasters[[1]], gaez.lookup,
+                         selection[[archetypes$archetype[i]]], pool.long, points.pool, aez.rasters,
+                         min_share = min_share_aez)
+  View(table.aez)
+  
+  write_csv(table.aez, file.path(path.output, paste0(country_code, "_", code, "_TableS",
+                                                     aez_table_numbers[[code]], "_aez.csv")))
+}
 #######
 #--- 4.1 Figure 1: high-priority areas (a) and main agro-ecological zones with study sites (b) ----
 map_settings <- list(
@@ -427,7 +472,7 @@ for (i in seq_len(nrow(archetypes))) {
 }
 
 #--- 4.2. Table S1: studies and comparisons per high-priority county, one per archetype ----
-county_table_numbers <- c("2A" = 1, "2B" = 1)   # supplementary table number of each archetype
+county_table_numbers <- c("3A" = 1, "3B" = 1, "3C"= 1)   # supplementary table number of each archetype
 
 for (i in seq_len(nrow(archetypes))) {
   code <- archetypes$code[i]
@@ -457,6 +502,7 @@ for (i in seq_len(nrow(archetypes))) {
   write_csv(table.aez, file.path(path.output, paste0(country_code, "_", code, "_TableS",
                                                      aez_table_numbers[[code]], "_aez.csv")))
 }
+
 #--- 4.5. Figure S1. Year of publication of the studies included in the analysis (supplementary) ----
 figS1_years_numbers <- c("2A" = 1, "2B" = 1)   # supplementary figure number of each archetype
 
