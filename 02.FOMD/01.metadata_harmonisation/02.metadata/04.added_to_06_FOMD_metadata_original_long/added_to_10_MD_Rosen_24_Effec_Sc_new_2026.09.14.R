@@ -48,7 +48,8 @@ length(unique(fomd04$study_id_ss))#1811
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v47.csv"))
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v50.csv"))
 #md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v51.csv"))
-md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v52.csv"))
+#md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v52.csv"))
+md.era.short <- read.csv(file.path(path.era, "ERA_data_short_v53.csv"))
 
 
 length(unique(md.era.short$study_id)) #1808 studies
@@ -103,7 +104,7 @@ md.era.short.clean %>%
 length(unique(md.era.short.clean$study_id)) # 1810;1808 studies
 length(unique(md.era.short.clean$effect_size_id))  #232209 rows #V50 191019 ROWS;V51:166297
 length(unique(md.era.short.clean$authors))  #1347
-length(unique(md.era.short.clean$title)) #980;988
+length(unique(md.era.short.clean$title)) #980;988;993
 length(unique(md.era.short.clean$doi)) #1592; #1591;1589
 
 #----------------------------------------------
@@ -217,9 +218,6 @@ md.era.short.clean <- md.era.short.clean %>%
       study_id=="LM0117.1"~"No",
       
       study_id== "NJ0025" & site_id=="Makoholi Research Station"~"No",
-      
-      
-      
       TRUE ~ site_agg),
     
     
@@ -234,6 +232,7 @@ md.era.short.clean <- md.era.short.clean %>%
       study_id == "NN0499" & site_id == "South Achefer" ~ "11.5",
       study_id=="AN0118"&site_id=="Mchinji..Msakambewa, Dowa..Salima"~"-13.795697..-13.55..-13.76",
       study_id=="EM1044"~"31.25",
+      study_id == "EO0003" & site_id == "Kisumu" ~ "-0.0843",
       
       TRUE ~ site_latitude
     ),
@@ -248,8 +247,8 @@ md.era.short.clean <- md.era.short.clean %>%
       study_id == "NN0499" & site_id == "South Achefer" ~ "36.85",
       study_id=="AN0118"&site_id=="Mchinji..Msakambewa, Dowa..Salima"~"32.892422..33.9..34.47",
       study_id=="EM1044"~"31.75",
-      
-      
+      study_id == "EO0003" & site_id == "Kisumu" ~ "34.6922",
+
       TRUE ~ site_longitude
     ),
     site_buffer = case_when(
@@ -271,7 +270,6 @@ md.era.short.clean <- md.era.short.clean %>%
            site_id=="NRC, Dokki, Cairo..Cairo University, Agricultural Experimental Station"))
 
 sort(unique(md.era.short.clean$study_id[is.na(md.era.short.clean$site_latitude)])) #character(0)
-
 sort(unique(md.era.short.clean$study_id[is.na(md.era.short.clean$site_admin)])) #character(0)
 sort(unique(md.era.short.clean$site_id[is.na(md.era.short.clean$site_latitude)])) #character(0)
 sort(unique(md.era.short.clean$site_id[is.na(md.era.short.clean$site_longitude)]))#character(0)
@@ -592,9 +590,12 @@ md.era.short.clean <- md.era.short.clean %>%
   mutate(
     C_crop_tree_variety = case_when(
       study_id == "AG0116" ~ str_replace(C_crop_tree_variety, fixed("Lemon & Lime"), "Lemon"),
+      study_id == "JS0204" ~ str_replace(C_crop_tree_variety, fixed("Pepper(NA)"), "Black Pepper(NA)"),
       TRUE ~ C_crop_tree_variety),
     T_crop_tree_variety = case_when(
       study_id == "AG0116" ~ str_replace(T_crop_tree_variety, fixed("Lemon & Lime"), "Lemon"),
+      study_id == "JS0204" ~ str_replace(T_crop_tree_variety, fixed("Pepper(NA)"), "Black Pepper(NA)"),
+      
       TRUE ~ T_crop_tree_variety))
 
 # Apply all fixes to any set of columns
@@ -757,6 +758,10 @@ md.era.short.clean <- apply_replace_in_cols(
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean, cols = crop_tree_cols,
   pattern = "Shea Nut", replacement = "Sheanut")
+
+md.era.short.clean <- apply_replace_in_cols(
+  md.era.short.clean, cols = crop_tree_cols,
+  pattern = "Acacia albida Delile", replacement = "Faidherbia albida")
 
 md.era.short.clean <- apply_replace_in_cols(
   md.era.short.clean,
@@ -1002,6 +1007,17 @@ md.era.short.clean <- apply_replace_in_cols(
   cols = c("C_varietal_crop_subpractice","T_varietal_crop_subpractice"),
   pattern = "Unspecified Variety Variety",replacement =  "Unspecified Variety") 
 
+md.era.short.clean <- md.era.short.clean %>%
+mutate(
+  C_varietal_crop_name = case_when(
+    study_id == "JS0204" ~ str_replace(C_varietal_crop_name, fixed("Pepper"), "Black Pepper"),
+    TRUE ~ C_varietal_crop_name),
+  T_varietal_crop_name = case_when(
+    study_id == "JS0204" ~ str_replace(T_varietal_crop_name, fixed("Pepper"), "Black Pepper"),
+    
+    TRUE ~ T_varietal_crop_name))
+
+
 # Quick checks-----
 md.era.short.clean %>%
   select(study_id, effect_size_id, 
@@ -1189,8 +1205,18 @@ md.era.short.clean <- apply_replace_in_cols(
 md.era.short.clean<-md.era.short.clean%>%
   mutate(T_intercrop_subpractice=case_when(
     study_id=="CJ0050"&T_intercrop_subpractice=="Intercrop (N fixing and Non N fixing)"~"Push pull",
-    TRUE~T_intercrop_subpractice))
-
+    study_id=="LM0168"&T_intercrop_subpractice=="Intercrop (N fixing and Non N fixing)"~"",
+    study_id=="LM0171"&T_intercrop_subpractice=="Intercrop (N fixing and Non N fixing)"~"",
+    study_id=="JO0177"&T_intercrop_subpractice=="Intercrop (Non N fixing)"~"",
+    
+    TRUE~T_intercrop_subpractice))%>%
+  
+  mutate(C_intercrop_subpractice=case_when(
+    study_id=="LM0168"&C_intercrop_subpractice=="Monoculture"~"",
+    study_id=="LM0171"&C_intercrop_subpractice=="Monoculture"~"",
+    study_id=="JO0177"&C_intercrop_subpractice=="Monoculture"~"",
+    
+    TRUE~C_intercrop_subpractice))
 
 # Quick checks ----
 md.era.short.clean %>%
@@ -1234,6 +1260,11 @@ md.era.short.clean <- apply_replace_in_cols(md.era.short.clean,
   cols = c("C_crop_seq_residues_fate", "T_crop_seq_residues_fate"),
   pattern = "NA",replacement = "Unspecified")
 
+md.era.short.clean<-md.era.short.clean%>%
+  mutate(T_crop_seq_subpractice=case_when(
+    study_id=="AN0129"&T_crop_seq_subpractice=="Rotation (N fixing and Non N fixing)"~"Agroforestry Fallow (N fixing)",
+    TRUE~T_crop_seq_subpractice))
+
 # Quick checks ----
 md.era.short.clean %>%
   select(study_id, effect_size_id, 
@@ -1275,9 +1306,56 @@ md.era.short.clean <-md.era.short.clean%>%
     study_id=="LM0279"&out_subindicator=="Land Equivalent Ratio"~"Monoculture",
     TRUE~C_agrof_subpractice))
 
+md.era.short.clean <-md.era.short.clean%>%
+  mutate(
+    C_agrof_subpractice=case_when(
+      study_id=="LM0264"&C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Gliricidia sepium-Maize"~"Monoculture",
+      study_id%in% c("HK0261","NN0247")&C_crop_tree_diversity=="Maize-Gliricidia sepium"& T_crop_tree_diversity=="Maize-Gliricidia sepium"~"Alleycropping (N fixing)",
+      study_id=="CJ0076"&C_crop_tree_diversity=="Cooking Banana"& T_crop_tree_diversity=="Cooking Banana-Common Bean"~"",
+      
+      TRUE~C_agrof_subpractice))%>%
+  
+  mutate(T_agrof_subpractice=case_when(
+    study_id=="LM0264"&C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Gliricidia sepium-Maize"~"Alleycropping (N fixing)",
+    study_id%in%c("HK0261","NN0241","NN0247")&
+      C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Maize-Gliricidia sepium"~"Alleycropping (N fixing)",
+    study_id%in%c("HK0261","NN0247")&C_crop_tree_diversity=="Maize-Gliricidia sepium"& T_crop_tree_diversity=="Maize-Gliricidia sepium"~"Alleycropping (N fixing)",
+    study_id=="JO0177"~"Alleycropping (Non N fixing)",
+    study_id=="NN0310"&C_crop_tree_diversity=="Common Bean/Maize"& T_crop_tree_diversity=="Casuarina equisetifolia-Common Bean/Casuarina equisetifolia-Maize/Casuarina equisetifolia-Common Bean"~"Alleycropping (N fixing)",
+    
+    study_id=="LM0276"&C_crop_tree_diversity=="Cowpea/Maize"& T_crop_tree_diversity=="Cowpea-Grevillea robusta/Cowpea-Grevillea robusta"~"Alleycropping (Non N fixing)",
+    study_id=="AC0033"&C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Maize-Faidherbia albida-Cordia africana-Vachellia seyal-Vachellia xanthophloea-Grevillea robusta"~"Alleycropping (N fixing and Non N fixing)",
+    study_id=="NN0310"&C_crop_tree_diversity=="Common Bean/Maize"& T_crop_tree_diversity=="Common Bean-Entada abyssinica/Common Bean-Entada abyssinica/Entada abyssinica-Maize/Entada abyssinica-Maize/Common Bean-Entada abyssinica"~"Alleycropping (N fixing)",
+    
+    study_id=="CJ0076"&C_crop_tree_diversity=="Cooking Banana"& T_crop_tree_diversity=="Cooking Banana-Common Bean"~"",
+    
+    TRUE~T_agrof_subpractice))%>%
+  
+  mutate(C_intercrop_subpractice=case_when(
+    study_id=="LM0264"&C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Gliricidia sepium-Maize"~"",
+    study_id%in%c("HK0261","NN0241","NN0247")&C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Maize-Gliricidia sepium"~"",
+    
+    study_id%in%c("HK0261","NN0247")&C_crop_tree_diversity=="Maize-Gliricidia sepium"& T_crop_tree_diversity=="Maize-Gliricidia sepium"~"",
+    study_id=="AC0033"&C_crop_tree_diversity=="Maize"~"",
+    
+    
+    
+    TRUE~C_intercrop_subpractice))%>%
+  mutate(T_intercrop_subpractice=case_when(
+    study_id=="LM0264"&C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Gliricidia sepium-Maize"~"",
+    study_id%in%c("HK0261","NN0241","NN0247")&
+      C_crop_tree_diversity=="Maize"& T_crop_tree_diversity=="Maize-Gliricidia sepium"~"",
+    
+    study_id%in%c("HK0261","NN0247")&C_crop_tree_diversity=="Maize-Gliricidia sepium"& T_crop_tree_diversity=="Maize-Gliricidia sepium"~"",
+    study_id=="AC0033"&C_crop_tree_diversity=="Maize"~"",
+    
+    TRUE~T_intercrop_subpractice))
+
 # Quick checks ----
 md.era.short.clean %>%
   select(study_id, effect_size_id, 
+         C_crop_tree_diversity,T_crop_tree_diversity,
+         C_intercrop_subpractice,T_intercrop_subpractice,
          C_agrof_subpractice_raw,C_agrof_subpractice,
          C_agrof_shade_mean_min_max,C_agrof_canopy_height_mean_min_max,
          C_agrof_dhb_mean_min_max,
@@ -1999,9 +2077,14 @@ md.era.short.clean <- md.era.short.clean %>%
   mutate(
     C_residues_subpractice=case_when(
       study_id=="NN0540"&C_residues_subpractice=="Crop Residue Unresolved (Unspecified)"~"Crop Residue Unresolved (Non N fixing)",
-      TRUE~C_residues_subpractice),
+     
+      
+       TRUE~C_residues_subpractice),
     T_residues_subpractice=case_when(
       study_id=="NN0540"&T_residues_subpractice=="Crop Residue Unresolved (Unspecified)"~"Crop Residue Unresolved (Non N fixing)",
+      
+      study_id=="JO0188"&T_residues_subpractice_raw%in%c("RFtS","RFbS")~"Mulch (Unspecified Plants)..Plastic Mulch",
+      
       TRUE~T_residues_subpractice))
   
   
@@ -2323,9 +2406,12 @@ md.era.short.clean <- apply_replace_in_cols(
   pattern = ", ",replacement = "..") 
 
 md.era.short.clean <- md.era.short.clean%>%
+  mutate(C_watharv_subpractice=case_when(
+    study_id== "JO0188"& C_watharv_subpractice=="No Water Harvesting"~"Ridge & Furrow",
+    TRUE~T_watharv_subpractice))%>%
+
   mutate(T_watharv_subpractice=case_when(
-           study_id== "EO0043"&
-           T_watharv_subpractice=="Bunds..Other Water Harvesting Practice"~"Bunds..Grass Strips",
+           study_id== "EO0043"&T_watharv_subpractice=="Bunds..Other Water Harvesting Practice"~"Bunds..Grass Strips",
          TRUE~T_watharv_subpractice))
 
 # Quick checks ----
@@ -2696,7 +2782,7 @@ replacements <- c(
   "Faidherbia albida (Wood)" = "Faidherbia albida Wood",
   "Fennel (Oil)"="Fennel Oil",
   "Fennel (Seed)"="Fennel Seed",
-  "Gliricidia sepium-Pepper-Cardamom" = "Gliricidia sepium..Pepper..Cardamom",
+  "Gliricidia sepium-Black Pepper-Cardamom" = "Gliricidia sepium..Black Pepper..Cardamom",
   
   "Grape (Wine)"="Grape Wine",
   "Grass Pea..Indian Pea..Blue Sweet Pea..Chickling Pea..White Pea..White Vetch"=
@@ -2720,7 +2806,7 @@ replacements <- c(
   "Mung Bean or Green Gram"="Green Gram",
   "Oats"="Oat",
   "Olive (Fruits)"="Olive Fruits",
-  "Onion and Shallot (Total Yield)"="Onion..Shallot",
+  "Onion and Shallot (Total Yield)"="Onion",
   "Plantains and Cooking Banana"="Plantain..Cooking Banana",
   "Patula Pine"="Pinus patula",
   "Peanut (Pod)"="Peanut Pod",
@@ -2733,9 +2819,9 @@ replacements <- c(
   "Pigs"="Pig",
   "Rabbit" = "Rabbits",
   "Rape or Canola Leaf"="Canola Leaf",
-  "Sheep (Meat)" = "Sheep",
-  "Sheep (Milk)" = "Sheep",
-  "Sheep (Wool)" = "Sheep",
+  "Sheep (Meat)" = "Sheep Meat",
+  "Sheep (Milk)" = "Sheep Milk",
+  "Sheep (Wool)" = "Sheep Wool",
   "Sunflower (Seed)"="Sunflower Seed",
   "Sugar Beet (Root)"="Sugar Beet Root",
   "Sugar Beet (Sugar)"="Sugar Beet Sugar",
@@ -2759,6 +2845,30 @@ for (pat in names(replacements)) {
     replacement = replacements[[pat]]
   )
 }
+
+#md.era.short.clean<-md.era.short.clean %>%
+#mutate(
+# T_product=case_when(
+      #study_id=="CJ0186"&T_product=="Pepper Seed"~"Pepper Fruit",
+      #study_id=="CJ0190"&T_product=="Pepper Seed"~"Pepper Fruit",
+      
+      #study_id=="JS0204"&T_product=="Pepper Fruit" ~"Black Pepper Fruit",
+      #study_id=="JS0204"&T_product=="Gliricidia sepium..Pepper..Cardamom" ~"Gliricidia sepium..Black Pepper..Cardamom",
+      #study_id=="JS0204"&T_product=="Pepper..Gliricidia sp." ~"Black Pepper..Gliricidia sp.",
+      #study_id=="JS0204"&T_product=="Pepper..Grevillea robusta" ~"Black Pepper..Grevillea robusta",
+      #study_id=="JS0204"&T_product=="Pepper..Grevillea robusta..Cardamom" ~"Black Pepper..Grevillea robusta..Cardamom",
+      
+#   TRUE~T_product
+#  ),
+# C_product=case_when(
+#   study_id=="CJ0186"&C_product=="Pepper Seed"~"Pepper Fruit",
+#   study_id=="CJ0190"&C_product=="Pepper Seed"~"Pepper Fruit",
+      
+#    study_id=="JS0204"&C_product=="Pepper Fruit" ~"Black Pepper Fruit",
+      
+#   TRUE~C_product
+#  )
+# )
 
 # Quick checks ----
 md.era.short.clean %>%
@@ -2786,7 +2896,6 @@ md.era.short.clean %>%
 # TO CHECK: out_subindicator- Pest & Pathogen (Losses)
 sort(unique(md.era.short.clean$C_product[md.era.short.clean$out_subindicator=="Pest & Pathogen (Losses)"])) 
 sort(unique(md.era.short.clean$study_id[md.era.short.clean$out_subindicator=="Pest & Pathogen (Losses)"])) 
-
 
 sort(unique(md.era.short.clean$C_product)) 
 sort(unique(md.era.short.clean$T_product)) 
