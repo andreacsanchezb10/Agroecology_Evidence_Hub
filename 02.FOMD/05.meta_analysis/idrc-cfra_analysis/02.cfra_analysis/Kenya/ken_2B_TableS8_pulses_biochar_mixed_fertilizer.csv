@@ -1,0 +1,7 @@
+V1,V2,V3,V4,V5,V6,V7,V8,V9,V10
+"a) Biochar amendment compared with no fertilizer, by measured crop, companion species, type of biochar amendment, and outcome measured.",,,,,,,,,
+Measured crop,Companion species,Biochar amendment,Outcome measured,Studies,Comparisons,Positive comparisons,Neutral comparisons,Negative comparisons,% positive comparisons
+Soybean,Maize,Biochar,Crop Yield,1,8,7,0,1,88
+"b) Mixed fertilizers compared with no fertilizer, by measured crop, companion species, type of mixed input, and outcome measured.",,,,,,,,,
+Measured crop,Companion species,Mixed input,Outcome measured,Studies,Comparisons,Positive comparisons,Neutral comparisons,Negative comparisons,% positive comparisons
+Soybean,Maize,Biochar + Inorganic Fertilizer + Inorganic Micronutrients Inputs,Crop Yield,1,8,8,0,0,100
