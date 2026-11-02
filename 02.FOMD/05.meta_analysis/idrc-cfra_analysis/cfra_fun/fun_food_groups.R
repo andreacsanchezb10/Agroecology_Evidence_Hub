@@ -30,17 +30,17 @@ food_group_order <- c("Cereals", "Pulses and legumes", "Nuts and seeds", "Roots 
 #   soybean -> Pulses and legumes; other oilseeds (groundnut, sunflower, sesame) -> Nuts and seeds;
 #   nuts in "Fruit and nuts" (e.g. cashew, macadamia) -> Nuts and seeds
 fao_to_school <- function(fao_group, fao_subgroup = NA_character_) {
-  sub <- coalesce(fao_subgroup, "")
+  grp <- str_to_lower(str_squish(coalesce(fao_group, "")))
+  sub <- str_to_lower(str_squish(coalesce(fao_subgroup, "")))
   case_when(
-    fao_group == "Cereals"                                              ~ "Cereals",
-    fao_group == "Leguminous crops"                                     ~ "Pulses and legumes",
-    fao_group == "Oilseed crops and oleaginous fruits" &
-      str_detect(sub, "Soya")                                           ~ "Pulses and legumes",
-    fao_group == "Oilseed crops and oleaginous fruits"                  ~ "Nuts and seeds",
-    str_detect(fao_group, "Fruit and nuts") & str_detect(sub, "Nuts")   ~ "Nuts and seeds",
-    str_detect(fao_group, "Root tuber")                                 ~ "Roots and tubers",
-    str_detect(fao_group, "Vegetables")                                 ~ "Vegetables",
-    str_detect(fao_group, "Fruit and nuts|^Fruits")                     ~ "Fruits",
+    grp == "cereals"                                                    ~ "Cereals",
+    grp == "leguminous crops"                                           ~ "Pulses and legumes",
+    grp == "oilseed crops and oleaginous fruits" & str_detect(sub, "soya") ~ "Pulses and legumes",
+    grp == "oilseed crops and oleaginous fruits"                        ~ "Nuts and seeds",
+    str_detect(grp, "^fruits? and nuts") & str_detect(sub, "nuts")      ~ "Nuts and seeds",
+    str_detect(grp, "root tuber")                                       ~ "Roots and tubers",
+    str_detect(grp, "vegetables")                                       ~ "Vegetables",
+    str_detect(grp, "^fruits? and nuts|^fruits")                        ~ "Fruits",
     TRUE                                                                ~ NA_character_)
 }
 
@@ -52,9 +52,9 @@ assign_food_group <- function(df, product_lookup) {
   
   lookup <- setNames(product_lookup$food_group, product_lookup$product)
   
-  # food groups of the measured crop; products like "Maize..Lepidoptera" keep the crop part only
-  crop_groups <- lapply(str_split(df$T_product_simple, fixed("..")), function(p) {
-    fg <- unique(na.omit(unname(lookup[p])))
+  # food groups of the measured crop and part (e.g. "Cowpea Leaf" is a vegetable, "Cowpea Grain" a legume);
+  # products like "Maize..Lepidoptera" keep the crop part only
+  crop_groups <- lapply(str_split(df$T_product, fixed("..")), function(p) {    fg <- unique(na.omit(unname(lookup[p])))
     if (length(fg) == 0) NA_character_ else fg
   })
   

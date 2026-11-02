@@ -11,6 +11,20 @@ in `../../01_status.md`.
 
 # A. Ours to fix — data-quality items
 
+## Residue-fate rule drops the second residue material (found v53, patched for JO0188 only)
+The v26 rule in Step 5c (`grepl("Crop Residue Unresolved", T_resp_derived) & .spec(.tfate)` → whole string
+replaced by the fate term) loses `Res.Out` P2 wherever an arm has two materials (JO0188 RFbS/RFtS: straw +
+plastic film). v53 hardcodes the two JO0188 values in Step 6c; the general, token-wise fix belongs in v54 and
+will change other studies — measure before shipping.
+
+## Ontology conformance check does not cover the product columns (found v53)
+The Step 8 check scans `*_subpractice` only, so a new product value ("Black Pepper", JS0204) is never reported.
+One loop over `C_/T_product` against `01_product_new` / `01_product_old` would close it.
+
+## LM0264 alley arm carries no agroforestry label (found v53)
+"M_G/M inter alley" (Rao 2000 system 5, gliricidia hedgerow intercropping) reads as an intercrop;
+`.move_af_side()` reacts to label text only. Not changed in v53.
+
 ## Detail tables do not join for multi-site studies (found v52, NOT fixed)
 `Fert.Method` and `Res.Method` join on `c("B.Code","Site.ID","Time","<level>.Level.Name")`, but a study whose
 observations are pooled across sites stores `Site.ID` in `Data.Out` as a `..`-concatenation
@@ -116,6 +130,21 @@ would not be safe:
 ---
 
 # C. Needs a human decision — not pipeline work
+
+## Capsicum trials extracted as *Piper* (found v53)
+ERA's `03e. EU_Codes` defines "Pepper (Seed)" / "Pepper (Fruit)" as *Piper sp.* (Spices); the vegetable is k18
+"Capsicum or Bell Pepper". v53 corrects CJ0186, CJ0190 and JO0140 (Yemu) at Lolita's decision. The same error
+is likely in **JO0106 (15 rows), EO0019 (6), DK0136 (36), AG0116 (2)** — nobody has read those papers.
+Andrea / ERA team.
+
+## "Black Pepper" product term (proposal, v53)
+Used on JS0204 (*Piper nigrum*); not in `01_product_new` nor in ERA's crop table. Proposal in
+`Downloads/ERA_v53_ontology_proposal.md`. The script resolves its nitrogen-fixing status explicitly (No).
+
+## Hardcoded per-study corrections now live in the script (v53)
+Eight studies are corrected in Steps 3b/6c because the source workbooks are wrong and not re-extracted. If ERA
+ever re-extracts these studies, the overrides must be reviewed, not just left in place — the ledger
+`study_corrections_vNN.csv` lists every rule and the rows it touches.
 
 These are **not pending work for the pipeline**. They are Andrea's, or the ERA data team's.
 

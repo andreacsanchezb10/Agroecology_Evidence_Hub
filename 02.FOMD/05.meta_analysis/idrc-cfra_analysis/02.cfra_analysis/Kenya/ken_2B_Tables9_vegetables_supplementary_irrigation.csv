@@ -1,0 +1,8 @@
+V1,V2,V3,V4,V5,V6,V7,V8,V9,V10
+"a) Vegetable productivity, by measured crop, companion species, irrigation method, and outcome measured.",,,,,,,,,
+Measured crop,Companion species,Irrigation method,Outcome measured,Studies,Comparisons,Positive comparisons,Neutral comparisons,Negative comparisons,% positive comparisons
+Cabbage,-,Supplemental drip irrigation,Crop Yield,1,6,6,0,0,100
+"b) Profitability of vegetable systems, by main crop, companion species, irrigation method, and outcome measured.",,,,,,,,,
+Main crop,Companion species,Irrigation method,Outcome measured,Studies,Comparisons,Positive comparisons,Neutral comparisons,Negative comparisons,% positive comparisons
+Cabbage,-,Supplemental drip irrigation,Net Return,1,6,6,0,0,100
+Cabbage,-,Supplemental drip irrigation,Total Cost,1,6,0,0,6,0

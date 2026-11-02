@@ -44,19 +44,24 @@ practice_groups <- c("biomass_management",
 # Any practice name (control or treatment) that starts with `starts_with` becomes `new_name`
 practice_rename <- tribble(
   ~starts_with,                  ~new_name,
-  "Crop residues incorporated",  "Residues incorporation",
-  "Tree pruning incorporated",   "Residues incorporation",
-  "Crop residues retained",      "Residues retention",
-  "Tree pruning retain",         "Residues retention",
+  "Crop residues incorporated",  "Residue incorporation",
+  "Tree pruning incorporated",   "Residue incorporation",
+  "Crop residues retained",      "Residue retention",
+  "Tree pruning retain",         "Residue retention",
   "Crop residues grazed",        "No residues or mulch",
   "Crop residues removed",       "No residues or mulch",
   "No mulch",                    "No residues or mulch",
   "Organic mulch",               "Organic mulch",
   
   "Alleycropping",               "Agroforestry",
+  "Agroforestry + Improved fallow","Agroforestry",
+  "Agroforestry + Crop rotation","Agroforestry",
+  
   "Boundary Planting",           "Agroforestry",
+  
   "Intercropping",               "Intercropping",
   "No Boundary Planting + Intercropping (N fixing mixed)", "Intercropping",
+  
   
   "Woody Fallow (N fixing)","Improved fallow",
   "Crop Rotation (N fixing mixed)", "Crop rotation",
@@ -98,7 +103,7 @@ control_rename <- tribble(
 swap_pairs <- tribble(
   ~C_practice,              ~T_practice,
   "Organic mulch",          "No residues or mulch",
-  "Residues incorporation", "No residues or mulch",
+  "Residue incorporation", "No residues or mulch",
    "Crop rotation",         "Monoculture",
   
   "Inorganic Fertilizer",   "No fertilizer applied", 
@@ -152,6 +157,8 @@ variety_origin <- function(practice, type, variety = NA_character_) {
 exclude_pairs <- tribble(
   ~C_practice,                    ~T_practice,
   "No residues or mulch",         "Plastic mulch",  # not an AE/RA practice
+  "No residues or mulch",         "Organic mulch (unspecified) + Plastic mulch",  # not an AE/RA practice
+  
   "No fertilizer applied",        "Inorganic Fertilizer",   # not an AE/RA practice
   "Inorganic Fertilizer",         "No fertilizer applied",
   "Synthetic pesticide",          "No Chemical Applied",
@@ -287,10 +294,29 @@ reclassify_practices <- function(df, level = "practice") {
   # 5.6 Keep only practice groups where control and treatment differ (the tested practice)
   long <- long %>% filter(tolower(C_practice) != tolower(T_practice))
   
-  # 5.7 Remove paired comparisons testing an excluded contrast (step 4d), in all practice groups
-  excluded_ids <- long %>%
-    semi_join(exclude_pairs, by = c("C_practice", "T_practice")) %>%
-    distinct(effect_size_id)
-  long %>% anti_join(excluded_ids, by = "effect_size_id")
+  # 5.6b Combine spatial and temporal diversification tested in the same comparison
+  #      into one practice (e.g. "Agroforestry + Crop rotation"), kept under spatial diversification
+  temporal <- long %>%
+    filter(practice_group == "Diversification temporal") %>%
+    distinct(effect_size_id, T_temporal = T_practice)
+  long <- long %>%
+    left_join(temporal, by = "effect_size_id") %>%
+    mutate(combine = !is.na(T_temporal) & effect_size_id %in% effect_size_id[practice_group == "Diversification spatial"]) %>%
+    filter(!(combine & practice_group == "Diversification temporal")) %>%
+    mutate(T_practice = if_else(combine & practice_group == "Diversification spatial",
+                                paste(T_practice, T_temporal, sep = " + "), T_practice)) %>%
+    select(-T_temporal, -combine)
+  
+  # 5.6c Rename again, for the combined practices created in 5.6b
+  for (i in seq_len(nrow(practice_rename))) {
+    long <- long %>%
+      mutate(T_practice = if_else(str_starts(T_practice, fixed(practice_rename$starts_with[i])),
+                                  practice_rename$new_name[i], T_practice))
+  }
+  # 5.7 Remove the excluded contrasts only (the other practice groups of the comparison are kept)
+  long %>% anti_join(exclude_pairs, by = c("C_practice", "T_practice"))
+  
+  
+  
 
 }
