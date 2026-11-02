@@ -329,11 +329,11 @@ out_cv_grouping_method,NA,"Audit trail: which variables defined the ""group"" fo
 out_effect_size_type,NA,Effect size type: Log Response Ratio or Standardized mean difference,NA
 out_effect_size_yi,NA,NA,NA
 out_effect_size_vi,NA,NA,NA
-pler_value_calc,Numeric,"Partial Land Equivalent Ratio (PLER) for one crop grown within an intercropping or agroforestry system, its yield under that system divided by the yield of the same crop grown alone (monoculture). Uses the study’s own reported ratio when available; otherwise calculated directly from the two yields.",NA
-pler_sd_calc,Numeric,The uncertainty (standard deviation) of pler_value_calc. Uses the study’s own reported precision when available; otherwise estimated from the variability and sample sizes of the underlying yield measurements.,NA
-ler_value_calc,Numeric,"Total Land Equivalent Ratio (LER) for an intercropping or agroforestry system, the sum of the Partial LER of every crop grown together in that system. A value above 1 means the system produced more combined yield than growing the same crops separately; below 1 means less. For studies that reported a Total LER directly rather than individual crop yields, that reported value is used instead.",NA
-ler_sd_calc,Numeric,"The uncertainty (standard deviation) of ler_value_calc, combining the uncertainty of each crop’s Partial LER within the same system. Left blank if the uncertainty of one or more component crops is unknown, since combining incomplete information would understate how uncertain the result really is. For studies that reported a Total LER directly, based on that study’s own reported uncertainty instead.",NA
-ler_product,Character,"The crop(s) included in this Total LER calculation, separated by .. when there is more than one.",NA
+pler_value_calc,Numeric,NA,NA
+pler_var_calc,Numeric,NA,NA
+ler_value_calc,Numeric,NA,NA
+ler_sd_calc,Numeric,NA,NA
+ler_product,Character,NA,NA
 ler_effect_size_type,Character,NA,NA
 ler_effect_size_yi,Numeric,NA,NA
 ler_effect_size_vi,Numeric,NA,NA

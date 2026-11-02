@@ -45,9 +45,15 @@ filename. Then update `../../_status/era.md` and `03_era_changelog.md` — that 
    unit, aggregation statistic and weight-gain duration agree (blank = wildcard; a single date inside the other
    arm's range = same campaign) and fills the blank side. `add_comparison_id()` then writes `out_comparison_id`
    from the key actually used. **Anything affecting *which rows pair* belongs at this step, not step 5.**
+   **Step 3b (v53)** sits just before the pairing: hardcoded *raw* overrides on `snap_tables$ie$Data.Out` for
+   studies whose extraction error decides which rows pair (CJ0186 inverted `T.Control`; LM0264 rotation-phase
+   "Sole Maize" rows flagged as controls; JO0140 needing one CT:CA pair per printed table row, via a
+   `Pair.Ord` column that `add_pair_subkey()` folds into `Pair.Subkey`).
 4. **`fomd_map`** — the big named list mapping output columns to source/derived columns.
-5. **Post-build steps** on `fomd_out`: consolidated fert/chem fields, control-label filling, diversification
-   reorientation, `practice_primary` / `practice_compared`, the v45 normalization pass, the v46 product fill,
+5. **Post-build steps** on `fomd_out`: consolidated fert/chem fields, **Step 6c (v53) — hardcoded per-study
+   value corrections** (one commented sub-block per study, each through `.fix()` which counts the defect before
+   and after the edit into a ledger; runs before 6g so every later rule sees the corrected values),
+   control-label filling, diversification reorientation, `practice_primary` / `practice_compared`, the v45 normalization pass, the v46 product fill,
    the v47 duplicate-DOI resolution, the v48 biodiversity taxon→product / metric→subindicator rewrite.
 6. **Write** the CSV, companion files and verification log.
 
@@ -63,6 +69,7 @@ filename. Then update `../../_status/era.md` and `03_era_changelog.md` — that 
 | `excluded_studies_vNN.csv` | study-level exclusions with reason (v51: NN0376) |
 | `template_drift_vNN.csv` | columns in the `10_` sheet but not in the output, and vice versa (v51) |
 | `subpractice_fill_vNN.csv` | where every explicit no-application label came from, and every refusal with its reason (v52) |
+| `study_corrections_vNN.csv` | the ledger of hardcoded per-study corrections (Steps 3b/6c): rule, rows matching the defect before and after (after must be 0), rows touched (v53) |
 
 Also read as an **input**: `ERA/Script/livestock_ss_overrides.csv` (manual livestock sample-size overrides),
 and from `era_cache/`: `animal_species_by_study.csv`, `po_paper_resolved.csv`.
@@ -231,6 +238,14 @@ belong to **harvest**, the rest to **postharvest** (v44). Only 6 of these codes 
   no-liming treatment arm) silently swapped control and treatment on 195 rows until it was caught. **Diff the
   outcome values against the previous release, not just `ct_reoriented`**: a flipped row also swaps its join
   key, so it simply fails to join rather than showing up as a difference.
+- **A `_raw` column must move with its subpractice when a fix removes a contrast.** `practice_compared` diffs
+  the `_raw` columns too, so writing "Ridge & Furrow" onto JO0188's control without copying
+  `C_watharv_subpractice_raw` would have left water harvesting listed as the contrast (v53).
+- **A per-row pairing ordinal must carry the table it was ranked within.** JO0140's `Pair.Ord` folded as
+  "1, 2, 3" let the Table-4 control meet the Table-5 treatment with the same rank (35 pairs instead of 19);
+  "Table 5#2" fixes it. Test any pairing change on the save point before a 30-minute build (v53).
+- **`data.table()` has a `key` argument.** A column literally named `key` becomes the table key and fails
+  with "some columns are not in the data.table" — name it `item_key` or similar.
 - **mh dates are Excel serial numbers.** `ED.Sample.Start/End` in mh are numerics like 42165 (origin
   1899-12-30), not Dates; anything that treats them as text or as R dates loses them.
 - The output CSV is often **moved** to `ERA/data/` between runs, so a verify script should try

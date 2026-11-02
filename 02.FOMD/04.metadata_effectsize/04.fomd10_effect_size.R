@@ -123,7 +123,7 @@ skim(fomd10.n.cv$T_out_cv_final) #110581; 87169; 87285
 skim(fomd10.n.cv$C_out_sample_size) #12758; 12110
 skim(fomd10.n.cv$C_out_sample_size_imputed) #9743; 9095
 
-skim(fomd10.n.cv$T_out_sample_size) #12758; 12110
+skim(fomd10.n.cv$T_out_sample_size) #12758; 12110;12080
 skim(fomd10.n.cv$T_out_sample_size_imputed)  #9743; 9095
 
 prueba<-fomd10.n.cv%>%

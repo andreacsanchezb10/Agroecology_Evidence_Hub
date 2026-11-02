@@ -1,6 +1,6 @@
 # Status — ERA
 
-**Owner: Lolita.** Read via `../01_status.md`. Figures verified **2026-10-01**.
+**Owner: Lolita.** Read via `../01_status.md`. Figures verified **2026-10-28**.
 
 ## Three versions are in play at once
 
@@ -8,12 +8,12 @@ This is the single most confusing thing in the project. Read it before investiga
 
 | Stage | Version | Where | Rows / studies |
 |---|---|---|---|
-| **Built** (newest) | **v52** | Lolita's `Downloads/ERA_crop_data_short_v52.csv` (1 Oct 2026) | 166,297 / 1,808 |
-| **Released** to Andrea | **v51** | `ERA/data/ERA_data_short_v51.csv` (28 Sept 2026) | 166,297 / 1,808 |
+| **Built** (newest) | **v53** | Lolita's `Downloads/ERA_crop_data_short_v53.csv` (28 Oct 2026) | 166,223 / 1,808 |
+| **Released** to Andrea | **v52** | `ERA/data/ERA_data_short_v52.csv` (1 Oct 2026) | 166,297 / 1,808 |
 | **Ingested** downstream | **v46** | read by `added_to_10_MD_Rosen_24_Effec_Sc_new.R` line 56 (last checked 2026-07-30) | — |
 
-- 332 columns through v50; 340 in v51; **342 in v52** (`C/T_subpractice_filled`, recording where each
-  explicit no-application label came from).
+- 332 columns through v50; 340 in v51; **350 in v52 and v53** (`C/T_subpractice_filled`, recording where each
+  explicit no-application label came from, plus eight row-level `background_<family>_subpractice` columns).
 - **The row-count drops 232,209 → 191,019 → 166,297 are not data loss.** They are spurious cross-joined
   rows being removed: v48 fixed biodiversity taxon×metric cross-products (230,267), v49 generalized the fix to
   soil depths and pest species×time (191,019), v51 made the two arms agree on sampling window, unit,
@@ -22,12 +22,23 @@ This is the single most confusing thing in the project. Read it before investiga
   Andrea's request (rangeland exclosure, not agroforestry) and DK0053 left with no valid pair.
   → `../sources/ERA/03_era_changelog.md`
 - Version history of row counts: 232,257 / 1,811 → 232,209 / 1,810 (v47 dedup) → 230,267 (v48) → 191,019 (v49,
-  v50) → **166,297 / 1,808 (v51)**.
+  v50) → **166,297 / 1,808 (v51, v52)** → **166,223 / 1,808 (v53)**.
 - **Consequence:** if Andrea reports an oddity, check whether v48/v49 already fixed it before investigating.
   → `../sources/ERA/02_era_handoff.md`
 
-**v52 is built and awaited — release pending** (built 2026-10-01 20:18, 26.2 min, **350 columns**).
-Two decisions by Lolita on 1 Oct shaped the final build.
+**v53 is built and awaited — release pending** (built 2026-10-28 16:28, 39.9 min, 350 columns). It hardcodes
+Andrea's nine per-study corrections of 28 Oct (AN0129, EO0081, CJ0186, CJ0190, JO0135, JO0140, JO0188, JS0204,
+LM0264): Step 3b raw overrides for what changes which rows pair, Step 6c value fixes, Step 6h one orientation
+override (AN0129, 50 rows flipped), ledger `study_corrections_v53.csv` (24 rules, 796 rows touched, 0 residual
+defects). Rows 166,297 → **166,223**:
+JO0140 49 → 19 (one pair per printed table row instead of a cartesian product) and LM0264 108 → 64 (the true
+control only; its two rotations become treatments). **Every other row is identical to v52** and the three
+flip counts are unchanged (1,813 / 921 / 14); AN0129's 50 rows are the only extra flips. Lolita's decision: the vegetable pepper of CJ0186/CJ0190/JO0140
+is "Capsicum or Bell Pepper", because ERA's "Pepper (Fruit)" is *Piper* (a spice).
+→ `../sources/ERA/03_era_changelog.md` v53 section; `../_meta/log/2026-10-28-01-era-v53-andrea-corrections.md`.
+
+**v52 was released on 1 Oct 2026** as `ERA/data/ERA_data_short_v52.csv` (built 20:18, 26.2 min, 350 columns).
+Two decisions by Lolita on 1 Oct shaped that build.
 
 **1. Background management has its own columns.** A practice in the study-level record was applied to every
 arm, so it is a property of the comparison, not of one arm, and it must not sit in an arm's practice column.

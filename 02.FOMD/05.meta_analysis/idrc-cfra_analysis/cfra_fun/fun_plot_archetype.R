@@ -3,9 +3,6 @@ library(terra)
 library(dplyr)
 library(ggplot2)
 
-# colour of the evidence (study sites on the maps, bars of the distribution figures)
-evidence_colour <- "#00796B"
-
 #==========================================================
 # plot_archetype(): map one CFRA policy archetype
 #==========================================================
@@ -61,8 +58,8 @@ plot_archetype <- function(x,
   
   make_labels <- function(cls) {
     if (is.null(n_criteria)) return(setNames(cls, cls))
-    lab <- cls                                                      # the legend title says "out of n"
-    lab[cls == as.character(n_criteria)] <- paste0(n_criteria, " (Core Priority)")
+    lab <- paste0(cls, " of ", n_criteria, " met")
+    lab[cls == as.character(n_criteria)] <- paste0(n_criteria, " of ", n_criteria, " met (Core Priority)")
     setNames(lab, cls)
   }
   
@@ -133,7 +130,7 @@ plot_archetype <- function(x,
     p <- p +
       geom_sf(data = x[x[[outline_col]] %in% 1, ], aes(colour = "outline"),
               fill = NA, linewidth = 1) +
-      scale_colour_manual(values = c(outline = "#00796B"), labels = outline_label, name = NULL)
+      scale_colour_manual(values = c(outline = "#1565C0"), labels = outline_label, name = NULL)
   }
   
   #--- high-priority areas: one black outline around all of them
@@ -151,7 +148,7 @@ plot_archetype <- function(x,
   if (!is.null(sites)) {
     p <- p +
       geom_sf(data = sites, aes(size = size_class), inherit.aes = FALSE,
-              shape = 21, fill = "#00796B", colour = "white", stroke = 0.3, alpha = 0.75,
+              shape = 21, fill = "#08519C", colour = "white", stroke = 0.3, alpha = 0.9,
               show.legend = c(size = TRUE)) +
       scale_size_manual(values = size_values, limits = size_labels, drop = FALSE,
                         name = "Comparisons per site")
@@ -262,12 +259,12 @@ plot_aez_evidence <- function(arc, rule, aez_raster, lookup, points_used,
     
     # within high-priority areas: blue with white outline; added: white with blue outline
     geom_sf(data = filter(sites, origin == "Within high-priority areas"), aes(size = size_class, shape = origin),
-            fill = "#00796B", colour = "white", stroke = 0.3, alpha = 0.9, key_glyph = draw_key_point,
+            fill = "#08519C", colour = "white", stroke = 0.3, alpha = 0.9, key_glyph = draw_key_point,
             show.legend = c(size = TRUE, shape = TRUE)) +
     { if (any(sites$origin == "Added from the same zones"))      # drawn only when comparisons were added
       geom_sf(data = filter(sites, origin == "Added from the same zones"), aes(size = size_class, shape = origin),
               fill = filter(sites, origin == "Added from the same zones")$zone_fill,   # filled with its zone colour
-              colour = "#00796B", stroke = 0.45, key_glyph = draw_key_point,
+              colour = "#08519C", stroke = 0.45, key_glyph = draw_key_point,
               show.legend = c(size = TRUE, shape = TRUE)) } +
     scale_fill_manual(values = cols, labels = zone_lab, name = "Main agroecological zones in high-priority areas") +
     scale_size_manual(values = c(1.3, 2.6, 4.5), limits = c("1\u20139", "10\u201349", "\u226550"), drop = FALSE,
@@ -280,11 +277,11 @@ plot_aez_evidence <- function(arc, rule, aez_raster, lookup, points_used,
     guides(fill  = guide_legend(order = 1, ncol = 1,                     # grey outline: white key visible
                                 override.aes = list(size = 0, shape = NA, colour = "grey50", linewidth = 0.2)),
            shape = guide_legend(order = 2, override.aes = list(size = 2,
-                                                               fill   = c(evidence_colour, "white")[shown],
-                                                               colour = c("white", evidence_colour)[shown],
+                                                               fill   = c("#08519C", "white")[shown],
+                                                               colour = c("white", "#08519C")[shown],
                                                                stroke = c(0.3, 0.45)[shown])),
            size  = guide_legend(order = 3, override.aes = list(size = c(1.3, 2.6, 4.5), shape = 21,
-                                                               fill ="grey60" , colour = "white", stroke = 0.3))) +
+                                                               fill = "grey60", colour = "white", stroke = 0.3))) +
     coord_sf(crs = st_crs(arc)) +
     labs(x = NULL, y = NULL, caption = note) +
     theme_void() +
@@ -309,7 +306,7 @@ plot_aez_evidence <- function(arc, rule, aez_raster, lookup, points_used,
 #==========================================================
 plot_years <- function(long,
                        year_col  = "year",
-                       fill      = "#00796B",
+                       fill      = "#08519C",
                        text_size = 8) {
   
   # one row per study
@@ -355,7 +352,7 @@ plot_distribution <- function(long,
                               cols      = c("a)" = "food_group",
                                             "b)" = "T_practice",
                                             "c)" = "outcome_group"),
-                              fill      = "#00796B",
+                              fill      = "#08519C",
                               x_title   = "Comparisons (studies)",
                               text_size = 8) {
   

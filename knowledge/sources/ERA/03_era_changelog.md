@@ -1,4 +1,4 @@
-# Change log (v1 → v52): project memory
+# Change log (v1 → v53): project memory
 
 Distilled history of what each release changed. Most fixes originate as review comments from Andrea
 (the output consumer). Early version numbers are approximate (reconstructed from script comments &
@@ -151,7 +151,7 @@ Ten points, each verified on the v50 file and, for the data problems, against tw
   (`template_drift_v51.csv`). Andrea's decision.
 - `animal_density` confirmed not recorded in ERA (the 9 cc stocking-rate rows are empty).
 
-## Explicit no-application labels — v52 (current)
+## Explicit no-application labels — v52 (released 1 Oct 2026)
 Andrea (1 Oct), analysing the Kenya subset of v51, reported that in 4,002 rows / 51 studies one arm carries a
 subpractice while the other is blank, so the comparison looks one-sided and is dropped; and that in 181 rows /
 17 studies the two arms are identical in every subpractice column. Measured globally the first problem is
@@ -307,3 +307,39 @@ for a different reason — `Fert.Method` and `Res.Method` join on `Site.ID`, but
 `Data.Out` as a concatenation ("KARI Embu_1..KARI Embu_2") that never matches the single-site detail rows:
 **6,389 raw rows across ~204 studies**, 1,951 of them carrying a fertiliser level. Proposed for v53. Per-study
 verdicts for all 17 identical-C/T studies are in `identical_CT_diagnosis_v52.csv`.
+
+## Andrea's review of v52 — eight per-study corrections, hardcoded — v53 (current, built 28 Oct 2026)
+Andrea (28 Oct) reported extraction errors in eight studies. The ERA workbooks are wrong and are not being
+re-extracted, so the fixes are **hardcoded in `era_harmonize.R`** and re-applied on every build. Every claim was
+checked against the raw `ie`/`mh` snapshots and the source PDFs before anything was coded. **166,223 rows /
+1,808 studies / 350 columns**; every row outside the eight studies is identical to v52 (multiset equality on 70
+columns), the three flip counts are unchanged (1,813 / 921 / 14), `verify_v53.R` ALL CHECKS PASSED. The
+multi-site join bug proposed above for v53 is still open — v53 was taken by this review instead.
+
+**Two mechanisms.** *Step 3b — raw overrides* (before Step 4, `ie` only) for anything that changes WHICH rows
+pair; *Step 6c — value fixes* (after the v20 fills, before Step 6g) for everything else, one commented sub-block
+per study through a `.fix()` helper that counts the defect before and after (after must be 0). Ledger written at
+Step 8: **`study_corrections_vNN.csv`** (23 rules, 746 rows touched).
+
+| study | what was wrong | fix | rows |
+|---|---|---|---|
+| AN0129 | in "FYM + R M-M N0" vs "FYM - R + M-M N90" the residue-incorporation arm was the control | **Step 6h** (after the Tier-1/2 rules, before `practice_compared`): `.do_flip()` on those rows → it is the treatment, `ct_reoriented` = Yes; the study's other 42 rows untouched | 50 |
+| EO0081 | TGx 1740-2F typed "Hybrid", TGx 1448-2E blank; Omondi 2015 p.477: IITA improved lines | `T_varietal_crop_type` → Cultivar (the vocabulary has no "Improved") | 84 |
+| CJ0186 | `T.Control` inverted at source (CA = control) | raw flag swapped → CT control, CA treatment | 31 |
+| CJ0190 | CA arms carry no b38, so 6g inferred Conventional; coordinates wrong | T tillage "No or Zero Tillage"; Dangishta 11.32/36.85, Robit 11.65/37.47; `site_key` regenerated | 6 |
+| JO0135 | coordinates; n = 9 everywhere | token-wise coordinates; n per crop from Table 2 (9/5/4/4/5), both arms | 5 |
+| JO0140 | every CT row paired with every CA row (49 rows); CA/CT values swapped for **every** crop; Mkindo Table-4 nightshade / Chinese cabbage cross-entered | `Pair.Ord` ("Table 5#2") folded into `Pair.Subkey` → 19 pairs; outcome columns swapped (labels stay, never `.do_flip`); the two Mkindo rows' values exchanged; coordinates | 49 → 19 |
+| JO0188 | control's water harvesting blank (6g inferred "No Water Harvesting"); RFbS/RFtS lost "Plastic Mulch" | C watharv + `_raw` copied from T ("Ridge & Furrow"); T residues "Mulch (Unspecified Plants)..Plastic Mulch" | 130 / 52 |
+| JS0204 | the pepper is *Piper nigrum* | token Pepper → "Black Pepper" in product and crop-list columns; `.nfix_map` entry | 44 |
+| LM0264 | three "Sole Maize" controls, two of them the maize phase of rotations 2A/B and 3A/B (72 wrong rows); "M_G/M inter block" is Rao 2000 system 6 (MMG): sole maize + incorporated gliricidia prunings, not an intercrop | rotation-phase rows → treatments (renamed); block arm → Maize / Monoculture / "Tree Prunings Incorporated (N fixing)", `_raw` blanked | 108 → 64 |
+
+**Decisions.** Lolita: ERA's "Pepper (Seed/Fruit)" is *Piper* (spice) in `03e. EU_Codes`; the vegetable is
+"Capsicum or Bell Pepper" → used on CJ0186, CJ0190 and JO0140 Yemu (Andrea had asked for "Pepper (Fruit)").
+Same likely error, not changed: JO0106, EO0019, DK0136, AG0116. "Black Pepper" proposed for the ontology
+(`Downloads/ERA_v53_ontology_proposal.md`), never written into the workbook.
+
+**Found on the way.** The v26 residue-fate rule (Step 5c) replaces the whole string with the fate term and drops
+`Res.Out` P2 (JO0188's plastic) — per-study patch now, general fix → v54. `practice_compared` diffs the `_raw`
+columns too, so a fix that removes a contrast must move the `_raw` with it. The ontology conformance check scans
+only `*_subpractice`. The pairing dry run caught the ordinal being folded without the table (35 pairs, not 19):
+test new blocks against the save point before building. → `../../_meta/log/2026-10-28-01-era-v53-andrea-corrections.md`
