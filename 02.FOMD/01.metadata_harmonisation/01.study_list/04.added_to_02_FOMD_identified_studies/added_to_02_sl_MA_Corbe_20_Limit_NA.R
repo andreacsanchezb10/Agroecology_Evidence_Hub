@@ -11,9 +11,12 @@ path.study.list<- "C:/Users/andreasanchez/OneDrive - CGIAR/Alliance-Agroecology 
 # Reference list transcribed from the paper's own Supplementary Table 1
 # (MA_Corbe_20_Limit_Na_supp_info.pdf) - no RIS/EndNote export exists for
 # this source, so this file IS the primary transcription.
-# code_from_ss 1-79 = studies used in the meta-analysis; 80-87 = retrieved
-# but excluded ("studied crop species had few observations in total,
-# resulting in confounding effects").
+# Rows 1-79 (by the PDF's own numbering, captured in "used") = studies used
+# in the meta-analysis; 80-87 = retrieved but excluded ("studied crop species
+# had few observations in total, resulting in confounding effects").
+# code_from_ss below is the raw 1-87 PDF reference number; Data_source is
+# the author/year string used as the key into md_MA_Corbe_20_Limit_Na.xlsx's
+# own "ref" field (hand-verified against the PDF - see team chat/log).
 sl.data <- read_xlsx(
   file.path(path.study.list, "02.selected", "sl_MA_Corbe_20_Limit_Na.xlsx"),
   sheet = "Corbeels_2020_references"
@@ -25,7 +28,7 @@ sl.data <- read_xlsx(
 #==========================================================
 sl.data.completed <- sl.data %>%
   mutate(
-    ss_id          = "MA_Corbe_20_Limit_NA",
+    ss_id          = "MA_Corbe_20_Limit_Na",
     booktitle      = NA_character_,
     article_number = if_else(code_from_ss == 41, "996", NA_character_),  # Front. Plant Sci. article number, not a page range
     issue          = NA_character_,
@@ -35,11 +38,16 @@ sl.data.completed <- sl.data %>%
     keywords       = NA_character_,
     abstract       = NA_character_,
     study_type     = "JA",
-    code_from_ss   = as.character(code_from_ss)
+    # code_from_ss now holds the Data_source string (e.g. "Agbede and
+    # Ojeniyi (2009)"), not the raw 1-87 PDF number - this is what the
+    # 06-harmonization script joins against md_MA_Corbe_20_Limit_Na.xlsx's
+    # "ref" field on (via Data_source -> study_id_ss, confirmed hand-matched
+    # against the supplementary PDF).
+    code_from_ss   = Data_source
   ) %>%
   select(ss_id, authors, journal, booktitle, article_number,
          start_page, end_page, issue, title, volume, year, doi,
          issn, url, code_from_ss, keywords, abstract, study_type)
 
 writexl::write_xlsx(sl.data.completed,
-                    paste0(path.study.list,"/04.added_to_02_FOMD_identified_studies/added_to_02_sl_MA_Corbe_20_Limit_NA.xlsx"))
+                    paste0(path.study.list,"/04.added_to_02_FOMD_identified_studies/added_to_02_sl_MA_Corbe_20_Limit_Na.xlsx"))

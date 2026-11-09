@@ -17,7 +17,7 @@ fomd04<-read_xlsx(file.path(path.metadata.structure,"04_FOMD_screening.xlsx"), s
   filter(ss_id=="MA_Sanch_22_Finan_Ec")%>%
   filter(status%in%c("PI","I","unresolved"))%>%
   select(ss_id,study_id_ss,study_id)
-length(unique(fomd04$study_id)) #110
+length(unique(fomd04$study_id)) #111
 
 #---09_FOMD_metadata_extraction_long
 fomd09.names<-names(read_xlsx(file.path(path.metadata.structure,"09_FOMD_metadata_extraction_long.xlsx"), sheet = "09_FOMD_metadata_extraction_lon"))
