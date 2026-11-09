@@ -13,7 +13,7 @@ list.files(paste0(path.metadata,"02.selected/"))
 #==========================================================
 #---04_FOMD_screening
 fomd04<-read_xlsx(file.path(path.metadata.structure,"04_FOMD_screening.xlsx"), sheet = "04_FOMD_screening")%>%
-  filter(ss_id=="MA_Corbe_20_Limit_NA")%>%
+  filter(ss_id=="MA_Corbe_20_Limit_Na")%>%
   filter(status%in%c("PI","I","unresolved"))%>%
   select(ss_id,study_id_ss,study_id)
 length(unique(fomd04$study_id)) #87
@@ -23,7 +23,7 @@ fomd09.names<-names(read_xlsx(file.path("C:/Users/andreasanchez/OneDrive - CGIAR
 fomd09.names
 
 #---Metadata
-file_md <- file.path(path.metadata, "02.selected", "md_MA_Corbe_20_Limit_NA.xlsx")
+file_md <- file.path(path.metadata, "02.selected", "md_MA_Corbe_20_Limit_Na.xlsx")
 getSheetNames(file_md)
 md.dic <- read.xlsx(file_md, sheet = "Variables_en")
 
@@ -39,7 +39,7 @@ md.data<-read.xlsx(file_md, sheet = "Donnees_meta-analyse_2020")%>%
 # it does NOT line up with code_from_ss/study_id_ss, which comes from a
 # separately-numbered PDF reference list. The join key is "Data_source"
 # (the author/year string, e.g. "Agbede and Ojeniyi (2009)"), hand-matched
-# to study_id_ss via added_to_02/04_sl_MA_Corbe_20_Limit_NA.R.
+# to study_id_ss via added_to_02/04_sl_MA_Corbe_20_Limit_Na.R.
 library(stringr)
 
 names(md.data)
@@ -152,7 +152,7 @@ length(unique(md.data.long.clean$Data_source)) #88
 # up with study_id_ss, which comes from a separately-numbered PDF reference
 # list; "Id1" is "Concatenation of ref and Id" (e.g. "1-1", "2-3") - a
 # per-site-comparison code, never equal to study_id_ss either. Data_source
-# is hand-matched to study_id_ss in added_to_02/04_sl_MA_Corbe_20_Limit_NA.R.
+# is hand-matched to study_id_ss in added_to_02/04_sl_MA_Corbe_20_Limit_Na.R.
 md.data.long.clean<-md.data.long.clean%>%
   left_join(fomd04,
             by=c("Data_source"="study_id_ss"))
@@ -358,5 +358,5 @@ fomd06.clean<-fomd06.clean %>%
 
 nrow(fomd06.clean)
 
-readr::write_csv(fomd06.clean, paste0(path.metadata, "04.added_to_06_FOMD_metadata_original_long/added_to_06_MA_Corbe_20_Limit_NA.csv"))
+readr::write_csv(fomd06.clean, paste0(path.metadata, "04.added_to_06_FOMD_metadata_original_long/added_to_06_MA_Corbe_20_Limit_Na.csv"))
 
