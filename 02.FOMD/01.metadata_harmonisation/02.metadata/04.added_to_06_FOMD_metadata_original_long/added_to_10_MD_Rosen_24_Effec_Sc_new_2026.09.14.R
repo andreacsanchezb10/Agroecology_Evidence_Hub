@@ -3392,6 +3392,36 @@ sort(unique(md.era.short.clean$out_pillar))
 sort(unique(md.era.short.clean$out_subindicator[md.era.short.clean$out_pillar==""]))
 sort(unique(md.era.short.clean$out_subindicator[is.na(md.era.short.clean$out_pillar)]))
 
+#--- Reclassifying out_subindicator as out_domain
+md.era.short.clean <- apply_lookup_ontologies_ERA(
+  df        = md.era.short.clean,
+  ref       = fomd01.outcomes,
+  key_col   = "subindicator",
+  value_col = "domain",
+  src_col   = "out_subindicator",
+  new_col   = "out_domain"
+)
+
+sort(unique(md.era.short.clean$out_domain))
+sort(unique(md.era.short.clean$out_pillar))
+sort(unique(md.era.short.clean$out_subindicator[md.era.short.clean$out_pillar==""]))
+sort(unique(md.era.short.clean$out_subindicator[is.na(md.era.short.clean$out_pillar)]))
+
+#--- Reclassifying out_subindicator as out_domain
+md.era.short.clean <- apply_lookup_ontologies_ERA(
+  df        = md.era.short.clean,
+  ref       = fomd01.outcomes,
+  key_col   = "subindicator",
+  value_col = "sub_domain",
+  src_col   = "out_subindicator",
+  new_col   = "out_subdomain"
+)
+
+sort(unique(md.era.short.clean$out_subdomain))
+sort(unique(md.era.short.clean$out_pillar))
+sort(unique(md.era.short.clean$out_subindicator[md.era.short.clean$out_pillar==""]))
+sort(unique(md.era.short.clean$out_subindicator[is.na(md.era.short.clean$out_pillar)]))
+
 #==========================================================
 # Unselect unnecessary columns
 #==========================================================
